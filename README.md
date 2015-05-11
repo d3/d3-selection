@@ -10,7 +10,7 @@ API changes from D3 3.x:
 
 * The implementation is now structured using CommonJS modules, rather than the ad hoc [SMASH](https://github.com/mbostock/smash) concatentation process used previously. A standalone build is provided for your convenience using [Browserify](http://browserify.org/), but you are free to define your own build process (e.g., [Webpack](https://webpack.github.io/)). See [#2220](https://github.com/mbostock/d3/issues/2220).
 
-* The [multi-value map](http://bl.ocks.org/mbostock/3305515) variants of selection.attr, selection.style, selection.property and selection.classed are now implemented as distinct methods rather than overloading the arguments. See [#2109](https://github.com/mbostock/d3/issues/2109).
+* The [multi-value map](http://bl.ocks.org/mbostock/3305515) variants of selection.attr, selection.style, selection.property, selection.classed and selection.on are now implemented as distinct methods rather than overloading the arguments. See [#2109](https://github.com/mbostock/d3/issues/2109).
 
 * The d3.ns.prefix namespace map is now exposed as d3.namespace.
 
