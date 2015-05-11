@@ -13,3 +13,5 @@ API changes from D3 3.x:
 * The [multi-value map](http://bl.ocks.org/mbostock/3305515) variants of selection.attr, selection.style, selection.property and selection.classed are now implemented as distinct methods rather than overloading the arguments. See [#2109](https://github.com/mbostock/d3/issues/2109).
 
 * The d3.ns.prefix namespace map is now exposed as d3.namespace.
+
+* Removed support for Sizzle.
