@@ -1,6 +1,6 @@
 # d3-selection
 
-This module implements the core concept of D3: manipulating the DOM by selecting elements and joining to data.
+This EXPERIMENTAL module implements the core concept of D3: manipulating the DOM by selecting elements and joining to data.
 
 API changes from D3 3.x:
 
