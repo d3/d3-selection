@@ -8,7 +8,7 @@ API changes from D3 3.x:
 
 * The selection.data method no longer returns a new selection, but instead modifies the current selection to be the update selection, and assigns the enter and exit selections as selection.enter and selection.exit. (Previously, selection.data returned a new selection, and enter and exit were methods.) See [#2402](https://github.com/mbostock/d3/issues/2402).
 
-* The implementation is now structured using CommonJS modules, rather than the ad hoc [SMASH](https://github.com/mbostock/smash) concatentation process used previously. A standalone build is provided for your convenience using [Browserify](http://browserify.org/), but you are free to define your own build process (e.g., [Webpack](https://webpack.github.io/)). See [#2220](https://github.com/mbostock/d3/issues/2220).
+* The implementation is now structured using CommonJS modules, rather than the ad hoc [SMASH](https://github.com/mbostock/smash) concatenation process used previously. A standalone build is provided for your convenience using [Browserify](http://browserify.org/), but you are free to define your own build process (e.g., [Webpack](https://webpack.github.io/)). See [#2220](https://github.com/mbostock/d3/issues/2220).
 
 * The selection.classed method has been renamed selection.class. (Even though “class” is a reserved word in ES6, since ES5 we’re allowed to use it as an identifier name.)
 
