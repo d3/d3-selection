@@ -6,8 +6,11 @@ var event = require("./lib/d3/event"),
 d3.mouse = event.mouse;
 d3.touch = event.touch;
 d3.touches = event.touches;
-d3.namespace = d3.ns = namespace;
+d3.namespace = namespace.prefix;
 d3.selection = selection;
 d3.select = selection.select;
 d3.selectAll = selection.selectAll;
+
+// Deprecated aliases for backwards-compatibility with 3.x:
+d3.ns = namespace;
 selection.prototype.classed = selection.prototype.class;
