@@ -10,7 +10,7 @@ API changes from D3 3.x:
 
 * The selection.enter and selection.exit selections are now simply fields (defined by selection.data), not methods. See [#2402](https://github.com/mbostock/d3/issues/2402).
 
-* The selection.data method, when called without arguments, now returns an array of data for all elements in the selection, not just the first group. This array is sparse if some of the elements in the selection are null.
+* The selection.data method, when called *without* arguments, now returns an array of data for all elements in the selection, not just the first group.
 
 * Similarly, a new selection selection.nodes method returns an array of all elements in the selection, flattening the underlying groups.
 
