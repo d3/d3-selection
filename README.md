@@ -14,7 +14,9 @@ API changes from D3 3.x:
 
 * The selection.classed method has been renamed selection.class. (Note: `class` is a reserved word in ES6, but ES5 and later allow reserved words as identifier names.)
 
-* The selection.on method has been renamed selection.event. (Not yet implemented.)
+* The selection.on method has been renamed selection.event.
+
+* A new selection.dispatch method dispatches a [custom event](https://dom.spec.whatwg.org/#interface-customevent) of the specified type to all selected elements.
 
 * The d3.ns.prefix namespace map is now exposed as d3.namespace.
 
