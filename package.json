@@ -9,8 +9,9 @@
   },
   "devDependencies": {
     "browserify": "10",
+    "faucet": "0.0",
     "jsdom": "3",
-    "uglify-js": "2",
-    "vows": "0.8"
+    "tape": "4",
+    "uglify-js": "2"
   }
 }
