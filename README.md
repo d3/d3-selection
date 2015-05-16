@@ -14,6 +14,8 @@ API changes from D3 3.x:
 
 * The selection.classed method has been renamed selection.class. (Note: `class` is a reserved word in ES6, but ES5 and later allow reserved words as identifier names.)
 
+* The selection.on method has been renamed selection.event. (Not yet implemented.)
+
 * The d3.ns.prefix namespace map is now exposed as d3.namespace.
 
 * [Multi-value map](http://bl.ocks.org/mbostock/3305515) variants of selection.attr, selection.style, selection.property, selection.class and selection.on are now implemented as distinct methods in the [d3-selection-multi plugin](https://github.com/d3/d3-selection-multi), rather than overloading the arguments. See [#2109](https://github.com/mbostock/d3/issues/2109).
