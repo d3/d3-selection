@@ -13,4 +13,5 @@ d3.selectAll = selection.selectAll;
 
 // Deprecated aliases for backwards-compatibility with 3.x:
 d3.ns = namespace;
+selection.prototype.on = selection.prototype.event;
 selection.prototype.classed = selection.prototype.class;
