@@ -6,7 +6,7 @@ API changes from D3 3.x:
 
 * The Selection class now extends Object, not Array, obviating the need for [prototype injection](http://perfectionkills.com/how-ecmascript-5-still-does-not-allow-to-subclass-an-array/#wrappers_prototype_chain_injection) (and [direct property injection](http://perfectionkills.com/how-ecmascript-5-still-does-not-allow-to-subclass-an-array/#wrappers_direct_property_injection) on runtimes that do not support `__proto__`). See [#2191](https://github.com/mbostock/d3/issues/2191).
 
-* The selection.data method, when called with arguments, now modifies the current selection to be the update selection, rather than returning a new selection. Likewise, the enter and exit selections (if previously accessed) are modified in-place. See [#2402](https://github.com/mbostock/d3/issues/2402).
+* The selection.data method, when called with arguments, now modifies the current selection to be the update selection, rather than returning a new selection. Likewise, the enter and exit selections are lazily constructed and modified in-place. See [#2402](https://github.com/mbostock/d3/issues/2402).
 
 * The selection.enter and selection.exit methods now return empty selections if the selection has not yet been bound to data. (Previously, attempting to access these methods before binding to data would throw an error.) See [#2402](https://github.com/mbostock/d3/issues/2402).
 
