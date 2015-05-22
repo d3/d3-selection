@@ -16,6 +16,8 @@ API changes from D3 3.x:
 
 * The selection.classed method has been renamed selection.class. (Note: `class` is a reserved word in ES6, but ES5 and later allow reserved words as identifier names.) The old name is deprecated but preserved for backwards-compatibility.
 
+* The selection.insert method has been deprecated and is now an alias for selection.append, which now takes an optional selector to specify the node before which to insert.
+
 * The selection.on method has been renamed selection.event. The old name is deprecated but preserved for backwards-compatibility.
 
 * A new selection.dispatch method dispatches a [custom event](https://dom.spec.whatwg.org/#interface-customevent) of the specified type to all selected elements.
