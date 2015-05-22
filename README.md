@@ -6,6 +6,8 @@ API changes from D3 3.x:
 
 * The Selection class now extends Object, not Array, obviating the need for [prototype injection](http://perfectionkills.com/how-ecmascript-5-still-does-not-allow-to-subclass-an-array/#wrappers_prototype_chain_injection) (and [direct property injection](http://perfectionkills.com/how-ecmascript-5-still-does-not-allow-to-subclass-an-array/#wrappers_direct_property_injection) on runtimes that do not support `__proto__`). See [#2191](https://github.com/mbostock/d3/issues/2191).
 
+* Selections are hierarchical! Rather than always being a nested array, selections now have arbitrary depth. As a result, accessor functions such as those accepted by selection.attr and selection.style can now use parent data (and index) if desired.
+
 * The selection.data method, when called with arguments, now modifies the current selection to be the update selection, rather than returning a new selection. Likewise, the enter and exit selections are lazily constructed and modified in-place. See [#2402](https://github.com/mbostock/d3/issues/2402).
 
 * The selection.enter and selection.exit methods now return empty selections if the selection has not yet been bound to data. (Previously, attempting to access these methods before binding to data would throw an error.) See [#2402](https://github.com/mbostock/d3/issues/2402).
@@ -16,7 +18,11 @@ API changes from D3 3.x:
 
 * The selection.classed method has been renamed selection.class. (Note: `class` is a reserved word in ES6, but ES5 and later allow reserved words as identifier names.) The old name is deprecated but preserved for backwards-compatibility.
 
-* The selection.insert method has been deprecated and is now an alias for selection.append, which now takes an optional selector to specify the node before which to insert.
+* The selection.insert method has been deprecated and is now an alias for selection.append, which now takes an optional selector to specify the node before which to insert. The enter.append method therefore now behaves the same as enter.insert (without a second argument), meaning that when joining data by key, document order will match data order by default, assuming that the new data is in the same order as the old data. (If it’s not, you must use selection.order to reorder the document to match the data.)
+
+* The enter.append method now removes elements from the enter selection, rather than simply copying them into the update selection. (In practice, you are unlikely to notice the difference, as enter selections are typically discarded upon append. But this makes more sense now that enter selections are persistent.)
+
+* Enter selections no longer have a special subclass. Instead, enter nodes function as virtual placeholders, providing appendChild and insertBefore methods for use with selection.append.
 
 * The selection.on method has been renamed selection.event. The old name is deprecated but preserved for backwards-compatibility.
 
