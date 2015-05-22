@@ -16,7 +16,7 @@ API changes from D3 3.x:
 
 * Similarly, a new selection selection.nodes method returns an array of all elements in the selection (flattening the underlying hierarchy).
 
-* The selection.insert has been renamed (and replaces) selection.append. The enter.append method now inserts elements in data order by default when joining by key. (This assumes that new data is in the same order as old data; if not, use selection.order after.)
+* The selection.insert method has been renamed (and replaces) selection.append. Thus, the enter.append method now inserts elements in data order by default when joining by key! (This assumes that new data is in the same order as old data; if not, use selection.order after.)
 
 * The enter.append method now moves (rather than copies) elements to the update selection. (In practice, you are unlikely to notice the difference, as enter selections are typically discarded upon append. But this makes more sense now that enter selections are persistent.)
 
