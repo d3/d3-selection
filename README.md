@@ -6,7 +6,7 @@ API changes from D3 3.x:
 
 * The Selection class now extends Object, not Array, obviating the need for [prototype injection](http://perfectionkills.com/how-ecmascript-5-still-does-not-allow-to-subclass-an-array/#wrappers_prototype_chain_injection) (and [direct property injection](http://perfectionkills.com/how-ecmascript-5-still-does-not-allow-to-subclass-an-array/#wrappers_direct_property_injection) on runtimes that do not support `__proto__`). See [#2191](https://github.com/mbostock/d3/issues/2191).
 
-* Selections are now truly hierarchical! Rather than always being a nested array, selections now have arbitrary depth. As a result, accessor functions such as those accepted by selection.attr and selection.style can now use parent data (and index) if desired.
+* Selections are now truly hierarchical! Rather than always being a nested array, selections now have arbitrary depth. Accessor functions such as those accepted by selection.attr and selection.style can now use parent data (and index) if desired.
 
 * The selection.data method, when called with arguments, now modifies the current selection to be the update selection, rather than returning a new selection. Likewise, the enter and exit selections are lazily constructed and modified in-place. See [#2402](https://github.com/mbostock/d3/issues/2402).
 
