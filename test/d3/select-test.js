@@ -5,7 +5,7 @@ var tape = require("tape"),
 tape("d3.select can select an element", function(test) {
   var document = jsdom.jsdom("<h1>hello</h1>"),
       s = selection.select(document.documentElement);
-  test.ok(s instanceof selection);
+  test.ok(s instanceof selection, "is a selection");
   test.equal(s._depth, 1, "_depth is one");
   test.ok(Array.isArray(s._root), "_root is an array");
   test.equal(s._root.length, 1, "_root has length one");
@@ -19,7 +19,7 @@ tape("d3.select can select an element", function(test) {
 tape("d3.select can select a window", function(test) {
   var document = jsdom.jsdom("<h1>hello</h1>"),
       s = selection.select(document.defaultView);
-  test.ok(s instanceof selection);
+  test.ok(s instanceof selection, "is a selection");
   test.equal(s._depth, 1, "_depth is one");
   test.ok(Array.isArray(s._root), "_root is an array");
   test.equal(s._root.length, 1, "_root has length one");
@@ -33,7 +33,7 @@ tape("d3.select can select a window", function(test) {
 tape("d3.select can select a document", function(test) {
   var document = jsdom.jsdom("<h1>hello</h1>"),
       s = selection.select(document);
-  test.ok(s instanceof selection);
+  test.ok(s instanceof selection, "is a selection");
   test.equal(s._depth, 1, "_depth is one");
   test.ok(Array.isArray(s._root), "_root is an array");
   test.equal(s._root.length, 1, "_root has length one");
@@ -47,7 +47,7 @@ tape("d3.select can select a document", function(test) {
 tape("d3.select can select a document element", function(test) {
   var document = jsdom.jsdom("<h1>hello</h1>"),
       s = selection.select(document.documentElement);
-  test.ok(s instanceof selection);
+  test.ok(s instanceof selection, "is a selection");
   test.equal(s._depth, 1, "_depth is one");
   test.ok(Array.isArray(s._root), "_root is an array");
   test.equal(s._root.length, 1, "_root has length one");
@@ -61,7 +61,7 @@ tape("d3.select can select a document element", function(test) {
 tape("d3.select can select null", function(test) {
   var document = jsdom.jsdom("<h1>hello</h1>"),
       s = selection.select(null);
-  test.ok(s instanceof selection);
+  test.ok(s instanceof selection, "is a selection");
   test.equal(s._depth, 1, "_depth is one");
   test.ok(Array.isArray(s._root), "_root is an array");
   test.equal(s._root.length, 1, "_root has length one");
@@ -75,7 +75,7 @@ tape("d3.select can select null", function(test) {
 tape("d3.select can select an arbitrary object", function(test) {
   var object = {},
       s = selection.select(object);
-  test.ok(s instanceof selection);
+  test.ok(s instanceof selection, "is a selection");
   test.equal(s._depth, 1, "_depth is one");
   test.ok(Array.isArray(s._root), "_root is an array");
   test.equal(s._root.length, 1, "_root has length one");
