@@ -155,35 +155,3 @@ tape("selection.select passes the selector function data and index", function(te
   test.equal(results[1].arguments[3], 1, "has the expected index");
   test.end();
 });
-
-tape("selection.select moves enter nodes to the update selection", function(test) {
-  var document = jsdom.jsdom(),
-      nodes = [],
-      update = selection.select(document.documentElement).selectAll("p").data([0, 1, 2]),
-      enter = update.enter();
-  test.equal(enter._root.length, 1, "enter selection initially contains enter nodes");
-  test.equal(enter._root[0].length, 3, "enter selection initially contains enter nodes");
-  test.equal(enter._root[0][0].__data__, 0, "enter selection initially contains enter nodes");
-  test.equal(enter._root[0][1].__data__, 1, "enter selection initially contains enter nodes");
-  test.equal(enter._root[0][2].__data__, 2, "enter selection initially contains enter nodes");
-  test.equal(update._root.length, 1, "update selection is initially empty");
-  test.equal(update._root[0].length, 3, "update selection is initially empty");
-  test.equal(update._root[0][0], undefined, "update selection is initially empty");
-  test.equal(update._root[0][1], undefined, "update selection is initially empty");
-  test.equal(update._root[0][2], undefined, "update selection is initially empty");
-  enter.select(function() { var p = this.appendChild(document.createElement("P")); nodes.push(p); return p; });
-  test.equal(enter._root.length, 1, "enter selection is subsequentyl empty");
-  test.equal(enter._root[0].length, 3, "enter selection is subsequentyl empty");
-  test.equal(enter._root[0][0], undefined, "enter selection is subsequentyl empty");
-  test.equal(enter._root[0][1], undefined, "enter selection is subsequentyl empty");
-  test.equal(enter._root[0][2], undefined, "enter selection is subsequentyl empty");
-  test.equal(update._root.length, 1, "update selection subsequently contains materialized nodes");
-  test.equal(update._root[0].length, 3, "update selection subsequently contains materialized nodes");
-  test.equal(update._root[0][0], nodes[0], "update selection subsequently contains materialized nodes");
-  test.equal(update._root[0][1], nodes[1], "update selection subsequently contains materialized nodes");
-  test.equal(update._root[0][2], nodes[2], "update selection subsequently contains materialized nodes");
-  test.equal(update._root[0][0].__data__, 0, "update selection subsequently contains materialized nodes");
-  test.equal(update._root[0][1].__data__, 1, "update selection subsequently contains materialized nodes");
-  test.equal(update._root[0][2].__data__, 2, "update selection subsequently contains materialized nodes");
-  test.end();
-});
