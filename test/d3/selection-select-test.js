@@ -97,6 +97,7 @@ tape("selection.select will propagate parents if defined on the originating grou
 tape("selection.select can select elements (when the originating selection is nested)", function(test) {
   var document = jsdom.jsdom("<parent id='one'><child><span>1</span></child></parent><parent id='two'><child><span>2</span></child></parent>"),
       s = selection.selectAll(document.querySelectorAll("parent")).selectAll("child").select("span");
+  test.equal(s._depth, 2, "has the expected structure");
   test.equal(s._root.length, 2, "has the expected structure");
   test.equal(s._root[0].length, 1, "has the expected structure");
   test.equal(s._root[1].length, 1, "has the expected structure");
@@ -111,6 +112,7 @@ tape("selection.select can select elements (when the originating selection is ne
 tape("selection.select can select elements (when the originating selection contains null)", function(test) {
   var document = jsdom.jsdom("<parent id='one'></parent><parent id='two'><child><span>2</span></child></parent>"),
       s = selection.selectAll(document.querySelectorAll("parent")).select("child").select("span");
+  test.equal(s._depth, 1, "has the expected structure");
   test.equal(s._root.length, 2, "has the expected structure");
   test.equal(s._root._parent, null, "has the expected parent");
   test.equal(s._root[0], undefined, "has the expected elements");
@@ -121,6 +123,7 @@ tape("selection.select can select elements (when the originating selection conta
 tape("selection.select can select elements (when the originating selection is nested and contains null)", function(test) {
   var document = jsdom.jsdom("<parent id='one'><child></child></parent><parent id='two'><child><span><b>2</b></span></child></parent>"),
       s = selection.selectAll(document.querySelectorAll("parent")).selectAll("child").select("span").select("b");
+  test.equal(s._depth, 2, "has the expected structure");
   test.equal(s._root.length, 2, "has the expected structure");
   test.equal(s._root[0].length, 1, "has the expected structure");
   test.equal(s._root[1].length, 1, "has the expected structure");
@@ -132,5 +135,25 @@ tape("selection.select can select elements (when the originating selection is ne
   test.end();
 });
 
-// TODO test selector function is passed expected arguments (d, i, …)
+tape("selection.select passes the selector function data and index", function(test) {
+  var document = jsdom.jsdom("<parent id='one'><child><span><b>1</b></span></child></parent><parent id='two'><child><span><b>2</b></span></child></parent>"),
+      results = [],
+      s = selection.selectAll(document.querySelectorAll("parent")).datum(function(d, i) { return "parent-" + i; }).selectAll("child").datum(function(d, i, p, j) { return "child-" + i + "-" + j; }).select("span").select(function() { results.push({this: this, arguments: [].slice.call(arguments)}); });
+  test.equal(document.querySelector("#one").__data__, "parent-0");
+  test.equal(document.querySelector("#two").__data__, "parent-1");
+  test.equal(results.length, 2, "was invoked once per element");
+  test.equal(results[0].this, document.querySelector("#one span"), "has the expected this context");
+  test.equal(results[1].this, document.querySelector("#two span"), "has the expected this context");
+  test.equal(results[0].arguments.length, 4, "has the expected number of arguments");
+  test.equal(results[0].arguments[0], "child-0-0", "has the expected data");
+  test.equal(results[0].arguments[1], 0, "has the expected index");
+  test.equal(results[0].arguments[2], "parent-0", "has the expected data");
+  test.equal(results[0].arguments[3], 0, "has the expected index");
+  test.equal(results[1].arguments[0], "child-0-1", "has the expected data");
+  test.equal(results[1].arguments[1], 0, "has the expected index");
+  test.equal(results[1].arguments[2], "parent-1", "has the expected data");
+  test.equal(results[1].arguments[3], 1, "has the expected index");
+  test.end();
+});
+
 // TODO test moving of elements from enter to update
