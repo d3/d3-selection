@@ -65,9 +65,72 @@ tape("selection.select can select elements (with a null originating element)", f
   test.end();
 });
 
-// TODO verify data propagation
-// TODO verify _parent propagation
-// TODO select where the originating selection is nested
-// TODO select where the originating selection is nested and some are null
+tape("selection.select will propagate data if defined on the originating element", function(test) {
+  var document = jsdom.jsdom("<parent><child>hello</child></parent>"),
+      parent = document.querySelector("parent"),
+      child = document.querySelector("child");
+  parent.__data__ = 0; // still counts as data even though falsey
+  child.__data__ = 42;
+  selection.select(parent).select("child");
+  test.equal(child.__data__, 0, "parent datum was propagated to child");
+  test.end();
+});
+
+tape("selection.select will not propagate data if not defined on the originating element", function(test) {
+  var document = jsdom.jsdom("<parent><child>hello</child></parent>"),
+      parent = document.querySelector("parent"),
+      child = document.querySelector("child");
+  child.__data__ = 42;
+  selection.select(parent).select("child");
+  test.equal(child.__data__, 42, "child datum was not overwritten");
+  test.end();
+});
+
+tape("selection.select will propagate parents if defined on the originating groups", function(test) {
+  var document = jsdom.jsdom("<parent><child>1</child></parent><parent><child>2</child></parent>"),
+      root = document.documentElement,
+      s = selection.select(root).selectAll("parent").select("child");
+  test.equal(s._root[0]._parent, root, "has the expected parent");
+  test.end();
+});
+
+tape("selection.select can select elements (when the originating selection is nested)", function(test) {
+  var document = jsdom.jsdom("<parent id='one'><child><span>1</span></child></parent><parent id='two'><child><span>2</span></child></parent>"),
+      s = selection.selectAll(document.querySelectorAll("parent")).selectAll("child").select("span");
+  test.equal(s._root.length, 2, "has the expected structure");
+  test.equal(s._root[0].length, 1, "has the expected structure");
+  test.equal(s._root[1].length, 1, "has the expected structure");
+  test.equal(s._root._parent, null, "has the expected parent");
+  test.equal(s._root[0]._parent, document.querySelector("#one"), "has the expected parent");
+  test.equal(s._root[1]._parent, document.querySelector("#two"), "has the expected parent");
+  test.equal(s._root[0][0], document.querySelector("#one span"), "has the expected elements");
+  test.equal(s._root[1][0], document.querySelector("#two span"), "has the expected elements");
+  test.end();
+});
+
+tape("selection.select can select elements (when the originating selection contains null)", function(test) {
+  var document = jsdom.jsdom("<parent id='one'></parent><parent id='two'><child><span>2</span></child></parent>"),
+      s = selection.selectAll(document.querySelectorAll("parent")).select("child").select("span");
+  test.equal(s._root.length, 2, "has the expected structure");
+  test.equal(s._root._parent, null, "has the expected parent");
+  test.equal(s._root[0], undefined, "has the expected elements");
+  test.equal(s._root[1], document.querySelector("#two span"), "has the expected elements");
+  test.end();
+});
+
+tape("selection.select can select elements (when the originating selection is nested and contains null)", function(test) {
+  var document = jsdom.jsdom("<parent id='one'><child></child></parent><parent id='two'><child><span><b>2</b></span></child></parent>"),
+      s = selection.selectAll(document.querySelectorAll("parent")).selectAll("child").select("span").select("b");
+  test.equal(s._root.length, 2, "has the expected structure");
+  test.equal(s._root[0].length, 1, "has the expected structure");
+  test.equal(s._root[1].length, 1, "has the expected structure");
+  test.equal(s._root[0][0], undefined, "has the expected elements");
+  test.equal(s._root[1][0], document.querySelector("#two b"), "has the expected elements");
+  test.equal(s._root._parent, null, "has the expected parent");
+  test.equal(s._root[0]._parent, document.querySelector("#one"), "has the expected parent");
+  test.equal(s._root[1]._parent, document.querySelector("#two"), "has the expected parent");
+  test.end();
+});
+
 // TODO test selector function is passed expected arguments (d, i, …)
 // TODO test moving of elements from enter to update
