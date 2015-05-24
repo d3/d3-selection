@@ -12,6 +12,7 @@
     "faucet": "0.0",
     "jsdom": "3",
     "tape": "4",
-    "uglify-js": "2"
+    "uglify-js": "2",
+    "requirejs": "2"
   }
 }
