@@ -170,7 +170,7 @@ tape("selection.select moves enter nodes to the update selection", function(test
   test.equal(update._root[0][0], undefined, "update selection is initially empty");
   test.equal(update._root[0][1], undefined, "update selection is initially empty");
   test.equal(update._root[0][2], undefined, "update selection is initially empty");
-  enter.append("p");
+  enter.append("p").attr("id", function(d, i) { return "p-" + i; });
   test.equal(enter._root.length, 1, "enter selection is subsequentyl empty");
   test.equal(enter._root[0].length, 3, "enter selection is subsequentyl empty");
   test.equal(enter._root[0][0], undefined, "enter selection is subsequentyl empty");
@@ -178,6 +178,9 @@ tape("selection.select moves enter nodes to the update selection", function(test
   test.equal(enter._root[0][2], undefined, "enter selection is subsequentyl empty");
   test.equal(update._root.length, 1, "update selection subsequently contains materialized nodes");
   test.equal(update._root[0].length, 3, "update selection subsequently contains materialized nodes");
+  test.equal(update._root[0][0], document.querySelector("#p-0"), "update selection subsequently contains materialized nodes");
+  test.equal(update._root[0][1], document.querySelector("#p-1"), "update selection subsequently contains materialized nodes");
+  test.equal(update._root[0][2], document.querySelector("#p-2"), "update selection subsequently contains materialized nodes");
   test.equal(update._root[0][0].__data__, 0, "update selection subsequently contains materialized nodes");
   test.equal(update._root[0][1].__data__, 1, "update selection subsequently contains materialized nodes");
   test.equal(update._root[0][2].__data__, 2, "update selection subsequently contains materialized nodes");
