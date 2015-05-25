@@ -1,7 +1,7 @@
 var event = require("./lib/d3/event"),
     namespace = require("./lib/d3/namespace"),
     selection = require("./lib/d3/selection"),
-    d3 = global.d3 || (global.d3 = {});
+    d3 = module.exports = global.d3 || (global.d3 = {});
 
 d3.mouse = event.mouse;
 d3.touch = event.touch;
