@@ -4,7 +4,7 @@ var tape = require("tape"),
 
 tape("selection.exit initially returns an empty selection", function(test) {
   var document = jsdom.jsdom("<h1>hello</h1>"),
-      s = selection.select(document.documentElement),
+      s = selection.select(document.body),
       e = s.exit();
   test.ok(e instanceof selection);
   test.equal(e._depth, 1);

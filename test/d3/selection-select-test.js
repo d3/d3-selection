@@ -5,7 +5,7 @@ var tape = require("tape"),
 tape("selection.select can select elements (in the simplest case)", function(test) {
   var document = jsdom.jsdom("<h1>hello</h1>"),
       h1 = document.querySelector("h1"),
-      s = selection.select(document.documentElement).select("h1");
+      s = selection.select(document.body).select("h1");
   test.ok(s instanceof selection);
   test.equal(s._depth, 1);
   test.ok(Array.isArray(s._root));
@@ -17,10 +17,10 @@ tape("selection.select can select elements (in the simplest case)", function(tes
   test.end();
 });
 
-tape("selection.select can select elements (where there are multiple matches)", function(test) {
+tape("selection.select will select the first element of multiple matches", function(test) {
   var document = jsdom.jsdom("<h1>hello</h1><h2>world</h2>"),
       h1 = document.querySelector("h1"),
-      s = selection.select(document.documentElement).select("h2,h1");
+      s = selection.select(document.body).select("h2,h1");
   test.ok(s instanceof selection);
   test.equal(s._depth, 1);
   test.ok(Array.isArray(s._root));
@@ -88,7 +88,7 @@ tape("selection.select will not propagate data if not defined on the originating
 
 tape("selection.select will propagate parents if defined on the originating groups", function(test) {
   var document = jsdom.jsdom("<parent><child>1</child></parent><parent><child>2</child></parent>"),
-      root = document.documentElement,
+      root = document.body,
       s = selection.select(root).selectAll("parent").select("child");
   test.equal(s._root[0]._parent, root);
   test.end();
@@ -116,9 +116,10 @@ tape("selection.select can select elements (when the originating selection conta
   var document = jsdom.jsdom("<parent id='one'></parent><parent id='two'><child><span>2</span></child></parent>"),
       s = selection.selectAll(document.querySelectorAll("parent")).select("child").select("span");
   test.equal(s._depth, 1);
+  test.ok(Array.isArray(s._root));
   test.equal(s._root.length, 2);
   test.equal(s._root._parent, null);
-  test.equal(s._root[0], undefined);
+  test.ok(!(0 in s._root));
   test.equal(s._root[1], document.querySelector("#two span"));
   test.end();
 });
@@ -133,7 +134,7 @@ tape("selection.select can select elements (when the originating selection is ne
   test.ok(Array.isArray(s._root));
   test.ok(Array.isArray(s._root[0]));
   test.ok(Array.isArray(s._root[1]));
-  test.equal(s._root[0][0], undefined);
+  test.ok(!(0 in s._root[0]));
   test.equal(s._root[1][0], document.querySelector("#two b"));
   test.equal(s._root._parent, null);
   test.equal(s._root[0]._parent, document.querySelector("#one"));
