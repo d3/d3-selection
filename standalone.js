@@ -16,3 +16,5 @@ d3.ns = namespace;
 selection.prototype.on = selection.prototype.event;
 selection.prototype.insert = selection.prototype.append;
 selection.prototype.classed = selection.prototype.class;
+
+module.exports = selection;
