@@ -7,30 +7,32 @@ var d3 = module.exports = global.d3 || (global.d3 = {}),
     selectorAllOf = function(selector) { return function() { return this.querySelectorAll(selector); }; },
     filterOf = function(selector) { return function() { return this.matches(selector); }; },
     filterEvents = new Map,
-    requoteRe = /[\\\^\$\*\+\?\|\[\]\(\)\.\{\}]/g;
+    ascending = function(a, b) { return a < b ? -1 : a > b ? 1 : a >= b ? 0 : NaN; },
+    collapse = function(string) { return string.trim().replace(/\s+/g, " "); },
+    requote = function(string) { return string.replace(requoteRe, "\\$&"); },
+    requoteRe = /[\\\^\$\*\+\?\|\[\]\(\)\.\{\}]/g,
+    bug44083 = global.navigator && /WebKit/.test(global.navigator.userAgent) ? -1 : 0; // https://bugs.webkit.org/show_bug.cgi?id=44083
 
 (function(document) {
-  if (!document) return;
+  if (!document) return
   var element = document.documentElement;
-
   if (!("onmouseenter" in element)) {
     filterEvents.set("mouseenter", "mouseover").set("mouseleave", "mouseout");
   }
-
   if (!element.matches) {
     var vendorMatches = element.webkitMatchesSelector || element.msMatchesSelector || element.mozMatchesSelector || element.oMatchesSelector;
     filterOf = function(selector) { return function() { return vendorMatches.call(this, selector); }; };
   }
 })(global.document);
 
-var namespaces = d3.namespaces = new Map;
-namespaces.set("svg", "http://www.w3.org/2000/svg");
-namespaces.set("xhtml", "http://www.w3.org/1999/xhtml");
-namespaces.set("xlink", "http://www.w3.org/1999/xlink");
-namespaces.set("xml", "http://www.w3.org/XML/1998/namespace");
-namespaces.set("xmlns", "http://www.w3.org/2000/xmlns/");
+d3.namespaces = (new Map)
+    .set("svg", "http://www.w3.org/2000/svg")
+    .set("xhtml", "http://www.w3.org/1999/xhtml")
+    .set("xlink", "http://www.w3.org/1999/xlink")
+    .set("xml", "http://www.w3.org/XML/1998/namespace")
+    .set("xmlns", "http://www.w3.org/2000/xmlns/");
 
-var namespace = d3.namespace = function(name) {
+d3.namespace = function(name) {
   var i = name.indexOf(":"),
       prefix = name;
 
@@ -39,13 +41,10 @@ var namespace = d3.namespace = function(name) {
     name = name.slice(i + 1);
   }
 
-  return namespaces.has(prefix)
-      ? {space: namespaces.get(prefix), local: name}
+  return d3.namespaces.has(prefix)
+      ? {space: d3.namespaces.get(prefix), local: name}
       : name;
 };
-
-// https://bugs.webkit.org/show_bug.cgi?id=44083
-var bug44083 = global.navigator && /WebKit/.test(global.navigator.userAgent) ? -1 : 0;
 
 function point(node, event) {
   var svg = node.ownerSVGElement || node;
@@ -620,7 +619,7 @@ Selection.prototype = {
   },
 
   attr: function(name, value) {
-    name = namespace(name);
+    name = d3.namespace(name);
 
     if (arguments.length < 2) {
       var node = this.node();
@@ -944,7 +943,7 @@ function arrayify(selection) {
 }
 
 function creatorOf(name) {
-  name = namespace(name);
+  name = d3.namespace(name);
 
   function creator() {
     var document = this.ownerDocument,
@@ -1018,18 +1017,6 @@ function filterListenerOf(listener) {
       listener(event);
     }
   };
-}
-
-function ascending(a, b) {
-  return a < b ? -1 : a > b ? 1 : a >= b ? 0 : NaN;
-}
-
-function collapse(string) {
-  return string.trim().replace(/\s+/g, " ");
-}
-
-function requote(string) {
-  return string.replace(requoteRe, "\\$&");
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
