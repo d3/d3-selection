@@ -136,7 +136,6 @@ if (!Map) {
 // When depth = 3, root = [[[Node, …], …], …]. etc.
 // Note that [Node, …] and NodeList are used interchangeably; see arrayify.
 function Selection(root, depth) {
-  root._parent = null;
   this._root = root;
   this._depth = depth;
   this._enter = null;
@@ -913,11 +912,27 @@ Selection.prototype = {
 };
 
 Selection.select = function(selector) {
-  return new Selection([typeof selector === "string" ? document.querySelector(selector) : selector], 1);
+  var root;
+  if (typeof selector === "string") {
+    root = [document.querySelector(selector)];
+    root._parent = document.documentElement;
+  } else {
+    root = [selector];
+    root._parent = null;
+  }
+  return new Selection(root, 1);
 };
 
 Selection.selectAll = function(selector) {
-  return new Selection(typeof selector === "string" ? document.querySelectorAll(selector) : selector, 1);
+  var root;
+  if (typeof selector === "string") {
+    root = document.querySelectorAll(selector);
+    root._parent = document.documentElement;
+  } else {
+    root = selector;
+    root._parent = null;
+  }
+  return new Selection(root, 1);
 };
 
 function EnterNode(parent, datum) {

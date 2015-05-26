@@ -1,6 +1,22 @@
 var tape = require("tape"),
-    jsdom = require("jsdom"),
-    selection = require("../../lib/d3/selection");
+    jsdom = require("jsdom");
+
+global.document = jsdom.jsdom();
+
+var selection = require("../../lib/d3/selection");
+
+tape("d3.select can select by string", function(test) {
+  var s = selection.select("body");
+  test.ok(s instanceof selection);
+  test.equal(s._depth, 1);
+  test.ok(Array.isArray(s._root));
+  test.equal(s._root.length, 1);
+  test.equal(s._root[0], document.body);
+  test.equal(s._root._parent, document.documentElement);
+  test.equal(s._enter, null);
+  test.equal(s._exit, null);
+  test.end();
+});
 
 tape("d3.select can select an element", function(test) {
   var document = jsdom.jsdom("<h1>hello</h1>"),
