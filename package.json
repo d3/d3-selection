@@ -1,6 +1,6 @@
 {
   "name": "d3-selection",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Data-driven DOM manipulation.",
   "main": "index",
   "repository": {
