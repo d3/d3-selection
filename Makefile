@@ -6,7 +6,7 @@ all: $(GENERATED_FILES)
 
 .PHONY: clean all test publish
 
-test:
+test: all
 	node_modules/.bin/faucet `find test -name '*-test.js'`
 
 d3-selection.js: $(shell node_modules/.bin/browserify standalone.js --list)
