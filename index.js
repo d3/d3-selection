@@ -361,83 +361,21 @@ Selection.prototype = {
   // Lazily constructs the enter selection for this (update) selection.
   // Until this selection is joined to data, the enter selection will be empty.
   enter: function() {
-    if (this._enter) return this._enter;
-
-    function visit(nodes, depth) {
-      var i = -1,
-          n = nodes.length,
-          node,
-          enter = new Array(n);
-
-      if (--depth) {
-        while (++i < n) {
-          if (node = nodes[i]) {
-            enter[i] = visit(node, depth);
-          }
-        }
-      }
-
-      enter._parent = nodes._parent;
-      return enter;
+    if (!this._enter) {
+      this._enter = emptyOf(this);
+      this._enter._update = this;
     }
-
-    this._enter = new Selection(visit(arrayify(this), this._depth), this._depth);
-    this._enter._update = this;
     return this._enter;
   },
 
   // Lazily constructs the exit selection for this (update) selection.
   // Until this selection is joined to data, the exit selection will be empty.
   exit: function() {
-
-    function visit(nodes, depth) {
-      var i = -1,
-          n = nodes.length,
-          node,
-          exit = new Array(n);
-
-      if (--depth) {
-        while (++i < n) {
-          if (node = nodes[i]) {
-            exit[i] = visit(node, depth);
-          }
-        }
-      }
-
-      exit._parent = nodes._parent;
-      return exit;
-    }
-
-    return this._exit || (this._exit = new Selection(visit(arrayify(this), this._depth), this._depth));
+    return this._exit || (this._exit = emptyOf(this));
   },
 
   order: function() {
-
-    function visit(nodes, depth) {
-      var i = nodes.length,
-          node,
-          next;
-
-      if (--depth) {
-        while (--i >= 0) {
-          if (node = nodes[i]) {
-            visit(node, depth);
-          }
-        }
-      }
-
-      else {
-        next = nodes[--i];
-        while (--i >= 0) {
-          if (node = nodes[i]) {
-            if (next && next !== node.nextSibling) next.parentNode.insertBefore(node, next);
-            next = node;
-          }
-        }
-      }
-    }
-
-    visit(this._root, this._depth);
+    orderNode(this._root, this._depth);
     return this;
   },
 
@@ -482,32 +420,7 @@ Selection.prototype = {
   },
 
   node: function() {
-
-    function visit(nodes, depth) {
-      var i = -1,
-          n = nodes.length,
-          node;
-
-      if (--depth) {
-        while (++i < n) {
-          if (node = nodes[i]) {
-            if (node = visit(node, depth)) {
-              return node;
-            }
-          }
-        }
-      }
-
-      else {
-        while (++i < n) {
-          if (node = nodes[i]) {
-            return node;
-          }
-        }
-      }
-    }
-
-    return visit(this._root, this._depth);
+    return firstNode(this._root, this._depth);
   },
 
   size: function() {
@@ -841,31 +754,100 @@ EnterNode.prototype = {
 // The leaf groups of the selection hierarchy are initially NodeList,
 // and then lazily converted to arrays when mutation is required.
 function arrayify(selection) {
+  return selection._root = arrayifyNode(selection._root, selection._depth);
+}
 
-  function visit(nodes, depth) {
-    var i = -1,
-        n = nodes.length,
-        node;
+function arrayifyNode(nodes, depth) {
+  var i = -1,
+      n = nodes.length,
+      node;
 
-    if (--depth) {
-      while (++i < n) {
-        if (node = nodes[i]) {
-          nodes[i] = visit(node, depth);
+  if (--depth) {
+    while (++i < n) {
+      if (node = nodes[i]) {
+        nodes[i] = arrayifyNode(node, depth);
+      }
+    }
+  }
+
+  else if (!Array.isArray(nodes)) {
+    var array = new Array(n);
+    while (++i < n) array[i] = nodes[i];
+    array._parent = nodes._parent;
+    nodes = array;
+  }
+
+  return nodes;
+}
+
+function emptyOf(selection) {
+  return new Selection(emptyNode(arrayify(selection), selection._depth), selection._depth);
+}
+
+function emptyNode(nodes, depth) {
+  var i = -1,
+      n = nodes.length,
+      node,
+      empty = new Array(n);
+
+  if (--depth) {
+    while (++i < n) {
+      if (node = nodes[i]) {
+        empty[i] = emptyNode(node, depth);
+      }
+    }
+  }
+
+  empty._parent = nodes._parent;
+  return empty;
+}
+
+function orderNode(nodes, depth) {
+  var i = nodes.length,
+      node,
+      next;
+
+  if (--depth) {
+    while (--i >= 0) {
+      if (node = nodes[i]) {
+        orderNode(node, depth);
+      }
+    }
+  }
+
+  else {
+    next = nodes[--i];
+    while (--i >= 0) {
+      if (node = nodes[i]) {
+        if (next && next !== node.nextSibling) next.parentNode.insertBefore(node, next);
+        next = node;
+      }
+    }
+  }
+}
+
+function firstNode(nodes, depth) {
+  var i = -1,
+      n = nodes.length,
+      node;
+
+  if (--depth) {
+    while (++i < n) {
+      if (node = nodes[i]) {
+        if (node = firstNode(node, depth)) {
+          return node;
         }
       }
     }
-
-    else if (!Array.isArray(nodes)) {
-      var array = new Array(n);
-      while (++i < n) array[i] = nodes[i];
-      array._parent = nodes._parent;
-      nodes = array;
-    }
-
-    return nodes;
   }
 
-  return selection._root = visit(selection._root, selection._depth);
+  else {
+    while (++i < n) {
+      if (node = nodes[i]) {
+        return node;
+      }
+    }
+  }
 }
 
 function creatorOf(name) {
