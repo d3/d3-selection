@@ -1,6 +1,74 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.d3 = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
-var Selection = require("./selection"); // TODO remove dependency
+var d3 = module.exports = global.d3 || (global.d3 = {}),
+    Map = global.Map,
+    valueOf = function(value) { return function() { return value; }; },
+    selectorOf = function(selector) { return function() { return this.querySelector(selector); }; },
+    selectorAllOf = function(selector) { return function() { return this.querySelectorAll(selector); }; },
+    filterOf = function(selector) { return function() { return this.matches(selector); }; },
+    // filterEvents = {mouseenter: "mouseover", mouseleave: "mouseout"},
+    requoteRe = /[\\\^\$\*\+\?\|\[\]\(\)\.\{\}]/g;
+
+// TODO mouseenter, mouseleave polyfill
+// TODO element.matches polyfill
+// TODO window.CustomEvent polyfill
+
+// if (document) {
+//   var node = document.documentElement;
+//
+//   if (!node.matches) {
+//     var vendorMatches = node.webkitMatchesSelector || node.msMatchesSelector || node.mozMatchesSelector || node.oMatchesSelector;
+//     filterOf = function(selector) { return function() { return vendorMatches.call(this, selector); }; };
+//   }
+//
+//   for (var type in filterEvents) {
+//     if ("on" + type in document) {
+//       delete filterEvents[type];
+//     }
+//   }
+//
+//   if (!CustomEvent) {
+//     CustomEvent = function(type, params) {
+//       var event = document.createEvent("CustomEvent");
+//       if (params) event.initCustomEvent(type, params.bubbles, params.cancelable, params.detail);
+//       else event.initCustomEvent(type, false, false, undefined);
+//       return event;
+//     };
+//     CustomEvent.prototype = document.defaultView.Event.prototype;
+//   }
+//
+//   node = type = null;
+// }
+
+if (!Map) {
+  Map = function() {};
+  Map.prototype = {
+    set: function(key, value) { this["$" + key] = value; return this; },
+    get: function(key) { return this["$" + key]; },
+    has: function(key) { return "$" + key in this; }
+  };
+}
+
+var namespaces = d3.namespaces = new Map;
+namespaces.set("svg", "http://www.w3.org/2000/svg");
+namespaces.set("xhtml", "http://www.w3.org/1999/xhtml");
+namespaces.set("xlink", "http://www.w3.org/1999/xlink");
+namespaces.set("xml", "http://www.w3.org/XML/1998/namespace");
+namespaces.set("xmlns", "http://www.w3.org/2000/xmlns/");
+
+var namespace = d3.namespace = function(name) {
+  var i = name.indexOf(":"),
+      prefix = name;
+
+  if (i >= 0) {
+    prefix = name.slice(0, i);
+    name = name.slice(i + 1);
+  }
+
+  return namespaces.has(prefix)
+      ? {space: namespaces.get(prefix), local: name}
+      : name;
+};
 
 // https://bugs.webkit.org/show_bug.cgi?id=44083
 var bug44083 = global.navigator && /WebKit/.test(global.navigator.userAgent) ? -1 : 0;
@@ -12,7 +80,7 @@ function point(node, event) {
     if (bug44083 < 0) {
       var window = global.window; // Must exist if bug44083.
       if (window.scrollX || window.scrollY) {
-        svg = Selection.select("body").append("svg").style({position: "absolute", top: 0, left: 0, margin: 0, padding: 0, border: "none"}, "important");
+        svg = d3.select("body").append("svg").style({position: "absolute", top: 0, left: 0, margin: 0, padding: 0, border: "none"}, "important");
         var ctm = svg.node().getScreenCTM();
         bug44083 = !(ctm.f || ctm.e);
         svg.remove();
@@ -28,18 +96,18 @@ function point(node, event) {
 }
 
 function source() {
-  var event = global.d3.event, source;
+  var event = d3.event, source;
   while (source = event.sourceEvent) event = source;
   return event;
 }
 
-exports.mouse = function(node, event) {
+d3.mouse = function(node, event) {
   if (arguments.length < 2) event = source();
   if (event.changedTouches) event = event.changedTouches[0];
   return point(node, event);
 };
 
-exports.touch = function(node, touches, identifier) {
+d3.touch = function(node, touches, identifier) {
   if (arguments.length < 3) identifier = touches, touches = source().changedTouches;
   for (var i = 0, n = touches ? touches.length : 0, touch; i < n; ++i) {
     if ((touch = touches[i]).identifier === identifier) {
@@ -49,87 +117,13 @@ exports.touch = function(node, touches, identifier) {
   return null;
 };
 
-exports.touches = function(node, touches) {
+d3.touches = function(node, touches) {
   if (arguments.length < 2) touches = source().touches;
   for (var i = 0, n = touches ? touches.length : 0, points = new Array(n); i < n; ++i) {
     points[i] = point(node, touches[i]);
   }
   return points;
 };
-
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./selection":3}],2:[function(require,module,exports){
-var prefixes = exports.prefix = {
-  svg: "http://www.w3.org/2000/svg",
-  xhtml: "http://www.w3.org/1999/xhtml",
-  xlink: "http://www.w3.org/1999/xlink",
-  xml: "http://www.w3.org/XML/1998/namespace",
-  xmlns: "http://www.w3.org/2000/xmlns/"
-};
-
-exports.qualify = function(name) {
-  var i = name.indexOf(":"),
-      prefix = name;
-
-  if (i >= 0) {
-    prefix = name.slice(0, i);
-    name = name.slice(i + 1);
-  }
-
-  return prefixes.hasOwnProperty(prefix)
-      ? {space: prefixes[prefix], local: name}
-      : name;
-};
-
-},{}],3:[function(require,module,exports){
-(function (global){
-var namespace = require("./namespace");
-
-var Map = global.Map,
-    document = global.document,
-    CustomEvent = global.CustomEvent,
-    valueOf = function(value) { return function() { return value; }; },
-    selectorOf = function(selector) { return function() { return this.querySelector(selector); }; },
-    selectorAllOf = function(selector) { return function() { return this.querySelectorAll(selector); }; },
-    filterOf = function(selector) { return function() { return this.matches(selector); }; },
-    filterEvents = {mouseenter: "mouseover", mouseleave: "mouseout"},
-    requoteRe = /[\\\^\$\*\+\?\|\[\]\(\)\.\{\}]/g;
-
-if (document) {
-  var node = document.documentElement;
-
-  if (!node.matches) {
-    var vendorMatches = node.webkitMatchesSelector || node.msMatchesSelector || node.mozMatchesSelector || node.oMatchesSelector;
-    filterOf = function(selector) { return function() { return vendorMatches.call(this, selector); }; };
-  }
-
-  for (var type in filterEvents) {
-    if ("on" + type in document) {
-      delete filterEvents[type];
-    }
-  }
-
-  if (!CustomEvent) {
-    CustomEvent = function(type, params) {
-      var event = document.createEvent("CustomEvent");
-      if (params) event.initCustomEvent(type, params.bubbles, params.cancelable, params.detail);
-      else event.initCustomEvent(type, false, false, undefined);
-      return event;
-    };
-    CustomEvent.prototype = global.Event.prototype;
-  }
-
-  node = type = null;
-}
-
-if (!Map) {
-  Map = function() {};
-  Map.prototype = {
-    set: function(key, value) { this["$" + key] = value; return this; },
-    get: function(key) { return this["$" + key]; },
-    has: function(key) { return "$" + key in this; }
-  };
-}
 
 // When depth = 1, root = [Node, …].
 // When depth = 2, root = [[Node, …], …].
@@ -141,6 +135,8 @@ function Selection(root, depth) {
   this._enter = null;
   this._exit = null;
 }
+
+d3.selection = Selection;
 
 Selection.prototype = {
 
@@ -664,7 +660,7 @@ Selection.prototype = {
   },
 
   attr: function(name, value) {
-    name = namespace.qualify(name);
+    name = namespace(name);
 
     if (arguments.length < 2) {
       var node = this.node();
@@ -854,20 +850,20 @@ Selection.prototype = {
   event: function(type, listener, capture) {
     var n = arguments.length,
         key = "__on" + type,
-        filter,
+        // filter,
         root = this._root;
 
     if (n < 2) return (n = this.node()[key]) && n._listener;
 
     if (n < 3) capture = false;
     if ((n = type.indexOf(".")) > 0) type = type.slice(0, n);
-    if (filter = filterEvents.hasOwnProperty(type)) type = filterEvents[type];
+    // if (filter = filterEvents.hasOwnProperty(type)) type = filterEvents[type];
 
     function add() {
       var ancestor = root, i = arguments.length >> 1, ancestors = new Array(i);
       while (--i >= 0) ancestor = ancestor[arguments[(i << 1) + 1]], ancestors[i] = i ? ancestor._parent : ancestor;
       var l = listenerOf(listener, ancestors, arguments);
-      if (filter) l = filterListenerOf(l);
+      // if (filter) l = filterListenerOf(l);
       remove.call(this);
       this.addEventListener(type, this[key] = l, l._capture = capture);
       l._listener = listener;
@@ -900,20 +896,26 @@ Selection.prototype = {
   dispatch: function(type, params) {
 
     function dispatchConstant() {
-      return this.dispatchEvent(new CustomEvent(type, params));
+      return this.dispatchEvent(new windowOf(this).CustomEvent(type, params));
     }
 
     function dispatchFunction() {
-      return this.dispatchEvent(new CustomEvent(type, params.apply(this, arguments)));
+      return this.dispatchEvent(new windowOf(this).CustomEvent(type, params.apply(this, arguments)));
     }
 
     return this.each(typeof params === "function" ? dispatchFunction : dispatchConstant);
   }
 };
 
-Selection.select = function(selector) {
+// Deprecated aliases for backwards-compatibility with 3.x:
+Selection.prototype.on = Selection.prototype.event;
+Selection.prototype.insert = Selection.prototype.append;
+Selection.prototype.classed = Selection.prototype.class;
+
+d3.select = function(selector) {
   var root;
   if (typeof selector === "string") {
+    var document = global.document;
     root = [document.querySelector(selector)];
     root._parent = document.documentElement;
   } else {
@@ -923,9 +925,10 @@ Selection.select = function(selector) {
   return new Selection(root, 1);
 };
 
-Selection.selectAll = function(selector) {
+d3.selectAll = function(selector) {
   var root;
   if (typeof selector === "string") {
+    var document = global.document;
     root = document.querySelectorAll(selector);
     root._parent = document.documentElement;
   } else {
@@ -981,7 +984,7 @@ function arrayify(selection) {
 }
 
 function creatorOf(name) {
-  name = namespace.qualify(name);
+  name = namespace(name);
 
   function creator() {
     var document = this.ownerDocument,
@@ -1022,25 +1025,25 @@ function classerOf(name) {
 
 function listenerOf(listener, ancestors, args) {
   return function(event) {
-    var i = ancestors.length, event0 = global.d3.event; // Events can be reentrant (e.g., focus).
+    var i = ancestors.length, event0 = d3.event; // Events can be reentrant (e.g., focus).
     while (--i >= 0) args[i << 1] = ancestors[i].__data__;
-    global.d3.event = event;
+    d3.event = event;
     try {
       listener.apply(ancestors[0], args);
     } finally {
-      global.d3.event = event0;
+      d3.event = event0;
     }
   };
 }
 
-function filterListenerOf(listener) {
-  return function(event) {
-    var related = event.relatedTarget;
-    if (!related || (related !== this && !(related.compareDocumentPosition(this) & 8))) {
-      listener(event);
-    }
-  };
-}
+// function filterListenerOf(listener) {
+//   return function(event) {
+//     var related = event.relatedTarget;
+//     if (!related || (related !== this && !(related.compareDocumentPosition(this) & 8))) {
+//       listener(event);
+//     }
+//   };
+// }
 
 function ascending(a, b) {
   return a < b ? -1 : a > b ? 1 : a >= b ? 0 : NaN;
@@ -1054,30 +1057,6 @@ function requote(string) {
   return string.replace(requoteRe, "\\$&");
 }
 
-module.exports = Selection;
-
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./namespace":2}],4:[function(require,module,exports){
-(function (global){
-var event = require("./lib/d3/event"),
-    namespace = require("./lib/d3/namespace"),
-    selection = require("./lib/d3/selection"),
-    d3 = module.exports = global.d3 || (global.d3 = {});
-
-d3.mouse = event.mouse;
-d3.touch = event.touch;
-d3.touches = event.touches;
-d3.namespace = namespace.prefix;
-d3.selection = selection;
-d3.select = selection.select;
-d3.selectAll = selection.selectAll;
-
-// Deprecated aliases for backwards-compatibility with 3.x:
-d3.ns = namespace;
-selection.prototype.on = selection.prototype.event;
-selection.prototype.insert = selection.prototype.append;
-selection.prototype.classed = selection.prototype.class;
-
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./lib/d3/event":1,"./lib/d3/namespace":2,"./lib/d3/selection":3}]},{},[4])(4)
+},{}]},{},[1])(1)
 });

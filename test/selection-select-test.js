@@ -1,12 +1,12 @@
 var tape = require("tape"),
     jsdom = require("jsdom"),
-    selection = require("../../lib/d3/selection");
+    d3 = require("../");
 
 tape("selection.select can select elements (in the simplest case)", function(test) {
   var document = jsdom.jsdom("<h1>hello</h1>"),
       h1 = document.querySelector("h1"),
-      s = selection.select(document.body).select("h1");
-  test.ok(s instanceof selection);
+      s = d3.select(document.body).select("h1");
+  test.ok(s instanceof d3.selection);
   test.equal(s._depth, 1);
   test.ok(Array.isArray(s._root));
   test.equal(s._root.length, 1);
@@ -20,8 +20,8 @@ tape("selection.select can select elements (in the simplest case)", function(tes
 tape("selection.select will select the first element of multiple matches", function(test) {
   var document = jsdom.jsdom("<h1>hello</h1><h2>world</h2>"),
       h1 = document.querySelector("h1"),
-      s = selection.select(document.body).select("h2,h1");
-  test.ok(s instanceof selection);
+      s = d3.select(document.body).select("h2,h1");
+  test.ok(s instanceof d3.selection);
   test.equal(s._depth, 1);
   test.ok(Array.isArray(s._root));
   test.equal(s._root.length, 1);
@@ -36,8 +36,8 @@ tape("selection.select can select elements (with multiple originating elements)"
   var document = jsdom.jsdom("<h1><span>hello</span></h1><h2><span>world</span></h2>"),
       h1 = document.querySelector("h1"),
       h2 = document.querySelector("h2"),
-      s = selection.selectAll([h1, h2]).select("span");
-  test.ok(s instanceof selection);
+      s = d3.selectAll([h1, h2]).select("span");
+  test.ok(s instanceof d3.selection);
   test.equal(s._depth, 1);
   test.ok(Array.isArray(s._root));
   test.equal(s._root.length, 2);
@@ -52,8 +52,8 @@ tape("selection.select can select elements (with multiple originating elements)"
 tape("selection.select can select elements (with a null originating element)", function(test) {
   var document = jsdom.jsdom("<h1><span>hello</span></h1>"),
       h1 = document.querySelector("h1"),
-      s = selection.selectAll([h1, null]).select("span");
-  test.ok(s instanceof selection);
+      s = d3.selectAll([h1, null]).select("span");
+  test.ok(s instanceof d3.selection);
   test.equal(s._depth, 1);
   test.ok(Array.isArray(s._root));
   test.equal(s._root.length, 2);
@@ -71,7 +71,7 @@ tape("selection.select will propagate data if defined on the originating element
       child = document.querySelector("child");
   parent.__data__ = 0; // still counts as data even though falsey
   child.__data__ = 42;
-  selection.select(parent).select("child");
+  d3.select(parent).select("child");
   test.equal(child.__data__, 0);
   test.end();
 });
@@ -81,7 +81,7 @@ tape("selection.select will not propagate data if not defined on the originating
       parent = document.querySelector("parent"),
       child = document.querySelector("child");
   child.__data__ = 42;
-  selection.select(parent).select("child");
+  d3.select(parent).select("child");
   test.equal(child.__data__, 42);
   test.end();
 });
@@ -89,14 +89,14 @@ tape("selection.select will not propagate data if not defined on the originating
 tape("selection.select will propagate parents if defined on the originating groups", function(test) {
   var document = jsdom.jsdom("<parent><child>1</child></parent><parent><child>2</child></parent>"),
       root = document.body,
-      s = selection.select(root).selectAll("parent").select("child");
+      s = d3.select(root).selectAll("parent").select("child");
   test.equal(s._root[0]._parent, root);
   test.end();
 });
 
 tape("selection.select can select elements (when the originating selection is nested)", function(test) {
   var document = jsdom.jsdom("<parent id='one'><child><span>1</span></child></parent><parent id='two'><child><span>2</span></child></parent>"),
-      s = selection.selectAll(document.querySelectorAll("parent")).selectAll("child").select("span");
+      s = d3.selectAll(document.querySelectorAll("parent")).selectAll("child").select("span");
   test.equal(s._depth, 2);
   test.equal(s._root.length, 2);
   test.equal(s._root[0].length, 1);
@@ -114,7 +114,7 @@ tape("selection.select can select elements (when the originating selection is ne
 
 tape("selection.select can select elements (when the originating selection contains null)", function(test) {
   var document = jsdom.jsdom("<parent id='one'></parent><parent id='two'><child><span>2</span></child></parent>"),
-      s = selection.selectAll(document.querySelectorAll("parent")).select("child").select("span");
+      s = d3.selectAll(document.querySelectorAll("parent")).select("child").select("span");
   test.equal(s._depth, 1);
   test.ok(Array.isArray(s._root));
   test.equal(s._root.length, 2);
@@ -126,7 +126,7 @@ tape("selection.select can select elements (when the originating selection conta
 
 tape("selection.select can select elements (when the originating selection is nested and contains null)", function(test) {
   var document = jsdom.jsdom("<parent id='one'><child></child></parent><parent id='two'><child><span><b>2</b></span></child></parent>"),
-      s = selection.selectAll(document.querySelectorAll("parent")).selectAll("child").select("span").select("b");
+      s = d3.selectAll(document.querySelectorAll("parent")).selectAll("child").select("span").select("b");
   test.equal(s._depth, 2);
   test.equal(s._root.length, 2);
   test.equal(s._root[0].length, 1);
@@ -145,7 +145,7 @@ tape("selection.select can select elements (when the originating selection is ne
 tape("selection.select passes the selector function data and index", function(test) {
   var document = jsdom.jsdom("<parent id='one'><child><span><b>1</b></span></child></parent><parent id='two'><child><span><b>2</b></span></child></parent>"),
       results = [],
-      s = selection.selectAll(document.querySelectorAll("parent")).datum(function(d, i) { return "parent-" + i; }).selectAll("child").datum(function(d, i, p, j) { return "child-" + i + "-" + j; }).select("span").select(function() { results.push({this: this, arguments: [].slice.call(arguments)}); });
+      s = d3.selectAll(document.querySelectorAll("parent")).datum(function(d, i) { return "parent-" + i; }).selectAll("child").datum(function(d, i, p, j) { return "child-" + i + "-" + j; }).select("span").select(function() { results.push({this: this, arguments: [].slice.call(arguments)}); });
   test.equal(document.querySelector("#one").__data__, "parent-0");
   test.equal(document.querySelector("#two").__data__, "parent-1");
   test.equal(results.length, 2);

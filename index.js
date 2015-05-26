@@ -1,41 +1,42 @@
-var namespace = require("./namespace");
-
-var Map = global.Map,
-    document = global.document,
-    CustomEvent = global.CustomEvent,
+var d3 = module.exports = global.d3 || (global.d3 = {}),
+    Map = global.Map,
     valueOf = function(value) { return function() { return value; }; },
     selectorOf = function(selector) { return function() { return this.querySelector(selector); }; },
     selectorAllOf = function(selector) { return function() { return this.querySelectorAll(selector); }; },
     filterOf = function(selector) { return function() { return this.matches(selector); }; },
-    filterEvents = {mouseenter: "mouseover", mouseleave: "mouseout"},
+    // filterEvents = {mouseenter: "mouseover", mouseleave: "mouseout"},
     requoteRe = /[\\\^\$\*\+\?\|\[\]\(\)\.\{\}]/g;
 
-if (document) {
-  var node = document.documentElement;
+// TODO mouseenter, mouseleave polyfill
+// TODO element.matches polyfill
+// TODO window.CustomEvent polyfill
 
-  if (!node.matches) {
-    var vendorMatches = node.webkitMatchesSelector || node.msMatchesSelector || node.mozMatchesSelector || node.oMatchesSelector;
-    filterOf = function(selector) { return function() { return vendorMatches.call(this, selector); }; };
-  }
-
-  for (var type in filterEvents) {
-    if ("on" + type in document) {
-      delete filterEvents[type];
-    }
-  }
-
-  if (!CustomEvent) {
-    CustomEvent = function(type, params) {
-      var event = document.createEvent("CustomEvent");
-      if (params) event.initCustomEvent(type, params.bubbles, params.cancelable, params.detail);
-      else event.initCustomEvent(type, false, false, undefined);
-      return event;
-    };
-    CustomEvent.prototype = global.Event.prototype;
-  }
-
-  node = type = null;
-}
+// if (document) {
+//   var node = document.documentElement;
+//
+//   if (!node.matches) {
+//     var vendorMatches = node.webkitMatchesSelector || node.msMatchesSelector || node.mozMatchesSelector || node.oMatchesSelector;
+//     filterOf = function(selector) { return function() { return vendorMatches.call(this, selector); }; };
+//   }
+//
+//   for (var type in filterEvents) {
+//     if ("on" + type in document) {
+//       delete filterEvents[type];
+//     }
+//   }
+//
+//   if (!CustomEvent) {
+//     CustomEvent = function(type, params) {
+//       var event = document.createEvent("CustomEvent");
+//       if (params) event.initCustomEvent(type, params.bubbles, params.cancelable, params.detail);
+//       else event.initCustomEvent(type, false, false, undefined);
+//       return event;
+//     };
+//     CustomEvent.prototype = document.defaultView.Event.prototype;
+//   }
+//
+//   node = type = null;
+// }
 
 if (!Map) {
   Map = function() {};
@@ -45,6 +46,82 @@ if (!Map) {
     has: function(key) { return "$" + key in this; }
   };
 }
+
+var namespaces = d3.namespaces = new Map;
+namespaces.set("svg", "http://www.w3.org/2000/svg");
+namespaces.set("xhtml", "http://www.w3.org/1999/xhtml");
+namespaces.set("xlink", "http://www.w3.org/1999/xlink");
+namespaces.set("xml", "http://www.w3.org/XML/1998/namespace");
+namespaces.set("xmlns", "http://www.w3.org/2000/xmlns/");
+
+var namespace = d3.namespace = function(name) {
+  var i = name.indexOf(":"),
+      prefix = name;
+
+  if (i >= 0) {
+    prefix = name.slice(0, i);
+    name = name.slice(i + 1);
+  }
+
+  return namespaces.has(prefix)
+      ? {space: namespaces.get(prefix), local: name}
+      : name;
+};
+
+// https://bugs.webkit.org/show_bug.cgi?id=44083
+var bug44083 = global.navigator && /WebKit/.test(global.navigator.userAgent) ? -1 : 0;
+
+function point(node, event) {
+  var svg = node.ownerSVGElement || node;
+  if (svg.createSVGPoint) {
+    var point = svg.createSVGPoint();
+    if (bug44083 < 0) {
+      var window = global.window; // Must exist if bug44083.
+      if (window.scrollX || window.scrollY) {
+        svg = d3.select("body").append("svg").style({position: "absolute", top: 0, left: 0, margin: 0, padding: 0, border: "none"}, "important");
+        var ctm = svg.node().getScreenCTM();
+        bug44083 = !(ctm.f || ctm.e);
+        svg.remove();
+      }
+    }
+    if (bug44083) point.x = event.pageX, point.y = event.pageY;
+    else point.x = event.clientX, point.y = event.clientY;
+    point = point.matrixTransform(node.getScreenCTM().inverse());
+    return [point.x, point.y];
+  }
+  var rect = node.getBoundingClientRect();
+  return [event.clientX - rect.left - node.clientLeft, event.clientY - rect.top - node.clientTop];
+}
+
+function source() {
+  var event = d3.event, source;
+  while (source = event.sourceEvent) event = source;
+  return event;
+}
+
+d3.mouse = function(node, event) {
+  if (arguments.length < 2) event = source();
+  if (event.changedTouches) event = event.changedTouches[0];
+  return point(node, event);
+};
+
+d3.touch = function(node, touches, identifier) {
+  if (arguments.length < 3) identifier = touches, touches = source().changedTouches;
+  for (var i = 0, n = touches ? touches.length : 0, touch; i < n; ++i) {
+    if ((touch = touches[i]).identifier === identifier) {
+      return point(node, touch);
+    }
+  }
+  return null;
+};
+
+d3.touches = function(node, touches) {
+  if (arguments.length < 2) touches = source().touches;
+  for (var i = 0, n = touches ? touches.length : 0, points = new Array(n); i < n; ++i) {
+    points[i] = point(node, touches[i]);
+  }
+  return points;
+};
 
 // When depth = 1, root = [Node, …].
 // When depth = 2, root = [[Node, …], …].
@@ -56,6 +133,8 @@ function Selection(root, depth) {
   this._enter = null;
   this._exit = null;
 }
+
+d3.selection = Selection;
 
 Selection.prototype = {
 
@@ -579,7 +658,7 @@ Selection.prototype = {
   },
 
   attr: function(name, value) {
-    name = namespace.qualify(name);
+    name = namespace(name);
 
     if (arguments.length < 2) {
       var node = this.node();
@@ -769,20 +848,20 @@ Selection.prototype = {
   event: function(type, listener, capture) {
     var n = arguments.length,
         key = "__on" + type,
-        filter,
+        // filter,
         root = this._root;
 
     if (n < 2) return (n = this.node()[key]) && n._listener;
 
     if (n < 3) capture = false;
     if ((n = type.indexOf(".")) > 0) type = type.slice(0, n);
-    if (filter = filterEvents.hasOwnProperty(type)) type = filterEvents[type];
+    // if (filter = filterEvents.hasOwnProperty(type)) type = filterEvents[type];
 
     function add() {
       var ancestor = root, i = arguments.length >> 1, ancestors = new Array(i);
       while (--i >= 0) ancestor = ancestor[arguments[(i << 1) + 1]], ancestors[i] = i ? ancestor._parent : ancestor;
       var l = listenerOf(listener, ancestors, arguments);
-      if (filter) l = filterListenerOf(l);
+      // if (filter) l = filterListenerOf(l);
       remove.call(this);
       this.addEventListener(type, this[key] = l, l._capture = capture);
       l._listener = listener;
@@ -815,20 +894,26 @@ Selection.prototype = {
   dispatch: function(type, params) {
 
     function dispatchConstant() {
-      return this.dispatchEvent(new CustomEvent(type, params));
+      return this.dispatchEvent(new windowOf(this).CustomEvent(type, params));
     }
 
     function dispatchFunction() {
-      return this.dispatchEvent(new CustomEvent(type, params.apply(this, arguments)));
+      return this.dispatchEvent(new windowOf(this).CustomEvent(type, params.apply(this, arguments)));
     }
 
     return this.each(typeof params === "function" ? dispatchFunction : dispatchConstant);
   }
 };
 
-Selection.select = function(selector) {
+// Deprecated aliases for backwards-compatibility with 3.x:
+Selection.prototype.on = Selection.prototype.event;
+Selection.prototype.insert = Selection.prototype.append;
+Selection.prototype.classed = Selection.prototype.class;
+
+d3.select = function(selector) {
   var root;
   if (typeof selector === "string") {
+    var document = global.document;
     root = [document.querySelector(selector)];
     root._parent = document.documentElement;
   } else {
@@ -838,9 +923,10 @@ Selection.select = function(selector) {
   return new Selection(root, 1);
 };
 
-Selection.selectAll = function(selector) {
+d3.selectAll = function(selector) {
   var root;
   if (typeof selector === "string") {
+    var document = global.document;
     root = document.querySelectorAll(selector);
     root._parent = document.documentElement;
   } else {
@@ -896,7 +982,7 @@ function arrayify(selection) {
 }
 
 function creatorOf(name) {
-  name = namespace.qualify(name);
+  name = namespace(name);
 
   function creator() {
     var document = this.ownerDocument,
@@ -937,25 +1023,25 @@ function classerOf(name) {
 
 function listenerOf(listener, ancestors, args) {
   return function(event) {
-    var i = ancestors.length, event0 = global.d3.event; // Events can be reentrant (e.g., focus).
+    var i = ancestors.length, event0 = d3.event; // Events can be reentrant (e.g., focus).
     while (--i >= 0) args[i << 1] = ancestors[i].__data__;
-    global.d3.event = event;
+    d3.event = event;
     try {
       listener.apply(ancestors[0], args);
     } finally {
-      global.d3.event = event0;
+      d3.event = event0;
     }
   };
 }
 
-function filterListenerOf(listener) {
-  return function(event) {
-    var related = event.relatedTarget;
-    if (!related || (related !== this && !(related.compareDocumentPosition(this) & 8))) {
-      listener(event);
-    }
-  };
-}
+// function filterListenerOf(listener) {
+//   return function(event) {
+//     var related = event.relatedTarget;
+//     if (!related || (related !== this && !(related.compareDocumentPosition(this) & 8))) {
+//       listener(event);
+//     }
+//   };
+// }
 
 function ascending(a, b) {
   return a < b ? -1 : a > b ? 1 : a >= b ? 0 : NaN;
@@ -968,5 +1054,3 @@ function collapse(string) {
 function requote(string) {
   return string.replace(requoteRe, "\\$&");
 }
-
-module.exports = Selection;

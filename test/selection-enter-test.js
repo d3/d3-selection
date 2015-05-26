@@ -1,12 +1,12 @@
 var tape = require("tape"),
     jsdom = require("jsdom"),
-    selection = require("../../lib/d3/selection");
+    d3 = require("../");
 
 tape("selection.enter initially returns an empty selection", function(test) {
   var document = jsdom.jsdom("<h1>hello</h1>"),
-      s = selection.select(document.body),
+      s = d3.select(document.body),
       e = s.enter();
-  test.ok(e instanceof selection);
+  test.ok(e instanceof d3.selection);
   test.equal(e._depth, 1);
   test.ok(Array.isArray(e._root));
   test.equal(e._root.length, 1);
@@ -22,7 +22,7 @@ tape("selection.enter initially returns an empty selection", function(test) {
 tape("selection.select moves enter nodes to the update selection", function(test) {
   var document = jsdom.jsdom(),
       nodes = [],
-      update = selection.select(document.body).selectAll("p").data([0, 1, 2]),
+      update = d3.select(document.body).selectAll("p").data([0, 1, 2]),
       enter = update.enter();
   test.equal(enter._root.length, 1);
   test.equal(enter._root[0].length, 3);
@@ -53,12 +53,12 @@ tape("selection.select moves enter nodes to the update selection", function(test
 
 tape("selection.append inserts enter nodes before following update nodes", function(test) {
   var document = jsdom.jsdom();
-  selection.select(document.body).selectAll("p").data([1, 3]).enter().append("p");
+  d3.select(document.body).selectAll("p").data([1, 3]).enter().append("p");
   var p = document.querySelectorAll("p");
   test.equal(p.length, 2);
   test.equal(p[0].__data__, 1);
   test.equal(p[1].__data__, 3);
-  selection.select(document.body).selectAll("p").data([0, 1, 2, 3, 4], function(d) { return d; }).enter().append("p");
+  d3.select(document.body).selectAll("p").data([0, 1, 2, 3, 4], function(d) { return d; }).enter().append("p");
   var p = document.querySelectorAll("p");
   test.equal(p.length, 5);
   test.equal(p[0].__data__, 0);

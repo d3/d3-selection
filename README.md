@@ -28,8 +28,8 @@ API changes from D3 3.x:
 
 * A new selection.dispatch method dispatches a [custom event](https://dom.spec.whatwg.org/#interface-customevent) of the specified type to all selected elements. It’s like trigger in jQuery.
 
-* The d3.ns.prefix namespace map is now exposed as d3.namespace. The old name is deprecated but preserved for backwards-compatibility.
-
 * [Multi-value map](http://bl.ocks.org/mbostock/3305515) variants of selection.attr, selection.style, selection.property, selection.class and selection.on are now implemented as distinct methods in the [d3-selection-multi plugin](https://github.com/d3/d3-selection-multi), rather than overloading the arguments. See [#2109](https://github.com/mbostock/d3/issues/2109).
+
+* The d3.ns.prefix namespace map has been renamed to d3.namespaces and is now a Map rather than an object. The d3.ns.qualify method has likewise been renamed to d3.namespace.
 
 * Removed support for Sizzle. It’s time.

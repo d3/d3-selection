@@ -2,7 +2,7 @@
   "name": "d3-selection",
   "version": "0.1.0",
   "description": "Data-driven DOM manipulation.",
-  "main": "lib/d3/selection",
+  "main": "index",
   "repository": {
     "type": "git",
     "url": "https://github.com/d3/d3-selection.git"
