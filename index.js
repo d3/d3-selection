@@ -1,51 +1,25 @@
 var d3 = module.exports = global.d3 || (global.d3 = {}),
-    Map = global.Map,
+    Map = global.Map || (Map = function() {}, Map.prototype = {set: function(k, v) { this["$" + k] = v; return this; }, get: function(k) { return this["$" + k]; }, has: function(k) { return "$" + k in this; }}, Map),
     valueOf = function(value) { return function() { return value; }; },
     selectorOf = function(selector) { return function() { return this.querySelector(selector); }; },
     selectorAllOf = function(selector) { return function() { return this.querySelectorAll(selector); }; },
     filterOf = function(selector) { return function() { return this.matches(selector); }; },
-    // filterEvents = {mouseenter: "mouseover", mouseleave: "mouseout"},
+    filterEvents = new Map,
     requoteRe = /[\\\^\$\*\+\?\|\[\]\(\)\.\{\}]/g;
 
-// TODO mouseenter, mouseleave polyfill
-// TODO element.matches polyfill
-// TODO window.CustomEvent polyfill
+(function(document) {
+  if (!document) return;
+  var element = document.documentElement;
 
-// if (document) {
-//   var node = document.documentElement;
-//
-//   if (!node.matches) {
-//     var vendorMatches = node.webkitMatchesSelector || node.msMatchesSelector || node.mozMatchesSelector || node.oMatchesSelector;
-//     filterOf = function(selector) { return function() { return vendorMatches.call(this, selector); }; };
-//   }
-//
-//   for (var type in filterEvents) {
-//     if ("on" + type in document) {
-//       delete filterEvents[type];
-//     }
-//   }
-//
-//   if (!CustomEvent) {
-//     CustomEvent = function(type, params) {
-//       var event = document.createEvent("CustomEvent");
-//       if (params) event.initCustomEvent(type, params.bubbles, params.cancelable, params.detail);
-//       else event.initCustomEvent(type, false, false, undefined);
-//       return event;
-//     };
-//     CustomEvent.prototype = document.defaultView.Event.prototype;
-//   }
-//
-//   node = type = null;
-// }
+  if (!("onmouseenter" in element)) {
+    filterEvents.set("mouseenter", "mouseover").set("mouseleave", "mouseout");
+  }
 
-if (!Map) {
-  Map = function() {};
-  Map.prototype = {
-    set: function(key, value) { this["$" + key] = value; return this; },
-    get: function(key) { return this["$" + key]; },
-    has: function(key) { return "$" + key in this; }
-  };
-}
+  if (!element.matches) {
+    var vendorMatches = element.webkitMatchesSelector || element.msMatchesSelector || element.mozMatchesSelector || element.oMatchesSelector;
+    filterOf = function(selector) { return function() { return vendorMatches.call(this, selector); }; };
+  }
+})(global.document);
 
 var namespaces = d3.namespaces = new Map;
 namespaces.set("svg", "http://www.w3.org/2000/svg");
@@ -131,6 +105,7 @@ function Selection(root, depth) {
   this._root = root;
   this._depth = depth;
   this._enter = null;
+  this._update = null;
   this._exit = null;
 }
 
@@ -146,10 +121,9 @@ Selection.prototype = {
 
     if (typeof selector !== "function") selector = selectorOf(selector);
 
-    function visit(nodes, depth) {
+    function visit(nodes, update, depth) {
       var i = -1,
           n = nodes.length,
-          update,
           node,
           subnode,
           subnodes = new Array(n);
@@ -160,17 +134,16 @@ Selection.prototype = {
         while (++i < n) {
           if (node = nodes[i]) {
             stack[stack0] = node._parent.__data__, stack[stack1] = i;
-            subnodes[i] = visit(node, depth);
+            subnodes[i] = visit(node, update && update[i], depth);
           }
         }
       }
 
       // The leaf group may be sparse if the selector returns a falsey value;
       // this preserves the index of nodes (unlike selection.filter).
-      // Data is propagated to the new node only if it is defined on the old.
+      // Propagate data to the new node only if it is defined on the old.
       // If this is an enter selection, materialized nodes are moved to update.
       else {
-        update = nodes._update;
         while (++i < n) {
           if (node = nodes[i]) {
             stack[0] = node.__data__, stack[1] = i;
@@ -187,7 +160,7 @@ Selection.prototype = {
       return subnodes;
     }
 
-    return new Selection(visit(this._root, depth), depth);
+    return new Selection(visit(this._root, this._update && this._update._root, depth), depth);
   },
 
   // The selector may either be a selector string (e.g., ".foo")
@@ -298,12 +271,10 @@ Selection.prototype = {
         stack = new Array(depth * 2),
         bind = key ? bindKey : bindIndex;
 
-    this.enter(); // initializes _enter and _update references
-    this.exit(); // initializes _exit references
     if (typeof value !== "function") value = valueOf(value);
-    visit(this._root, depth);
+    visit(this._root, this.enter()._root, this.exit()._root, depth);
 
-    function visit(nodes, depth) {
+    function visit(update, enter, exit, depth) {
       var i = -1,
           n,
           node;
@@ -312,23 +283,22 @@ Selection.prototype = {
         var stack0 = depth * 2,
             stack1 = stack0 + 1;
 
-        n = nodes.length;
+        n = update.length;
 
         while (++i < n) {
-          if (node = nodes[i]) {
+          if (node = update[i]) {
             stack[stack0] = node._parent.__data__, stack[stack1] = i;
-            visit(node, depth);
+            visit(node, enter[i], exit[i], depth);
           }
         }
       }
 
       else {
         var j = 0,
-            enter = nodes._enter,
             before;
 
-        bind(nodes, value.apply(nodes._parent, stack));
-        n = nodes.length;
+        bind(update, enter, exit, value.apply(update._parent, stack));
+        n = update.length;
 
         // Now connect the enter nodes to their following update node, such that
         // appendChild can insert the materialized enter node before this node,
@@ -336,18 +306,16 @@ Selection.prototype = {
         while (++i < n) {
           if (before = enter[i]) {
             if (i >= j) j = i + 1;
-            while (!(node = nodes[j]) && ++j < n);
+            while (!(node = update[j]) && ++j < n);
             before._next = node || null;
           }
         }
       }
     }
 
-    function bindIndex(update, data) {
+    function bindIndex(update, enter, exit, data) {
       var i = 0,
           node,
-          enter = update._enter,
-          exit = update._exit,
           nodeLength = update.length,
           dataLength = data.length,
           minLength = Math.min(nodeLength, dataLength);
@@ -381,11 +349,9 @@ Selection.prototype = {
       update.length = dataLength;
     }
 
-    function bindKey(update, data) {
+    function bindKey(update, enter, exit, data) {
       var i,
           node,
-          enter = update._enter,
-          exit = update._exit,
           dataLength = data.length,
           nodeLength = update.length,
           nodeByKeyValue = new Map,
@@ -458,6 +424,7 @@ Selection.prototype = {
   // Lazily constructs the enter selection for this (update) selection.
   // Until this selection is joined to data, the enter selection will be empty.
   enter: function() {
+    if (this._enter) return this._enter;
 
     function visit(nodes, depth) {
       var i = -1,
@@ -473,16 +440,13 @@ Selection.prototype = {
         }
       }
 
-      else {
-        nodes._enter = enter;
-        enter._update = nodes;
-      }
-
       enter._parent = nodes._parent;
       return enter;
     }
 
-    return this._enter || (this._enter = new Selection(visit(arrayify(this), this._depth), this._depth));
+    this._enter = new Selection(visit(arrayify(this), this._depth), this._depth);
+    this._enter._update = this;
+    return this._enter;
   },
 
   // Lazily constructs the exit selection for this (update) selection.
@@ -501,10 +465,6 @@ Selection.prototype = {
             exit[i] = visit(node, depth);
           }
         }
-      }
-
-      else {
-        nodes._exit = exit;
       }
 
       exit._parent = nodes._parent;
@@ -848,20 +808,20 @@ Selection.prototype = {
   event: function(type, listener, capture) {
     var n = arguments.length,
         key = "__on" + type,
-        // filter,
+        filter,
         root = this._root;
 
     if (n < 2) return (n = this.node()[key]) && n._listener;
 
     if (n < 3) capture = false;
     if ((n = type.indexOf(".")) > 0) type = type.slice(0, n);
-    // if (filter = filterEvents.hasOwnProperty(type)) type = filterEvents[type];
+    if (filter = filterEvents.has(type)) type = filterEvents.get(type);
 
     function add() {
       var ancestor = root, i = arguments.length >> 1, ancestors = new Array(i);
       while (--i >= 0) ancestor = ancestor[arguments[(i << 1) + 1]], ancestors[i] = i ? ancestor._parent : ancestor;
       var l = listenerOf(listener, ancestors, arguments);
-      // if (filter) l = filterListenerOf(l);
+      if (filter) l = filterListenerOf(l);
       remove.call(this);
       this.addEventListener(type, this[key] = l, l._capture = capture);
       l._listener = listener;
@@ -894,11 +854,11 @@ Selection.prototype = {
   dispatch: function(type, params) {
 
     function dispatchConstant() {
-      return this.dispatchEvent(new windowOf(this).CustomEvent(type, params));
+      return dispatchEvent(this, type, params);
     }
 
     function dispatchFunction() {
-      return this.dispatchEvent(new windowOf(this).CustomEvent(type, params.apply(this, arguments)));
+      return dispatchEvent(this, type, params.apply(this, arguments));
     }
 
     return this.each(typeof params === "function" ? dispatchFunction : dispatchConstant);
@@ -1006,6 +966,21 @@ function windowOf(node) {
           || node.defaultView); // node is a Document
 }
 
+function dispatchEvent(node, type, params) {
+  var window = windowOf(node),
+      event = window.CustomEvent;
+
+  if (event) {
+    event = new event(type, params);
+  } else {
+    event = window.document.createEvent("Event");
+    if (params) event.initEvent(type, params.bubbles, params.cancelable), event.detail = params.detail;
+    else event.initEvent(type, false, false);
+  }
+
+  node.dispatchEvent(event);
+}
+
 function classerOf(name) {
   var re;
   return function(node, value) {
@@ -1034,14 +1009,14 @@ function listenerOf(listener, ancestors, args) {
   };
 }
 
-// function filterListenerOf(listener) {
-//   return function(event) {
-//     var related = event.relatedTarget;
-//     if (!related || (related !== this && !(related.compareDocumentPosition(this) & 8))) {
-//       listener(event);
-//     }
-//   };
-// }
+function filterListenerOf(listener) {
+  return function(event) {
+    var related = event.relatedTarget;
+    if (!related || (related !== this && !(related.compareDocumentPosition(this) & 8))) {
+      listener(event);
+    }
+  };
+}
 
 function ascending(a, b) {
   return a < b ? -1 : a > b ? 1 : a >= b ? 0 : NaN;

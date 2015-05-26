@@ -14,6 +14,5 @@ tape("selection.exit initially returns an empty selection", function(test) {
   test.equal(e._root._parent, null);
   test.equal(e._enter, null);
   test.equal(e._exit, null);
-  test.equal(s._root._exit, e._root);
   test.end();
 });

@@ -14,8 +14,7 @@ tape("selection.enter initially returns an empty selection", function(test) {
   test.equal(e._root._parent, null);
   test.equal(e._enter, null);
   test.equal(e._exit, null);
-  test.equal(e._root._update, s._root);
-  test.equal(s._root._enter, e._root);
+  test.equal(e._update, s);
   test.end();
 });
 
