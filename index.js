@@ -49,9 +49,9 @@ function point(node, event) {
   if (svg.createSVGPoint) {
     var point = svg.createSVGPoint();
     if (bug44083 < 0) {
-      var window = global.window; // Must exist if bug44083.
+      var window = windowOf(node);
       if (window.scrollX || window.scrollY) {
-        svg = d3.select("body").append("svg").style({position: "absolute", top: 0, left: 0, margin: 0, padding: 0, border: "none"}, "important");
+        svg = d3.select(window.document.body).append("svg").style({position: "absolute", top: 0, left: 0, margin: 0, padding: 0, border: "none"}, "important");
         var ctm = svg.node().getScreenCTM();
         bug44083 = !(ctm.f || ctm.e);
         svg.remove();
