@@ -4,7 +4,7 @@ GENERATED_FILES = \
 
 all: $(GENERATED_FILES)
 
-.PHONY: clean all test publish
+.PHONY: clean all test
 
 test: all
 	node_modules/.bin/faucet `find test -name '*-test.js'`
@@ -18,9 +18,6 @@ d3-selection.min.js: d3-selection.js
 	rm -f $@
 	node_modules/.bin/uglifyjs $^ -c -m -o $@
 	chmod a-w $@
-
-publish:
-	npm publish
 
 clean:
 	rm -f -- $(GENERATED_FILES)
