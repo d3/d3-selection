@@ -310,7 +310,6 @@ Selection.prototype = {
           // Is this a duplicate of a key we’ve previously seen?
           // If so, this node is moved to the exit selection.
           if (nodeByKeyValue.has(keyValue)) {
-            delete update[i];
             exit[i] = node;
           }
 
