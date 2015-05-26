@@ -7,6 +7,7 @@ var d3 = module.exports = global.d3 || (global.d3 = {}),
     selectorAllOf = function(selector) { return function() { return this.querySelectorAll(selector); }; },
     filterOf = function(selector) { return function() { return this.matches(selector); }; },
     filterEvents = new Map,
+    noop = function() {},
     ascending = function(a, b) { return a < b ? -1 : a > b ? 1 : a >= b ? 0 : NaN; },
     collapse = function(string) { return string.trim().replace(/\s+/g, " "); },
     requote = function(string) { return string.replace(requoteRe, "\\$&"); },
@@ -14,7 +15,7 @@ var d3 = module.exports = global.d3 || (global.d3 = {}),
     bug44083 = global.navigator && /WebKit/.test(global.navigator.userAgent) ? -1 : 0; // https://bugs.webkit.org/show_bug.cgi?id=44083
 
 (function(document) {
-  if (!document) return
+  if (!document) return;
   var element = document.documentElement;
   if (!("onmouseenter" in element)) {
     filterEvents.set("mouseenter", "mouseover").set("mouseleave", "mouseout");
@@ -33,69 +34,9 @@ d3.namespaces = (new Map)
     .set("xmlns", "http://www.w3.org/2000/xmlns/");
 
 d3.namespace = function(name) {
-  var i = name.indexOf(":"),
-      prefix = name;
-
-  if (i >= 0) {
-    prefix = name.slice(0, i);
-    name = name.slice(i + 1);
-  }
-
-  return d3.namespaces.has(prefix)
-      ? {space: d3.namespaces.get(prefix), local: name}
-      : name;
-};
-
-function point(node, event) {
-  var svg = node.ownerSVGElement || node;
-  if (svg.createSVGPoint) {
-    var point = svg.createSVGPoint();
-    if (bug44083 < 0) {
-      var window = windowOf(node);
-      if (window.scrollX || window.scrollY) {
-        svg = d3.select(window.document.body).append("svg").style({position: "absolute", top: 0, left: 0, margin: 0, padding: 0, border: "none"}, "important");
-        var ctm = svg.node().getScreenCTM();
-        bug44083 = !(ctm.f || ctm.e);
-        svg.remove();
-      }
-    }
-    if (bug44083) point.x = event.pageX, point.y = event.pageY;
-    else point.x = event.clientX, point.y = event.clientY;
-    point = point.matrixTransform(node.getScreenCTM().inverse());
-    return [point.x, point.y];
-  }
-  var rect = node.getBoundingClientRect();
-  return [event.clientX - rect.left - node.clientLeft, event.clientY - rect.top - node.clientTop];
-}
-
-function source() {
-  var event = d3.event, source;
-  while (source = event.sourceEvent) event = source;
-  return event;
-}
-
-d3.mouse = function(node, event) {
-  if (arguments.length < 2) event = source();
-  if (event.changedTouches) event = event.changedTouches[0];
-  return point(node, event);
-};
-
-d3.touch = function(node, touches, identifier) {
-  if (arguments.length < 3) identifier = touches, touches = source().changedTouches;
-  for (var i = 0, n = touches ? touches.length : 0, touch; i < n; ++i) {
-    if ((touch = touches[i]).identifier === identifier) {
-      return point(node, touch);
-    }
-  }
-  return null;
-};
-
-d3.touches = function(node, touches) {
-  if (arguments.length < 2) touches = source().touches;
-  for (var i = 0, n = touches ? touches.length : 0, points = new Array(n); i < n; ++i) {
-    points[i] = point(node, touches[i]);
-  }
-  return points;
+  var i = name.indexOf(":"), prefix = name;
+  if (i >= 0) prefix = name.slice(0, i), name = name.slice(i + 1);
+  return d3.namespaces.has(prefix) ? {space: d3.namespaces.get(prefix), local: name} : name;
 };
 
 // When depth = 1, root = [Node, …].
@@ -105,9 +46,7 @@ d3.touches = function(node, touches) {
 function Selection(root, depth) {
   this._root = root;
   this._depth = depth;
-  this._enter = null;
-  this._update = null;
-  this._exit = null;
+  this._enter = this._update = this._exit = null;
 }
 
 d3.selection = Selection;
@@ -684,11 +623,7 @@ Selection.prototype = {
       else this.style.setProperty(name, x, priority);
     }
 
-    return this.each(value == null
-        ? remove
-        : (typeof value === "function"
-            ? setFunction
-            : setConstant));
+    return this.each(value == null ? remove : typeof value === "function" ? setFunction : setConstant);
   },
 
   property: function(name, value) {
@@ -708,11 +643,7 @@ Selection.prototype = {
       else this[name] = x;
     }
 
-    return this.each(value == null
-        ? remove
-        : (typeof value === "function"
-            ? setFunction
-            : setConstant));
+    return this.each(value == null ? remove : typeof value === "function" ? setFunction : setConstant);
   },
 
   class: function(name, value) {
@@ -910,8 +841,6 @@ EnterNode.prototype = {
   insertBefore: function(child, next) { return this._parent.insertBefore(child, next || this._next); }
 };
 
-function noop() {}
-
 // The leaf groups of the selection hierarchy are initially NodeList,
 // and then lazily converted to arrays when mutation is required.
 function arrayify(selection) {
@@ -1018,6 +947,58 @@ function filterListenerOf(listener) {
     }
   };
 }
+
+function point(node, event) {
+  var svg = node.ownerSVGElement || node;
+  if (svg.createSVGPoint) {
+    var point = svg.createSVGPoint();
+    if (bug44083 < 0) {
+      var window = windowOf(node);
+      if (window.scrollX || window.scrollY) {
+        svg = d3.select(window.document.body).append("svg").style({position: "absolute", top: 0, left: 0, margin: 0, padding: 0, border: "none"}, "important");
+        var ctm = svg.node().getScreenCTM();
+        bug44083 = !(ctm.f || ctm.e);
+        svg.remove();
+      }
+    }
+    if (bug44083) point.x = event.pageX, point.y = event.pageY;
+    else point.x = event.clientX, point.y = event.clientY;
+    point = point.matrixTransform(node.getScreenCTM().inverse());
+    return [point.x, point.y];
+  }
+  var rect = node.getBoundingClientRect();
+  return [event.clientX - rect.left - node.clientLeft, event.clientY - rect.top - node.clientTop];
+}
+
+function source() {
+  var event = d3.event, source;
+  while (source = event.sourceEvent) event = source;
+  return event;
+}
+
+d3.mouse = function(node, event) {
+  if (arguments.length < 2) event = source();
+  if (event.changedTouches) event = event.changedTouches[0];
+  return point(node, event);
+};
+
+d3.touch = function(node, touches, identifier) {
+  if (arguments.length < 3) identifier = touches, touches = source().changedTouches;
+  for (var i = 0, n = touches ? touches.length : 0, touch; i < n; ++i) {
+    if ((touch = touches[i]).identifier === identifier) {
+      return point(node, touch);
+    }
+  }
+  return null;
+};
+
+d3.touches = function(node, touches) {
+  if (arguments.length < 2) touches = source().touches;
+  for (var i = 0, n = touches ? touches.length : 0, points = new Array(n); i < n; ++i) {
+    points[i] = point(node, touches[i]);
+  }
+  return points;
+};
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}]},{},[1])(1)
