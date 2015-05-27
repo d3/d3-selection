@@ -9,6 +9,7 @@ if (!this.Map) {
 
 (function(global) {
   "use strict";
+
   var sourceEvent = function() {
     var event = global.d3.event, source;
     while (source = event.sourceEvent) event = source;
@@ -1044,5 +1045,4 @@ if (!this.Map) {
   else global.d3 = d3 = index;
   if (typeof define === "function" && define.amd) define(d3);
   else if (typeof module === "object" && module.exports) module.exports = d3;
-
 })(this);
