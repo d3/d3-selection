@@ -1,0 +1,29 @@
+import defaultView from "./defaultView";
+
+export default function(type, params) {
+
+  function dispatchConstant() {
+    return dispatchEvent(this, type, params);
+  }
+
+  function dispatchFunction() {
+    return dispatchEvent(this, type, params.apply(this, arguments));
+  }
+
+  return this.each(typeof params === "function" ? dispatchFunction : dispatchConstant);
+};
+
+function dispatchEvent(node, type, params) {
+  var window = defaultView(node),
+      event = window.CustomEvent;
+
+  if (event) {
+    event = new event(type, params);
+  } else {
+    event = window.document.createEvent("Event");
+    if (params) event.initEvent(type, params.bubbles, params.cancelable), event.detail = params.detail;
+    else event.initEvent(type, false, false);
+  }
+
+  node.dispatchEvent(event);
+}

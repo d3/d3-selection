@@ -8,7 +8,7 @@
     "url": "https://github.com/d3/d3-selection.git"
   },
   "devDependencies": {
-    "d3-bundler": "0.0",
+    "d3-bundler": "0.1",
     "faucet": "0.0",
     "jsdom": "3",
     "requirejs": "2",
