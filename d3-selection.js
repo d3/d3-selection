@@ -70,12 +70,6 @@ if (!this.Map) {
     return new Selection(visit(this._root, this._update && this._update._root, depth), depth);
   };
 
-  var selectorAllOf = function(selector) {
-    return function() {
-      return this.querySelectorAll(selector);
-    };
-  };
-
   var selection_selectAll = function(selector) {
     var depth = this._depth,
         stack = new Array(depth * 2);
@@ -118,6 +112,12 @@ if (!this.Map) {
 
     return new Selection(visit(this._root, depth), depth + 1);
   };
+
+  function selectorAllOf(selector) {
+    return function() {
+      return this.querySelectorAll(selector);
+    };
+  }
 
   var selection_filter = function(filter) {
     var depth = this._depth,

@@ -1,4 +1,3 @@
-
 // The leaf groups of the selection hierarchy are initially NodeList,
 // and then lazily converted to arrays when mutation is required.
 export default function(selection) {

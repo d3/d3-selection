@@ -1,5 +1,4 @@
 import Selection from "./selection";
-import selectorAllOf from "./selectorAllOf";
 
 // The selector may either be a selector string (e.g., ".foo")
 // or a function that optionally returns an array of nodes to select.
@@ -46,3 +45,9 @@ export default function(selector) {
 
   return new Selection(visit(this._root, depth), depth + 1);
 };
+
+function selectorAllOf(selector) {
+  return function() {
+    return this.querySelectorAll(selector);
+  };
+}
