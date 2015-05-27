@@ -8,10 +8,9 @@
     "url": "https://github.com/d3/d3-selection.git"
   },
   "devDependencies": {
-    "esperanto": "0.7",
+    "d3-bundler": "0.0",
     "faucet": "0.0",
     "jsdom": "3",
-    "minimist": "1",
     "requirejs": "2",
     "tape": "4",
     "uglify-js": "2"
