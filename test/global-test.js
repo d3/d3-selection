@@ -1,6 +1,6 @@
 var tape = require("tape"),
     jsdom = require("jsdom"),
-    d3 = require("../");
+    d3 = require("../d3-selection");
 
 tape("d3.selectAll can select by string", function(test) {
   var document = global.document = jsdom.jsdom(),

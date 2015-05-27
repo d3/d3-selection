@@ -8,11 +8,12 @@
     "url": "https://github.com/d3/d3-selection.git"
   },
   "devDependencies": {
-    "browserify": "10",
+    "esperanto": "0.7",
     "faucet": "0.0",
     "jsdom": "3",
+    "minimist": "1",
+    "requirejs": "2",
     "tape": "4",
-    "uglify-js": "2",
-    "requirejs": "2"
+    "uglify-js": "2"
   }
 }

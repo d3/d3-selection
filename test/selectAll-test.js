@@ -1,6 +1,6 @@
 var tape = require("tape"),
     jsdom = require("jsdom"),
-    d3 = require("../");
+    d3 = require("../d3-selection");
 
 tape("d3.selectAll can select an array of elements", function(test) {
   var document = jsdom.jsdom("<h1>hello</h1><h2>world</h2>"),

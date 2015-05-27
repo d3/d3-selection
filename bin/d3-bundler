@@ -1,0 +1,48 @@
+#!/usr/bin/env node
+
+var path = require("path"),
+    minimist = require("minimist"),
+    esperanto = require("esperanto");
+
+var argv = minimist(process.argv.slice(2));
+
+var polyfill = {
+  "Map":
+      '  if (!global.Map) {\n' +
+      '    var Map = function() {};\n' +
+      '    Map.prototype = {\n' +
+      '      set: function(k, v) { this["$" + k] = v; return this; },\n' +
+      '      get: function(k) { return this["$" + k]; },\n' +
+      '      has: function(k) { return "$" + k in this; }\n' +
+      '    };\n' +
+      '    global.Map = Map;\n' +
+      '  }\n' +
+      '\n'
+};
+
+esperanto.bundle({
+  entry: "standalone.js",
+  modules: {
+    "standalone.js":
+        'import index from ' + JSON.stringify("./" + argv._[0]) + ';\n' +
+        'var d3 = global.d3;\n' +
+        'if (d3) for (var field in index) d3[field] = index[field];\n' +
+        'else global.d3 = d3 = index;\n' +
+        'if (typeof define === "function" && define.amd) define(d3);\n' +
+        'else if (typeof module === "object" && module.exports) module.exports = d3;\n'
+  }
+}).then(function(bundle) {
+  process.stdout.write(bundle.concat({
+    indent: "  ",
+    intro:
+        '(function(global) {\n' +
+        '  "use strict";\n' +
+        '\n' + (argv["polyfill-map"] ? polyfill.Map : ""),
+    outro:
+        '\n' +
+        '\n' +
+        '})(this);\n'
+  }).code)
+}).catch(function(error) {
+  console.error(error);
+});
