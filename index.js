@@ -1,5 +1,13 @@
+if (!global.Map) {
+  Map = function() {};
+  Map.prototype = {
+    set: function(k, v) { this["$" + k] = v; return this; },
+    get: function(k) { return this["$" + k]; },
+    has: function(k) { return "$" + k in this; }
+  };
+}
+
 var d3 = module.exports = global.d3 || (global.d3 = {}),
-    Map = global.Map || (Map = function() {}, Map.prototype = {set: function(k, v) { this["$" + k] = v; return this; }, get: function(k) { return this["$" + k]; }, has: function(k) { return "$" + k in this; }}, Map),
     valueOf = function(value) { return function() { return value; }; },
     selectorOf = function(selector) { return function() { return this.querySelector(selector); }; },
     selectorAllOf = function(selector) { return function() { return this.querySelectorAll(selector); }; },
