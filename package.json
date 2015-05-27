@@ -1,14 +1,14 @@
 {
   "name": "d3-selection",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Data-driven DOM manipulation.",
-  "main": "index",
+  "main": "d3-selection",
   "repository": {
     "type": "git",
     "url": "https://github.com/d3/d3-selection.git"
   },
   "devDependencies": {
-    "d3-bundler": "0.1",
+    "d3-bundler": "0.2",
     "faucet": "0.0",
     "jsdom": "3",
     "requirejs": "2",
