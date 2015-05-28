@@ -4,9 +4,7 @@ This module implements the core concept of D3: manipulating the DOM by selecting
 
 * The implementation is now organized into ES6 modules, rather than the ad hoc concatentation used previously. A [UMD](https://github.com/umdjs/umd) build is provided using [Esperanto](http://esperantojs.org/), but feel free to roll your own.
 
-* The Selection class now extends Object, rather than Array. This obviates the need for [prototype injection](http://perfectionkills.com/how-ecmascript-5-still-does-not-allow-to-subclass-an-array/#wrappers_prototype_chain_injection) and [direct property injection](http://perfectionkills.com/how-ecmascript-5-still-does-not-allow-to-subclass-an-array/#wrappers_direct_property_injection).
-
-* Selections are now hierarchical, rather than having fixed two-level nesting. Accessor functions such as those accepted by selection.attr and selection.style can now refer to [parent data](http://bl.ocks.org/mbostock/7a8a2de2b99d391add4b) and indexes if desired.
+* The Selection class now extends Object, rather than Array. This obviates the need for [prototype injection](http://perfectionkills.com/how-ecmascript-5-still-does-not-allow-to-subclass-an-array/#wrappers_prototype_chain_injection) and [direct property injection](http://perfectionkills.com/how-ecmascript-5-still-does-not-allow-to-subclass-an-array/#wrappers_direct_property_injection).  Selections are now hierarchical, rather than having fixed two-level nesting. Accessor functions such as those accepted by selection.attr and selection.style can now refer to [parent data](http://bl.ocks.org/mbostock/7a8a2de2b99d391add4b) and indexes if desired.
 
 * The selection.data method (when called with arguments) now modifies the current selection to be the update selection, rather than returning a new selection. The selection.data method (when called *without* arguments) now returns an array of data for *all* selected elements, not just the first group.
 
