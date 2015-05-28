@@ -1,8 +1,6 @@
 # d3-selection
 
-This module implements the core concept of D3: manipulating the DOM by selecting elements and joining to data.
-
-This module is currently EXPERIMENTAL and represents the in-development D3 4.0 API. The 4.0 API is largely backwards-compatible, but differs from 3.x in several ways:
+This module implements the core concept of D3: manipulating the DOM by selecting elements and joining to data. This code is currently EXPERIMENTAL and represents the in-development D3 4.0 API. The 4.0 API is largely backwards-compatible, but differs from 3.x in several ways:
 
 * The implementation is now organized into ES6 modules, rather than the ad hoc concatentation used previously. A [UMD](https://github.com/umdjs/umd) build is provided using [Esperanto](http://esperantojs.org/), but you are free to define your own build.
 
