@@ -277,7 +277,7 @@ if (!this.Map) {
           dataLength = data.length,
           nodeLength = update.length,
           nodeByKeyValue = new Map,
-          keyStack = [null, null].concat(stack),
+          keyStack = new Array(2).concat(stack),
           keyValues = new Array(nodeLength),
           keyValue;
 
