@@ -10,15 +10,11 @@ This module implements the core concept of D3: manipulating the DOM by selecting
 
 * The selection.data method (when called with arguments) now modifies the current selection to be the update selection, rather than returning a new selection. The selection.data method (when called *without* arguments) now returns an array of data for *all* selected elements, not just the first group.
 
-* The enter and exit selections are now empty prior to a data-join, rather than non-existant.
-
-* Enter selections no longer have a special subclass, and thus support all selection methods. (Internally, enter nodes function as virtual placeholders, providing specialized appendChild and insertBefore methods.)
+* The enter and exit selections are now empty prior to a data-join, rather than non-existant. Enter selections no longer have a special subclass, and thus support all selection methods. (Internally, enter nodes function as virtual placeholders, providing specialized appendChild and insertBefore methods.)
 
 * A new selection selection.nodes method returns an array of all selected elements.
 
-* The selection.append method now takes an optional before selector and replaces selection.insert. The selection.insert method is now deprecated.
-
-* The enter.append method now inserts elements in data order by default when joining by key. (This assumes that new data is in the same order as old data; if not, use selection.order.) The enter.append method now moves, rather than copies, elements to the update selection.
+* The selection.append method now takes an optional before selector and replaces selection.insert. The selection.insert method is now deprecated. The selection.append method now inserts entering elements in data order by default when joining by key. (This assumes that new data is in the same order as old data; if not, use selection.order.) The selection.append method now moves, rather than copies, entering elements to the update selection.
 
 * The selection.classed method has been renamed selection.class. The old name is deprecated but preserved for backwards-compatibility.
 
