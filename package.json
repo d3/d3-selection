@@ -3,6 +3,7 @@
   "version": "0.4.2",
   "description": "Data-driven DOM manipulation.",
   "main": "dist/d3-selection",
+  "jsnext:main": "index",
   "repository": {
     "type": "git",
     "url": "https://github.com/d3/d3-selection.git"
