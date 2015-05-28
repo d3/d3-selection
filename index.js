@@ -8,14 +8,14 @@ import Selection from "./src/selection";
 import touch from "./src/touch";
 import touches from "./src/touches";
 
-export default {
-  mouse: mouse,
-  namespace: namespace,
-  namespaces: namespaces,
-  requote: requote,
-  select: select,
-  selectAll: selectAll,
-  selection: Selection,
-  touch: touch,
-  touches: touches
+export {
+  mouse,
+  namespace,
+  namespaces,
+  requote,
+  select,
+  selectAll,
+  Selection as selection,
+  touch,
+  touches
 };

@@ -1028,21 +1028,24 @@ if (!this.Map) {
     return points;
   };
 
-  var index = {
-    mouse: mouse,
-    namespace: namespace,
-    namespaces: namespaces,
-    requote: requote,
-    select: select,
-    selectAll: selectAll,
-    selection: Selection,
-    touch: src_touch,
-    touches: src_touches
+  var index_js = {
+    get mouse () { return mouse; },
+    get namespace () { return namespace; },
+    get namespaces () { return namespaces; },
+    get requote () { return requote; },
+    get select () { return select; },
+    get selectAll () { return selectAll; },
+    get selection () { return Selection; },
+    get touch () { return src_touch; },
+    get touches () { return src_touches; }
   };
 
-  var d3 = global.d3;
-  if (d3) for (var field in index) d3[field] = index[field];
-  else global.d3 = d3 = index;
+  var d3 = global.d3 || (global.d3 = {});
+  for (var name in index_js) {
+    var object = d3, names = name.split("_"), value = index_js[name];
+    while (name = names.shift(), names.length) object = object[name] || (object[name] = {});
+    object[name] = value;
+  }
   if (typeof define === "function" && define.amd) define(d3);
   else if (typeof module === "object" && module.exports) module.exports = d3;
 })(typeof global === "undefined" ? this : global);
