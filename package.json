@@ -1,6 +1,6 @@
 {
   "name": "d3-selection",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "Data-driven DOM manipulation.",
   "main": "dist/d3-selection",
   "jsnext:main": "index",
