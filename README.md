@@ -6,21 +6,17 @@ This module implements the core concept of D3: manipulating the DOM by selecting
 
 * The Selection class now extends Object, rather than Array. This obviates the need for [prototype injection](http://perfectionkills.com/how-ecmascript-5-still-does-not-allow-to-subclass-an-array/#wrappers_prototype_chain_injection) and [direct property injection](http://perfectionkills.com/how-ecmascript-5-still-does-not-allow-to-subclass-an-array/#wrappers_direct_property_injection).
 
-* Selections are now hierarchical, rather than having fixed two-level nesting. Accessor functions such as those accepted by selection.attr and selection.style can now refer to [parent data](http://bl.ocks.org/mbostock/7a8a2de2b99d391add4b) (and indices) if desired.
+* Selections are now hierarchical, rather than having fixed two-level nesting. Accessor functions such as those accepted by selection.attr and selection.style can now refer to [parent data](http://bl.ocks.org/mbostock/7a8a2de2b99d391add4b) and indexes if desired.
 
-* The selection.data method (when called with arguments) now modifies the current selection to be the update selection, rather than returning a new selection.
+* The selection.data method (when called with arguments) now modifies the current selection to be the update selection, rather than returning a new selection. The selection.data method (when called *without* arguments) now returns an array of data for *all* selected elements, not just the first group.
 
 * The enter and exit selections are now empty prior to a data-join, rather than non-existant.
 
-* The selection.data method (when called *without* arguments) now returns an array of data for *all* selected elements, not just the first group.
-
-* Similarly, a new selection selection.nodes method returns an array of all selected elements.
+* A new selection selection.nodes method returns an array of all selected elements.
 
 * The selection.append method now takes an optional before selector and replaces selection.insert. The selection.insert method is now deprecated.
 
-* The enter.append method now inserts elements in data order by default when joining by key. (This assumes that new data is in the same order as old data; if not, use selection.order after.)
-
-* The enter.append method now moves, rather than copies, elements to the update selection.
+* The enter.append method now inserts elements in data order by default when joining by key. (This assumes that new data is in the same order as old data; if not, use selection.order after.) The enter.append method now moves, rather than copies, elements to the update selection.
 
 * Enter selections no longer have a special subclass, and thus supports all selection methods. (Internally, enter nodes function as virtual placeholders, providing specialized appendChild and insertBefore methods.)
 
