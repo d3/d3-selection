@@ -1040,12 +1040,9 @@ if (!this.Map) {
     get touches () { return src_touches; }
   };
 
-  var d3 = global.d3 || (global.d3 = {});
-  for (var name in index_js) {
-    var object = d3, names = name.split("_"), value = index_js[name];
-    while (name = names.shift(), names.length) object = object[name] || (object[name] = {});
-    object[name] = value;
-  }
+  var object = global;
+  object = object.d3 || (object.d3 = {});
+  for (var name in index_js) object[name] = index_js[name];
   if (typeof define === "function" && define.amd) define(d3);
   else if (typeof module === "object" && module.exports) module.exports = d3;
 })(typeof global === "undefined" ? this : global);
