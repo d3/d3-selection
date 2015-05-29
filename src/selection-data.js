@@ -13,7 +13,7 @@ export default function(value, key) {
       stack = new Array(depth * 2),
       bind = key ? bindKey : bindIndex;
 
-  if (typeof value !== "function") value = valueOf(value);
+  if (typeof value !== "function") value = valueOf_(value);
   visit(this._root, this.enter()._root, this.exit()._root, depth);
 
   function visit(update, enter, exit, depth) {
@@ -175,7 +175,7 @@ EnterNode.prototype = {
   insertBefore: function(child, next) { return this._parent.insertBefore(child, next || this._next); }
 };
 
-function valueOf(value) {
+function valueOf_(value) { // XXX https://github.com/rollup/rollup/issues/12
   return function() {
     return value;
   };

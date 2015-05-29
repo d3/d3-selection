@@ -1,6 +1,6 @@
 var tape = require("tape"),
     jsdom = require("jsdom"),
-    d3 = require("../");
+    d3 = require("../build/d3");
 
 tape("selection.select can select elements (in the simplest case)", function(test) {
   var document = jsdom.jsdom("<h1>hello</h1>"),
