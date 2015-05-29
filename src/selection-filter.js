@@ -53,7 +53,7 @@ var filterOf = function(selector) {
   };
 };
 
-if (global.document) {
+if (typeof document !== "undefined") {
   var element = document.documentElement;
   if (!element.matches) {
     var vendorMatches = element.webkitMatchesSelector || element.msMatchesSelector || element.mozMatchesSelector || element.oMatchesSelector;

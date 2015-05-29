@@ -1,6 +1,6 @@
 import select from "./select";
 
-var bug44083 = global.navigator && /WebKit/.test(global.navigator.userAgent) ? -1 : 0; // https://bugs.webkit.org/show_bug.cgi?id=44083
+var bug44083 = typeof navigator !== "undefined" && /WebKit/.test(navigator.userAgent) ? -1 : 0; // https://bugs.webkit.org/show_bug.cgi?id=44083
 
 export default function(node, event) {
   var svg = node.ownerSVGElement || node;

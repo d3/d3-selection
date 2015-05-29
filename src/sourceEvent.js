@@ -1,5 +1,7 @@
+import {event} from "./selection-event";
+
 export default function() {
-  var event = global.d3.event, source;
-  while (source = event.sourceEvent) event = source;
-  return event;
+  var current = event, source;
+  while (source = current.sourceEvent) current = source;
+  return current;
 };

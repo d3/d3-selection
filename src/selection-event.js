@@ -2,7 +2,9 @@ import requote from "./requote";
 
 var filterEvents = new Map;
 
-if (global.document) {
+export var event = null;
+
+if (typeof document !== "undefined") {
   var element = document.documentElement;
   if (!("onmouseenter" in element)) {
     filterEvents.set("mouseenter", "mouseover").set("mouseleave", "mouseout");
@@ -56,14 +58,14 @@ export default function(type, listener, capture) {
 };
 
 function listenerOf(listener, ancestors, args) {
-  return function(event) {
-    var i = ancestors.length, event0 = global.d3.event; // Events can be reentrant (e.g., focus).
+  return function(event1) {
+    var i = ancestors.length, event0 = event; // Events can be reentrant (e.g., focus).
     while (--i >= 0) args[i << 1] = ancestors[i].__data__;
-    global.d3.event = event;
+    event = event1;
     try {
       listener.apply(ancestors[0], args);
     } finally {
-      global.d3.event = event0;
+      event = event0;
     }
   };
 }

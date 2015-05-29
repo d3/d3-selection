@@ -7,8 +7,10 @@ import selectAll from "./src/selectAll";
 import Selection from "./src/selection";
 import touch from "./src/touch";
 import touches from "./src/touches";
+import {event} from "./src/selection-event"
 
 export {
+  event,
   mouse,
   namespace,
   namespaces,
