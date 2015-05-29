@@ -4,7 +4,7 @@ import namespaces from "./src/namespaces";
 import requote from "./src/requote";
 import select from "./src/select";
 import selectAll from "./src/selectAll";
-import Selection from "./src/selection";
+import selection from "./src/selection";
 import touch from "./src/touch";
 import touches from "./src/touches";
 import {event} from "./src/selection-event"
@@ -17,7 +17,7 @@ export {
   requote,
   select,
   selectAll,
-  Selection as selection,
+  selection,
   touch,
   touches
 };
