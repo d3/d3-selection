@@ -16,7 +16,7 @@ tape("selection.event passes the listener function data and index", function(tes
       results = [],
       parent = d3.selectAll(document.querySelectorAll("parent")),
       child = parent.selectAll("child"),
-      s = child.event("foo", function() { results.push({this: this, arguments: [].slice.call(arguments)}); });
+      s = child.event("foo", function() { results.push({this: this, arguments: arguments}); });
   test.equal(results.length, 0);
   parent.datum(function(d, i) { return "parent-" + i; });
   child.datum(function(d, i, p, j) { return "child-" + i + "-" + j; });

@@ -22,6 +22,7 @@ import selection_append from "./selection-append";
 import selection_remove from "./selection-remove";
 import selection_datum from "./selection-datum";
 import selection_event from "./selection-event";
+import selection_context from "./selection-context";
 import selection_dispatch from "./selection-dispatch";
 
 // When depth = 1, root = [Node, …].
@@ -65,6 +66,7 @@ Selection.prototype = selection.prototype = {
   remove: selection_remove,
   datum: selection_datum,
   event: selection_event,
+  context: selection_context,
   on: selection_event, // deprecated alias
   dispatch: selection_dispatch
 };
