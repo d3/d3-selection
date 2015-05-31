@@ -28,13 +28,17 @@ import selection_dispatch from "./selection-dispatch";
 // When depth = 2, root = [[Node, …], …].
 // When depth = 3, root = [[[Node, …], …], …]. etc.
 // Note that [Node, …] and NodeList are used interchangeably; see arrayify.
-function Selection(root, depth) {
+export function Selection(root, depth) {
   this._root = root;
   this._depth = depth;
   this._enter = this._update = this._exit = null;
+};
+
+function selection() {
+  return new Selection([document.documentElement], 1);
 }
 
-Selection.prototype = {
+Selection.prototype = selection.prototype = {
   select: selection_select,
   selectAll: selection_selectAll,
   filter: selection_filter,
@@ -65,4 +69,4 @@ Selection.prototype = {
   dispatch: selection_dispatch
 };
 
-export default Selection;
+export default selection;

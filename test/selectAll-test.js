@@ -10,7 +10,7 @@ tape("d3.selectAll can select by string", function(test) {
   test.ok(s._root instanceof document.defaultView.NodeList);
   test.equal(s._root.length, 1);
   test.equal(s._root[0], document.body);
-  test.equal(s._root._parent, document.documentElement);
+  test.equal(s._root._parent, undefined);
   test.equal(s._enter, null);
   test.equal(s._exit, null);
   test.end();
@@ -28,7 +28,7 @@ tape("d3.selectAll can select an array of elements", function(test) {
   test.equal(s._root.length, 2);
   test.equal(s._root[0], h1);
   test.equal(s._root[1], h2);
-  test.equal(s._root._parent, null);
+  test.equal(s._root._parent, undefined);
   test.equal(s._enter, null);
   test.equal(s._exit, null);
   test.end();
@@ -45,7 +45,7 @@ tape("d3.selectAll can select a NodeList of elements", function(test) {
   test.equal(s._root.length, 2);
   test.equal(s._root[0], h1);
   test.equal(s._root[1], h2);
-  test.equal(s._root._parent, null);
+  test.equal(s._root._parent, undefined);
   test.equal(s._enter, null);
   test.equal(s._exit, null);
   test.end();
@@ -58,7 +58,7 @@ tape("d3.selectAll can select an empty array", function(test) {
   test.equal(s._depth, 1);
   test.ok(Array.isArray(s._root));
   test.equal(s._root.length, 0);
-  test.equal(s._root._parent, null);
+  test.equal(s._root._parent, undefined);
   test.equal(s._enter, null);
   test.equal(s._exit, null);
   test.end();
@@ -75,7 +75,7 @@ tape("d3.selectAll can select an array that contains null", function(test) {
   test.equal(s._root[0], null);
   test.equal(s._root[1], h1);
   test.equal(s._root[2], null);
-  test.equal(s._root._parent, null);
+  test.equal(s._root._parent, undefined);
   test.equal(s._enter, null);
   test.equal(s._exit, null);
   test.end();
@@ -89,7 +89,7 @@ tape("d3.selectAll can select an array that contains arbitrary objects", functio
   test.ok(Array.isArray(s._root));
   test.equal(s._root.length, 1);
   test.equal(s._root[0], object);
-  test.equal(s._root._parent, null);
+  test.equal(s._root._parent, undefined);
   test.equal(s._enter, null);
   test.equal(s._exit, null);
   test.end();

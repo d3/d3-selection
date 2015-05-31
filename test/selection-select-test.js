@@ -11,7 +11,7 @@ tape("selection.select can select elements (in the simplest case)", function(tes
   test.ok(Array.isArray(s._root));
   test.equal(s._root.length, 1);
   test.equal(s._root[0], h1);
-  test.equal(s._root._parent, null);
+  test.equal(s._root._parent, undefined);
   test.equal(s._enter, null);
   test.equal(s._exit, null);
   test.end();
@@ -26,7 +26,7 @@ tape("selection.select will select the first element of multiple matches", funct
   test.ok(Array.isArray(s._root));
   test.equal(s._root.length, 1);
   test.equal(s._root[0], h1);
-  test.equal(s._root._parent, null);
+  test.equal(s._root._parent, undefined);
   test.equal(s._enter, null);
   test.equal(s._exit, null);
   test.end();
@@ -43,7 +43,7 @@ tape("selection.select can select elements (with multiple originating elements)"
   test.equal(s._root.length, 2);
   test.equal(s._root[0], h1.firstChild);
   test.equal(s._root[1], h2.firstChild);
-  test.equal(s._root._parent, null);
+  test.equal(s._root._parent, undefined);
   test.equal(s._enter, null);
   test.equal(s._exit, null);
   test.end();
@@ -59,7 +59,7 @@ tape("selection.select can select elements (with a null originating element)", f
   test.equal(s._root.length, 2);
   test.equal(s._root[0], h1.firstChild);
   test.ok(!(1 in s._root));
-  test.equal(s._root._parent, null);
+  test.equal(s._root._parent, undefined);
   test.equal(s._enter, null);
   test.equal(s._exit, null);
   test.end();
@@ -104,7 +104,7 @@ tape("selection.select can select elements (when the originating selection is ne
   test.ok(Array.isArray(s._root));
   test.ok(Array.isArray(s._root[0]));
   test.ok(Array.isArray(s._root[1]));
-  test.equal(s._root._parent, null);
+  test.equal(s._root._parent, undefined);
   test.equal(s._root[0]._parent, document.querySelector("#one"));
   test.equal(s._root[1]._parent, document.querySelector("#two"));
   test.equal(s._root[0][0], document.querySelector("#one span"));
@@ -118,7 +118,7 @@ tape("selection.select can select elements (when the originating selection conta
   test.equal(s._depth, 1);
   test.ok(Array.isArray(s._root));
   test.equal(s._root.length, 2);
-  test.equal(s._root._parent, null);
+  test.equal(s._root._parent, undefined);
   test.ok(!(0 in s._root));
   test.equal(s._root[1], document.querySelector("#two span"));
   test.end();
@@ -136,7 +136,7 @@ tape("selection.select can select elements (when the originating selection is ne
   test.ok(Array.isArray(s._root[1]));
   test.ok(!(0 in s._root[0]));
   test.equal(s._root[1][0], document.querySelector("#two b"));
-  test.equal(s._root._parent, null);
+  test.equal(s._root._parent, undefined);
   test.equal(s._root[0]._parent, document.querySelector("#one"));
   test.equal(s._root[1]._parent, document.querySelector("#two"));
   test.end();

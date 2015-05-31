@@ -1,4 +1,4 @@
-import Selection from "./selection";
+import {Selection} from "./selection";
 
 // The filter may either be a selector string (e.g., ".foo")
 // or a function that returns a boolean.

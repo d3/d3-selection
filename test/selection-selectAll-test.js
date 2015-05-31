@@ -15,7 +15,7 @@ tape("selection.selectAll can select elements (in the simplest case)", function(
   test.equal(s._root[0].length, 2);
   test.equal(s._root[0][0], h1);
   test.equal(s._root[0][1], h2);
-  test.equal(s._root._parent, null);
+  test.equal(s._root._parent, undefined);
   test.equal(s._root[0]._parent, document.body);
   test.equal(s._enter, null);
   test.equal(s._exit, null);
@@ -39,7 +39,7 @@ tape("selection.selectAll can select elements (with multiple originating element
   test.equal(s._root[0][1], document.querySelector("#td-0-1"));
   test.equal(s._root[1][0], document.querySelector("#td-1-0"));
   test.equal(s._root[1][1], document.querySelector("#td-1-1"));
-  test.equal(s._root._parent, null);
+  test.equal(s._root._parent, undefined);
   test.equal(s._root[0]._parent, tr0);
   test.equal(s._root[1]._parent, tr1);
   test.equal(s._enter, null);
@@ -60,7 +60,7 @@ tape("selection.selectAll can select elements (with multiple originating element
   test.equal(s._root[0].length, 2);
   test.equal(s._root[0][0], document.querySelector("#td-0-0"));
   test.equal(s._root[0][1], document.querySelector("#td-0-1"));
-  test.equal(s._root._parent, null);
+  test.equal(s._root._parent, undefined);
   test.equal(s._root[0]._parent, tr);
   test.equal(s._enter, null);
   test.equal(s._exit, null);
@@ -91,7 +91,7 @@ tape("selection.selectAll can select elements (when the originating selection is
   test.ok(Array.isArray(s._root[1]));
   test.ok(s._root[0][0] instanceof document.defaultView.NodeList);
   test.ok(s._root[1][0] instanceof document.defaultView.NodeList);
-  test.equal(s._root._parent, null);
+  test.equal(s._root._parent, undefined);
   test.equal(s._root[0]._parent, document.querySelector("#one"));
   test.equal(s._root[1]._parent, document.querySelector("#two"));
   test.equal(s._root[0][0]._parent, document.querySelector("#one child"));
@@ -110,7 +110,7 @@ tape("selection.selectAll can select elements (when the originating selection co
   test.equal(s._root[1].length, 1);
   test.ok(!(0 in s._root));
   test.ok(s._root[1] instanceof document.defaultView.NodeList);
-  test.equal(s._root._parent, null);
+  test.equal(s._root._parent, undefined);
   test.equal(s._root[1]._parent, document.querySelector("#two child"));
   test.equal(s._root[1][0], document.querySelector("#two span"));
   test.end();
@@ -130,7 +130,7 @@ tape("selection.selectAll can select elements (when the originating selection is
   test.ok(s._root[1][0] instanceof document.defaultView.NodeList);
   test.ok(!(0 in s._root[0]));
   test.equal(s._root[1][0][0], document.querySelector("#two b"));
-  test.equal(s._root._parent, null);
+  test.equal(s._root._parent, undefined);
   test.equal(s._root[0]._parent, document.querySelector("#one"));
   test.equal(s._root[1]._parent, document.querySelector("#two"));
   test.equal(s._root[1][0]._parent, document.querySelector("#two span"));

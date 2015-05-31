@@ -1,4 +1,4 @@
-import Selection from "./selection";
+import {Selection} from "./selection";
 import selectorOf from "./selectorOf";
 
 // The selector may either be a selector string (e.g., ".foo")
