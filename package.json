@@ -1,21 +1,22 @@
 {
   "name": "d3-selection",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "description": "Data-driven DOM manipulation.",
+  "main": "build/d3",
   "jsnext:main": "index",
   "repository": {
     "type": "git",
     "url": "https://github.com/d3/d3-selection.git"
   },
   "scripts": {
-    "pretest": "mkdir -p build && d3-bundler -- test/d3.js > build/d3.js",
-    "test": "faucet `find test -name '*-test.js'`"
+    "pretest": "mkdir -p build && d3-bundler --format=cjs -- d3.js > build/d3.js",
+    "test": "faucet `find test -name '*-test.js'`",
+    "prepublish": "npm run test"
   },
   "devDependencies": {
-    "d3-bundler": "~0.2.2",
+    "d3-bundler": "~0.2.5",
     "faucet": "0.0",
     "jsdom": "3",
-    "requirejs": "2",
     "tape": "4"
   }
 }

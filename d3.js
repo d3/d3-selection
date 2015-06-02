@@ -9,7 +9,7 @@ import {
   selection,
   touch,
   touches
-} from "../index";
+} from "./index";
 
 export default {
   get event() { return event; },

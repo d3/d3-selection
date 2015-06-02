@@ -1,6 +1,6 @@
 var tape = require("tape"),
     jsdom = require("jsdom"),
-    d3 = require("../build/d3");
+    d3 = require("../");
 
 tape("selection.event registers a listener which receives events", function(test) {
   var document = jsdom.jsdom(),
