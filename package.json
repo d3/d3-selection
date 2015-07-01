@@ -30,6 +30,6 @@
     "faucet": "0.0",
     "jsdom": "3",
     "tape": "4",
-    "uglifyjs": "2"
+    "uglify-js": "2"
   }
 }
