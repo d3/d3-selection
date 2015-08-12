@@ -34,7 +34,7 @@ function classerOf(name) {
   var re;
   return function(node, value) {
     if (c = node.classList) return value ? c.add(name) : c.remove(name);
-    if (!re) re = new RegExp("(?:^|\\s+)" + requote(name) + "(?:\\s+|$)", "g");
+    if (!re) re = classedRe(name);
     var c = node.getAttribute("class") || "";
     if (value) {
       re.lastIndex = 0;
@@ -47,4 +47,8 @@ function classerOf(name) {
 
 function collapse(string) {
   return string.trim().replace(/\s+/g, " ");
+}
+
+function classedRe(name) {
+  return new RegExp("(?:^|\\s+)" + requote(name) + "(?:\\s+|$)", "g");
 }
