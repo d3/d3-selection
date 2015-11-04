@@ -1,6 +1,6 @@
 {
   "name": "d3-selection",
-  "version": "0.4.10",
+  "version": "0.4.11",
   "description": "Data-driven DOM manipulation: select elements and join them to data.",
   "keywords": [
     "d3",
@@ -26,7 +26,7 @@
     "prepublish": "npm run test && d3-bundler -n selection -o build/selection.js && uglifyjs build/selection.js -c -m -o build/selection.min.js && rm -f build/selection.zip && zip -j build/selection.zip -- LICENSE README.md build/selection.js build/selection.min.js"
   },
   "devDependencies": {
-    "d3-bundler": "~0.4.0",
+    "d3-bundler": "~0.4.2",
     "faucet": "0.0",
     "jsdom": "7",
     "tape": "4",
