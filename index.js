@@ -1,23 +1,10 @@
-import mouse from "./src/mouse";
-import namespace from "./src/namespace";
-import namespaces from "./src/namespaces";
-import requote from "./src/requote";
-import select from "./src/select";
-import selectAll from "./src/selectAll";
-import selection from "./src/selection";
-import touch from "./src/touch";
-import touches from "./src/touches";
-import {event} from "./src/selection-event"
-
-export {
-  event,
-  mouse,
-  namespace,
-  namespaces,
-  requote,
-  select,
-  selectAll,
-  selection,
-  touch,
-  touches
-};
+export {default as mouse} from "./src/mouse";
+export {default as namespace} from "./src/namespace";
+export {default as namespaces} from "./src/namespaces";
+export {default as requote} from "./src/requote";
+export {default as select} from "./src/select";
+export {default as selectAll} from "./src/selectAll";
+export {default as selection} from "./src/selection";
+export {default as touch} from "./src/touch";
+export {default as touches} from "./src/touches";
+export {event} from "./src/selection-event"
