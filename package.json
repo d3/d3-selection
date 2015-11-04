@@ -1,6 +1,6 @@
 {
   "name": "d3-selection",
-  "version": "0.4.8",
+  "version": "0.4.9",
   "description": "Data-driven DOM manipulation: select elements and join them to data.",
   "keywords": [
     "d3",
@@ -14,19 +14,19 @@
     "name": "Mike Bostock",
     "url": "http://bost.ocks.org/mike"
   },
-  "main": "build/d3",
+  "main": "build/selection",
   "jsnext:main": "index",
   "repository": {
     "type": "git",
     "url": "https://github.com/d3/d3-selection.git"
   },
   "scripts": {
-    "pretest": "mkdir -p build && d3-bundler --polyfill-map --format=umd --name=d3 -- d3.js > build/d3.js",
+    "pretest": "mkdir -p build && d3-bundler --format=umd --name=selection -- index.js > build/selection.js",
     "test": "faucet `find test -name '*-test.js'`",
-    "prepublish": "npm run test && uglifyjs build/d3.js -c -m -o build/d3.min.js && rm -f build/d3.zip && zip -j build/d3.zip -- LICENSE README.md build/d3.js build/d3.min.js"
+    "prepublish": "npm run test && uglifyjs build/selection.js -c -m -o build/selection.min.js && rm -f build/selection.zip && zip -j build/selection.zip -- LICENSE README.md build/selection.js build/selection.min.js"
   },
   "devDependencies": {
-    "d3-bundler": "~0.2.5",
+    "d3-bundler": "~0.3.0",
     "faucet": "0.0",
     "jsdom": "3",
     "tape": "4",

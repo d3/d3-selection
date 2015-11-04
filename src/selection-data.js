@@ -1,3 +1,5 @@
+var keyPrefix = "$";
+
 // The value may either be an array or a function that returns an array.
 // An optional key function may be specified to control how data is bound;
 // if no key function is specified, data is bound to nodes by index.
@@ -96,7 +98,7 @@ export default function(value, key) {
         node,
         dataLength = data.length,
         nodeLength = update.length,
-        nodeByKeyValue = new Map,
+        nodeByKeyValue = {},
         keyStack = new Array(2).concat(stack),
         keyValues = new Array(nodeLength),
         keyValue;
@@ -109,17 +111,17 @@ export default function(value, key) {
     for (i = 0; i < nodeLength; ++i) {
       if (node = update[i]) {
         keyStack[0] = node.__data__, keyStack[1] = i;
-        keyValues[i] = keyValue = key.apply(node, keyStack);
+        keyValues[i] = keyValue = keyPrefix + key.apply(node, keyStack);
 
         // Is this a duplicate of a key we’ve previously seen?
         // If so, this node is moved to the exit selection.
-        if (nodeByKeyValue.has(keyValue)) {
+        if (nodeByKeyValue[keyValue]) {
           exit[i] = node;
         }
 
         // Otherwise, record the mapping from key to node.
         else {
-          nodeByKeyValue.set(keyValue, node);
+          nodeByKeyValue[keyValue] = node;
         }
       }
     }
@@ -130,11 +132,11 @@ export default function(value, key) {
     // Compute the keys for each datum.
     for (i = 0; i < dataLength; ++i) {
       keyStack[0] = data[i], keyStack[1] = i;
-      keyValue = key.apply(update._parent, keyStack);
+      keyValue = keyPrefix + key.apply(update._parent, keyStack);
 
       // Is there a node associated with this key?
       // If not, this datum is added to the enter selection.
-      if (!(node = nodeByKeyValue.get(keyValue))) {
+      if (!(node = nodeByKeyValue[keyValue])) {
         enter[i] = new EnterNode(update._parent, data[i]);
       }
 
@@ -147,13 +149,13 @@ export default function(value, key) {
       }
 
       // Record that we consumed this key, either to enter or update.
-      nodeByKeyValue.set(keyValue, true);
+      nodeByKeyValue[keyValue] = true;
     }
 
     // Take any remaining nodes that were not bound to data,
     // and place them in the exit selection.
     for (i = 0; i < nodeLength; ++i) {
-      if ((node = nodeByKeyValue.get(keyValues[i])) !== true) {
+      if ((node = nodeByKeyValue[keyValues[i]]) !== true) {
         exit[i] = node;
       }
     }

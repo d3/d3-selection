@@ -1,13 +1,13 @@
 import requote from "./requote";
 
-var filterEvents = new Map;
+var filterEvents = {};
 
 export var event = null;
 
 if (typeof document !== "undefined") {
   var element = document.documentElement;
   if (!("onmouseenter" in element)) {
-    filterEvents.set("mouseenter", "mouseover").set("mouseleave", "mouseout");
+    filterEvents = {mouseenter: "mouseover", mouseleave: "mouseout"};
   }
 }
 
@@ -21,7 +21,7 @@ export default function(type, listener, capture) {
 
   if (n < 3) capture = false;
   if ((n = type.indexOf(".")) > 0) type = type.slice(0, n);
-  if (filter = filterEvents.has(type)) type = filterEvents.get(type);
+  if (filter = filterEvents.hasOwnProperty(type)) type = filterEvents[type];
 
   function add() {
     var ancestor = root, i = arguments.length >> 1, ancestors = new Array(i);

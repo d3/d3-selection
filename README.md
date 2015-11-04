@@ -22,7 +22,7 @@ This module implements the core concept of D3: manipulating the DOM by selecting
 
 * [Multi-value map](http://bl.ocks.org/mbostock/3305515) variants of selection.attr, selection.style, selection.property, selection.class and selection.on are now implemented as distinct methods in the [d3-selection-multi plugin](https://github.com/d3/d3-selection-multi), rather than overloading the arguments. See [#2109](https://github.com/mbostock/d3/issues/2109).
 
-* The d3.ns.prefix namespace map has been renamed to d3.namespaces and is now a Map rather than an object.
+* The d3.ns.prefix namespace map has been renamed to d3.namespaces.
 
 * The d3.ns.qualify method has been renamed to d3.namespace.
 
