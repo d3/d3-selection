@@ -1,6 +1,6 @@
 {
   "name": "d3-selection",
-  "version": "0.4.11",
+  "version": "0.4.12",
   "description": "Data-driven DOM manipulation: select elements and join them to data.",
   "keywords": [
     "d3",
@@ -14,20 +14,20 @@
     "name": "Mike Bostock",
     "url": "http://bost.ocks.org/mike"
   },
-  "main": "build/selection.cjs",
+  "main": "build/d3-selection.js",
   "jsnext:main": "index",
   "repository": {
     "type": "git",
     "url": "https://github.com/d3/d3-selection.git"
   },
   "scripts": {
-    "pretest": "mkdir -p build && d3-bundler -x -f cjs -o build/selection.cjs.js",
+    "pretest": "mkdir -p build && node -e 'process.stdout.write(\"var version = \\\"\" + require(\"./package.json\").version + \"\\\"; export * from \\\"../index\\\"; export {version};\");' > build/bundle.js && rollup -f umd -u d3-selection -n d3_selection -o build/d3-selection.js -- build/bundle.js",
     "test": "faucet `find test -name '*-test.js'`",
-    "prepublish": "npm run test && d3-bundler -n selection -o build/selection.js && uglifyjs build/selection.js -c -m -o build/selection.min.js && rm -f build/selection.zip && zip -j build/selection.zip -- LICENSE README.md build/selection.js build/selection.min.js"
+    "prepublish": "npm run test && uglifyjs build/d3-selection.js -c -m -o build/d3-selection.min.js && rm -f build/d3-selection.zip && zip -j build/d3-selection.zip -- LICENSE README.md build/d3-selection.js build/d3-selection.min.js"
   },
   "devDependencies": {
-    "d3-bundler": "~0.4.2",
     "faucet": "0.0",
+    "rollup": "0.20.5",
     "jsdom": "7",
     "tape": "4",
     "uglify-js": "2"
