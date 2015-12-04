@@ -15,7 +15,7 @@ export default function(type, listener, capture) {
   var n = arguments.length,
       key = "__on" + type,
       filter,
-      root = this._root;
+      selection = this;
 
   if (n < 2) return (n = this.node()[key]) && n._listener;
 
@@ -24,13 +24,11 @@ export default function(type, listener, capture) {
   if (filter = filterEvents.hasOwnProperty(type)) type = filterEvents[type];
 
   function add() {
-    var ancestor = root, i = arguments.length >> 1, ancestors = new Array(i);
-    while (--i >= 0) ancestor = ancestor[arguments[(i << 1) + 1]], ancestors[i] = i ? ancestor._parent : ancestor;
-    var l = listenerOf(listener, ancestors, arguments);
-    if (filter) l = filterListenerOf(l);
     remove.call(this);
-    this.addEventListener(type, this[key] = l, l._capture = capture);
+    var l = listenerOf(listener, selection.context(arguments));
+    if (filter) l = filterListenerOf(l);
     l._listener = listener;
+    this.addEventListener(type, this[key] = l, l._capture = capture);
   }
 
   function remove() {
@@ -57,13 +55,12 @@ export default function(type, listener, capture) {
       : (n ? remove : removeAll));
 };
 
-function listenerOf(listener, ancestors, args) {
+function listenerOf(listener, context) {
   return function(event1) {
-    var i = ancestors.length, event0 = event; // Events can be reentrant (e.g., focus).
-    while (--i >= 0) args[i << 1] = ancestors[i].__data__;
-    event = event1;
+    var event0 = event;
+    event = event1; // Events can be reentrant (e.g., focus).
     try {
-      listener.apply(ancestors[0], args);
+      context(listener);
     } finally {
       event = event0;
     }
