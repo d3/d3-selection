@@ -1,3 +1,5 @@
+import constant from "./constant";
+
 var keyPrefix = "$";
 
 // The value may either be an array or a function that returns an array.
@@ -13,10 +15,13 @@ export default function(value, key) {
 
   var depth = this._depth - 1,
       stack = new Array(depth * 2),
-      bind = key ? bindKey : bindIndex;
+      bind = key ? bindKey : bindIndex,
+      enter = this.enter(), // Note: arrayify’s!
+      exit = this.exit();
 
-  if (typeof value !== "function") value = valueOf_(value);
-  visit(this._root, this.enter()._root, this.exit()._root, depth);
+  if (typeof value !== "function") value = constant(value);
+
+  visit(this._root, enter._root, exit._root, depth);
 
   function visit(update, enter, exit, depth) {
     var i = -1,
@@ -176,9 +181,3 @@ EnterNode.prototype = {
   appendChild: function(child) { return this._parent.insertBefore(child, this._next); },
   insertBefore: function(child, next) { return this._parent.insertBefore(child, next || this._next); }
 };
-
-function valueOf_(value) { // XXX https://github.com/rollup/rollup/issues/12
-  return function() {
-    return value;
-  };
-}
