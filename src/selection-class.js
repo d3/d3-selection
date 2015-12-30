@@ -1,16 +1,17 @@
 import requote from "./requote";
 
-export default function(name, value) {
-  name = (name + "").trim().split(/^|\s+/);
+export default function(rawName, value) {
+  var name = (rawName + "").trim().split(/^|\s+/);
   var n = name.length;
 
   if (arguments.length < 2) {
     var node = this.node(), i = -1;
-    if (value = node.classList) { // SVG elements may not support DOMTokenList!
-      while (++i < n) if (!value.contains(name[i])) return false;
+    var classes = node.classList;
+    if (classes) { // SVG elements may not support DOMTokenList!
+      while (++i < n) if (!classes.contains(name[i])) return false;
     } else {
-      value = node.getAttribute("class");
-      while (++i < n) if (!classedRe(name[i]).test(value)) return false;
+      classes = node.getAttribute("class");
+      while (++i < n) if (!classedRe(name[i]).test(classes)) return false;
     }
     return true;
   }
@@ -29,6 +30,8 @@ export default function(name, value) {
 
   return this.each(typeof value === "function" ? setFunction : setConstant);
 };
+
+
 
 function classerOf(name) {
   var re;
