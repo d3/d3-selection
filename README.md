@@ -40,7 +40,7 @@ d3.selectAll("p b")
 
 Selecting via [*selection*.select](#selection_select) does not affect grouping: it preserves the existing grouping and propagates parent data (if any) to selected children. Grouping plays an important role in the [data join](#data). See [Nested Selections](http://bost.ocks.org/mike/nest/) for more on this topic.
 
-<a name="selection" href="#selection">#</a> <b>selection</b>()
+<a name="selection" href="#selection">#</a> d3.<b>selection</b>()
 
 Selects the root document element. Equivalent to `select(document.documentElement)`. This function can also be used to check if an object is a selection (`o instanceof selection`) or to extend the selection prototype. For example, to add a convenience method for setting the “checked” property of checkboxes, you might say:
 
@@ -52,15 +52,15 @@ selection.prototype.checked = function(value) {
 };
 ```
 
-<a name="select" href="#select">#</a> <b>select</b>(<i>selector</i>)
-<br><a href="#select">#</a> <b>select</b>(<i>node</i>)
+<a name="select" href="#select">#</a> d3.<b>select</b>(<i>selector</i>)
+<br><a href="#select">#</a> d3.<b>select</b>(<i>node</i>)
 
 Selects the first element that matches the specified *selector*, returning a new, single-element selection. If no elements in the document match the specified selector, returns an empty selection. If multiple elements match the selector, only the first matching element (in document traversal order) will be selected.
 
 If *selector* is not a string, instead selects the specified *node*. This is useful if you already have a reference to a node, such as `select(this)` within an event listener, or a global such as `document.body`.
 
-<a name="selectAll" href="#selectAll">#</a> <b>selectAll</b>(<i>selector</i>)
-<br><a href="#selectAll">#</a> <b>selectAll</b>(<i>nodes</i>)
+<a name="selectAll" href="#selectAll">#</a> d3.<b>selectAll</b>(<i>selector</i>)
+<br><a href="#selectAll">#</a> d3.<b>selectAll</b>(<i>nodes</i>)
 
 Selects all elements that match the specified *selector*. The elements will be selected in document traversal order (top-to-bottom). If no elements in the document match the specified selector, returns an empty selection.
 
@@ -328,19 +328,19 @@ Re-inserts elements into the document such that the document order matches the s
 
 …
 
-<a name="event" href="#event">#</a> <b>event</b>()
+<a name="event" href="#event">#</a> d3.<b>event</b>
 
 …
 
-<a name="mouse" href="#mouse">#</a> <b>mouse</b>()
+<a name="mouse" href="#mouse">#</a> d3.<b>mouse</b>()
 
 …
 
-<a name="touch" href="#touch">#</a> <b>touch</b>()
+<a name="touch" href="#touch">#</a> d3.<b>touch</b>()
 
 …
 
-<a name="touches" href="#touches">#</a> <b>touches</b>()
+<a name="touches" href="#touches">#</a> d3.<b>touches</b>()
 
 …
 
@@ -377,14 +377,14 @@ For advanced usage, D3 has a few additional operators for custom control flow.
 
 …
 
-<a name="namespace" href="#namespace">#</a> <b>namespace</b>()
+<a name="namespace" href="#namespace">#</a> d3.<b>namespace</b>()
 
 …
 
-<a name="namespaces" href="#namespaces">#</a> <b>namespaces</b>()
+<a name="namespaces" href="#namespaces">#</a> d3.<b>namespaces</b>()
 
 …
 
-<a name="requote" href="#requote">#</a> <b>requote</b>()
+<a name="requote" href="#requote">#</a> d3.<b>requote</b>()
 
 …
