@@ -146,13 +146,11 @@ The specified *name* may have a namespace prefix, such as `xlink:href` to specif
 
 <a name="selection_classed" href="#selection_classed">#</a> <i>selection</i>.<b>classed</b>(<i>classes</i>[, <i>value</i>])
 
-Assigns or unassigns the specified CSS *classes* on the selected elements. The specified *classes* is a string of space-separated class names. For example, to add the classes `foo` and `bar` to the selected elements:
+Assigns or unassigns the specified CSS *classes* on the selected elements by setting the `class` attribute or modifying the `classList` property as appropriate. The specified *classes* is a string of space-separated class names. For example, to add the classes `foo` and `bar` to the selected elements:
 
 ```js
 selection.classed("foo bar", true);
 ```
-
-This operator is implemented by setting the `class` attribute or modifying the `classList` property.
 
 If a *value* is specified, sets whether or not the specified *classes* are associated with the selected elements. If the *value* is truthy, then all elements are assigned the specified *classes*; otherwise, the *classes* are unassigned from all selected elements.
 
