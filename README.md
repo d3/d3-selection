@@ -210,19 +210,21 @@ In both cases, this method returns a new selection containing the appended eleme
 
 An optional *before* selector string or function may be specified. For instance, the selector `:first-child` will prepend nodes before the first child, rather than after the last child. If no *before* selector is specified on an [enter selection](#selection_enter), then entering elements are inserted immediately before the next following sibling in the update selection, if any. This allows you to insert elements into the DOM in an order consistent with bound data. Note, however, the slower [*selection*.order](#selection_order) may still be required if updating elements change order.
 
-The specified *name* may have a namespace prefix, such as `svg:text`, to specify a `text` attribute in the SVG namespace. See [namespaces](#namespaces) for the map of supported namespaces; additional namespaces can be registered by adding to the map. If no namespace is specified, the namespace will be inherited from the parent element; or, if the name is one of the known prefixes, the corresponding namespace will be used (for example, `svg` implies `svg:svg`).
+The specified *name* may have a namespace prefix, such as `svg:text` to specify a `text` attribute in the SVG namespace. See [namespaces](#namespaces) for the map of supported namespaces; additional namespaces can be registered by adding to the map. If no namespace is specified, the namespace will be inherited from the parent element; or, if the name is one of the known prefixes, the corresponding namespace will be used (for example, `svg` implies `svg:svg`).
 
 <a name="selection_remove" href="#selection_remove">#</a> <i>selection</i>.<b>remove</b>()
 
-Removes the selected elements from the document. Returns the current selection (the removed elements) which are now detached from the DOM. Note that there is not currently a dedicated API to add removed elements back to the document; however, you can pass a function to *selection*.append to re-add elements.
+Removes the selected elements from the document. Returns this selection (the removed elements) which are now detached from the DOM. Note that there is not currently a dedicated API to add removed elements back to the document; however, you can pass a function to [*selection*.append](#selection_append) to re-add elements.
 
 ### Data
+
+For an introduction to D3’s data joins, see [Thinking With Joins](http://bost.ocks.org/mike/join/). Also see the [General Update Pattern](http://bl.ocks.org/mbostock/3808218) example thread.
 
 <a name="selection_data" href="#selection_data">#</a> <i>selection</i>.<b>data</b>([<i>data</i>[, <i>key</i>]])
 
 Joins the specified array of *data* with the selected elements. The specified *data* is an array of arbitrary values (*e.g.*, numbers or objects), or a function that returns an array of values. If a *key* function is not specified, then the first datum in *values* is assigned to the first selected element, the second datum to the second selected element, and so on. When data is assigned to an element, it is stored in the property `__data__`, thus making the data “sticky” and available on re-selection.
 
-This method modifies the current selection so that it represents the *update* selection: the elements that were successfully bound to data. It simultaneously defines the [enter](#selection_enter) and [exit](#selection_exit) selections for adding and removing elements to correspond to data. The *update* and *enter* selections are returned in data order, while the *exit* selection is in document order (at the time that the selection was queried). For more details, see the tutorial [Thinking With Joins](http://bost.ocks.org/mike/join/).
+This method modifies the current selection so that it represents the *update* selection: the elements that were successfully bound to data. It simultaneously defines the [enter](#selection_enter) and [exit](#selection_exit) selections for adding and removing elements to correspond to data. The *update* and *enter* selections are returned in data order, while the *exit* selection is in document order (at the time that the selection was queried).
 
 A *key* function may be specified to control how data is joined to elements, replacing the default join-by-index. The key function is evaluated for each selected element (in order), being passed the current datum *d* and the current index *i*, with the `this` context as the current DOM element. The key function is also evaluated for each new datum, being passed the datum `d`, the index `i`, with the `this` context as the parent DOM element. The returned string keys are used to construct a map to uniquely assign data to elements.
 
