@@ -45,7 +45,7 @@ d3.selectAll("input[type=checkbox]").checked(true);
 
 <a name="select" href="#select">#</a> d3.<b>select</b>(<i>selector</i>)
 
-Selects the first element that matches the specified *selector*, returning a new, single-element selection. If no elements match the *selector*, returns an empty selection. If multiple elements match the *selector*, only the first matching element (in traversal order) will be selected. For example, to select the first anchor element:
+Selects the first element that matches the specified *selector*. If no elements match the *selector*, returns an empty selection. If multiple elements match the *selector*, only the first matching element (in traversal order) will be selected. For example, to select the first anchor element:
 
 ```js
 var anchor = d3.select("a");
@@ -134,7 +134,7 @@ To learn selections experientially, try selecting elements by writing code into 
 
 <a name="selection_attr" href="#selection_attr">#</a> <i>selection</i>.<b>attr</b>(<i>name</i>[, <i>value</i>])
 
-If a *value* is specified, sets the attribute with the specified *name* to the specified *value* on the selected elements. If the *value* is a constant, then all elements are given the same attribute *value*; otherwise, if the *value* is a function, the function is evaluated for each selected element (in order), being passed the current datum *d* and the current index *i*, with the `this` context as the current DOM element. The function’s return value is then used to set each element’s attribute. A null value will remove the specified attribute.
+If a *value* is specified, sets the attribute with the specified *name* to the specified *value* on the selected elements and returns this selection. If the *value* is a constant, then all elements are given the same attribute *value*; otherwise, if the *value* is a function, the function is evaluated for each selected element (in order), being passed the current datum *d* and the current index *i*, with the `this` context as the current DOM element. The function’s return value is then used to set each element’s attribute. A null value will remove the specified attribute.
 
 If a *value* is not specified, returns the current value of the specified attribute for the first (non-null) element in the selection. This is generally useful only if you know that the selection contains exactly one element.
 
@@ -142,27 +142,27 @@ The specified *name* may have a namespace prefix, such as `xlink:href` to specif
 
 <a name="selection_classed" href="#selection_classed">#</a> <i>selection</i>.<b>classed</b>(<i>classes</i>[, <i>value</i>])
 
-Assigns or unassigns the specified CSS *classes* on the selected elements by setting the `class` attribute or modifying the `classList` property as appropriate. The specified *classes* is a string of space-separated class names. For example, to add the classes `foo` and `bar` to the selected elements:
+If a *value* is specified, assigns or unassigns the specified CSS *classes* on the selected elements by setting the `class` attribute or modifying the `classList` property and returns this selection. The specified *classes* is a string of space-separated class names. For example, to add the classes `foo` and `bar` to the selected elements:
 
 ```js
 selection.classed("foo bar", true);
 ```
 
-If a *value* is specified, sets whether or not the specified *classes* are associated with the selected elements. If the *value* is truthy, then all elements are assigned the specified *classes*; otherwise, the *classes* are unassigned from all selected elements. If the *value* is a function, then the function is evaluated for each selected element (in order), being passed the current datum *d* and the current index *i*, with the `this` context as the current DOM element. The function’s return value is then used to assign or unassign classes on each element. For example, to randomly associate the class *foo* with on average half the selected elements:
+If the *value* is truthy, then all elements are assigned the specified *classes*; otherwise, the *classes* are unassigned from all selected elements. If the *value* is a function, then the function is evaluated for each selected element (in order), being passed the current datum *d* and the current index *i*, with the `this` context as the current DOM element. The function’s return value is then used to assign or unassign classes on each element. For example, to randomly associate the class *foo* with on average half the selected elements:
 
 ```js
 selection.classed("foo", function() { return Math.random(); });
 ```
 
-If a *value* is not specified, returns true if and only if the first non-null element in this selection has the specified class(es). This is generally useful only if you know the selection contains exactly one element.
+If a *value* is not specified, returns true if and only if the first (non-null) selected element has the specified *classes*. This is generally useful only if you know the selection contains exactly one element.
 
 <a name="selection_style" href="#selection_style">#</a> <i>selection</i>.<b>style</b>(<i>name</i>[, <i>value</i>[, <i>priority</i>]])
 
-If a *value* is specified, sets the style property with the specified *name* to the specified *value* on the selected elements. If the *value* is a constant, then all elements are given the same style value; otherwise, if the *value* is a function, then the function is evaluated for each selected element (in order), being passed the current datum *d* and the current index *i*, with the `this` context as the current DOM element. The function’s return value is then used to set each element’s style property. A null value will remove the style property. An optional *priority* may also be specified, either as null or the string `important` (without the exclamation point).
+If a *value* is specified, sets the style property with the specified *name* to the specified *value* on the selected elements and returns this selection. If the *value* is a constant, then all elements are given the same style value; otherwise, if the *value* is a function, then the function is evaluated for each selected element (in order), being passed the current datum *d* and the current index *i*, with the `this` context as the current DOM element. The function’s return value is then used to set each element’s style property. A null value will remove the style property. An optional *priority* may also be specified, either as null or the string `important` (without the exclamation point).
+
+If a *value* is not specified, returns the current computed value of the specified style property for the first non-null element in the selection. This is generally useful only if you know the selection contains exactly one element. Note that **the computed value may be different than the previously-set value**, particularly if the style property was set using a shorthand property (such as the `font` style, which is shorthand for `font-size`, `font-face`, etc.).
 
 Note that CSS styles typically have associated units. For example, `3px` is a valid stroke-width property value, while `3` is not. Although some browsers implicitly assign the `px` (pixel) unit to numeric values, not all browsers do: IE, for example, throws an “invalid arguments” error and stops executing!
-
-If a *value* is not specified, returns the current *computed* value of the specified style property for the first non-null element in the selection. This is generally useful only if you know the selection contains exactly one element. Note that the computed value may be *different* than the value that was previously set, particularly if the style property was set using a shorthand property (such as the `font` style, which is shorthand for `font-size`, `font-face`, etc.).
 
 <a name="selection_property" href="#selection_property">#</a> <i>selection</i>.<b>property</b>(<i>name</i>[, <i>value</i>])
 
