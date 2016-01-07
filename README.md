@@ -99,8 +99,6 @@ For each selected element, selects all descendant elements that match the specif
 var b = d3.selectAll("p").selectAll("b");
 ```
 
-Unlike [*selection*.select](#selection_select), *selection*.selectAll does affect grouping: each selected descendant is grouped by the parent element in the originating selection. Grouping plays an important role in the [data join](#data). See [Nested Selections](http://bost.ocks.org/mike/nest/) for more on this topic.
-
 If the *selector* is a function, it will be invoked in the same manner as other operator functions, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. It must then return an array of elements (or a psuedo-array, such as a NodeList), or the empty array if there are no matching elements. For example, to select the previous and next siblings of each paragraph:
 
 ```js
@@ -111,6 +109,8 @@ var sibling = d3.selectAll("p").selectAll(function() {
   ];
 });
 ```
+
+Unlike [*selection*.select](#selection_select), *selection*.selectAll does affect grouping: each selected descendant is grouped by the parent element in the originating selection. Grouping plays an important role in the [data join](#data). See [Nested Selections](http://bost.ocks.org/mike/nest/) for more on this topic.
 
 ### Transformation
 
