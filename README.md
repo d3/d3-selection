@@ -1,10 +1,8 @@
 # d3-selection
 
-A *selection* is an array of elements selected by a [selector](http://www.w3.org/TR/css3-selectors/ "|http://www.w3.org/TR/css3-selectors/"). For example, you can select by tag (`div`), class (`.awesome`), unique identifier (`#foo`), attribute (`[color=red]`), or containment (`parent child`). Selectors can also be intersected (`.this.that` for logical AND) or unioned (`.this, .that` for logical OR).
+Selections manipulate multiple elements simultaneously. Get or set [attributes](#selection_attr), [styles](#selection_style), [properties](#selection_property), [HTML](#selection_html) and [text](#selection_text) content. Values are specified as either constants or functions; the latter are evaluated for each element, given the element’s data. Use method chaining for brevity when applying multiple operators.
 
-After selecting, apply *operators* to manipulate elements. Operators can get or set [attributes](#selection_attr), [styles](#selection_style), [properties](#selection_property), [HTML](#selection_html) and [text](#selection_text) content. Values are specified as either constants or functions; the latter are evaluated for each element, given the element’s data. Use method chaining for brevity when applying multiple operators: the operator return value is the selection.
-
-Join selections to [data](#selection_data) to make data available to operators. The data join also produces the [enter](#selection_enter) and [exit](#selection_enter) subselections, so that you may [add](#selection_append) or [remove](#selection_remove) elements to correspond to data.
+Join selections to [data](#selection_data) to make data available to operators. Using the [enter](#selection_enter) and [exit](#selection_enter) subselections, you can also [add](#selection_append) or [remove](#selection_remove) elements to correspond to data.
 
 ## Installing
 
