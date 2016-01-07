@@ -222,17 +222,9 @@ For an introduction to D3’s data joins, see [Thinking With Joins](http://bost.
 
 <a name="selection_data" href="#selection_data">#</a> <i>selection</i>.<b>data</b>([<i>data</i>[, <i>key</i>]])
 
-Joins the specified array of *data* with the selected elements. The specified *data* is an array of arbitrary values (*e.g.*, numbers or objects), or a function that returns an array of values. If a *key* function is not specified, then the first datum in *values* is assigned to the first selected element, the second datum to the second selected element, and so on. When data is assigned to an element, it is stored in the property `__data__`, thus making the data “sticky” and available on re-selection.
+Joins the specified array of *data* with the selected elements, modifying this selection so that it represents the *update* selection: the elements successfully bound to data. Also defines the [enter](#selection_enter) and [exit](#selection_exit) selections, which can be used to add or remove elements to correspond to the new data. The specified *data* is an array of arbitrary values (*e.g.*, numbers or objects), or a function that returns an array of values for each group. When data is assigned to an element, it is stored in the property `__data__`, thus making the data “sticky” and available on re-selection.
 
-This method modifies the current selection so that it represents the *update* selection: the elements that were successfully bound to data. It simultaneously defines the [enter](#selection_enter) and [exit](#selection_exit) selections for adding and removing elements to correspond to data. The *update* and *enter* selections are returned in data order, while the *exit* selection is in document order (at the time that the selection was queried).
-
-A *key* function may be specified to control how data is joined to elements, replacing the default join-by-index. The key function is evaluated for each selected element (in order), being passed the current datum *d* and the current index *i*, with the `this` context as the current DOM element. The key function is also evaluated for each new datum, being passed the datum `d`, the index `i`, with the `this` context as the parent DOM element. The returned string keys are used to construct a map to uniquely assign data to elements.
-
-If a key function is specified, the order of elements in this selection may change. However, the elements are not automatically reordered in the DOM; use [*selection*.order](#order) or [*selection*.sort](#sort) as needed. For a more detailed example of how the key function affects the data join, see the tutorial [A Bar Chart, Part 2](http://bost.ocks.org/mike/bar/2/).
-
-The *data* is specified **for each group** in the selection. Thus, if the selection has multiple groups (such as a [selectAll](#selectAll) followed by a [*selection*.selectAll](#selection_selectAll)), then *data* should typically be specified as a function that returns an array. The *data* function will be passed the parent element data (which may be undefined) and the index, with the parent element as the `this` context.
-
-For example, you may bind a two-dimensional array to an initial selection, and then bind the inner arrays to each subselection. The *data* function in this case is the identity function: it is invoked for each group of child elements, being passed the data bound to the parent element, and returns this array of data.
+The *data* is specified **for each group** in the selection. If the selection has multiple groups (such as [d3.selectAll](#selectAll) followed by [*selection*.selectAll](#selection_selectAll)), then *data* should typically be specified as a function. This function will be invoked for each group, being passed the parent datum *d* (which may be undefined) and the group index *i*, with the parent element as the `this` context. For example, to create an HTML table from a matrix of numbers:
 
 ```js
 var matrix = [
@@ -252,6 +244,40 @@ var td = tr.selectAll("td")
   .enter().append("td")
     .text(function(d) { return d; });
 ```
+
+The *data* function here is the identity function: it is invoked for each table row, and returns the numbers for each table cell.
+
+If a *key* is not specified, then the first datum in *data* is assigned to the first selected element, the second datum to the second selected element, and so on. A *key* function may be specified to control how data is assigned to elements, replacing the default join-by-index. This key function is evaluated for each selected element (in order), being passed the current datum *d* and the current index *i*, with the `this` context as the current DOM element. The key function is also evaluated for each new datum in *data*, being passed the datum `d`, the index `i`, with the `this` context as the parent DOM element. The datum for a given key is assigned to the element with the matching key. For example, given this document:
+
+```html
+<div id="Locke"></div>
+<div id="Reyes"></div>
+<div id="Ford"></div>
+<div id="Jarrah"></div>
+<div id="Shephard"></div>
+<div id="Kwon"></div>
+```
+
+You could join data by key as follows:
+
+
+```js
+var data = [
+  {name: "Locke", number: 4},
+  {name: "Reyes", number: 8},
+  {name: "Ford", number: 15},
+  {name: "Jarrah", number: 16},
+  {name: "Shephard", number: 31},
+  {name: "Kwon", number: 34}
+];
+
+d3.selectAll("div")
+    .data(data, function(d) { return d ? d.name : this.id; });
+```
+
+This key function uses the bound datum *d* if present, and otherwise falls back to the element’s id property.
+
+The *update* and *enter* selections are returned in data order, while the *exit* selection is in document order (at the time that the selection was queried). If a key function is specified, the order of elements in this selection may change. However, the elements are not automatically reordered in the DOM; use [*selection*.order](#order) or [*selection*.sort](#sort) as needed. For a more detailed example of how the key function affects the data join, see the tutorial [A Bar Chart, Part 2](http://bost.ocks.org/mike/bar/2/).
 
 If *data* is not specified, then this method returns the array of data the selected elements.
 
