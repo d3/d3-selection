@@ -138,21 +138,25 @@ To learn selections experientially, try selecting elements by writing code into 
 
 <a name="selection_attr" href="#selection_attr">#</a> <i>selection</i>.<b>attr</b>(<i>name</i>[, <i>value</i>])
 
-If a *value* is specified, sets the attribute with the specified *name* to the specified *value* on the selected elements. If the *value* is a constant, then all elements are given the same *value*; otherwise, if the *value* is a function, the function is evaluated for each selected element (in order), being passed the current datum *d* and the current index *i*, with the `this` context as the current DOM element. The function’s return value is then used to set each element’s attribute. A null value will remove the specified attribute.
+If a *value* is specified, sets the attribute with the specified *name* to the specified *value* on the selected elements. If the *value* is a constant, then all elements are given the same attribute *value*; otherwise, if the *value* is a function, the function is evaluated for each selected element (in order), being passed the current datum *d* and the current index *i*, with the `this` context as the current DOM element. The function’s return value is then used to set each element’s attribute. A null value will remove the specified attribute.
 
-If a *value* is not specified, returns the value of the specified attribute for the first non-null element in the selection. This is generally useful only if you know that the selection contains exactly one element.
+If a *value* is not specified, returns the current value of the specified attribute for the first (non-null) element in the selection. This is generally useful only if you know that the selection contains exactly one element.
 
-The specified *name* may have a namespace prefix, such as `xlink:href`, to specify an `href` attribute in the XLink namespace. See [namespaces](#namespaces) for the map of supported namespaces; additional namespaces can be registered by adding to the map.
+The specified *name* may have a namespace prefix, such as `xlink:href` to specify the `href` attribute in the XLink namespace. See [namespaces](#namespaces) for the map of supported namespaces; additional namespaces can be registered by adding to the map.
 
 <a name="selection_classed" href="#selection_classed">#</a> <i>selection</i>.<b>classed</b>(<i>classes</i>[, <i>value</i>])
 
-A convenience operator for setting the `class` attribute (or `classList` property). The specified *classes* is a string of space-separated class names. For example, to add the classes `foo` and `bar` to the selected elements:
+Assigns or unassigns the specified CSS *classes* on the selected elements. The specified *classes* is a string of space-separated class names. For example, to add the classes `foo` and `bar` to the selected elements:
 
 ```js
 selection.classed("foo bar", true);
 ```
 
-If a *value* is specified, sets whether or not the specified *classes* are associated with the selected elements. If *value* is a constant and truthy, then all elements are assigned the specified *classes*, if not already assigned; if falsey, then the *classes* are removed from all selected elements, if assigned. If *value* is a function, then the function is evaluated for each selected element (in order), being passed the current datum *d* and the current index *i*, with the `this` context as the current DOM element. The function’s return value is then used to assign or unassign classes on each element.
+This operator is implemented by setting the `class` attribute or modifying the `classList` property.
+
+If a *value* is specified, sets whether or not the specified *classes* are associated with the selected elements. If the *value* is truthy, then all elements are assigned the specified *classes*; otherwise, the *classes* are unassigned from all selected elements.
+
+If the *value* is a function, then the function is evaluated for each selected element (in order), being passed the current datum *d* and the current index *i*, with the `this` context as the current DOM element. The function’s return value is then used to assign or unassign classes on each element.
 
 If a *value* is not specified, returns true if and only if the first non-null element in this selection has the specified class(es). This is generally useful only if you know the selection contains exactly one element.
 
