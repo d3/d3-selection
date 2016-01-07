@@ -446,42 +446,86 @@ Returns the *x* and *y* coordinates of the touches associated with the [current 
 
 For advanced usage, D3 has a few additional operators for custom control flow.
 
-<a name="selection_each" href="#selection_each">#</a> <i>selection</i>.<b>each</b>()
+<a name="selection_each" href="#selection_each">#</a> <i>selection</i>.<b>each</b>(<i>function</i>)
 
-…
+Invokes the specified *function* for each selected element, passing in the current datum `d` and index `i`, with the `this` context of the current DOM element. This operator is used internally by most other operators, and can be used to invoke arbitrary code for each selected element.
 
-<a name="selection_call" href="#selection_call">#</a> <i>selection</i>.<b>call</b>()
+<a name="selection_call" href="#selection_call">#</a> <i>selection</i>.<b>call</b>(<i>selection</i>[, <i>arguments…</i>])
 
-…
+Invokes the specified *function* (once), passing in the current selection along with any optional *arguments*, and returns the current selection. The call operator is identical to invoking a function by hand, but it facilitates method chaining. For example, to set several attributes in a reusable function:
+
+```javascript
+function name(selection, first, last) {
+  selection
+      .attr("first-name", first)
+      .attr("last-name", last);
+}
+```
+
+Now, we can say this:
+
+```javascript
+name(d3.selectAll("div"), "John", "Snow");
+```
+
+Or equivalently:
+
+```javascript
+d3.selectAll("div").call(name, "John", "Snow");
+```
+
+The `this` context of the called function is also the current selection. This is slightly redundant with the first argument, which we might fix in the future.
 
 <a name="selection_empty" href="#selection_empty">#</a> <i>selection</i>.<b>empty</b>()
 
-…
+Returns true if this selection is empty. A selection is empty if it contains no elements, or all elements are null.
 
 <a name="selection_nodes" href="#selection_nodes">#</a> <i>selection</i>.<b>nodes</b>()
 
-…
+Returns an array of all (non-null) elements in this selection.
 
 <a name="selection_node" href="#selection_node">#</a> <i>selection</i>.<b>node</b>()
 
-…
+Returns the first (non-null) element in this selection. If the selection is empty, returns null.
 
 <a name="selection_size" href="#selection_size">#</a> <i>selection</i>.<b>size</b>()
 
-…
+Returns the total number of elements in this selection.
 
 ### Namespaces
 
-…
+XML namespaces are fun!
 
-<a name="namespace" href="#namespace">#</a> d3.<b>namespace</b>()
+<a name="namespace" href="#namespace">#</a> d3.<b>namespace</b>(<i>name</i>)
 
-…
+Qualifies the specified *name*, which may or may not have a namespace prefix. If the name contains a colon (`:`), the substring before the colon is interpreted as the namespace prefix, which must be registered in [d3.namespaces](#namespaces). Returns an object `space` and `local` attributes describing the full namespace URL and the local name. For example:
 
-<a name="namespaces" href="#namespaces">#</a> d3.<b>namespaces</b>()
+```js
+d3.namespace("svg:text"); // {space: "http://www.w3.org/2000/svg", local: "text"}
+```
 
-…
+If the name does not contain a colon, this function merely returns the input name.
 
-<a name="requote" href="#requote">#</a> d3.<b>requote</b>()
+<a name="namespaces" href="#namespaces">#</a> d3.<b>namespaces</b>
 
-…
+The map of registered namespace prefixes. The default value is:
+
+```js
+{
+  svg: "http://www.w3.org/2000/svg",
+  xhtml: "http://www.w3.org/1999/xhtml",
+  xlink: "http://www.w3.org/1999/xlink",
+  xml: "http://www.w3.org/XML/1998/namespace",
+  xmlns: "http://www.w3.org/2000/xmlns/"
+}
+```
+
+Additional prefixes may be assigned as needed to create elements or attributes in other namespaces.
+
+<a name="requote" href="#requote">#</a> d3.<b>requote</b>(<i>string</i>)
+
+Returns a quoted (escaped) version of the specified *string* that may be safely embedded within a regular expression as a string literal. For example:
+
+```js
+d3.requote("[]"); // "\[\]"
+```
