@@ -188,12 +188,11 @@ If a *value* is specified, sets the inner HTML to the specified value on all sel
 
 If a *value* is not specified, returns the inner HTML for the first (non-null) element in the selection. This is generally useful only if you know the selection contains exactly one element.
 
-Note: as its name suggests, *selection*.html is only supported on HTML elements. SVG elements and other non-HTML elements do not support the innerHTML property, and thus are incompatible with *selection*.html. Consider using [XMLSerializer](https://developer.mozilla.org/en-US/docs/XMLSerializer) to convert a DOM subtree to text. See also the [innersvg polyfill](https://code.google.com/p/innersvg/), which provides a shim to support the innerHTML property on SVG elements.
+As the name suggests, *selection*.html is only supported on HTML elements. SVG elements and other non-HTML elements do not support the innerHTML property, and thus are incompatible with *selection*.html. Consider using [XMLSerializer](https://developer.mozilla.org/en-US/docs/XMLSerializer) to convert a DOM subtree to text. See also the [innersvg polyfill](https://code.google.com/p/innersvg/), which provides a shim to support the innerHTML property on SVG elements.
 
-<a name="selection_append" href="#selection_append">#</a> <i>selection</i>.<b>append</b>(<i>name</i>[, <i>before</i>])
-<br><a href="#selection_append">#</a> <i>selection</i>.<b>append</b>(<i>node</i>[, <i>before</i>])
+<a name="selection_append" href="#selection_append">#</a> <i>selection</i>.<b>append</b>(<i>type</i>[, <i>before</i>])
 
-If *name* is specified as a string, appends a new element with the specified *name* as the last child of each element in the current selection. Otherwise, a *node* function may be specified, which is evaluated for each selected element (in order), being passed the current datum *d* and the current index *i*, with the `this` context as the current DOM element. This function should return an element to be appended. (Typically, the function creates a new element, but it may return an existing element instead.) For example:
+If *type* is specified as a string, appends a new element with the specified type (tag name) as the last child of each element in the current selection. Otherwise, the *type* may be a function which is evaluated for each selected element (in order), being passed the current datum *d* and the current index *i*, with the `this` context as the current DOM element. This function should return an element to be appended. (Typically, the function creates a new element, but it may return an existing element instead.) For example:
 
 ```js
 selection.append(function() {
