@@ -2,21 +2,21 @@ var tape = require("tape"),
     jsdom = require("jsdom"),
     d3 = require("../");
 
-tape("selection.event registers a listener which receives events", function(test) {
+tape("selection.on registers a listener which receives events", function(test) {
   var document = jsdom.jsdom(),
       clicks = 0,
-      s = d3.select(document.body).event("click", function() { ++clicks; });
+      s = d3.select(document.body).on("click", function() { ++clicks; });
   s.dispatch("click");
   test.equal(clicks, 1);
   test.end();
 });
 
-tape("selection.event passes the listener function data and index", function(test) {
+tape("selection.on passes the listener function data and index", function(test) {
   var document = jsdom.jsdom("<parent id='one'><child><span><b>1</b></span></child></parent><parent id='two'><child><span><b>2</b></span></child></parent>"),
       results = [],
       parent = d3.selectAll(document.querySelectorAll("parent")),
       child = parent.selectAll("child"),
-      s = child.event("foo", function() { results.push({this: this, arguments: [].slice.call(arguments)}); });
+      s = child.on("foo", function() { results.push({this: this, arguments: [].slice.call(arguments)}); });
   test.equal(results.length, 0);
   parent.datum(function(d, i) { return "parent-" + i; });
   child.datum(function(d, i, p, j) { return "child-" + i + "-" + j; });

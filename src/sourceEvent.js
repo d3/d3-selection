@@ -1,4 +1,4 @@
-import {event} from "./selection-event";
+import {event} from "./selection-on";
 
 export default function() {
   var current = event, source;
