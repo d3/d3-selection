@@ -23,11 +23,11 @@ In a vanilla environment, a `d3_selection` global is exported. [Try d3-selection
 
 ### Selection
 
-Selection methods accept [selectors](http://www.w3.org/TR/selectors-api/) (such as `.foo` to select elements with the class *foo*) and come in two forms: select and selectAll. The former selects only the first matching element, while the latter selects all matching elements in traversal order. The top-level selection methods, [d3.select](#select) and [d3.selectAll](#selectAll), query the entire document; the subselection methods, [*selection*.select](#selection_select) and [*selection*.selectAll](#selection_selectAll), restrict selection to descendants of the selected elements
+Selection methods accept [selectors](http://www.w3.org/TR/selectors-api/) (such as `.foo` to select elements with the class *foo*) and come in two forms: select and selectAll. The former selects only the first matching element, while the latter selects all matching elements in traversal order. The top-level selection methods, [d3.select](#select) and [d3.selectAll](#selectAll), query the entire document; the subselection methods, [*selection*.select](#selection_select) and [*selection*.selectAll](#selection_selectAll), restrict selection to descendants of the selected elements.
 
 <a name="selection" href="#selection">#</a> d3.<b>selection</b>()
 
-Selects the root document element. Equivalent to [selecting](#select) `document.documentElement`. This function can also be used to check if an object is a selection (`instanceof selection`) or to extend the selection prototype. For example, to add a method to check or uncheck checkboxes, you might say:
+[Selects](#select) the root document element, `document.documentElement`. This function can also be used to check if an object is a selection (`instanceof selection`) or to extend the selection prototype. For example, to add a method to check or uncheck checkboxes:
 
 ```js
 d3.selection.prototype.checked = function(value) {
@@ -35,6 +35,12 @@ d3.selection.prototype.checked = function(value) {
       ? this.property("checked")
       : this.property("checked", !!value);
 };
+```
+
+And then to check all checkboxes:
+
+```js
+d3.selectAll("input[type=checkbox]").checked(true);
 ```
 
 <a name="select" href="#select">#</a> d3.<b>select</b>(<i>selector</i>)
