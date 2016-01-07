@@ -18,6 +18,31 @@ In a vanilla environment, a `d3_selection` global is exported. [Try d3-selection
 
 ## API Reference
 
+* [Selection](#selection)
+* [Manipulation](#manipulation)
+* [Data](#data)
+* [Events](#events)
+* [Control](#control)
+* [Namespaces](#namespaces)
+
+### Selection
+
+D3 provides two top-level methods for selecting elements: [select](#select) and [selectAll](#selectAll). These methods accept selector strings; the former selects only the first matching element, while the latter selects *all* matching elements in document traversal order. These methods can also accept nodes, which is useful for integration with third-party libraries such as jQuery or developer tools (`$0`).
+
+Whereas the top-level select methods query the entire document, a selection’s [select](Selections#select) and [selectAll](Selections#selectAll) operators restrict queries to descendants of each selected element; we call this "subselection". For example, `d3.selectAll("p").select("b")` returns the first bold ("b") elements in every paragraph ("p") element. Subselecting via selectAll groups elements by ancestor. Thus, `d3.selectAll("p").selectAll("b")` groups by paragraph, while `d3.selectAll("p b")` returns a flat selection. Subselecting via select is similar, but preserves groups and propagates data. Grouping plays an important role in the data join, and functional operators may depend on the numeric index of the current element within its group.
+
+<a name="selection" href="#selection">#</a> <b>selection</b>()
+
+Selects the root document element. Equivalent to `select(document.documentElement)`. This function can also be used to check if an object is a selection: `o instanceof selection`. You can also add new methods to the selection prototype. For example, to add a convenience method for setting the “checked” property of checkboxes, you might say:
+
+```js
+selection.prototype.checked = function(value) {
+  return arguments.length < 1
+      ? this.property("checked")
+      : this.property("checked", !!value);
+};
+```
+
 <a name="select" href="#select">#</a> <b>select</b>(<i>selector</i>)
 <br><a href="#select">#</a> <b>select</b>(<i>node</i>)
 
@@ -32,17 +57,19 @@ Selects all elements that match the specified *selector*. The elements will be s
 
 If *selector* is not a string, instead selects the specified array of *nodes*. This is useful if you already have a reference to nodes, such as `selectAll(this.childNodes)` within an event listener, or a global such as `document.links`. The *nodes* argument doesn’t have to be an array, exactly; a pseudo-array that can be coerced into an array (*e.g.*, a `NodeList` or `arguments`) will work.
 
-<a name="selection" href="#selection">#</a> <b>selection</b>()
+<a name="selection_select" href="#selection_select">#</a> <i>selection</i>.<b>select</b>()
 
-Selects the root document element. Equivalent to `select(document.documentElement)`. This function can also be used to check if an object is a selection: `o instanceof selection`. You can also add new methods to the selection prototype. For example, to add a convenience method for setting the “checked” property of checkboxes, you might say:
+…
 
-```js
-selection.prototype.checked = function(value) {
-  return arguments.length < 1
-      ? this.property("checked")
-      : this.property("checked", !!value);
-};
-```
+<a name="selection_selectAll" href="#selection_selectAll">#</a> <i>selection</i>.<b>selectAll</b>()
+
+…
+
+### Manipulation
+
+D3 has a variety of operators which affect the document content. These are what you’ll use the most to display data! When used to set document content, the operators return the current selection, so you can chain multiple operators together in a concise statement.
+
+If you want to learn how selections work, try selecting elements interactively using your browser’s developer console. You can inspect the returned array to see which elements were selected, and how they are grouped. You can also then apply operators to the selected elements and see how the page content changes.
 
 <a name="selection_attr" href="#selection_attr">#</a> <i>selection</i>.<b>attr</b>(<i>name</i>[, <i>value</i>])
 
@@ -118,6 +145,8 @@ The specified *name* may have a namespace prefix, such as `svg:text`, to specify
 <a name="selection_remove" href="#selection_remove">#</a> <i>selection</i>.<b>remove</b>()
 
 Removes the selected elements from the document. Returns the current selection (the removed elements) which are now detached from the DOM. Note that there is not currently a dedicated API to add removed elements back to the document; however, you can pass a function to *selection*.append to re-add elements.
+
+### Data
 
 <a name="selection_data" href="#selection_data">#</a> <i>selection</i>.<b>data</b>([<i>data</i>[, <i>key</i>]])
 
@@ -225,23 +254,91 @@ Note that the order of the DOM elements matches the order of the data. This is t
 
 <a name="selection_datum" href="#selection_datum">#</a> <i>selection</i>.<b>datum</b>()
 
-…
+Gets or sets the bound data for each selected element. Unlike the [*selection*.data](#selection_data) method, this method does not compute a join (and thus does not affect the enter and exit selections).
 
-<a name="selection_filter" href="#selection_filter">#</a> <i>selection</i>.<b>filter</b>()
+If *value* is specified, sets the element’s bound data to the specified value on all selected elements. If *value* is a constant, all elements are given the same data; otherwise, if *value* is a function, then the function is evaluated for each selected element, being passed the previous datum `d` and the current index `i`, with the `this` context as the current DOM element. The function is then used to set each element’s data. A null value will delete the bound data. This operator has no effect on the index.
 
-…
+If *value* is not specified, returns the bound datum for the first non-null element in the selection. This is generally useful only if you know the selection contains exactly one element.
+
+This method is useful for accessing HTML5 [custom data attributes](http://www.w3.org/TR/html5/dom.html#custom-data-attribute). For example, given the following elements:
+
+```html
+<ul id="list">
+  <li data-username="shawnbot">Shawn Allen</li>
+  <li data-username="mbostock">Mike Bostock</li>
+</ul>
+```
+
+You can expose the custom data attributes by setting each element’s data as the built-in [dataset](http://www.w3.org/TR/html5/dom.html#dom-dataset) property:
+
+```js
+selection.datum(function() { return this.dataset; })
+```
+
+<a name="selection_filter" href="#selection_filter">#</a> <i>selection</i>.<b>filter</b>(*selector*)
+
+Filters the selection, returning a new selection that contains only the elements for which the specified *selector* is true. The *selector* may be specified either as a function or as a selector string, such as `.foo`. If a function, it is passed the current datum `d` and index `i`, with the `this` context as the current DOM element. Note that the returned selection *may not* preserve the index of the original selection in the returned selection, as some elements may be removed; you can use [*selection*.select](#selection_select) to preserve the index, if needed.
+
+For example, to select every element with an odd index (relative to the zero-based index):
+
+```js
+var odd = selection.select(function(d, i) { return i % 2 === 1 ? this : null; });
+```
+
+Equivalently, using a filter function:
+
+```js
+var odd = selection.filter(function(d, i) { return i % 2 === 1; });
+```
+
+Or a filter selector (note that the `:nth-child` pseudo-class is a one-based index rather than a zero-based index):
+
+```js
+var odd = selection.filter(":nth-child(even)");
+```
 
 <a name="selection_sort" href="#selection_sort">#</a> <i>selection</i>.<b>sort</b>()
 
-…
+Sorts the selected elements according to the *comparator* function, and then re-inserts the document elements to match the resulting order. Returns this selection.
+
+The comparator function, which defaults to [ascending](https://github.com/d3/d3-array#ascending), is passed two elements’ data *a* and *b* to compare. It should return either a negative, positive, or zero value. If negative, then *a* should be before *b*; if positive, then *a* should be after *b*; otherwise, *a* and *b* are considered equal and the order is arbitrary.
+
+Note that sorting is not guaranteed to be stable; however, it is guaranteed to have the same behavior as your browser’s built-in [sort](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/sort "https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/sort") method on arrays.
 
 <a name="selection_order" href="#selection_order">#</a> <i>selection</i>.<b>order</b>()
 
-…
+Re-inserts elements into the document such that the document order matches the selection order. This is equivalent to calling [*selection*.sort](#selection_sort) if the data is already sorted, but much faster.
+
+### Events
 
 <a name="selection_on" href="#selection_on">#</a> <i>selection</i>.<b>on</b>()
 
 …
+
+<a name="selection_dispatch" href="#selection_dispatch">#</a> <i>selection</i>.<b>dispatch</b>()
+
+…
+
+<a name="event" href="#event">#</a> <b>event</b>()
+
+…
+
+<a name="mouse" href="#mouse">#</a> <b>mouse</b>()
+
+…
+
+<a name="touch" href="#touch">#</a> <b>touch</b>()
+
+…
+
+<a name="touches" href="#touches">#</a> <b>touches</b>()
+
+…
+
+
+### Control
+
+For advanced usage, D3 has a few additional operators for custom control flow.
 
 <a name="selection_each" href="#selection_each">#</a> <i>selection</i>.<b>each</b>()
 
@@ -267,31 +364,7 @@ Note that the order of the DOM elements matches the order of the data. This is t
 
 …
 
-<a name="selection_select" href="#selection_select">#</a> <i>selection</i>.<b>select</b>()
-
-…
-
-<a name="selection_selectAll" href="#selection_selectAll">#</a> <i>selection</i>.<b>selectAll</b>()
-
-…
-
-<a name="selection_dispatch" href="#selection_dispatch">#</a> <i>selection</i>.<b>dispatch</b>()
-
-…
-
-<a name="event" href="#event">#</a> <b>event</b>()
-
-…
-
-<a name="mouse" href="#mouse">#</a> <b>mouse</b>()
-
-…
-
-<a name="touch" href="#touch">#</a> <b>touch</b>()
-
-…
-
-<a name="touches" href="#touches">#</a> <b>touches</b>()
+### Namespaces
 
 …
 
@@ -306,4 +379,3 @@ Note that the order of the DOM elements matches the order of the data. This is t
 <a name="requote" href="#requote">#</a> <b>requote</b>()
 
 …
-
