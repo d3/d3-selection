@@ -114,7 +114,7 @@ Unlike [*selection*.select](#selection_select), *selection*.selectAll does affec
 
 ### Transformation
 
-Selections expose a variety of operators to affect document content. Selection operators return the current selection, affording method chaining to apply multiple operators on a given selection concisely. For example, to see the name attribute and color style of an anchor element:
+Selections expose a variety of operators to affect document content. Selection operators return the current selection, allowing the concise application of multiple operators on a given selection via method chaining. For example, to see the name attribute and color style of an anchor element:
 
 ```js
 d3.select("a")
@@ -130,7 +130,7 @@ anchor.attr("name", "fred");
 anchor.style("color", "red");
 ```
 
-To learn selections experientially, try selecting elements by writing code into your browser’s developer console! (In Chrome, open the console with ⌥⌘J.) Inspect the returned selection to see which elements are selected and how they are grouped. Apply operators to the selection and see how the page content changes.
+To learn selections experientially, go to [d3js.org](https://d3js.org) and try selecting elements in your browser’s developer console! (In Chrome, open the console with ⌥⌘J.) Inspect the returned selection to see which elements are selected and how they are grouped. Apply operators to the selection and see how the page content changes.
 
 <a name="selection_attr" href="#selection_attr">#</a> <i>selection</i>.<b>attr</b>(<i>name</i>[, <i>value</i>])
 
@@ -446,7 +446,7 @@ Returns the *x* and *y* coordinates of the touches associated with the [current 
 
 ### Control
 
-For advanced usage, D3 has a few additional operators for custom control flow.
+For advanced usage, selections provide operators for custom control flow.
 
 <a name="selection_each" href="#selection_each">#</a> <i>selection</i>.<b>each</b>(<i>function</i>)
 
