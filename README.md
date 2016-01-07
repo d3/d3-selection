@@ -45,15 +45,33 @@ d3.selectAll("input[type=checkbox]").checked(true);
 
 <a name="select" href="#select">#</a> d3.<b>select</b>(<i>selector</i>)
 
-Selects the first element that matches the specified *selector*, returning a new, single-element selection. If no elements match the *selector*, returns an empty selection. If multiple elements match the *selector*, only the first matching element (in traversal order) will be selected.
+Selects the first element that matches the specified *selector*, returning a new, single-element selection. If no elements match the *selector*, returns an empty selection. If multiple elements match the *selector*, only the first matching element (in traversal order) will be selected. For example, to select the first anchor element:
 
-If the *selector* is not a string, instead selects the specified node; this is useful if you already have a reference to a node, such as `this` within an event listener or a global such as `document.body`.
+```js
+var anchor = d3.select("a");
+```
+
+If the *selector* is not a string, instead selects the specified node; this is useful if you already have a reference to a node, such as `this` within an event listener or a global such as `document.body`. For example, to make the text of any clicked paragraph red:
+
+```js
+d3.selectAll("p").on("click", function() {
+  d3.select(this).style("color", "red");
+});
+```
 
 <a name="selectAll" href="#selectAll">#</a> d3.<b>selectAll</b>(<i>selector</i>)
 
-Selects all elements that match the specified *selector*. The elements will be selected in traversal order (top-to-bottom). If no elements in the document match the *selector*, returns an empty selection.
+Selects all elements that match the specified *selector*. The elements will be selected in traversal order (top-to-bottom). If no elements in the document match the *selector*, returns an empty selection. For example, to select all paragraphs:
 
-If the *selector* is not a string, instead selects the specified array of *nodes*; this is useful if you already have a reference to nodes, such as `this.childNodes` within an event listener or a global such as `document.links`. The *nodes* argument may also be a pseudo-array such as a `NodeList` or `arguments`.
+```js
+var paragraph = d3.selectAll("p");
+```
+
+If the *selector* is not a string, instead selects the specified array of *nodes*; this is useful if you already have a reference to nodes, such as `this.childNodes` within an event listener or a global such as `document.links`. The *nodes* argument may also be a pseudo-array such as a `NodeList` or `arguments`. For example, to make the text of any links red:
+
+```js
+d3.selectAll(document.links).style("color", "red");
+```
 
 <a name="selection_select" href="#selection_select">#</a> <i>selection</i>.<b>select</b>(<i>selector</i>)
 
