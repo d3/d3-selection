@@ -1,6 +1,6 @@
 # d3-selection
 
-Selections manipulate many elements at once: set [attributes](#selection_attr), [styles](#selection_style), [properties](#selection_property), [HTML](#selection_html) or [text](#selection_text) content, and more. Join selections to [data](#selection_data) for data-driven manipulation: attribute and property values may be specified as functions that are passed each element’s data. Using [enter](#selection_enter) and [exit](#selection_enter) selections, you can also [add](#selection_append) or [remove](#selection_remove) elements to correspond to data.
+Selections allow powerful [data-driven](#data) manipulation of the document object model (DOM): set [attributes](#selection_attr), [styles](#selection_style), [properties](#selection_property), [HTML](#selection_html) or [text](#selection_text) content, and more. Using the data join’s [enter](#selection_enter) and [exit](#selection_enter) selections, you can also [add](#selection_append) or [remove](#selection_remove) elements to correspond to data.
 
 ## Installing
 
