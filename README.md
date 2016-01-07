@@ -79,18 +79,26 @@ For example, to select the bold elements in every paragraph:
 var b = d3.selectAll("p").selectAll("b");
 ```
 
-Unlike [*selection*.select](#selection_select), *selection*.selectAll affects grouping: each selected descendant is grouped by the parent element in the originating selection. Grouping plays an important role in the [data join](#data). See [Nested Selections](http://bost.ocks.org/mike/nest/) for more on this topic.
+Unlike [*selection*.select](#selection_select), *selection*.selectAll does affect grouping: each selected descendant is grouped by the parent element in the originating selection. Grouping plays an important role in the [data join](#data). See [Nested Selections](http://bost.ocks.org/mike/nest/) for more on this topic.
 
 If the *selector* is a function, it will be invoked in the same manner as other operator functions, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. It must then return an array of elements (or a psuedo-array, such as a NodeList), or the empty array if there are no matching elements.
 
 ### Transformation
 
-Selections provide a variety of operators to affect document content. Selection operators return the current selection, so you can chain multiple operators together in a concise statement. For example, to see the name attribute and color style of an anchor element:
+Selections expose a variety of operators to affect document content. Selection operators return the current selection, affording method chaining to apply multiple operators on a given selection concisely. For example, to see the name attribute and color style of an anchor element:
 
 ```js
 d3.select("a")
     .attr("name", "fred")
     .style("color", "red");
+```
+
+This is equivalent to:
+
+```js
+var anchor = d3.select("a");
+anchor.attr("name", "fred");
+anchor.style("color", "red");
 ```
 
 To learn selections experientially, try selecting elements by writing code into your browser’s developer console! (In Chrome, open the console with ⌘⌥J.) Inspect the returned selection to see which elements are selected and how they are grouped. Apply operators to the selection and see how the page content changes.
