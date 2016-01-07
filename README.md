@@ -45,21 +45,19 @@ d3.selectAll("input[type=checkbox]").checked(true);
 
 <a name="select" href="#select">#</a> d3.<b>select</b>(<i>selector</i>)
 
-Selects the first element that matches the specified *selector*, returning a new, single-element selection. If no elements match the *selector*, returns an empty selection. If multiple elements match the *selector*, only the first matching element (in document traversal order) will be selected.
+Selects the first element that matches the specified *selector*, returning a new, single-element selection. If no elements match the *selector*, returns an empty selection. If multiple elements match the *selector*, only the first matching element (in traversal order) will be selected.
 
 If the *selector* is not a string, instead selects the specified node; this is useful if you already have a reference to a node, such as `this` within an event listener or a global such as `document.body`.
 
 <a name="selectAll" href="#selectAll">#</a> d3.<b>selectAll</b>(<i>selector</i>)
 
-Selects all elements that match the specified *selector*. The elements will be selected in document traversal order (top-to-bottom). If no elements in the document match the *selector*, returns an empty selection.
+Selects all elements that match the specified *selector*. The elements will be selected in traversal order (top-to-bottom). If no elements in the document match the *selector*, returns an empty selection.
 
 If the *selector* is not a string, instead selects the specified array of *nodes*; this is useful if you already have a reference to nodes, such as `this.childNodes` within an event listener or a global such as `document.links`. The *nodes* argument may also be a pseudo-array such as a `NodeList` or `arguments`.
 
 <a name="selection_select" href="#selection_select">#</a> <i>selection</i>.<b>select</b>(<i>selector</i>)
 
-For each selected element, selects the first descendant element that matches the specified *selector*. If no element matches the specified selector for the current element, the element at the current index will be null in the returned selection; operators automatically skip null elements, thereby preserving the index of the existing selection. If the current element has associated data, this data is inherited by the returned subselection, and automatically bound to the newly selected elements. If multiple elements match the selector, only the first matching element in document traversal order will be selected.
-
-The *selector* may instead be specified as a function that returns an element, or null if there is no matching element. In this case, the *selector* is invoked in the same manner as other operator functions, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element.
+For each selected element, selects the first descendant element that matches the specified *selector*. If no element matches the specified selector for the current element, the element at the current index will be null in the returned selection, preserving the index of the existing selection. (Note that operators automatically skip null elements.) If the current element has associated data, this data is propagated to the newly selected elements. If multiple elements match the selector, only the first matching element (in traversal order) is selected.
 
 For example, to select the first bold element in every paragraph:
 
@@ -69,11 +67,11 @@ var b = d3.selectAll("p").select("b");
 
 Unlike [*selection*.selectAll](#selection_selectAll), selecting via *selection*.select does not affect grouping: it preserves the existing grouping and propagates parent data (if any) to selected children. Grouping plays an important role in the [data join](#data). See [Nested Selections](http://bost.ocks.org/mike/nest/) for more on this topic.
 
+If the *selector* is a function, it will be invoked in the same manner as other operator functions, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. It must then return an element, or null if there is no matching element.
+
 <a name="selection_selectAll" href="#selection_selectAll">#</a> <i>selection</i>.<b>selectAll</b>(<i>selector</i>)
 
-For each selected element, selects all descendant elements that match the specified *selector*. The returned selection is grouped by the ancestor node in the current selection. If no element matches the specified selector for the current element, the group at the current index will be empty in the returned selection. The subselection does not inherit data from the current selection; use [*selection*.data](#selection_data) to propagate data to children.
-
-The *selector* may instead be specified as a function that returns an array of elements (or a psuedo-array, such as a NodeList), or the empty array if there are no matching elements. In this case, the *selector* is invoked in the same manner as other operator functions, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element.
+For each selected element, selects all descendant elements that match the specified *selector*. The returned selection is grouped by its parent node in the current selection. If no element matches the specified selector for the current element, the group at the current index will be empty in the returned selection. The subselection does not inherit data from the current selection; use [*selection*.data](#selection_data) to propagate data to children.
 
 For example, to select the bold elements in every paragraph:
 
@@ -82,6 +80,8 @@ var b = d3.selectAll("p").selectAll("b");
 ```
 
 Unlike [*selection*.select](#selection_select), selecting via *selection*.selectAll affects grouping: each selected descendant is grouped by the parent element in the originating selection. Grouping plays an important role in the [data join](#data). See [Nested Selections](http://bost.ocks.org/mike/nest/) for more on this topic.
+
+If the *selector* is a function, it will be invoked in the same manner as other operator functions, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. It must then return an array of elements (or a psuedo-array, such as a NodeList), or the empty array if there are no matching elements.
 
 ### Transformation
 
