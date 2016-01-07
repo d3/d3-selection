@@ -410,6 +410,8 @@ Re-inserts elements into the document such that the document order matches the s
 
 ### Events
 
+For interaction, selections allow listening for and dispatching of events.
+
 <a name="selection_on" href="#selection_on">#</a> <i>selection</i>.<b>on</b>(<i>type</i>[, <i>listener</i>[, <i>capture</i>]])
 
 Adds or removes a *listener* to each selected element for the specified event *type*. The *type* is a string event type name, such as `click`, `mouseover`, or `submit`. (Any [DOM event type](https://developer.mozilla.org/en-US/docs/Web/Events#Standard_events) supported by your browser may be used.) The *listener* is invoked in the same manner as other operator functions, being passed the current datum *d* and index *i*, with the `this` context as the current DOM element. Listeners always see the latest datum for their element, but the index is a property of the selection and is fixed when the listener is assigned; to update the index, re-assign the listener. To access the current event within a listener, use [d3.event](#event).
@@ -494,7 +496,7 @@ Returns the total number of elements in this selection.
 
 ### Namespaces
 
-XML namespaces are fun!
+XML namespaces are fun! Right? Fortunately you can mostly ignore them.
 
 <a name="namespace" href="#namespace">#</a> d3.<b>namespace</b>(<i>name</i>)
 
