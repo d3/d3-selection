@@ -23,29 +23,14 @@ In a vanilla environment, a `d3_selection` global is exported. [Try d3-selection
 
 ### Selection
 
-The top-level selection methods are [select](#select) and [selectAll](#selectAll). These methods accept selector strings; the former selects only the first matching element, while the latter selects *all* matching elements in document traversal order. These methods can also accept nodes such as `document.body` or `document.links`.
-
-Whereas the top-level selection methods query the entire document, a selection’s [select](Selections#select) and [selectAll](Selections#selectAll) operators restrict queries to descendants of each selected element. For example, to select the first bold element in every paragraph:
-
-```js
-d3.selectAll("p").select("b")
-
-```
-
-Selecting via [*selection*.selectAll](#selection_selectAll) groups elements by parent. Thus, the above code groups bold elements by their enclosing paragraph. However, the following code returns a flat selection:
-
-```js
-d3.selectAll("p b")
-```
-
-Selecting via [*selection*.select](#selection_select) does not affect grouping: it preserves the existing grouping and propagates parent data (if any) to selected children. Grouping plays an important role in the [data join](#data). See [Nested Selections](http://bost.ocks.org/mike/nest/) for more on this topic.
+The top-level selection methods are [d3.select](#select) and [d3.selectAll](#selectAll). These methods accept selector strings; the former selects only the first matching element, while the latter selects *all* matching elements in document traversal order. They also accept a node or nodes, such as `document.body` or `document.links`. Whereas the top-level selection methods query the entire document, [*selection*.select](#selection_select) and [*selection*.selectAll](#selection_selectAll) restrict selection to descendants of the selected elements.
 
 <a name="selection" href="#selection">#</a> d3.<b>selection</b>()
 
-Selects the root document element. Equivalent to `select(document.documentElement)`. This function can also be used to check if an object is a selection (`o instanceof selection`) or to extend the selection prototype. For example, to add a convenience method for setting the “checked” property of checkboxes, you might say:
+Selects the root document element. Equivalent to [selecting](#select) `document.documentElement`. This function can also be used to check if an object is a selection (`instanceof selection`) or to extend the selection prototype. For example, to add a method to check or uncheck checkboxes, you might say:
 
 ```js
-selection.prototype.checked = function(value) {
+d3.selection.prototype.checked = function(value) {
   return arguments.length < 1
       ? this.property("checked")
       : this.property("checked", !!value);
@@ -55,30 +40,52 @@ selection.prototype.checked = function(value) {
 <a name="select" href="#select">#</a> d3.<b>select</b>(<i>selector</i>)
 <br><a href="#select">#</a> d3.<b>select</b>(<i>node</i>)
 
-Selects the first element that matches the specified *selector*, returning a new, single-element selection. If no elements in the document match the specified selector, returns an empty selection. If multiple elements match the selector, only the first matching element (in document traversal order) will be selected.
-
-If *selector* is not a string, instead selects the specified *node*. This is useful if you already have a reference to a node, such as `select(this)` within an event listener, or a global such as `document.body`.
+Selects the first element that matches the specified *selector*, returning a new, single-element selection. If no elements in the document match the specified selector, returns an empty selection. If multiple elements match the selector, only the first matching element (in document traversal order) will be selected. If *selector* is not a string, instead selects the specified *node*; this is useful if you already have a reference to a node, such as `this` within an event listener, or a global such as `document.body`.
 
 <a name="selectAll" href="#selectAll">#</a> d3.<b>selectAll</b>(<i>selector</i>)
 <br><a href="#selectAll">#</a> d3.<b>selectAll</b>(<i>nodes</i>)
 
-Selects all elements that match the specified *selector*. The elements will be selected in document traversal order (top-to-bottom). If no elements in the document match the specified selector, returns an empty selection.
+Selects all elements that match the specified *selector*. The elements will be selected in document traversal order (top-to-bottom). If no elements in the document match the specified selector, returns an empty selection. If *selector* is not a string, instead selects the specified array of *nodes*; this is useful if you already have a reference to nodes, such as `this.childNodes` within an event listener, or a global such as `document.links`. The *nodes* argument may also be a pseudo-array such as a `NodeList` or `arguments`.
 
-If *selector* is not a string, instead selects the specified array of *nodes*. This is useful if you already have a reference to nodes, such as `selectAll(this.childNodes)` within an event listener, or a global such as `document.links`. The *nodes* argument doesn’t have to be an array, exactly; a pseudo-array that can be coerced into an array (*e.g.*, a `NodeList` or `arguments`) will work.
+<a name="selection_select" href="#selection_select">#</a> <i>selection</i>.<b>select</b>(<i>selector</i>)
 
-<a name="selection_select" href="#selection_select">#</a> <i>selection</i>.<b>select</b>()
+For each selected element, selects the first descendant element that matches the specified *selector*. If no element matches the specified selector for the current element, the element at the current index will be null in the returned selection; operators automatically skip null elements, thereby preserving the index of the existing selection. If the current element has associated data, this data is inherited by the returned subselection, and automatically bound to the newly selected elements. If multiple elements match the selector, only the first matching element in document traversal order will be selected.
 
-…
+The *selector* may instead be specified as a function that returns an element, or null if there is no matching element. In this case, the *selector* is invoked in the same manner as other operator functions, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element.
 
-<a name="selection_selectAll" href="#selection_selectAll">#</a> <i>selection</i>.<b>selectAll</b>()
+For example, to select the first bold element in every paragraph:
 
-…
+```js
+var b = d3.selectAll("p").select("b");
+```
+
+Unlike [*selection*.selectAll](#selection_selectAll), selecting via *selection*.select does not affect grouping: it preserves the existing grouping and propagates parent data (if any) to selected children. Grouping plays an important role in the [data join](#data). See [Nested Selections](http://bost.ocks.org/mike/nest/) for more on this topic.
+
+<a name="selection_selectAll" href="#selection_selectAll">#</a> <i>selection</i>.<b>selectAll</b>(<i>selector</i>)
+
+For each selected element, selects all descendant elements that match the specified *selector*. The returned selection is grouped by the ancestor node in the current selection. If no element matches the specified selector for the current element, the group at the current index will be empty in the returned selection. The subselection does not inherit data from the current selection; use [*selection*.data](#selection_data) to propagate data to children.
+
+The *selector* may instead be specified as a function that returns an array of elements (or a psuedo-array, such as a NodeList), or the empty array if there are no matching elements. In this case, the *selector* is invoked in the same manner as other operator functions, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element.
+
+For example, to select the bold elements in every paragraph:
+
+```js
+var b = d3.selectAll("p").selectAll("b");
+```
+
+Unlike [*selection*.select](#selection_select), selecting via *selection*.selectAll affects grouping: each selected descendant is grouped by the parent element in the originating selection. Grouping plays an important role in the [data join](#data). See [Nested Selections](http://bost.ocks.org/mike/nest/) for more on this topic.
 
 ### Manipulation
 
-D3 has a variety of operators which affect the document content. These are what you’ll use the most to display data! When used to set document content, the operators return the current selection, so you can chain multiple operators together in a concise statement.
+Selections provide a variety of operators to affect document content. Selection operators return the current selection, so you can chain multiple operators together in a concise statement. For example, to see the name attribute and color style of an anchor element:
 
-If you want to learn how selections work, try selecting elements interactively using your browser’s developer console. You can inspect the returned array to see which elements were selected, and how they are grouped. You can also then apply operators to the selected elements and see how the page content changes.
+```js
+d3.select("a")
+    .attr("name", "fred")
+    .style("color", "red");
+```
+
+To learn selections experientially, try selecting elements by writing code into your browser’s developer console! (In Chrome, open the console with ⌘⌥J.) Inspect the returned selection to see which elements are selected and how they are grouped. Apply operators to the selection and see how the page content changes.
 
 <a name="selection_attr" href="#selection_attr">#</a> <i>selection</i>.<b>attr</b>(<i>name</i>[, <i>value</i>])
 
