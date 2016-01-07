@@ -23,9 +23,22 @@ In a vanilla environment, a `d3_selection` global is exported. [Try d3-selection
 
 ### Selection
 
-D3 provides two top-level methods for selecting elements: [select](#select) and [selectAll](#selectAll). These methods accept selector strings; the former selects only the first matching element, while the latter selects *all* matching elements in document traversal order. These methods can also accept nodes, which is useful for integration with third-party libraries such as jQuery or developer tools (`$0`).
+The two top-level methods for selecting elements are [select](#select) and [selectAll](#selectAll). These methods accept selector strings; the former selects only the first matching element, while the latter selects *all* matching elements in document traversal order. These methods can also accept nodes, which is useful for integration with third-party libraries such as jQuery or developer tools (`$0`).
 
-Whereas the top-level select methods query the entire document, a selection’s [select](Selections#select) and [selectAll](Selections#selectAll) operators restrict queries to descendants of each selected element; we call this "subselection". For example, `d3.selectAll("p").select("b")` returns the first bold ("b") elements in every paragraph ("p") element. Subselecting via selectAll groups elements by ancestor. Thus, `d3.selectAll("p").selectAll("b")` groups by paragraph, while `d3.selectAll("p b")` returns a flat selection. Subselecting via select is similar, but preserves groups and propagates data. Grouping plays an important role in the data join, and functional operators may depend on the numeric index of the current element within its group.
+Whereas the top-level select methods query the entire document, a selection’s [select](Selections#select) and [selectAll](Selections#selectAll) operators restrict queries to descendants of each selected element. For example, to select the first bold ("b") element in every paragraph ("p") element:
+
+```js
+d3.selectAll("p").select("b")
+
+```
+
+Selecting via [*selection*.selectAll](#selection_selectAll) groups elements by parent. Thus, the above code groups bold elements by their enclosing paragraph, while
+
+```js
+d3.selectAll("p b")
+```
+
+returns a flat selection. Selecting via [*selection*.select](#selection_select) does not affect grouping: it preserves the existing grouping and propagates parent data (if any) to selected children. Grouping plays an important role in the [data join](#data).
 
 <a name="selection" href="#selection">#</a> <b>selection</b>()
 
