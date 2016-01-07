@@ -1,6 +1,6 @@
 # d3-selection
 
-Selections manipulate multiple elements simultaneously. Get or set [attributes](#selection_attr), [styles](#selection_style), [properties](#selection_property), [HTML](#selection_html) and [text](#selection_text) content. Values are specified as either constants or functions; the latter are evaluated for each element, given the element’s data. Use method chaining for brevity when applying multiple operators.
+Selections manipulate many elements at once. Get or set [attributes](#selection_attr), [styles](#selection_style), [properties](#selection_property), [HTML](#selection_html) and [text](#selection_text) content. Values are specified as either constants or functions; the latter are evaluated for each element, given the element’s data. Use method chaining for brevity when applying multiple operators.
 
 Join selections to [data](#selection_data) to make data available to operators. Using the [enter](#selection_enter) and [exit](#selection_enter) subselections, you can also [add](#selection_append) or [remove](#selection_remove) elements to correspond to data.
 
