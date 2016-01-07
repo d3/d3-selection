@@ -192,11 +192,17 @@ As the name suggests, *selection*.html is only supported on HTML elements. SVG e
 
 <a name="selection_append" href="#selection_append">#</a> <i>selection</i>.<b>append</b>(<i>type</i>[, <i>before</i>])
 
-If *type* is specified as a string, appends a new element with the specified type (tag name) as the last child of each element in the current selection. Otherwise, the *type* may be a function which is evaluated for each selected element (in order), being passed the current datum *d* and the current index *i*, with the `this` context as the current DOM element. This function should return an element to be appended. (Typically, the function creates a new element, but it may return an existing element instead.) For example:
+If the specified *type* is a string, appends a new element of this type (tag name) as the last child of each element in the current selection. Otherwise, the *type* may be a function which is evaluated for each selected element (in order), being passed the current datum *d* and the current index *i*, with the `this` context as the current DOM element. This function should return an element to be appended. (Typically, the function creates a new element, but it may return an existing element instead.) For example, to append a DIV element to each paragraph:
 
 ```js
-selection.append(function() {
-  return document.createElementNS("http://www.w3.org/2000/svg", "g");
+d3.selectAll("p").append("div");
+```
+
+This is equivalent to:
+
+```js
+d3.selectAll("p").append(function() {
+  return document.createElement("DIV");
 });
 ```
 
