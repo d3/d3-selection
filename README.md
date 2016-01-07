@@ -23,7 +23,7 @@ In a vanilla environment, a `d3_selection` global is exported. [Try d3-selection
 
 ### Selection
 
-The top-level selection methods are [d3.select](#select) and [d3.selectAll](#selectAll). These methods accept selector strings; the former selects only the first matching element, while the latter selects *all* matching elements in document traversal order. They also accept a node or nodes, such as `document.body` or `document.links`. Whereas the top-level selection methods query the entire document, [*selection*.select](#selection_select) and [*selection*.selectAll](#selection_selectAll) restrict selection to descendants of the selected elements.
+Selection methods accept [selectors](http://www.w3.org/TR/selectors-api/), such as `.foo` to select elements with the class *foo*, and come in two forms: select and selectAll. The former selects only the first matching element, while the latter selects all matching elements in document traversal order. The top-level selection methods [d3.select](#select) and [d3.selectAll](#selectAll) query the entire document, whereas the subselection methods [*selection*.select](#selection_select) and [*selection*.selectAll](#selection_selectAll) restrict selection to descendants of the selected elements
 
 <a name="selection" href="#selection">#</a> d3.<b>selection</b>()
 
