@@ -15,7 +15,7 @@ In a vanilla environment, a `d3_selection` global is exported. [Try d3-selection
 ## API Reference
 
 * [Selection](#selection)
-* [Manipulation](#manipulation)
+* [Transformation](#transformation)
 * [Data](#data)
 * [Events](#events)
 * [Control](#control)
