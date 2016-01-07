@@ -75,7 +75,7 @@ var b = d3.selectAll("p").selectAll("b");
 
 Unlike [*selection*.select](#selection_select), selecting via *selection*.selectAll affects grouping: each selected descendant is grouped by the parent element in the originating selection. Grouping plays an important role in the [data join](#data). See [Nested Selections](http://bost.ocks.org/mike/nest/) for more on this topic.
 
-### Manipulation
+### Transformation
 
 Selections provide a variety of operators to affect document content. Selection operators return the current selection, so you can chain multiple operators together in a concise statement. For example, to see the name attribute and color style of an anchor element:
 
