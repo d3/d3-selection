@@ -420,9 +420,9 @@ An optional *capture* flag may be specified, which corresponds to the W3C [useCa
 
 If a *listener* is not specified, returns the currently-assigned listener for the specified event *type* on the first (non-null) selected element, if any.
 
-<a name="selection_dispatch" href="#selection_dispatch">#</a> <i>selection</i>.<b>dispatch</b>()
+<a name="selection_dispatch" href="#selection_dispatch">#</a> <i>selection</i>.<b>dispatch</b>(<i>type</i>[, <i>parameters</i>])
 
-…
+Dispatches a [custom event](http://www.w3.org/TR/dom/#interface-customevent) of the specified *type* to each selected element. An optional *parameters* map may be specified to set additional properties of the event: bubbles, cancelable, and detail. If *parameters* is a function, it will be invoked in the same manner as other operator functions, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. It must then return the parameters map for the current element.
 
 <a name="event" href="#event">#</a> d3.<b>event</b>
 
