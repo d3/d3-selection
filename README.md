@@ -23,26 +23,26 @@ In a vanilla environment, a `d3_selection` global is exported. [Try d3-selection
 
 ### Selection
 
-The two top-level methods for selecting elements are [select](#select) and [selectAll](#selectAll). These methods accept selector strings; the former selects only the first matching element, while the latter selects *all* matching elements in document traversal order. These methods can also accept nodes such as `document.body` or `document.links`.
+The top-level selection methods are [select](#select) and [selectAll](#selectAll). These methods accept selector strings; the former selects only the first matching element, while the latter selects *all* matching elements in document traversal order. These methods can also accept nodes such as `document.body` or `document.links`.
 
-Whereas the top-level select methods query the entire document, a selection’s [select](Selections#select) and [selectAll](Selections#selectAll) operators restrict queries to descendants of each selected element. For example, to select the first bold element in every paragraph:
+Whereas the top-level selection methods query the entire document, a selection’s [select](Selections#select) and [selectAll](Selections#selectAll) operators restrict queries to descendants of each selected element. For example, to select the first bold element in every paragraph:
 
 ```js
 d3.selectAll("p").select("b")
 
 ```
 
-Selecting via [*selection*.selectAll](#selection_selectAll) groups elements by parent. Thus, the above code groups bold elements by their enclosing paragraph, while
+Selecting via [*selection*.selectAll](#selection_selectAll) groups elements by parent. Thus, the above code groups bold elements by their enclosing paragraph. However, the following code returns a flat selection:
 
 ```js
 d3.selectAll("p b")
 ```
 
-returns a flat selection. Selecting via [*selection*.select](#selection_select) does not affect grouping: it preserves the existing grouping and propagates parent data (if any) to selected children. Grouping plays an important role in the [data join](#data).
+Selecting via [*selection*.select](#selection_select) does not affect grouping: it preserves the existing grouping and propagates parent data (if any) to selected children. Grouping plays an important role in the [data join](#data). See [Nested Selections](http://bost.ocks.org/mike/nest/) for more on this topic.
 
 <a name="selection" href="#selection">#</a> <b>selection</b>()
 
-Selects the root document element. Equivalent to `select(document.documentElement)`. This function can also be used to check if an object is a selection: `o instanceof selection`. You can also add new methods to the selection prototype. For example, to add a convenience method for setting the “checked” property of checkboxes, you might say:
+Selects the root document element. Equivalent to `select(document.documentElement)`. This function can also be used to check if an object is a selection (`o instanceof selection`) or to extend the selection prototype. For example, to add a convenience method for setting the “checked” property of checkboxes, you might say:
 
 ```js
 selection.prototype.checked = function(value) {
