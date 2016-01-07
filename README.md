@@ -174,7 +174,7 @@ If a *value* is not specified, returns the value of the specified property for t
 
 <a name="selection_text" href="#selection_text">#</a> <i>selection</i>.<b>text</b>([<i>value</i>])
 
-The text operator is based on the [textContent](http://www.w3.org/TR/DOM-Level-3-Core/core.html#Node3-textContent "http://www.w3.org/TR/DOM-Level-3-Core/core.html#Node3-textContent") property; setting the text content will replace any existing child elements.
+The text operator is based on the [textContent](http://www.w3.org/TR/DOM-Level-3-Core/core.html#Node3-textContent) property; setting the text content will replace any existing child elements.
 
 If a *value* is specified, sets the text content to the specified value on all selected elements. If the *value* is a constant, then all elements are given the same text content; otherwise, if the *value* is a function, then the function is evaluated for each selected element (in order), being passed the current datum *d* and the current index *i*, with the `this` context as the current DOM element. The function’s return value is then used to set each element’s text content. A null value will clear the content.
 
@@ -182,7 +182,7 @@ If a *value* is not specified, returns the text content for the first (non-null)
 
 <a name="selection_html" href="#selection_html">#</a> <i>selection</i>.<b>html</b>([<i>value</i>])
 
-The html operator is based on the [innerHTML](http://dev.w3.org/html5/spec-LC/apis-in-html-documents.html#innerhtml "http://dev.w3.org/html5/spec-LC/apis-in-html-documents.html#innerhtml") property; setting the inner HTML will replace any existing child elements. Also, you may prefer to use [*selection*.append](#selection_append) to create HTML content in a data-driven way; this operator is intended for when you want a little bit of HTML, say for rich formatting.
+The html operator is based on the [innerHTML](http://dev.w3.org/html5/spec-LC/apis-in-html-documents.html#innerhtml) property; setting the inner HTML will replace any existing child elements. Also, you may prefer to use [*selection*.append](#selection_append) to create HTML content in a data-driven way; this operator is intended for when you want a little bit of HTML, say for rich formatting.
 
 If a *value* is specified, sets the inner HTML to the specified value on all selected elements. If the *value* is a constant, then all elements are given the same inner HTML; otherwise, if the *value* is a function, then the function is evaluated for each selected element (in order), being passed the current datum *d* and the current index *i*, with the `this` context as the current DOM element. The function’s return value is then used to set each element’s inner HTML. A null value will clear the content.
 
@@ -402,7 +402,7 @@ Sorts the selected elements according to the *comparator* function, and then re-
 
 The comparator function, which defaults to [ascending](https://github.com/d3/d3-array#ascending), is passed two elements’ data *a* and *b* to compare. It should return either a negative, positive, or zero value. If negative, then *a* should be before *b*; if positive, then *a* should be after *b*; otherwise, *a* and *b* are considered equal and the order is arbitrary.
 
-Note that sorting is not guaranteed to be stable; however, it is guaranteed to have the same behavior as your browser’s built-in [sort](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/sort "https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/sort") method on arrays.
+Note that sorting is not guaranteed to be stable; however, it is guaranteed to have the same behavior as your browser’s built-in [sort](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/sort) method on arrays.
 
 <a name="selection_order" href="#selection_order">#</a> <i>selection</i>.<b>order</b>()
 
@@ -410,9 +410,15 @@ Re-inserts elements into the document such that the document order matches the s
 
 ### Events
 
-<a name="selection_on" href="#selection_on">#</a> <i>selection</i>.<b>on</b>()
+<a name="selection_on" href="#selection_on">#</a> <i>selection</i>.<b>on</b>(<i>type</i>[, <i>listener</i>[, <i>capture</i>]])
 
-…
+Adds or removes a *listener* to each selected element for the specified event *type*. The *type* is a string event type name, such as `click`, `mouseover`, or `submit`. (Any [DOM event type](https://developer.mozilla.org/en-US/docs/Web/Events#Standard_events) supported by your browser may be used.) The *listener* is invoked in the same manner as other operator functions, being passed the current datum *d* and index *i*, with the `this` context as the current DOM element. Listeners always see the latest datum for their element, but the index is a property of the selection and is fixed when the listener is assigned; to update the index, re-assign the listener. To access the current event within a listener, use [d3.event](#event).
+
+If an event listener was already registered for the same *type* on a selected element, the existing listener is removed before the new listener is added. To register multiple listeners for a given type, the type may be followed by an optional namespace, such as `click.foo` and `click.bar`. To remove a listener, pass null as the *listener*. To remove all listeners for a particular namespace, pass null as the *listener* and `.foo` as the *type*, where *foo* is the namespace.
+
+An optional *capture* flag may be specified, which corresponds to the W3C [useCapture flag](http://www.w3.org/TR/DOM-Level-2-Events/events.html#Events-registration): “After initiating capture, all events of the specified type will be dispatched to the registered EventListener before being dispatched to any EventTargets beneath them in the tree. Events which are bubbling upward through the tree will not trigger an EventListener designated to use capture.”
+
+If a *listener* is not specified, returns the currently-assigned listener for the specified event *type* on the first (non-null) selected element, if any.
 
 <a name="selection_dispatch" href="#selection_dispatch">#</a> <i>selection</i>.<b>dispatch</b>()
 
@@ -420,20 +426,21 @@ Re-inserts elements into the document such that the document order matches the s
 
 <a name="event" href="#event">#</a> d3.<b>event</b>
 
-…
+The current [event](https://developer.mozilla.org/en-US/docs/DOM/event), if any. This is set during the invocation of an event listener, and is reset after the listener terminates. Use this to access standard event fields such as event.timeStamp, and methods such as event.preventDefault.
 
-<a name="mouse" href="#mouse">#</a> d3.<b>mouse</b>()
+While you can use the native [event.pageX](https://developer.mozilla.org/en/DOM/event.pageX) and [event.pageY](https://developer.mozilla.org/en/DOM/event.pageY), it is often more convenient to transform the event position to the local coordinate system of the container that received the event using [d3.mouse](#mouse), [d3.touch](#touch) or [d3.touches](#touches).
 
-…
+<a name="mouse" href="#mouse">#</a> d3.<b>mouse</b>(<i>container</i>)
 
-<a name="touch" href="#touch">#</a> d3.<b>touch</b>()
+Returns the *x* and *y* coordinates of the [current event](#event) relative to the specified *container*. The container may be an HTML or SVG container element, such as a [G element](http://www.w3.org/TR/SVG/struct.html#Groups) or an [SVG element](http://www.w3.org/TR/SVG/struct.html#SVGElement). The coordinates are returned as a two-element array of numbers [*x*, *y*].
 
-…
+<a name="touch" href="#touch">#</a> d3.<b>touch</b>(<i>container</i>[, <i>touches</i>], <i>identifier</i>)
 
-<a name="touches" href="#touches">#</a> d3.<b>touches</b>()
+Returns the *x* and *y* coordinates of the touch with the specified *identifier* associated with the [current event](#event) relative to the specified *container*. The container may be an HTML or SVG container element, such as a [G element](http://www.w3.org/TR/SVG/struct.html#Groups) or an [SVG element](http://www.w3.org/TR/SVG/struct.html#SVGElement). The coordinates are returned as an array of two-element arrays of numbers \[\[*x1*, *y1*], [*x2*, *y2*], …\]. If there is no touch with the specified identifier in *touches*, returns null; this can be useful for ignoring touchmove events where the only some touches have moved. If *touches* is not specified, it defaults to the current event’s [changedTouches](http://developer.apple.com/library/safari/documentation/UserExperience/Reference/TouchEventClassReference/TouchEvent/TouchEvent.html#//apple_ref/javascript/instp/TouchEvent/changedTouches) property.
 
-…
+<a name="touches" href="#touches">#</a> d3.<b>touches</b>(<i>container</i>[, <i>touches</i>])
 
+Returns the *x* and *y* coordinates of the touches associated with the [current event](#event) relative to the specified *container*. The container may be an HTML or SVG container element, such as a [G element](http://www.w3.org/TR/SVG/struct.html#Groups) or an [SVG element](http://www.w3.org/TR/SVG/struct.html#SVGElement). The coordinates are returned as an array of two-element arrays of numbers \[\[*x1*, *y1*], [*x2*, *y2*], …\]. If *touches* is not specified, it defaults to the current event’s [touches](http://developer.apple.com/library/safari/documentation/UserExperience/Reference/TouchEventClassReference/TouchEvent/TouchEvent.html#//apple_ref/javascript/instp/TouchEvent/touches) property.
 
 ### Control
 
