@@ -250,12 +250,12 @@ The *data* function here is the identity function: it is invoked for each table 
 If a *key* is not specified, then the first datum in *data* is assigned to the first selected element, the second datum to the second selected element, and so on. A *key* function may be specified to control how data is assigned to elements, replacing the default join-by-index. This key function is evaluated for each selected element (in order), being passed the current datum *d* and the current index *i*, with the `this` context as the current DOM element. The key function is also evaluated for each new datum in *data*, being passed the datum `d`, the index `i`, with the `this` context as the parent DOM element. The datum for a given key is assigned to the element with the matching key. For example, given this document:
 
 ```html
-<div id="Locke"></div>
-<div id="Reyes"></div>
 <div id="Ford"></div>
 <div id="Jarrah"></div>
-<div id="Shephard"></div>
 <div id="Kwon"></div>
+<div id="Locke"></div>
+<div id="Reyes"></div>
+<div id="Shephard"></div>
 ```
 
 You could join data by key as follows:
@@ -272,20 +272,21 @@ var data = [
 ];
 
 d3.selectAll("div")
-    .data(data, function(d) { return d ? d.name : this.id; });
+    .data(data, function(d) { return d ? d.name : this.id; })
+    .text(function(d) { return d.number; });
 ```
 
 This key function uses the bound datum *d* if present, and otherwise falls back to the element’s id property.
 
-The *update* and *enter* selections are returned in data order, while the *exit* selection is in document order (at the time that the selection was queried). If a key function is specified, the order of elements in this selection may change. However, the elements are not automatically reordered in the DOM; use [*selection*.order](#order) or [*selection*.sort](#sort) as needed. For a more detailed example of how the key function affects the data join, see the tutorial [A Bar Chart, Part 2](http://bost.ocks.org/mike/bar/2/).
+The *update* and *enter* selections are returned in data order, while the *exit* selection preserves the order prior to the data join. If a key function is specified, the order of elements in the selection may not match their order in the document; use [*selection*.order](#order) or [*selection*.sort](#sort) as needed. For more on how the key function affects the join, see [A Bar Chart, Part 2](http://bost.ocks.org/mike/bar/2/).
 
-If *data* is not specified, then this method returns the array of data the selected elements.
+If *data* is not specified, this method returns the array of data for the selected elements.
 
-Note: this method cannot be used to clear previously-bound data; use [*selection*.datum](#selection_datum) instead.
+This method cannot be used to clear bound data; use [*selection*.datum](#selection_datum) instead.
 
 <a name="selection_enter" href="#selection_enter">#</a> <i>selection</i>.<b>enter</b>()
 
-Returns the enter selection: placeholder nodes for each datum for which there was no corresponding DOM element in the selection. The enter selection is always empty until the selection is joined to data by [*selection*.data](#selection_data). For example, to create new DIV elements corresponding to an array of numbers:
+Returns the enter selection: placeholder nodes for each datum that had no corresponding DOM element in the selection. The enter selection is always empty until the selection is joined to data by [*selection*.data](#selection_data). The enter selection is typically used to create “missing” elements from new data. For example, to create DIV elements from an array of numbers:
 
 ```js
 var div = d3.select("body").selectAll("div");
@@ -304,7 +305,7 @@ If the body is initially empty, the above code will create six new DIV elements,
 <div>42</div>
 ```
 
-The enter selection’s placeholders are conceptually pointers to the parent node (in this example, the document body), and the enter selection is typically only used transiently to append elements.
+Conceptually, the enter selection’s placeholders are pointers to the parent element (in this example, the document body). The enter selection is typically only used transiently to append elements.
 
 The enter selection **merges into the update selection** on [append](#selection_append). Rather than applying the same operators to the enter and update selections separately, apply them once to the update selection *after* entering nodes. For example:
 
@@ -319,13 +320,13 @@ circle.exit().remove(); // removes exiting elements
 
 <a name="selection_exit" href="#selection_exit">#</a> <i>selection</i>.<b>exit</b>()
 
-Returns the exit selection: existing DOM elements for which no new datum was found. The exit selection is always empty until the selection is joined to data by [*selection*.data](#selection_data). For example, to update the DIV elements created above with a new array of numbers:
+Returns the exit selection: existing DOM elements in the selection for which no new datum was found. The exit selection is always empty until the selection is joined to data by [*selection*.data](#selection_data). The exit selection is typically used to remove “superfluous” elements from old data. For example, to update the DIV elements created previously with a new array of numbers:
 
 ```js
 div.data([1, 2, 4, 8, 16, 32], function(d) { return d; });
 ```
 
-Since we specified a key function (the identity function), and the new data contains the numbers [4, 8, 16] which match existing elements, the update selection contains three DIV elements. We’ll leave those elements as-is. We can append new elements for [1, 2, 32] using the enter selection:
+Since a key function was specified (as the identity function), and the new data contains the numbers [4, 8, 16] which match existing elements in the document, the update selection contains three DIV elements. We’ll leave those elements as-is. We can append new elements for [1, 2, 32] using the enter selection:
 
 ```js
 div.enter().append("div").text(function(d) { return d; });
@@ -348,13 +349,13 @@ Now the document body looks like this:
 <div>32</div>
 ```
 
-Note that the order of the DOM elements matches the order of the data. This is true because the old data’s order and the new data’s order were consistent. If the new data’s order is different, use [*selection*.order](#selection_order) to reorder the elements in the DOM.
+Note that the order of the DOM elements matches the order of the data. This is because the old data’s order and the new data’s order were consistent. If the new data’s order is different, use [*selection*.order](#selection_order) to reorder the elements in the DOM. See the [General Update Pattern](http://bl.ocks.org/mbostock/3808218) example thread for more on data joins.
 
-<a name="selection_datum" href="#selection_datum">#</a> <i>selection</i>.<b>datum</b>()
+<a name="selection_datum" href="#selection_datum">#</a> <i>selection</i>.<b>datum</b>([<i>value</i>])
 
-Gets or sets the bound data for each selected element. Unlike the [*selection*.data](#selection_data) method, this method does not compute a join (and thus does not affect the enter and exit selections).
+Gets or sets the bound data for each selected element. Unlike [*selection*.data](#selection_data), this method does not compute a join and thus does not affect indexes or the enter and exit selections.
 
-If a *value* is specified, sets the element’s bound data to the specified value on all selected elements. If the *value* is a constant, all elements are given the same data; otherwise, if the *value* is a function, then the function is evaluated for each selected element, being passed the previous datum `d` and the current index `i`, with the `this` context as the current DOM element. The function is then used to set each element’s data. A null value will delete the bound data. This operator has no effect on the index.
+If a *value* is specified, sets the element’s bound data to the specified value on all selected elements. If the *value* is a constant, all elements are given the same datum; otherwise, if the *value* is a function, then the function is evaluated for each selected element, being passed the previous datum `d` and the current index `i`, with the `this` context as the current DOM element. The function is then used to set each element’s data. A null value will delete the bound data.
 
 If a *value* is not specified, returns the bound datum for the first (non-null) element in the selection. This is generally useful only if you know the selection contains exactly one element.
 
@@ -373,11 +374,9 @@ You can expose the custom data attributes by setting each element’s data as th
 selection.datum(function() { return this.dataset; })
 ```
 
-<a name="selection_filter" href="#selection_filter">#</a> <i>selection</i>.<b>filter</b>(*selector*)
+<a name="selection_filter" href="#selection_filter">#</a> <i>selection</i>.<b>filter</b>(<i>filter</i>)
 
-Filters the selection, returning a new selection that contains only the elements for which the specified *selector* is true. The *selector* may be specified either as a function or as a selector string, such as `.foo`. If a function, it is passed the current datum `d` and index `i`, with the `this` context as the current DOM element. Note that the returned selection *may not* preserve the index of the original selection in the returned selection, as some elements may be removed; you can use [*selection*.select](#selection_select) to preserve the index, if needed.
-
-For example, to select every element with an odd index (relative to the zero-based index):
+Filters the selection, returning a new selection that contains only the elements for which the specified *filter* is true. The *filter* may be specified either as a function or as a selector string, such as `.foo`. If a function, it is passed the current datum `d` and index `i`, with the `this` context as the current DOM element. For example, to select every element with an odd index (relative to the zero-based index):
 
 ```js
 var odd = selection.select(function(d, i) { return i % 2 === 1 ? this : null; });
@@ -395,7 +394,9 @@ Or a filter selector (note that the `:nth-child` pseudo-class is a one-based ind
 var odd = selection.filter(":nth-child(even)");
 ```
 
-<a name="selection_sort" href="#selection_sort">#</a> <i>selection</i>.<b>sort</b>()
+The returned selection may not preserve the index of the original selection, as some elements may be removed; you can use [*selection*.select](#selection_select) to preserve the index, if needed.
+
+<a name="selection_sort" href="#selection_sort">#</a> <i>selection</i>.<b>sort</b>(<i>comparator</i>)
 
 Sorts the selected elements according to the *comparator* function, and then re-inserts the document elements to match the resulting order. Returns this selection.
 
