@@ -23,7 +23,7 @@ In a vanilla environment, a `d3_selection` global is exported. [Try d3-selection
 
 ### Selection
 
-The two top-level methods for selecting elements are [select](#select) and [selectAll](#selectAll). These methods accept selector strings; the former selects only the first matching element, while the latter selects *all* matching elements in document traversal order. These methods can also accept nodes, which is useful for integration with third-party libraries such as jQuery or developer tools (`$0`).
+The two top-level methods for selecting elements are [select](#select) and [selectAll](#selectAll). These methods accept selector strings; the former selects only the first matching element, while the latter selects *all* matching elements in document traversal order. These methods can also accept nodes such as `document.body` or `document.links`.
 
 Whereas the top-level select methods query the entire document, a selection’s [select](Selections#select) and [selectAll](Selections#selectAll) operators restrict queries to descendants of each selected element. For example, to select the first bold ("b") element in every paragraph ("p") element:
 
