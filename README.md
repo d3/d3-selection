@@ -67,7 +67,7 @@ Selects all elements that match the specified *selector*. The elements will be s
 var paragraph = d3.selectAll("p");
 ```
 
-If the *selector* is not a string, instead selects the specified array of *nodes*; this is useful if you already have a reference to nodes, such as `this.childNodes` within an event listener or a global such as `document.links`. The *nodes* argument may also be a pseudo-array such as a `NodeList` or `arguments`. For example, to make the text of any links red:
+If the *selector* is not a string, instead selects the specified array of *nodes*; this is useful if you already have a reference to nodes, such as `this.childNodes` within an event listener or a global such as `document.links`. The *nodes* argument may also be a pseudo-array such as a `NodeList` or `arguments`. For example, to color all links red:
 
 ```js
 d3.selectAll(document.links).style("color", "red");
@@ -75,7 +75,7 @@ d3.selectAll(document.links).style("color", "red");
 
 <a name="selection_select" href="#selection_select">#</a> <i>selection</i>.<b>select</b>(<i>selector</i>)
 
-For each selected element, selects the first descendant element that matches the specified *selector*. If no element matches the specified selector for the current element, the element at the current index will be null in the returned selection, preserving the index of the existing selection. (Note that operators automatically skip null elements.) If the current element has associated data, this data is propagated to the newly selected elements. If multiple elements match the selector, only the first matching element (in traversal order) is selected.
+For each selected element, selects the first descendant element that matches the specified *selector*. If no element matches the specified selector for the current element, the element at the current index will be null in the returned selection, preserving the index of the existing selection. (Operators automatically skip null elements.) If the current element has associated data, this data is propagated to the newly selected elements. If multiple elements match the selector, only the first matching element (in traversal order) is selected.
 
 For example, to select the first bold element in every paragraph:
 
@@ -85,7 +85,13 @@ var b = d3.selectAll("p").select("b");
 
 Unlike [*selection*.selectAll](#selection_selectAll), *selection*.select does not affect grouping: it preserves the existing grouping and propagates parent data (if any) to selected children. Grouping plays an important role in the [data join](#data). See [Nested Selections](http://bost.ocks.org/mike/nest/) for more on this topic.
 
-If the *selector* is a function, it will be invoked in the same manner as other operator functions, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. It must then return an element, or null if there is no matching element.
+If the *selector* is a function, it will be invoked in the same manner as other operator functions, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. It must then return an element, or null if there is no matching element. For example, to select the previous sibling of each paragraph:
+
+```js
+var previous = d3.selectAll("p").select(function() {
+  return this.previousElementSibling;
+});
+```
 
 <a name="selection_selectAll" href="#selection_selectAll">#</a> <i>selection</i>.<b>selectAll</b>(<i>selector</i>)
 
@@ -99,7 +105,16 @@ var b = d3.selectAll("p").selectAll("b");
 
 Unlike [*selection*.select](#selection_select), *selection*.selectAll does affect grouping: each selected descendant is grouped by the parent element in the originating selection. Grouping plays an important role in the [data join](#data). See [Nested Selections](http://bost.ocks.org/mike/nest/) for more on this topic.
 
-If the *selector* is a function, it will be invoked in the same manner as other operator functions, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. It must then return an array of elements (or a psuedo-array, such as a NodeList), or the empty array if there are no matching elements.
+If the *selector* is a function, it will be invoked in the same manner as other operator functions, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. It must then return an array of elements (or a psuedo-array, such as a NodeList), or the empty array if there are no matching elements. For example, to select the previous and next siblings of each paragraph:
+
+```js
+var sibling = d3.selectAll("p").selectAll(function() {
+  return [
+    this.previousElementSibling,
+    this.nextElementSibling
+  ];
+});
+```
 
 ### Transformation
 
