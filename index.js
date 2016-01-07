@@ -7,4 +7,4 @@ export {default as selectAll} from "./src/selectAll";
 export {default as selection} from "./src/selection";
 export {default as touch} from "./src/touch";
 export {default as touches} from "./src/touches";
-export {event} from "./src/selection-event"
+export {event} from "./src/selection-on"
