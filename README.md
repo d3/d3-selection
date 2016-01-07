@@ -154,7 +154,11 @@ selection.classed("foo bar", true);
 
 If a *value* is specified, sets whether or not the specified *classes* are associated with the selected elements. If the *value* is truthy, then all elements are assigned the specified *classes*; otherwise, the *classes* are unassigned from all selected elements.
 
-If the *value* is a function, then the function is evaluated for each selected element (in order), being passed the current datum *d* and the current index *i*, with the `this` context as the current DOM element. The function’s return value is then used to assign or unassign classes on each element.
+If the *value* is a function, then the function is evaluated for each selected element (in order), being passed the current datum *d* and the current index *i*, with the `this` context as the current DOM element. The function’s return value is then used to assign or unassign classes on each element. For example, to randomly associate the class *foo* with about half of the selected elements:
+
+```js
+selection.classed("foo", function() { return Math.random(); });
+```
 
 If a *value* is not specified, returns true if and only if the first non-null element in this selection has the specified class(es). This is generally useful only if you know the selection contains exactly one element.
 
