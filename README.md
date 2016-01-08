@@ -112,6 +112,28 @@ var sibling = d3.selectAll("p").selectAll(function() {
 
 Unlike [*selection*.select](#selection_select), *selection*.selectAll does affect grouping: each selected descendant is grouped by the parent element in the originating selection. Grouping plays an important role in the [data join](#data). See [Nested Selections](http://bost.ocks.org/mike/nest/) for more on this topic.
 
+<a name="selection_filter" href="#selection_filter">#</a> <i>selection</i>.<b>filter</b>(<i>filter</i>)
+
+Filters the selection, returning a new selection that contains only the elements for which the specified *filter* is true. The *filter* may be specified either as a function or as a selector string, such as `.foo`. If a function, it is passed the current datum `d` and index `i`, with the `this` context as the current DOM element. For example, to select every element with an odd index (relative to the zero-based index):
+
+```js
+var odd = selection.select(function(d, i) { return i % 2 === 1 ? this : null; });
+```
+
+Equivalently, using a filter function:
+
+```js
+var odd = selection.filter(function(d, i) { return i % 2 === 1; });
+```
+
+Or a filter selector (note that the `:nth-child` pseudo-class is a one-based index rather than a zero-based index):
+
+```js
+var odd = selection.filter(":nth-child(even)");
+```
+
+The returned selection may not preserve the index of the original selection, as some elements may be removed; you can use [*selection*.select](#selection_select) to preserve the index, if needed.
+
 ### Transformation
 
 Selections expose a variety of operators to affect document content. Selection operators return the current selection, allowing the concise application of multiple operators on a given selection via method chaining. For example, to see the name attribute and color style of an anchor element:
@@ -215,6 +237,18 @@ The specified *name* may have a namespace prefix, such as `svg:text` to specify 
 <a name="selection_remove" href="#selection_remove">#</a> <i>selection</i>.<b>remove</b>()
 
 Removes the selected elements from the document. Returns this selection (the removed elements) which are now detached from the DOM. Note that there is not currently a dedicated API to add removed elements back to the document; however, you can pass a function to [*selection*.append](#selection_append) to re-add elements.
+
+<a name="selection_sort" href="#selection_sort">#</a> <i>selection</i>.<b>sort</b>(<i>comparator</i>)
+
+Sorts the selected elements according to the *comparator* function, and then re-inserts the document elements to match the resulting order. Returns this selection.
+
+The comparator function, which defaults to [ascending](https://github.com/d3/d3-array#ascending), is passed two elements’ data *a* and *b* to compare. It should return either a negative, positive, or zero value. If negative, then *a* should be before *b*; if positive, then *a* should be after *b*; otherwise, *a* and *b* are considered equal and the order is arbitrary.
+
+Note that sorting is not guaranteed to be stable; however, it is guaranteed to have the same behavior as your browser’s built-in [sort](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/sort) method on arrays.
+
+<a name="selection_order" href="#selection_order">#</a> <i>selection</i>.<b>order</b>()
+
+Re-inserts elements into the document such that the document order matches the selection order. This is equivalent to calling [*selection*.sort](#selection_sort) if the data is already sorted, but much faster.
 
 ### Data
 
@@ -373,40 +407,6 @@ You can expose the custom data attributes by setting each element’s data as th
 ```js
 selection.datum(function() { return this.dataset; })
 ```
-
-<a name="selection_filter" href="#selection_filter">#</a> <i>selection</i>.<b>filter</b>(<i>filter</i>)
-
-Filters the selection, returning a new selection that contains only the elements for which the specified *filter* is true. The *filter* may be specified either as a function or as a selector string, such as `.foo`. If a function, it is passed the current datum `d` and index `i`, with the `this` context as the current DOM element. For example, to select every element with an odd index (relative to the zero-based index):
-
-```js
-var odd = selection.select(function(d, i) { return i % 2 === 1 ? this : null; });
-```
-
-Equivalently, using a filter function:
-
-```js
-var odd = selection.filter(function(d, i) { return i % 2 === 1; });
-```
-
-Or a filter selector (note that the `:nth-child` pseudo-class is a one-based index rather than a zero-based index):
-
-```js
-var odd = selection.filter(":nth-child(even)");
-```
-
-The returned selection may not preserve the index of the original selection, as some elements may be removed; you can use [*selection*.select](#selection_select) to preserve the index, if needed.
-
-<a name="selection_sort" href="#selection_sort">#</a> <i>selection</i>.<b>sort</b>(<i>comparator</i>)
-
-Sorts the selected elements according to the *comparator* function, and then re-inserts the document elements to match the resulting order. Returns this selection.
-
-The comparator function, which defaults to [ascending](https://github.com/d3/d3-array#ascending), is passed two elements’ data *a* and *b* to compare. It should return either a negative, positive, or zero value. If negative, then *a* should be before *b*; if positive, then *a* should be after *b*; otherwise, *a* and *b* are considered equal and the order is arbitrary.
-
-Note that sorting is not guaranteed to be stable; however, it is guaranteed to have the same behavior as your browser’s built-in [sort](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/sort) method on arrays.
-
-<a name="selection_order" href="#selection_order">#</a> <i>selection</i>.<b>order</b>()
-
-Re-inserts elements into the document such that the document order matches the selection order. This is equivalent to calling [*selection*.sort](#selection_sort) if the data is already sorted, but much faster.
 
 ### Events
 
