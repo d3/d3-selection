@@ -1,5 +1,5 @@
-import namespace from "./namespace";
-import selector from "./selector";
+import namespace from "../namespace";
+import selector from "../selector";
 
 function creatorInherit(name) {
   return function() {

@@ -1,5 +1,5 @@
-import requote from "./requote";
-import noop from "./noop";
+import requote from "../requote";
+import noop from "../noop";
 
 var filterEvents = {};
 

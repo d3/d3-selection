@@ -1,5 +1,5 @@
-import {Selection} from "./selection";
-import matcher from "./matcher";
+import {Selection} from "./index";
+import matcher from "../matcher";
 
 // The filter may either be a selector string (e.g., ".foo")
 // or a function that returns a boolean.

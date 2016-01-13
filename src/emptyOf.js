@@ -1,5 +1,5 @@
 import arrayify from "./arrayify";
-import {Selection} from "./selection";
+import {Selection} from "./selection/index";
 
 export default function(selection) {
   return new Selection(emptyNode(arrayify(selection), selection._depth), selection._depth);

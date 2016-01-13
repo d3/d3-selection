@@ -1,0 +1,69 @@
+import selection_select from "./select";
+import selection_selectAll from "./selectAll";
+import selection_filter from "./filter";
+import selection_data from "./data";
+import selection_enter from "./enter";
+import selection_exit from "./exit";
+import selection_order from "./order";
+import selection_sort from "./sort";
+import selection_call from "./call";
+import selection_nodes from "./nodes";
+import selection_node from "./node";
+import selection_size from "./size";
+import selection_empty from "./empty";
+import selection_each from "./each";
+import selection_attr from "./attr";
+import selection_style from "./style";
+import selection_property from "./property";
+import selection_classed from "./classed";
+import selection_text from "./text";
+import selection_html from "./html";
+import selection_append from "./append";
+import selection_remove from "./remove";
+import selection_datum from "./datum";
+import selection_on from "./on";
+import selection_dispatch from "./dispatch";
+
+// When depth = 1, root = [Node, …].
+// When depth = 2, root = [[Node, …], …].
+// When depth = 3, root = [[[Node, …], …], …]. etc.
+// Note that [Node, …] and NodeList are used interchangeably; see arrayify.
+export function Selection(root, depth) {
+  this._root = root;
+  this._depth = depth;
+  this._enter = this._update = this._exit = null;
+};
+
+function selection() {
+  return new Selection([document.documentElement], 1);
+}
+
+Selection.prototype = selection.prototype = {
+  select: selection_select,
+  selectAll: selection_selectAll,
+  filter: selection_filter,
+  data: selection_data,
+  enter: selection_enter,
+  exit: selection_exit,
+  order: selection_order,
+  sort: selection_sort,
+  call: selection_call,
+  nodes: selection_nodes,
+  node: selection_node,
+  size: selection_size,
+  empty: selection_empty,
+  each: selection_each,
+  attr: selection_attr,
+  style: selection_style,
+  property: selection_property,
+  classed: selection_classed,
+  text: selection_text,
+  html: selection_html,
+  append: selection_append,
+  remove: selection_remove,
+  datum: selection_datum,
+  on: selection_on,
+  dispatch: selection_dispatch
+};
+
+export default selection;

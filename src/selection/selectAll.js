@@ -1,5 +1,5 @@
-import {Selection} from "./selection";
-import selectorAll from "./selectorAll";
+import {Selection} from "./index";
+import selectorAll from "../selectorAll";
 
 // The selector may either be a selector string (e.g., ".foo")
 // or a function that optionally returns an array of nodes to select.

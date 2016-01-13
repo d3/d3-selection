@@ -1,4 +1,4 @@
-import arrayify from "./arrayify";
+import arrayify from "../arrayify";
 
 export default function(compare) {
   if (!compare) compare = ascending;

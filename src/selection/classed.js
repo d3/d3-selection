@@ -1,4 +1,4 @@
-import requote from "./requote";
+import requote from "../requote";
 
 function collapse(string) {
   return string.trim().replace(/\s+/g, " ");

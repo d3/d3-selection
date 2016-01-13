@@ -1,5 +1,5 @@
-import {Selection} from "./selection";
-import selector from "./selector";
+import {Selection} from "./index";
+import selector from "../selector";
 
 // The selector may either be a selector string (e.g., ".foo")
 // or a function that optionally returns the node to select.

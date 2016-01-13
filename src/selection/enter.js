@@ -1,4 +1,4 @@
-import emptyOf from "./emptyOf";
+import emptyOf from "../emptyOf";
 
 // Lazily constructs the enter selection for this (update) selection.
 // Until this selection is joined to data, the enter selection will be empty.
