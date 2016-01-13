@@ -1,12 +1,13 @@
 import {Selection} from "./selection";
+import matcher from "./matcher";
 
 // The filter may either be a selector string (e.g., ".foo")
 // or a function that returns a boolean.
-export default function(filter) {
+export default function(match) {
   var depth = this._depth,
       stack = new Array(depth * 2);
 
-  if (typeof filter !== "function") filter = filterOf(filter);
+  if (typeof match !== "function") match = matcher(match);
 
   function visit(nodes, depth) {
     var i = -1,
@@ -33,7 +34,7 @@ export default function(filter) {
       while (++i < n) {
         if (node = nodes[i]) {
           stack[0] = node.__data__, stack[1] = i;
-          if (filter.apply(node, stack)) {
+          if (match.apply(node, stack)) {
             subnodes.push(node);
           }
         }
@@ -46,17 +47,3 @@ export default function(filter) {
 
   return new Selection(visit(this._root, depth), depth);
 };
-
-var filterOf = function(selector) {
-  return function() {
-    return this.matches(selector);
-  };
-};
-
-if (typeof document !== "undefined") {
-  var element = document.documentElement;
-  if (!element.matches) {
-    var vendorMatches = element.webkitMatchesSelector || element.msMatchesSelector || element.mozMatchesSelector || element.oMatchesSelector;
-    filterOf = function(selector) { return function() { return vendorMatches.call(this, selector); }; };
-  }
-}

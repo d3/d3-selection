@@ -1,13 +1,13 @@
 import {Selection} from "./selection";
-import selectorOf from "./selectorOf";
+import selector from "./selector";
 
 // The selector may either be a selector string (e.g., ".foo")
 // or a function that optionally returns the node to select.
-export default function(selector) {
+export default function(select) {
   var depth = this._depth,
       stack = new Array(depth * 2);
 
-  if (typeof selector !== "function") selector = selectorOf(selector);
+  if (typeof select !== "function") select = selector(select);
 
   function visit(nodes, update, depth) {
     var i = -1,
@@ -35,7 +35,7 @@ export default function(selector) {
       while (++i < n) {
         if (node = nodes[i]) {
           stack[0] = node.__data__, stack[1] = i;
-          if (subnode = selector.apply(node, stack)) {
+          if (subnode = select.apply(node, stack)) {
             if ("__data__" in node) subnode.__data__ = node.__data__;
             if (update) update[i] = subnode, delete nodes[i];
             subnodes[i] = subnode;

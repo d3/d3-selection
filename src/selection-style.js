@@ -1,25 +1,33 @@
 import defaultView from "./defaultView";
 
-export default function(name, value, priority) {
-  var n = arguments.length;
-
-  if (n < 2) return defaultView(n = this.node()).getComputedStyle(n, null).getPropertyValue(name);
-
-  if (n < 3) priority = "";
-
-  function remove() {
+function styleRemove(name) {
+  return function() {
     this.style.removeProperty(name);
-  }
+  };
+}
 
-  function setConstant() {
+function styleConstant(name, value, priority) {
+  return function() {
     this.style.setProperty(name, value, priority);
-  }
+  };
+}
 
-  function setFunction() {
-    var x = value.apply(this, arguments);
-    if (x == null) this.style.removeProperty(name);
-    else this.style.setProperty(name, x, priority);
-  }
+function styleFunction(name, value, priority) {
+  return function() {
+    var v = value.apply(this, arguments);
+    if (v == null) this.style.removeProperty(name);
+    else this.style.setProperty(name, v, priority);
+  };
+}
 
-  return this.each(value == null ? remove : typeof value === "function" ? setFunction : setConstant);
+export default function(name, value, priority) {
+  var node;
+  return arguments.length > 1
+      ? this.each((value == null
+            ? styleRemove : typeof value === "function"
+            ? styleFunction
+            : styleConstant)(name, value, priority == null ? "" : priority))
+      : defaultView(node = this.node())
+          .getComputedStyle(node, null)
+          .getPropertyValue(name);
 };

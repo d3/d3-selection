@@ -1,46 +1,58 @@
 import namespace from "./namespace";
 
+function attrRemove(name) {
+  return function() {
+    this.removeAttribute(name);
+  };
+}
+
+function attrRemoveNS(fullname) {
+  return function() {
+    this.removeAttributeNS(fullname.space, fullname.local);
+  };
+}
+
+function attrConstant(name, value) {
+  return function() {
+    this.setAttribute(name, value);
+  };
+}
+
+function attrConstantNS(fullname, value) {
+  return function() {
+    this.setAttributeNS(fullname.space, fullname.local, value);
+  };
+}
+
+function attrFunction(name, value) {
+  return function() {
+    var v = value.apply(this, arguments);
+    if (v == null) this.removeAttribute(name);
+    else this.setAttribute(name, v);
+  };
+}
+
+function attrFunctionNS(fullname, value) {
+  return function() {
+    var v = value.apply(this, arguments);
+    if (v == null) this.removeAttributeNS(fullname.space, fullname.local);
+    else this.setAttributeNS(fullname.space, fullname.local, v);
+  };
+}
+
 export default function(name, value) {
-  name = namespace(name);
+  var fullname = namespace(name);
 
   if (arguments.length < 2) {
     var node = this.node();
-    return name.local
-        ? node.getAttributeNS(name.space, name.local)
-        : node.getAttribute(name);
+    return fullname.local
+        ? node.getAttributeNS(fullname.space, fullname.local)
+        : node.getAttribute(fullname);
   }
 
-  function remove() {
-    this.removeAttribute(name);
-  }
-
-  function removeNS() {
-    this.removeAttributeNS(name.space, name.local);
-  }
-
-  function setConstant() {
-    this.setAttribute(name, value);
-  }
-
-  function setConstantNS() {
-    this.setAttributeNS(name.space, name.local, value);
-  }
-
-  function setFunction() {
-    var x = value.apply(this, arguments);
-    if (x == null) this.removeAttribute(name);
-    else this.setAttribute(name, x);
-  }
-
-  function setFunctionNS() {
-    var x = value.apply(this, arguments);
-    if (x == null) this.removeAttributeNS(name.space, name.local);
-    else this.setAttributeNS(name.space, name.local, x);
-  }
-
-  return this.each(value == null
-      ? (name.local ? removeNS : remove)
+  return this.each((value == null
+      ? (fullname.local ? attrRemoveNS : attrRemove)
       : (typeof value === "function"
-          ? (name.local ? setFunctionNS : setFunction)
-          : (name.local ? setConstantNS : setConstant)));
+          ? (fullname.local ? attrFunctionNS : attrFunction)
+          : (fullname.local ? attrConstantNS : attrConstant)))(fullname, value));
 };

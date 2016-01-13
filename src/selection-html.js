@@ -1,16 +1,21 @@
-export default function(value) {
-  if (!arguments.length) return this.node().innerHTML;
-
-  function setConstant() {
+function htmlConstant(value) {
+  if (value == null) value = "";
+  return function() {
     this.innerHTML = value;
-  }
+  };
+}
 
-  function setFunction() {
+function htmlFunction(value) {
+  return function() {
     var v = value.apply(this, arguments);
     this.innerHTML = v == null ? "" : v;
-  }
+  };
+}
 
-  if (value == null) value = "";
-
-  return this.each(typeof value === "function" ? setFunction : setConstant);
+export default function(value) {
+  return arguments.length
+      ? this.each((typeof value === "function"
+          ? htmlFunction
+          : htmlConstant)(value))
+      : this.node().innerHTML;
 };

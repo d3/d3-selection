@@ -1,10 +1,10 @@
 import arrayify from "./arrayify";
 
-export default function(comparator) {
-  if (!comparator) comparator = ascending;
+export default function(compare) {
+  if (!compare) compare = ascending;
 
   function compare(a, b) {
-    return a && b ? comparator(a.__data__, b.__data__) : !a - !b;
+    return a && b ? compare(a.__data__, b.__data__) : !a - !b;
   }
 
   function visit(nodes, depth) {

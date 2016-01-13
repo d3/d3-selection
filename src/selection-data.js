@@ -180,5 +180,6 @@ function EnterNode(parent, datum) {
 EnterNode.prototype = {
   appendChild: function(child) { return this._parent.insertBefore(child, this._next); },
   insertBefore: function(child, next) { return this._parent.insertBefore(child, next || this._next); },
-  querySelector: function(selector) { return this._parent.querySelector(selector); }
+  querySelector: function(selector) { return this._parent.querySelector(selector); },
+  querySelectorAll: function(selector) { return this._parent.querySelectorAll(selector); }
 };

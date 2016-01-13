@@ -1,13 +1,14 @@
 import {Selection} from "./selection";
+import selectorAll from "./selectorAll";
 
 // The selector may either be a selector string (e.g., ".foo")
 // or a function that optionally returns an array of nodes to select.
 // This is the only operation that increases the depth of a selection.
-export default function(selector) {
+export default function(select) {
   var depth = this._depth,
       stack = new Array(depth * 2);
 
-  if (typeof selector !== "function") selector = selectorAllOf(selector);
+  if (typeof select !== "function") select = selectorAll(select);
 
   function visit(nodes, depth) {
     var i = -1,
@@ -33,7 +34,7 @@ export default function(selector) {
       while (++i < n) {
         if (node = nodes[i]) {
           stack[0] = node.__data__, stack[1] = i;
-          subnodes[i] = subnode = selector.apply(node, stack);
+          subnodes[i] = subnode = select.apply(node, stack);
           subnode._parent = node;
         }
       }
@@ -45,9 +46,3 @@ export default function(selector) {
 
   return new Selection(visit(this._root, depth), depth + 1);
 };
-
-function selectorAllOf(selector) {
-  return function() {
-    return this.querySelectorAll(selector);
-  };
-}

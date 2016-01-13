@@ -1,18 +1,5 @@
 import defaultView from "./defaultView";
 
-export default function(type, params) {
-
-  function dispatchConstant() {
-    return dispatchEvent(this, type, params);
-  }
-
-  function dispatchFunction() {
-    return dispatchEvent(this, type, params.apply(this, arguments));
-  }
-
-  return this.each(typeof params === "function" ? dispatchFunction : dispatchConstant);
-};
-
 function dispatchEvent(node, type, params) {
   var window = defaultView(node),
       event = window.CustomEvent;
@@ -27,3 +14,21 @@ function dispatchEvent(node, type, params) {
 
   node.dispatchEvent(event);
 }
+
+function dispatchConstant(type, params) {
+  return function() {
+    return dispatchEvent(this, type, params);
+  };
+}
+
+function dispatchFunction(type, params) {
+  return function() {
+    return dispatchEvent(this, type, params.apply(this, arguments));
+  };
+}
+
+export default function(type, params) {
+  return this.each((typeof params === "function"
+      ? dispatchFunction
+      : dispatchConstant)(type, params));
+};

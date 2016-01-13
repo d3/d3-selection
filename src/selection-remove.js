@@ -1,6 +1,8 @@
+function remove() {
+  var parent = this.parentNode;
+  if (parent) parent.removeChild(this);
+}
+
 export default function() {
-  return this.each(function() {
-    var parent = this.parentNode;
-    if (parent) parent.removeChild(this);
-  });
+  return this.each(remove);
 };

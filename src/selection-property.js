@@ -1,19 +1,28 @@
-export default function(name, value) {
-  if (arguments.length < 2) return this.node()[name];
-
-  function remove() {
+function propertyRemove(name) {
+  return function() {
     delete this[name];
-  }
+  };
+}
 
-  function setConstant() {
+function propertyConstant(name, value) {
+  return function() {
     this[name] = value;
-  }
+  };
+}
 
-  function setFunction() {
-    var x = value.apply(this, arguments);
-    if (x == null) delete this[name];
-    else this[name] = x;
-  }
+function propertyFunction(name, value) {
+  return function() {
+    var v = value.apply(this, arguments);
+    if (v == null) delete this[name];
+    else this[name] = v;
+  };
+}
 
-  return this.each(value == null ? remove : typeof value === "function" ? setFunction : setConstant);
+export default function(name, value) {
+  return arguments.length > 1
+      ? this.each((value == null
+          ? propertyRemove : typeof value === "function"
+          ? propertyFunction
+          : propertyConstant)(name, value))
+      : this.node()[name];
 };
