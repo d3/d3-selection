@@ -4,6 +4,7 @@ var tape = require("tape"),
 
 tape("d3.namespace(name) returns name if there is no namespace prefix", function(test) {
   test.equal(d3.namespace("foo"), "foo");
+  test.equal(d3.namespace("foo:bar"), "bar");
   test.end();
 });
 
@@ -27,5 +28,13 @@ tape("d3.namespace(name) returns the expected values for built-in namespaces", f
 
 tape("d3.namespace(\"xmlns:…\") treats the whole name as the local name", function(test) {
   test.deepEqual(d3.namespace("xmlns:xlink"), {space: "http://www.w3.org/2000/xmlns/", local: "xmlns:xlink"});
+  test.end();
+});
+
+tape("d3.namespace(name) observes modifications to d3.namespaces", function(test) {
+  d3.namespaces.d3js = "https://d3js.org/2016/namespace";
+  test.deepEqual(d3.namespace("d3js:pie"), {space: "https://d3js.org/2016/namespace", local: "pie"});
+  delete d3.namespaces.d3js;
+  test.equal(d3.namespace("d3js:pie"), "pie");
   test.end();
 });
