@@ -1,6 +1,6 @@
 var tape = require("tape"),
     jsdom = require("jsdom"),
-    d3 = require("../");
+    d3 = require("../../");
 
 tape("selection.exit initially returns an empty selection", function(test) {
   var document = jsdom.jsdom("<h1>hello</h1>"),

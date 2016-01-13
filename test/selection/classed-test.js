@@ -1,6 +1,6 @@
 var tape = require("tape"),
     jsdom = require("jsdom"),
-    d3 = require("../");
+    d3 = require("../../");
 
 tape("selection.classed returns true iff the first element has the specified class", function(test) {
   var document = jsdom.jsdom("<h1 class=\"c1 c2\">hello</h1>"),
