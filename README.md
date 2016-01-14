@@ -23,7 +23,7 @@ In a vanilla environment, a `d3_selection` global is exported. [Try d3-selection
 
 ### Selection
 
-Selection methods accept [W3C selector strings](http://www.w3.org/TR/selectors-api/) such as `.foo` to select elements with the class *foo*, or `div` to select DIV elements. Selection methods come in two forms: select and selectAll: the former selects only the first matching element, while the latter selects all matching elements in traversal order. The top-level selection methods, [d3.select](#select) and [d3.selectAll](#selectAll), query the entire document; the subselection methods, in contrast, [*selection*.select](#selection_select) and [*selection*.selectAll](#selection_selectAll), restrict selection to descendants of the selected elements.
+Selection methods accept [W3C selector strings](http://www.w3.org/TR/selectors-api/) such as `.fancy` to select elements with the class *fancy*, or `div` to select DIV elements. Selection methods come in two forms: select and selectAll: the former selects only the first matching element, while the latter selects all matching elements in traversal order. The top-level selection methods, [d3.select](#select) and [d3.selectAll](#selectAll), query the entire document; the subselection methods, in contrast, [*selection*.select](#selection_select) and [*selection*.selectAll](#selection_selectAll), restrict selection to descendants of the selected elements.
 
 <a name="selection" href="#selection">#</a> d3.<b>selection</b>()
 
@@ -45,7 +45,7 @@ d3.selectAll("input[type=checkbox]").checked(true);
 
 <a name="select" href="#select">#</a> d3.<b>select</b>(<i>selector</i>)
 
-Selects the first element that matches the specified *selector* string, such as `.foo`. If no elements match the *selector*, returns an empty selection. If multiple elements match the *selector*, only the first matching element (in traversal order) will be selected. For example, to select the first anchor element:
+Selects the first element that matches the specified *selector* string. If no elements match the *selector*, returns an empty selection. If multiple elements match the *selector*, only the first matching element (in traversal order) will be selected. For example, to select the first anchor element:
 
 ```js
 var anchor = d3.select("a");
@@ -61,7 +61,7 @@ d3.selectAll("p").on("click", function() {
 
 <a name="selectAll" href="#selectAll">#</a> d3.<b>selectAll</b>(<i>selector</i>)
 
-Selects all elements that match the specified *selector* string, such as `.foo`. The elements will be selected in document traversal order (top-to-bottom). If no elements in the document match the *selector*, returns an empty selection. For example, to select all paragraphs:
+Selects all elements that match the specified *selector* string. The elements will be selected in document traversal order (top-to-bottom). If no elements in the document match the *selector*, returns an empty selection. For example, to select all paragraphs:
 
 ```js
 var paragraph = d3.selectAll("p");
@@ -75,7 +75,7 @@ d3.selectAll(document.links).style("color", "red");
 
 <a name="selection_select" href="#selection_select">#</a> <i>selection</i>.<b>select</b>(<i>selector</i>)
 
-For each selected element, selects the first descendant element that matches the specified *selector* string, such as `.foo`. If no element matches the specified selector for the current element, the element at the current index will be null in the returned selection. If the current element has associated data, this data is propagated to the corresponding selected element. If multiple elements match the selector, only the first matching element in document traversal order is selected. For example, to select the first bold element in every paragraph:
+For each selected element, selects the first descendant element that matches the specified *selector* string. If no element matches the specified selector for the current element, the element at the current index will be null in the returned selection. If the current element has associated data, this data is propagated to the corresponding selected element. If multiple elements match the selector, only the first matching element in document traversal order is selected. For example, to select the first bold element in every paragraph:
 
 ```js
 var b = d3.selectAll("p").select("b");
@@ -93,7 +93,7 @@ Unlike [*selection*.selectAll](#selection_selectAll), *selection*.select does no
 
 <a name="selection_selectAll" href="#selection_selectAll">#</a> <i>selection</i>.<b>selectAll</b>(<i>selector</i>)
 
-For each selected element, selects the descendant elements that match the specified *selector* string, such as `.foo`. The elements in the returned selection are grouped by their corresponding parent node in this selection. If no element matches the specified selector for the current element, the group at the current index will be empty. The selected elements do not inherit data from the current selection; use [*selection*.data](#selection_data) to propagate data to children. For example, to select the bold elements in every paragraph:
+For each selected element, selects the descendant elements that match the specified *selector* string. The elements in the returned selection are grouped by their corresponding parent node in this selection. If no element matches the specified selector for the current element, the group at the current index will be empty. The selected elements do not inherit data from the current selection; use [*selection*.data](#selection_data) to propagate data to children. For example, to select the bold elements in every paragraph:
 
 ```js
 var b = d3.selectAll("p").selectAll("b");
@@ -114,7 +114,7 @@ Unlike [*selection*.select](#selection_select), *selection*.selectAll does affec
 
 <a name="selection_filter" href="#selection_filter">#</a> <i>selection</i>.<b>filter</b>(<i>filter</i>)
 
-Filters the selection, returning a new selection that contains only the elements for which the specified *filter* is true. The *filter* may be specified either as a selector string, such as `.foo`, or a function. If a function, it will be invoked for each selected element, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. For example, to filter a selection of table rows to contain only even rows:
+Filters the selection, returning a new selection that contains only the elements for which the specified *filter* is true. The *filter* may be specified either as a selector string or a function. If a function, it will be invoked for each selected element, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. For example, to filter a selection of table rows to contain only even rows:
 
 ```js
 var even = d3.selectAll("tr").filter(":nth-child(even)");
