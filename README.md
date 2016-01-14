@@ -434,9 +434,9 @@ If a *listener* is not specified, returns the currently-assigned listener for th
 
 Dispatches a [custom event](http://www.w3.org/TR/dom/#interface-customevent) of the specified *type* to each selected element, in order. An optional *parameters* map may be specified to set additional properties of the event. It may contain the following fields:
 
-* `bubbles` - if true, the event is dispatched to ancestors in reverse tree order.
-* `cancelable` - if true, *event*.preventDefault is allowed.
-* `detail` - any custom data associated with the event.
+* [`bubbles`](https://www.w3.org/TR/dom/#dom-event-bubbles) - if true, the event is dispatched to ancestors in reverse tree order.
+* [`cancelable`](https://www.w3.org/TR/dom/#dom-event-cancelable) - if true, *event*.preventDefault is allowed.
+* [`detail`](https://www.w3.org/TR/dom/#dom-customevent-detail) - any custom data associated with the event.
 
 If *parameters* is a function, it is evaluated for each selected element, in order, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. It must return the parameters map for the current element.
 
