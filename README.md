@@ -27,7 +27,7 @@ Selection methods accept [W3C selector strings](http://www.w3.org/TR/selectors-a
 
 <a name="selection" href="#selection">#</a> d3.<b>selection</b>()
 
-[Selects](#select) the root element, `document.documentElement`. This function can also be used to check if an object is a selection (`instanceof selection`) or to extend the selection prototype. For example, to add a method to check or uncheck input checkboxes:
+[Selects](#select) the root element, `document.documentElement`. This function can also be used to check if an object is a selection (`instanceof selection`) or to extend the selection prototype. For example, to add a method to check checkboxes:
 
 ```js
 d3.selection.prototype.checked = function(value) {
@@ -37,7 +37,7 @@ d3.selection.prototype.checked = function(value) {
 };
 ```
 
-And then to check all checkboxes:
+And then to use:
 
 ```js
 d3.selectAll("input[type=checkbox]").checked(true);
@@ -45,13 +45,13 @@ d3.selectAll("input[type=checkbox]").checked(true);
 
 <a name="select" href="#select">#</a> d3.<b>select</b>(<i>selector</i>)
 
-Selects the first element that matches the specified *selector*. If no elements match the *selector*, returns an empty selection. If multiple elements match the *selector*, only the first matching element (in traversal order) will be selected. For example, to select the first anchor element:
+Selects the first element that matches the specified *selector* string. If no elements match the *selector*, returns an empty selection. If multiple elements match the *selector*, only the first matching element (in traversal order) will be selected. For example, to select the first anchor element:
 
 ```js
 var anchor = d3.select("a");
 ```
 
-If the *selector* is not a string, instead selects the specified node; this is useful if you already have a reference to a node, such as `this` within an event listener or a global such as `document.body`. For example, to make the text of any clicked paragraph red:
+If the *selector* is not a string, instead selects the specified node; this is useful if you already have a reference to a node, such as `this` within an event listener or a global such as `document.body`. For example, to make a clicked paragraph red:
 
 ```js
 d3.selectAll("p").on("click", function() {
@@ -61,7 +61,7 @@ d3.selectAll("p").on("click", function() {
 
 <a name="selectAll" href="#selectAll">#</a> d3.<b>selectAll</b>(<i>selector</i>)
 
-Selects all elements that match the specified *selector*. The elements will be selected in traversal order (top-to-bottom). If no elements in the document match the *selector*, returns an empty selection. For example, to select all paragraphs:
+Selects all elements that match the specified *selector* string. The elements will be selected in document traversal order (top-to-bottom). If no elements in the document match the *selector*, returns an empty selection. For example, to select all paragraphs:
 
 ```js
 var paragraph = d3.selectAll("p");
@@ -75,13 +75,13 @@ d3.selectAll(document.links).style("color", "red");
 
 <a name="selection_select" href="#selection_select">#</a> <i>selection</i>.<b>select</b>(<i>selector</i>)
 
-For each selected element, selects the first descendant element that matches the specified *selector*. If no element matches the specified selector for the current element, the element at the current index will be null in the returned selection, preserving the index of the existing selection. (Operators automatically skip null elements.) If the current element has associated data, this data is propagated to the newly selected elements. If multiple elements match the selector, only the first matching element (in traversal order) is selected. For example, to select the first bold element in every paragraph:
+For each selected element, selects the first descendant element that matches the specified *selector* string. If no element matches the specified selector for the current element, the element at the current index will be null in the returned selection. If the current element has associated data, this data is propagated to the corresponding selected element. If multiple elements match the selector, only the first matching element in document traversal order is selected. For example, to select the first bold element in every paragraph:
 
 ```js
 var b = d3.selectAll("p").select("b");
 ```
 
-If the *selector* is a function, it will be invoked in the same manner as other operator functions, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. It must then return an element, or null if there is no matching element. For example, to select the previous sibling of each paragraph:
+If the *selector* is a function, it will be invoked for each selected element, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. It must then return an element, or null if there is no matching element. For example, to select the previous sibling of each paragraph:
 
 ```js
 var previous = d3.selectAll("p").select(function() {
@@ -89,17 +89,17 @@ var previous = d3.selectAll("p").select(function() {
 });
 ```
 
-Unlike [*selection*.selectAll](#selection_selectAll), *selection*.select does not affect grouping: it preserves the existing grouping and propagates parent data (if any) to selected children. Grouping plays an important role in the [data join](#data). See [Nested Selections](http://bost.ocks.org/mike/nest/) for more on this topic.
+Unlike [*selection*.selectAll](#selection_selectAll), *selection*.select does not affect grouping: it preserves the existing group structure and indexes, and propagates data (if any) to selected children. Grouping plays an important role in the [data join](#data). See [Nested Selections](http://bost.ocks.org/mike/nest/) and [How Selections Work](http://bost.ocks.org/mike/selection/) for more on this topic.
 
 <a name="selection_selectAll" href="#selection_selectAll">#</a> <i>selection</i>.<b>selectAll</b>(<i>selector</i>)
 
-For each selected element, selects all descendant elements that match the specified *selector*. The returned selection is grouped by its parent node in the current selection. If no element matches the specified selector for the current element, the group at the current index will be empty in the returned selection. The subselection does not inherit data from the current selection; use [*selection*.data](#selection_data) to propagate data to children. For example, to select the bold elements in every paragraph:
+For each selected element, selects the descendant elements that match the specified *selector* string. The elements in the returned selection are grouped by their corresponding parent node in this selection. If no element matches the specified selector for the current element, the group at the current index will be empty. The selected elements do not inherit data from the current selection; use [*selection*.data](#selection_data) to propagate data to children. For example, to select the bold elements in every paragraph:
 
 ```js
 var b = d3.selectAll("p").selectAll("b");
 ```
 
-If the *selector* is a function, it will be invoked in the same manner as other operator functions, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. It must then return an array of elements (or a psuedo-array, such as a NodeList), or the empty array if there are no matching elements. For example, to select the previous and next siblings of each paragraph:
+If the *selector* is a function, it will be invoked for each selected element, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. It must then return an array of elements (or a psuedo-array, such as a NodeList), or the empty array if there are no matching elements. For example, to select the previous and next siblings of each paragraph:
 
 ```js
 var sibling = d3.selectAll("p").selectAll(function() {
@@ -110,27 +110,35 @@ var sibling = d3.selectAll("p").selectAll(function() {
 });
 ```
 
-Unlike [*selection*.select](#selection_select), *selection*.selectAll does affect grouping: each selected descendant is grouped by the parent element in the originating selection. Grouping plays an important role in the [data join](#data). See [Nested Selections](http://bost.ocks.org/mike/nest/) for more on this topic.
+Unlike [*selection*.select](#selection_select), *selection*.selectAll does affect grouping: each selected descendant is grouped by the parent element in the originating selection. Grouping plays an important role in the [data join](#data). See [Nested Selections](http://bost.ocks.org/mike/nest/) and [How Selections Work](http://bost.ocks.org/mike/selection/) for more on this topic.
 
 <a name="selection_filter" href="#selection_filter">#</a> <i>selection</i>.<b>filter</b>(<i>filter</i>)
 
-Filters the selection, returning a new selection that contains only the elements for which the specified *filter* is true. The *filter* may be specified either as a function or as a selector string, such as `.foo`. If a function, it is passed the current datum `d` and index `i`, with the `this` context as the current DOM element. For example, to select every element with an odd index (relative to the zero-based index):
+Filters the selection, returning a new selection that contains only the elements for which the specified *filter* is true. The *filter* may be specified either as a selector string, such as `.foo`, or a function. If a function, it will be invoked for each selected element, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. For example, to filter a selection of table rows to contain only even rows:
 
 ```js
-var odd = selection.select(function(d, i) { return i % 2 === 1 ? this : null; });
+var even = d3.selectAll("tr").filter(":nth-child(even)");
 ```
 
-Equivalently, using a filter function:
+Equivalently, using [d3.selectAll](#selectAll) directly:
 
 ```js
-var odd = selection.filter(function(d, i) { return i % 2 === 1; });
+var even = d3.selectAll("tr:nth-child(even)");
 ```
 
-Or a filter selector (note that the `:nth-child` pseudo-class is a one-based index rather than a zero-based index):
+Similarly, using a function:
 
 ```js
-var odd = selection.filter(":nth-child(even)");
+var even = d3.selectAll("tr").filter(function(d, i) { return i & 1; });
 ```
+
+Or using [*selection*.select](#selection_select):
+
+```js
+var even = d3.selectAll("tr").select(function(d, i) { return i & 1 ? this : null; });
+```
+
+Note that the `:nth-child` pseudo-class is a one-based index rather than a zero-based index. Also, the above filter functions do not have precisely the same meaning as `:nth-child`; they rely on the selection index rather than the number of preceeding sibling elements in the DOM.
 
 The returned selection may not preserve the index of the original selection, as some elements may be removed; you can use [*selection*.select](#selection_select) to preserve the index, if needed.
 
@@ -418,7 +426,7 @@ For interaction, selections allow listening for and dispatching of events.
 
 <a name="selection_on" href="#selection_on">#</a> <i>selection</i>.<b>on</b>(<i>type</i>[, <i>listener</i>[, <i>capture</i>]])
 
-Adds or removes a *listener* to each selected element for the specified event *type*. The *type* is a string event type name, such as `click`, `mouseover`, or `submit`. (Any [DOM event type](https://developer.mozilla.org/en-US/docs/Web/Events#Standard_events) supported by your browser may be used.) The *listener* is invoked in the same manner as other operator functions, being passed the current datum *d* and index *i*, with the `this` context as the current DOM element. Listeners always see the latest datum for their element, but the index is a property of the selection and is fixed when the listener is assigned; to update the index, re-assign the listener. To access the current event within a listener, use [d3.event](#event).
+Adds or removes a *listener* to each selected element for the specified event *type*. The *type* is a string event type name, such as `click`, `mouseover`, or `submit`. (Any [DOM event type](https://developer.mozilla.org/en-US/docs/Web/Events#Standard_events) supported by your browser may be used.) The *listener* is invoked for each selected element, being passed the current datum *d* and index *i*, with the `this` context as the current DOM element. Listeners always see the latest datum for their element, but the index is a property of the selection and is fixed when the listener is assigned; to update the index, re-assign the listener. To access the current event within a listener, use [d3.event](#event).
 
 If an event listener was already registered for the same *type* on a selected element, the existing listener is removed before the new listener is added. To register multiple listeners for a given type, the type may be followed by an optional namespace, such as `click.foo` and `click.bar`. To remove a listener, pass null as the *listener*. To remove all listeners for a particular namespace, pass null as the *listener* and `.foo` as the *type*, where *foo* is the namespace.
 
@@ -428,7 +436,7 @@ If a *listener* is not specified, returns the currently-assigned listener for th
 
 <a name="selection_dispatch" href="#selection_dispatch">#</a> <i>selection</i>.<b>dispatch</b>(<i>type</i>[, <i>parameters</i>])
 
-Dispatches a [custom event](http://www.w3.org/TR/dom/#interface-customevent) of the specified *type* to each selected element. An optional *parameters* map may be specified to set additional properties of the event: bubbles, cancelable, and detail. If *parameters* is a function, it will be invoked in the same manner as other operator functions, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. It must then return the parameters map for the current element.
+Dispatches a [custom event](http://www.w3.org/TR/dom/#interface-customevent) of the specified *type* to each selected element. An optional *parameters* map may be specified to set additional properties of the event: bubbles, cancelable, and detail. If *parameters* is a function, it will be invoked for each selected element, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. It must then return the parameters map for the current element.
 
 <a name="event" href="#event">#</a> d3.<b>event</b>
 
