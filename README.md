@@ -14,14 +14,14 @@ In a vanilla environment, a `d3_selection` global is exported. [Try d3-selection
 
 ## API Reference
 
-* [Selection](#selection)
-* [Transformation](#transformation)
+* [Selecting Elements](#selecting-elements)
+* [Modifying Elements](#modifying-elements)
 * [Data](#data)
 * [Events](#events)
 * [Control](#control)
 * [Namespaces](#namespaces)
 
-### Selection
+### Selecting Elements
 
 Selection methods accept [W3C selector strings](http://www.w3.org/TR/selectors-api/) such as `.fancy` to select elements with the class *fancy*, or `div` to select DIV elements. Selection methods come in two forms: select and selectAll: the former selects only the first matching element, while the latter selects all matching elements in document order. The top-level selection methods, [d3.select](#select) and [d3.selectAll](#selectAll), query the entire document; the subselection methods, [*selection*.select](#selection_select) and [*selection*.selectAll](#selection_selectAll), restrict selection to descendants of the selected elements.
 
@@ -142,7 +142,7 @@ Note that the `:nth-child` pseudo-class is a one-based index rather than a zero-
 
 The returned selection may not preserve the index of the original selection, as some elements may be removed; you can use [*selection*.select](#selection_select) to preserve the index, if needed.
 
-### Transformation
+### Modifying Elements
 
 After selecting elements, use the selection’s transformation methods to affect document content. Selection methods return the current selection, allowing the concise application of multiple methods on a given selection via method chaining. For example, to set the name attribute and color style of an anchor element:
 
