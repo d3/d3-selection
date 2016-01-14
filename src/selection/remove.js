@@ -1,5 +1,3 @@
-import {Selection} from "./index";
-
 function remove() {
   var parent = this.parentNode;
   if (parent) parent.removeChild(this);
