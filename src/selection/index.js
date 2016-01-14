@@ -27,7 +27,6 @@ import selection_dispatch from "./dispatch";
 export function Selection(groups) {
   this._ = groups;
   this._enter =
-  this._update =
   this._exit = null;
 };
 
