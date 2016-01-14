@@ -81,7 +81,7 @@ For each selected element, selects the first descendant element that matches the
 var b = d3.selectAll("p").select("b");
 ```
 
-If the *selector* is a function, it will be invoked for each selected element, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. It must then return an element, or null if there is no matching element. For example, to select the previous sibling of each paragraph:
+If the *selector* is a function, it is evaluated for each selected element, in order, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. It must then return an element, or null if there is no matching element. For example, to select the previous sibling of each paragraph:
 
 ```js
 var previous = d3.selectAll("p").select(function() {
@@ -99,7 +99,7 @@ For each selected element, selects the descendant elements that match the specif
 var b = d3.selectAll("p").selectAll("b");
 ```
 
-If the *selector* is a function, it will be invoked for each selected element, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. It must then return an array of elements (or a psuedo-array, such as a NodeList), or the empty array if there are no matching elements. For example, to select the previous and next siblings of each paragraph:
+If the *selector* is a function, it is evaluated for each selected element, in order, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. It must then return an array of elements (or a psuedo-array, such as a NodeList), or the empty array if there are no matching elements. For example, to select the previous and next siblings of each paragraph:
 
 ```js
 var sibling = d3.selectAll("p").selectAll(function() {
@@ -114,7 +114,7 @@ Unlike [*selection*.select](#selection_select), *selection*.selectAll does affec
 
 <a name="selection_filter" href="#selection_filter">#</a> <i>selection</i>.<b>filter</b>(<i>filter</i>)
 
-Filters the selection, returning a new selection that contains only the elements for which the specified *filter* is true. The *filter* may be specified either as a selector string or a function. If a function, it will be invoked for each selected element, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. For example, to filter a selection of table rows to contain only even rows:
+Filters the selection, returning a new selection that contains only the elements for which the specified *filter* is true. The *filter* may be specified either as a selector string or a function. If a function, it is evaluated for each selected element, in order, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. For example, to filter a selection of table rows to contain only even rows:
 
 ```js
 var even = d3.selectAll("tr").filter(":nth-child(even)");
@@ -144,7 +144,7 @@ The returned selection may not preserve the index of the original selection, as 
 
 ### Transformation
 
-Selections expose a variety of operators to affect document content. Selection operators return the current selection, allowing the concise application of multiple operators on a given selection via method chaining. For example, to see the name attribute and color style of an anchor element:
+After selecting elements, use the selection’s transformation methods to affect document content. Selection methods return the current selection, allowing the concise application of multiple methods on a given selection via method chaining. For example, to set the name attribute and color style of an anchor element:
 
 ```js
 d3.select("a")
@@ -160,11 +160,11 @@ anchor.attr("name", "fred");
 anchor.style("color", "red");
 ```
 
-To learn selections experientially, go to [d3js.org](https://d3js.org) and try selecting elements in your browser’s developer console! (In Chrome, open the console with ⌥⌘J.) Inspect the returned selection to see which elements are selected and how they are grouped. Apply operators to the selection and see how the page content changes.
+To experiment with selections, visit [d3js.org](https://d3js.org) and open your browser’s developer console! (In Chrome, open the console with ⌥⌘J.) Select elements and then inspect the returned selection to see which elements are selected and how they are grouped. Call selection methods and see how the page content changes.
 
 <a name="selection_attr" href="#selection_attr">#</a> <i>selection</i>.<b>attr</b>(<i>name</i>[, <i>value</i>])
 
-If a *value* is specified, sets the attribute with the specified *name* to the specified value on the selected elements and returns this selection. If the *value* is a constant, then all elements are given the same attribute value; otherwise, if the *value* is a function, the function is evaluated for each selected element (in order), being passed the current datum *d* and the current index *i*, with the `this` context as the current DOM element. The function’s return value is then used to set each element’s attribute. A null value will remove the specified attribute.
+If a *value* is specified, sets the attribute with the specified *name* to the specified value on the selected elements and returns this selection. If the *value* is a constant, all elements are given the same attribute value; otherwise, if the *value* is a function, the function is evaluated for each selected element, in order, being passed the current datum *d* and index *i*, with the `this` context as the current DOM element. The function’s return value is then used to set each element’s attribute. A null value will remove the specified attribute.
 
 If a *value* is not specified, returns the current value of the specified attribute for the first (non-null) element in the selection. This is generally useful only if you know that the selection contains exactly one element.
 
@@ -178,7 +178,7 @@ If a *value* is specified, assigns or unassigns the specified CSS *classes* on t
 selection.classed("foo bar", true);
 ```
 
-If the *value* is truthy, then all elements are assigned the specified *classes*; otherwise, the classes are unassigned. If the *value* is a function, then the function is evaluated for each selected element (in order), being passed the current datum *d* and the current index *i*, with the `this` context as the current DOM element. The function’s return value is then used to assign or unassign classes on each element. For example, to randomly associate the class *foo* with on average half the selected elements:
+If the *value* is truthy, then all elements are assigned the specified *classes*; otherwise, the classes are unassigned. If the *value* is a function, then the function is evaluated for each selected element, in order, being passed the current datum *d* and index *i*, with the `this` context as the current DOM element. The function’s return value is then used to assign or unassign classes on each element. For example, to randomly associate the class *foo* with on average half the selected elements:
 
 ```js
 selection.classed("foo", function() { return Math.random(); });
@@ -188,7 +188,7 @@ If a *value* is not specified, returns true if and only if the first (non-null) 
 
 <a name="selection_style" href="#selection_style">#</a> <i>selection</i>.<b>style</b>(<i>name</i>[, <i>value</i>[, <i>priority</i>]])
 
-If a *value* is specified, sets the style property with the specified *name* to the specified value on the selected elements and returns this selection. If the *value* is a constant, then all elements are given the same style property value; otherwise, if the *value* is a function, then the function is evaluated for each selected element (in order), being passed the current datum *d* and the current index *i*, with the `this` context as the current DOM element. The function’s return value is then used to set each element’s style property. A null value will remove the style property. An optional *priority* may also be specified, either as null or the string `important` (without the exclamation point).
+If a *value* is specified, sets the style property with the specified *name* to the specified value on the selected elements and returns this selection. If the *value* is a constant, then all elements are given the same style property value; otherwise, if the *value* is a function, then the function is evaluated for each selected element, in order, being passed the current datum *d* and index *i*, with the `this` context as the current DOM element. The function’s return value is then used to set each element’s style property. A null value will remove the style property. An optional *priority* may also be specified, either as null or the string `important` (without the exclamation point).
 
 If a *value* is not specified, returns the current computed value of the specified style property for the first (non-null) element in the selection. This is generally useful only if you know the selection contains exactly one element. The computed value **may be different than the previously-set value**, particularly if it was set using a shorthand property (such as the `font` style, which is shorthand for `font-size`, `font-face`, etc.).
 
@@ -196,9 +196,9 @@ Caution: unlike many SVG attributes, CSS styles typically have associated units.
 
 <a name="selection_property" href="#selection_property">#</a> <i>selection</i>.<b>property</b>(<i>name</i>[, <i>value</i>])
 
-Some HTML elements have special properties that are not addressable using attributes or styles, such as a form field’s text `value` and a checkbox’s `checked` boolean. Use this operator to get or set these properties.
+Some HTML elements have special properties that are not addressable using attributes or styles, such as a form field’s text `value` and a checkbox’s `checked` boolean. Use this method to get or set these properties.
 
-If a *value* is specified, sets the property with the specified *name* to the specified value on selected elements. If the *value* is a constant, then all elements are given the same property value; otherwise, if the *value* is a function, then the function is evaluated for each selected element (in order), being passed the current datum *d* and the current index *i*, with the `this` context as the current DOM element. The function’s return value is then used to set each element’s property. A null value will delete the specified property.
+If a *value* is specified, sets the property with the specified *name* to the specified value on selected elements. If the *value* is a constant, then all elements are given the same property value; otherwise, if the *value* is a function, then the function is evaluated for each selected element, in order, being passed the current datum *d* and index *i*, with the `this` context as the current DOM element. The function’s return value is then used to set each element’s property. A null value will delete the specified property.
 
 If a *value* is not specified, returns the value of the specified property for the first (non-null) element in the selection. This is generally useful only if you know the selection contains exactly one element.
 
@@ -206,7 +206,7 @@ If a *value* is not specified, returns the value of the specified property for t
 
 The text operator is based on the [textContent](http://www.w3.org/TR/DOM-Level-3-Core/core.html#Node3-textContent) property; setting the text content will replace any existing child elements.
 
-If a *value* is specified, sets the text content to the specified value on all selected elements. If the *value* is a constant, then all elements are given the same text content; otherwise, if the *value* is a function, then the function is evaluated for each selected element (in order), being passed the current datum *d* and the current index *i*, with the `this` context as the current DOM element. The function’s return value is then used to set each element’s text content. A null value will clear the content.
+If a *value* is specified, sets the text content to the specified value on all selected elements. If the *value* is a constant, then all elements are given the same text content; otherwise, if the *value* is a function, then the function is evaluated for each selected element, in order, being passed the current datum *d* and index *i*, with the `this` context as the current DOM element. The function’s return value is then used to set each element’s text content. A null value will clear the content.
 
 If a *value* is not specified, returns the text content for the first (non-null) element in the selection. This is generally useful only if you know the selection contains exactly one element.
 
@@ -214,7 +214,7 @@ If a *value* is not specified, returns the text content for the first (non-null)
 
 The html operator is based on the [innerHTML](http://dev.w3.org/html5/spec-LC/apis-in-html-documents.html#innerhtml) property; setting the inner HTML will replace any existing child elements. Also, you may prefer to use [*selection*.append](#selection_append) to create HTML content in a data-driven way; this operator is intended for when you want a little bit of HTML, say for rich formatting.
 
-If a *value* is specified, sets the inner HTML to the specified value on all selected elements. If the *value* is a constant, then all elements are given the same inner HTML; otherwise, if the *value* is a function, then the function is evaluated for each selected element (in order), being passed the current datum *d* and the current index *i*, with the `this` context as the current DOM element. The function’s return value is then used to set each element’s inner HTML. A null value will clear the content.
+If a *value* is specified, sets the inner HTML to the specified value on all selected elements. If the *value* is a constant, then all elements are given the same inner HTML; otherwise, if the *value* is a function, then the function is evaluated for each selected element, in order, being passed the current datum *d* and index *i*, with the `this` context as the current DOM element. The function’s return value is then used to set each element’s inner HTML. A null value will clear the content.
 
 If a *value* is not specified, returns the inner HTML for the first (non-null) element in the selection. This is generally useful only if you know the selection contains exactly one element.
 
@@ -222,7 +222,7 @@ As the name suggests, *selection*.html is only supported on HTML elements. SVG e
 
 <a name="selection_append" href="#selection_append">#</a> <i>selection</i>.<b>append</b>(<i>type</i>[, <i>before</i>])
 
-If the specified *type* is a string, appends a new element of this type (tag name) as the last child of each element in the current selection. Otherwise, the *type* may be a function which is evaluated for each selected element (in order), being passed the current datum *d* and the current index *i*, with the `this` context as the current DOM element. This function should return an element to be appended. (Typically, the function creates a new element, but it may return an existing element instead.) For example, to append a DIV element to each paragraph:
+If the specified *type* is a string, appends a new element of this type (tag name) as the last child of each element in the current selection. Otherwise, the *type* may be a function which is evaluated for each selected element, in order, being passed the current datum *d* and index *i*, with the `this` context as the current DOM element. This function should return an element to be appended. (Typically, the function creates a new element, but it may return an existing element instead.) For example, to append a DIV element to each paragraph:
 
 ```js
 d3.selectAll("p").append("div");
@@ -289,7 +289,7 @@ var td = tr.selectAll("td")
 
 The *data* function here is the identity function: it is invoked for each table row, and returns the numbers for each table cell.
 
-If a *key* is not specified, then the first datum in *data* is assigned to the first selected element, the second datum to the second selected element, and so on. A *key* function may be specified to control how data is assigned to elements, replacing the default join-by-index. This key function is evaluated for each selected element (in order), being passed the current datum *d* and the current index *i*, with the `this` context as the current DOM element. The key function is also evaluated for each new datum in *data*, being passed the datum `d`, the index `i`, with the `this` context as the parent DOM element. The datum for a given key is assigned to the element with the matching key. For example, given this document:
+If a *key* is not specified, then the first datum in *data* is assigned to the first selected element, the second datum to the second selected element, and so on. A *key* function may be specified to control how data is assigned to elements, replacing the default join-by-index. This key function is evaluated for each selected element, in order, being passed the current datum *d* and index *i*, with the `this` context as the current DOM element. The key function is also evaluated for each new datum in *data*, being passed the datum `d`, the index `i`, with the `this` context as the parent DOM element. The datum for a given key is assigned to the element with the matching key. For example, given this document:
 
 ```html
 <div id="Ford"></div>
@@ -401,7 +401,7 @@ Note that the order of the DOM elements matches the order of the data. This is b
 
 Gets or sets the bound data for each selected element. Unlike [*selection*.data](#selection_data), this method does not compute a join and thus does not affect indexes or the enter and exit selections.
 
-If a *value* is specified, sets the element’s bound data to the specified value on all selected elements. If the *value* is a constant, all elements are given the same datum; otherwise, if the *value* is a function, then the function is evaluated for each selected element, being passed the previous datum `d` and the current index `i`, with the `this` context as the current DOM element. The function is then used to set each element’s data. A null value will delete the bound data.
+If a *value* is specified, sets the element’s bound data to the specified value on all selected elements. If the *value* is a constant, all elements are given the same datum; otherwise, if the *value* is a function, then the function is evaluated for each selected element, in order, being passed the previous datum `d` and the current index `i`, with the `this` context as the current DOM element. The function is then used to set each element’s data. A null value will delete the bound data.
 
 If a *value* is not specified, returns the bound datum for the first (non-null) element in the selection. This is generally useful only if you know the selection contains exactly one element.
 
@@ -436,7 +436,7 @@ If a *listener* is not specified, returns the currently-assigned listener for th
 
 <a name="selection_dispatch" href="#selection_dispatch">#</a> <i>selection</i>.<b>dispatch</b>(<i>type</i>[, <i>parameters</i>])
 
-Dispatches a [custom event](http://www.w3.org/TR/dom/#interface-customevent) of the specified *type* to each selected element. An optional *parameters* map may be specified to set additional properties of the event: bubbles, cancelable, and detail. If *parameters* is a function, it will be invoked for each selected element, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. It must then return the parameters map for the current element.
+Dispatches a [custom event](http://www.w3.org/TR/dom/#interface-customevent) of the specified *type* to each selected element. An optional *parameters* map may be specified to set additional properties of the event: bubbles, cancelable, and detail. If *parameters* is a function, it is evaluated for each selected element, in order, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. It must then return the parameters map for the current element.
 
 <a name="event" href="#event">#</a> d3.<b>event</b>
 
