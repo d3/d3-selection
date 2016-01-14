@@ -2,7 +2,9 @@ import arrayify from "./arrayify";
 import {Selection} from "./index";
 
 function exit(update) {
-  return new Array(update.length);
+  var exit = new Array(update.length);
+  exit._parent = update._parent;
+  return exit;
 }
 
 export default function() {

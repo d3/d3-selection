@@ -3,6 +3,7 @@ import {Selection} from "./index";
 
 function enter(update) {
   var enter = new Array(update.length);
+  enter._parent = update._parent;
   enter._update = update;
   return enter;
 }
