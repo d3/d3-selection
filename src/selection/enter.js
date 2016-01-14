@@ -8,5 +8,5 @@ function enter(update) {
 }
 
 export default function() {
-  return this._exit || (this._exit = new Selection(arrayify(this).map(enter)));
+  return this._enter || (this._enter = new Selection(arrayify(this).map(enter)));
 };
