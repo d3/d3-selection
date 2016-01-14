@@ -81,7 +81,7 @@ For each selected element, selects the first descendant element that matches the
 var b = d3.selectAll("p").select("b");
 ```
 
-If the *selector* is a function, it is evaluated for each selected element, in order, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. It must then return an element, or null if there is no matching element. For example, to select the previous sibling of each paragraph:
+If the *selector* is a function, it is evaluated for each selected element, in order, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. It must return an element, or null if there is no matching element. For example, to select the previous sibling of each paragraph:
 
 ```js
 var previous = d3.selectAll("p").select(function() {
@@ -99,7 +99,7 @@ For each selected element, selects the descendant elements that match the specif
 var b = d3.selectAll("p").selectAll("b");
 ```
 
-If the *selector* is a function, it is evaluated for each selected element, in order, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. It must then return an array of elements (or a psuedo-array, such as a NodeList), or the empty array if there are no matching elements. For example, to select the previous and next siblings of each paragraph:
+If the *selector* is a function, it is evaluated for each selected element, in order, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. It must return an array of elements (or a psuedo-array, such as a NodeList), or the empty array if there are no matching elements. For example, to select the previous and next siblings of each paragraph:
 
 ```js
 var sibling = d3.selectAll("p").selectAll(function() {
@@ -436,7 +436,7 @@ If a *listener* is not specified, returns the currently-assigned listener for th
 
 <a name="selection_dispatch" href="#selection_dispatch">#</a> <i>selection</i>.<b>dispatch</b>(<i>type</i>[, <i>parameters</i>])
 
-Dispatches a [custom event](http://www.w3.org/TR/dom/#interface-customevent) of the specified *type* to each selected element. An optional *parameters* map may be specified to set additional properties of the event: bubbles, cancelable, and detail. If *parameters* is a function, it is evaluated for each selected element, in order, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. It must then return the parameters map for the current element.
+Dispatches a [custom event](http://www.w3.org/TR/dom/#interface-customevent) of the specified *type* to each selected element. An optional *parameters* map may be specified to set additional properties of the event: bubbles, cancelable, and detail. If *parameters* is a function, it is evaluated for each selected element, in order, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. It must return the parameters map for the current element.
 
 <a name="event" href="#event">#</a> d3.<b>event</b>
 
