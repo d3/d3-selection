@@ -18,6 +18,8 @@ import selection_property from "./property";
 import selection_classed from "./classed";
 import selection_text from "./text";
 import selection_html from "./html";
+import selection_raise from "./raise";
+import selection_lower from "./lower";
 import selection_append from "./append";
 import selection_remove from "./remove";
 import selection_datum from "./datum";
@@ -53,6 +55,8 @@ Selection.prototype = selection.prototype = {
   classed: selection_classed,
   text: selection_text,
   html: selection_html,
+  raise: selection_raise,
+  lower: selection_lower,
   append: selection_append,
   remove: selection_remove,
   datum: selection_datum,

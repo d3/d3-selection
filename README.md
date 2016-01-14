@@ -254,6 +254,26 @@ Note that sorting is not guaranteed to be stable; however, it is guaranteed to h
 
 Re-inserts elements into the document such that the document order of each group matches the selection order. This is equivalent to calling [*selection*.sort](#selection_sort) if the data is already sorted, but much faster.
 
+<a name="selection_raise" href="#selection_raise">#</a> <i>selection</i>.<b>raise</b>()
+
+Re-inserts each selected element, in order, as the last child of its parent. Equivalent to:
+
+```js
+selection.each(function() {
+  this.parentNode.appendChild(this);
+});
+```
+
+<a name="selection_lower" href="#selection_lower">#</a> <i>selection</i>.<b>lower</b>()
+
+Re-inserts each selected element, in order, as the first child of its parent. Equivalent to:
+
+```js
+selection.each(function() {
+  this.parentNode.insertBefore(this, this.parentNode.firstChild);
+});
+```
+
 ### Joining Data
 
 For an introduction to D3’s data joins, see [Thinking With Joins](http://bost.ocks.org/mike/join/). Also see the [General Update Pattern](http://bl.ocks.org/mbostock/3808218) examples.
