@@ -1,5 +1,5 @@
-import blank from "./blank";
+import sparse from "./sparse";
 
 export default function() {
-  return this._exit || (this._exit = blank(this));
+  return this._exit || (this._exit = sparse(this));
 };
