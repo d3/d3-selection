@@ -458,15 +458,15 @@ Returns the *x* and *y* coordinates of the touches associated with the [current 
 
 ### Control
 
-For advanced usage, selections provide operators for custom control flow.
+For advanced usage, selections provide methods for custom control flow.
 
 <a name="selection_each" href="#selection_each">#</a> <i>selection</i>.<b>each</b>(<i>function</i>)
 
-Invokes the specified *function* for each selected element, passing in the current datum `d` and index `i`, with the `this` context of the current DOM element. This operator is used internally by most other operators, and can be used to invoke arbitrary code for each selected element.
+Invokes the specified *function* for each selected element, passing in the current datum `d` and index `i`, with the `this` context of the current DOM element. This method is used internally by many [transformation methods](#transformation) and can be used to invoke arbitrary code for each selected element.
 
 <a name="selection_call" href="#selection_call">#</a> <i>selection</i>.<b>call</b>(<i>selection</i>[, <i>arguments…</i>])
 
-Invokes the specified *function* (once), passing in the current selection along with any optional *arguments*, and returns the current selection. The call operator is identical to invoking a function by hand, but it facilitates method chaining. For example, to set several attributes in a reusable function:
+Invokes the specified *function* (exactly once), passing in the current selection along with any optional *arguments*. Returns the current selection. This is equivalent to invoking the function by hand but facilitates method chaining. For example, to set several attributes in a reusable function:
 
 ```javascript
 function name(selection, first, last) {
@@ -476,19 +476,19 @@ function name(selection, first, last) {
 }
 ```
 
-Now, we can say this:
-
-```javascript
-name(d3.selectAll("div"), "John", "Snow");
-```
-
-Or equivalently:
+Now say:
 
 ```javascript
 d3.selectAll("div").call(name, "John", "Snow");
 ```
 
-The `this` context of the called function is also the current selection. This is slightly redundant with the first argument, which we might fix in the future.
+This is equivalent to:
+
+```javascript
+name(d3.selectAll("div"), "John", "Snow");
+```
+
+The `this` context of the called function is also the current selection.
 
 <a name="selection_empty" href="#selection_empty">#</a> <i>selection</i>.<b>empty</b>()
 

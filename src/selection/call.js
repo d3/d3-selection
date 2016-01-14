@@ -1,5 +1,6 @@
 export default function() {
   var callback = arguments[0];
-  callback.apply(arguments[0] = this, arguments);
+  arguments[0] = this;
+  callback.apply(null, arguments);
   return this;
 };
