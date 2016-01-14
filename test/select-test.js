@@ -12,8 +12,8 @@ tape("d3.select can select by string", function(test) {
   test.equal(s._[0].length, 1);
   test.equal(s._[0][0], document.body);
   test.equal(s._[0]._parent, undefined);
-  test.equal(s._enter, null);
-  test.equal(s._exit, null);
+  test.equal(s._enter, undefined);
+  test.equal(s._exit, undefined);
   test.end();
   delete global.document;
 });
@@ -28,8 +28,8 @@ tape("d3.select can select an element", function(test) {
   test.equal(s._[0].length, 1);
   test.equal(s._[0][0], document.body);
   test.equal(s._[0]._parent, undefined);
-  test.equal(s._enter, null);
-  test.equal(s._exit, null);
+  test.equal(s._enter, undefined);
+  test.equal(s._exit, undefined);
   test.end();
 });
 
@@ -43,8 +43,8 @@ tape("d3.select can select a window", function(test) {
   test.equal(s._[0].length, 1);
   test.equal(s._[0][0], document.defaultView);
   test.equal(s._[0]._parent, undefined);
-  test.equal(s._enter, null);
-  test.equal(s._exit, null);
+  test.equal(s._enter, undefined);
+  test.equal(s._exit, undefined);
   test.end();
 });
 
@@ -58,8 +58,8 @@ tape("d3.select can select a document", function(test) {
   test.equal(s._[0].length, 1);
   test.equal(s._[0][0], document);
   test.equal(s._[0]._parent, undefined);
-  test.equal(s._enter, null);
-  test.equal(s._exit, null);
+  test.equal(s._enter, undefined);
+  test.equal(s._exit, undefined);
   test.end();
 });
 
@@ -72,8 +72,8 @@ tape("d3.select can select a document element", function(test) {
   test.equal(s._[0].length, 1);
   test.equal(s._[0][0], document.documentElement);
   test.equal(s._[0]._parent, undefined);
-  test.equal(s._enter, null);
-  test.equal(s._exit, null);
+  test.equal(s._enter, undefined);
+  test.equal(s._exit, undefined);
   test.end();
 });
 
@@ -87,8 +87,8 @@ tape("d3.select can select null", function(test) {
   test.equal(s._[0].length, 1);
   test.equal(s._[0][0], null);
   test.equal(s._[0]._parent, undefined);
-  test.equal(s._enter, null);
-  test.equal(s._exit, null);
+  test.equal(s._enter, undefined);
+  test.equal(s._exit, undefined);
   test.end();
 });
 
@@ -102,7 +102,7 @@ tape("d3.select can select an arbitrary object", function(test) {
   test.equal(s._[0].length, 1);
   test.equal(s._[0][0], object);
   test.equal(s._[0]._parent, undefined);
-  test.equal(s._enter, null);
-  test.equal(s._exit, null);
+  test.equal(s._enter, undefined);
+  test.equal(s._exit, undefined);
   test.end();
 });

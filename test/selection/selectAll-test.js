@@ -15,8 +15,8 @@ tape("selection.selectAll can select elements (in the simplest case)", function(
   test.equal(s._[0][0], h1);
   test.equal(s._[0][1], h2);
   test.equal(s._[0]._parent, document.body);
-  test.equal(s._enter, null);
-  test.equal(s._exit, null);
+  test.equal(s._enter, undefined);
+  test.equal(s._exit, undefined);
   test.end();
 });
 
@@ -38,8 +38,8 @@ tape("selection.selectAll can select elements (with multiple originating element
   test.equal(s._[1][1], document.querySelector("#td-1-1"));
   test.equal(s._[0]._parent, tr0);
   test.equal(s._[1]._parent, tr1);
-  test.equal(s._enter, null);
-  test.equal(s._exit, null);
+  test.equal(s._enter, undefined);
+  test.equal(s._exit, undefined);
   test.end();
 });
 
@@ -55,8 +55,8 @@ tape("selection.selectAll can select elements (with multiple originating element
   test.equal(s._[0][0], document.querySelector("#td-0-0"));
   test.equal(s._[0][1], document.querySelector("#td-0-1"));
   test.equal(s._[0]._parent, tr);
-  test.equal(s._enter, null);
-  test.equal(s._exit, null);
+  test.equal(s._enter, undefined);
+  test.equal(s._exit, undefined);
   test.end();
 });
 

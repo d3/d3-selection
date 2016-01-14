@@ -12,8 +12,8 @@ tape("d3.selectAll can select by string", function(test) {
   test.equal(s._[0].length, 1);
   test.equal(s._[0][0], document.body);
   test.equal(s._[0]._parent, undefined);
-  test.equal(s._enter, null);
-  test.equal(s._exit, null);
+  test.equal(s._enter, undefined);
+  test.equal(s._exit, undefined);
   test.end();
   delete global.document;
 });
@@ -31,8 +31,8 @@ tape("d3.selectAll can select an array of elements", function(test) {
   test.equal(s._[0][0], h1);
   test.equal(s._[0][1], h2);
   test.equal(s._[0]._parent, undefined);
-  test.equal(s._enter, null);
-  test.equal(s._exit, null);
+  test.equal(s._enter, undefined);
+  test.equal(s._exit, undefined);
   test.end();
 });
 
@@ -49,8 +49,8 @@ tape("d3.selectAll can select a NodeList of elements", function(test) {
   test.equal(s._[0][0], h1);
   test.equal(s._[0][1], h2);
   test.equal(s._[0]._parent, undefined);
-  test.equal(s._enter, null);
-  test.equal(s._exit, null);
+  test.equal(s._enter, undefined);
+  test.equal(s._exit, undefined);
   test.end();
 });
 
@@ -63,8 +63,8 @@ tape("d3.selectAll can select an empty array", function(test) {
   test.ok(Array.isArray(s._[0]));
   test.equal(s._[0].length, 0);
   test.equal(s._[0]._parent, undefined);
-  test.equal(s._enter, null);
-  test.equal(s._exit, null);
+  test.equal(s._enter, undefined);
+  test.equal(s._exit, undefined);
   test.end();
 });
 
@@ -81,8 +81,8 @@ tape("d3.selectAll can select an array that contains null", function(test) {
   test.equal(s._[0][1], h1);
   test.equal(s._[0][2], null);
   test.equal(s._[0]._parent, undefined);
-  test.equal(s._enter, null);
-  test.equal(s._exit, null);
+  test.equal(s._enter, undefined);
+  test.equal(s._exit, undefined);
   test.end();
 });
 
@@ -96,7 +96,7 @@ tape("d3.selectAll can select an array that contains arbitrary objects", functio
   test.equal(s._.length, 1);
   test.equal(s._[0][0], object);
   test.equal(s._[0]._parent, undefined);
-  test.equal(s._enter, null);
-  test.equal(s._exit, null);
+  test.equal(s._enter, undefined);
+  test.equal(s._exit, undefined);
   test.end();
 });

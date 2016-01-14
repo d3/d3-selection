@@ -13,8 +13,8 @@ tape("selection.select can select elements (in the simplest case)", function(tes
   test.equal(s._[0].length, 1);
   test.equal(s._[0][0], h1);
   test.equal(s._[0]._parent, undefined);
-  test.equal(s._enter, null);
-  test.equal(s._exit, null);
+  test.equal(s._enter, undefined);
+  test.equal(s._exit, undefined);
   test.end();
 });
 
@@ -29,8 +29,8 @@ tape("selection.select will select the first element of multiple matches", funct
   test.equal(s._[0].length, 1);
   test.equal(s._[0][0], h1);
   test.equal(s._[0]._parent, undefined);
-  test.equal(s._enter, null);
-  test.equal(s._exit, null);
+  test.equal(s._enter, undefined);
+  test.equal(s._exit, undefined);
   test.end();
 });
 
@@ -47,8 +47,8 @@ tape("selection.select can select elements (with multiple originating elements)"
   test.equal(s._[0][0], h1.firstChild);
   test.equal(s._[0][1], h2.firstChild);
   test.equal(s._[0]._parent, undefined);
-  test.equal(s._enter, null);
-  test.equal(s._exit, null);
+  test.equal(s._enter, undefined);
+  test.equal(s._exit, undefined);
   test.end();
 });
 
@@ -64,8 +64,8 @@ tape("selection.select can select elements (with a null originating element)", f
   test.equal(s._[0][0], h1.firstChild);
   test.ok(!(1 in s._[0]));
   test.equal(s._[0]._parent, undefined);
-  test.equal(s._enter, null);
-  test.equal(s._exit, null);
+  test.equal(s._enter, undefined);
+  test.equal(s._exit, undefined);
   test.end();
 });
 
