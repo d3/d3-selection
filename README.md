@@ -23,7 +23,7 @@ In a vanilla environment, a `d3_selection` global is exported. [Try d3-selection
 
 ### Selection
 
-Selection methods accept [W3C selector strings](http://www.w3.org/TR/selectors-api/) such as `.fancy` to select elements with the class *fancy*, or `div` to select DIV elements. Selection methods come in two forms: select and selectAll: the former selects only the first matching element, while the latter selects all matching elements in traversal order. The top-level selection methods, [d3.select](#select) and [d3.selectAll](#selectAll), query the entire document; the subselection methods, [*selection*.select](#selection_select) and [*selection*.selectAll](#selection_selectAll), restrict selection to descendants of the selected elements.
+Selection methods accept [W3C selector strings](http://www.w3.org/TR/selectors-api/) such as `.fancy` to select elements with the class *fancy*, or `div` to select DIV elements. Selection methods come in two forms: select and selectAll: the former selects only the first matching element, while the latter selects all matching elements in document order. The top-level selection methods, [d3.select](#select) and [d3.selectAll](#selectAll), query the entire document; the subselection methods, [*selection*.select](#selection_select) and [*selection*.selectAll](#selection_selectAll), restrict selection to descendants of the selected elements.
 
 <a name="selection" href="#selection">#</a> d3.<b>selection</b>()
 
@@ -45,7 +45,7 @@ d3.selectAll("input[type=checkbox]").checked(true);
 
 <a name="select" href="#select">#</a> d3.<b>select</b>(<i>selector</i>)
 
-Selects the first element that matches the specified *selector* string. If no elements match the *selector*, returns an empty selection. If multiple elements match the *selector*, only the first matching element (in traversal order) will be selected. For example, to select the first anchor element:
+Selects the first element that matches the specified *selector* string. If no elements match the *selector*, returns an empty selection. If multiple elements match the *selector*, only the first matching element(in document order will be selected. For example, to select the first anchor element:
 
 ```js
 var anchor = d3.select("a");
@@ -61,7 +61,7 @@ d3.selectAll("p").on("click", function() {
 
 <a name="selectAll" href="#selectAll">#</a> d3.<b>selectAll</b>(<i>selector</i>)
 
-Selects all elements that match the specified *selector* string. The elements will be selected in document traversal order (top-to-bottom). If no elements in the document match the *selector*, returns an empty selection. For example, to select all paragraphs:
+Selects all elements that match the specified *selector* string. The elements will be selected in document order (top-to-bottom). If no elements in the document match the *selector*, returns an empty selection. For example, to select all paragraphs:
 
 ```js
 var paragraph = d3.selectAll("p");
@@ -75,7 +75,7 @@ d3.selectAll(document.links).style("color", "red");
 
 <a name="selection_select" href="#selection_select">#</a> <i>selection</i>.<b>select</b>(<i>selector</i>)
 
-For each selected element, selects the first descendant element that matches the specified *selector* string. If no element matches the specified selector for the current element, the element at the current index will be null in the returned selection. If the current element has associated data, this data is propagated to the corresponding selected element. If multiple elements match the selector, only the first matching element in document traversal order is selected. For example, to select the first bold element in every paragraph:
+For each selected element, selects the first descendant element that matches the specified *selector* string. If no element matches the specified selector for the current element, the element at the current index will be null in the returned selection. If the current element has associated data, this data is propagated to the corresponding selected element. If multiple elements match the selector, only the first matching element in document order is selected. For example, to select the first bold element in every paragraph:
 
 ```js
 var b = d3.selectAll("p").select("b");
@@ -204,25 +204,21 @@ If a *value* is not specified, returns the value of the specified property for t
 
 <a name="selection_text" href="#selection_text">#</a> <i>selection</i>.<b>text</b>([<i>value</i>])
 
-The text operator is based on the [textContent](http://www.w3.org/TR/DOM-Level-3-Core/core.html#Node3-textContent) property; setting the text content will replace any existing child elements.
-
-If a *value* is specified, sets the text content to the specified value on all selected elements. If the *value* is a constant, then all elements are given the same text content; otherwise, if the *value* is a function, then the function is evaluated for each selected element, in order, being passed the current datum *d* and index *i*, with the `this` context as the current DOM element. The function’s return value is then used to set each element’s text content. A null value will clear the content.
+If a *value* is specified, sets the [text content](http://www.w3.org/TR/DOM-Level-3-Core/core.html#Node3-textContent) to the specified value on all selected elements, replacing any existing child elements. If the *value* is a constant, then all elements are given the same text content; otherwise, if the *value* is a function, then the function is evaluated for each selected element, in order, being passed the current datum *d* and index *i*, with the `this` context as the current DOM element. The function’s return value is then used to set each element’s text content. A null value will clear the content.
 
 If a *value* is not specified, returns the text content for the first (non-null) element in the selection. This is generally useful only if you know the selection contains exactly one element.
 
 <a name="selection_html" href="#selection_html">#</a> <i>selection</i>.<b>html</b>([<i>value</i>])
 
-The html operator is based on the [innerHTML](http://dev.w3.org/html5/spec-LC/apis-in-html-documents.html#innerhtml) property; setting the inner HTML will replace any existing child elements. Also, you may prefer to use [*selection*.append](#selection_append) to create HTML content in a data-driven way; this operator is intended for when you want a little bit of HTML, say for rich formatting.
-
-If a *value* is specified, sets the inner HTML to the specified value on all selected elements. If the *value* is a constant, then all elements are given the same inner HTML; otherwise, if the *value* is a function, then the function is evaluated for each selected element, in order, being passed the current datum *d* and index *i*, with the `this` context as the current DOM element. The function’s return value is then used to set each element’s inner HTML. A null value will clear the content.
+If a *value* is specified, sets the [inner HTML](http://dev.w3.org/html5/spec-LC/apis-in-html-documents.html#innerhtml) to the specified value on all selected elements, replacing any existing child elements. If the *value* is a constant, then all elements are given the same inner HTML; otherwise, if the *value* is a function, then the function is evaluated for each selected element, in order, being passed the current datum *d* and index *i*, with the `this` context as the current DOM element. The function’s return value is then used to set each element’s inner HTML. A null value will clear the content.
 
 If a *value* is not specified, returns the inner HTML for the first (non-null) element in the selection. This is generally useful only if you know the selection contains exactly one element.
 
-As the name suggests, *selection*.html is only supported on HTML elements. SVG elements and other non-HTML elements do not support the innerHTML property, and thus are incompatible with *selection*.html. Consider using [XMLSerializer](https://developer.mozilla.org/en-US/docs/XMLSerializer) to convert a DOM subtree to text. See also the [innersvg polyfill](https://code.google.com/p/innersvg/), which provides a shim to support the innerHTML property on SVG elements.
+Use [*selection*.append](#selection_append) instead to create data-driven content; this method is intended for when you want a little bit of HTML, say for rich formatting. Also, *selection*.html is only supported on HTML elements. SVG elements and other non-HTML elements do not support the innerHTML property, and thus are incompatible with *selection*.html. Consider using [XMLSerializer](https://developer.mozilla.org/en-US/docs/XMLSerializer) to convert a DOM subtree to text. See also the [innersvg polyfill](https://code.google.com/p/innersvg/), which provides a shim to support the innerHTML property on SVG elements.
 
 <a name="selection_append" href="#selection_append">#</a> <i>selection</i>.<b>append</b>(<i>type</i>[, <i>before</i>])
 
-If the specified *type* is a string, appends a new element of this type (tag name) as the last child of each element in the current selection. Otherwise, the *type* may be a function which is evaluated for each selected element, in order, being passed the current datum *d* and index *i*, with the `this` context as the current DOM element. This function should return an element to be appended. (Typically, the function creates a new element, but it may return an existing element instead.) For example, to append a DIV element to each paragraph:
+If the specified *type* is a string, appends a new element of this type (tag name) as the last child of each element in the current selection. Otherwise, the *type* may be a function which is evaluated for each selected element, in order, being passed the current datum *d* and index *i*, with the `this` context as the current DOM element. This function should return an element to be appended. Typically, the function creates a new element, but it may instead return an existing element. For example, to append a DIV element to each paragraph:
 
 ```js
 d3.selectAll("p").append("div");
@@ -238,17 +234,17 @@ d3.selectAll("p").append(function() {
 
 In both cases, this method returns a new selection containing the appended elements. Each new element inherits the data of the current elements, if any, in the same manner as [*selection*.select](#selection_select).
 
-An optional *before* selector string or function may be specified. For instance, the selector `:first-child` will prepend nodes before the first child, rather than after the last child. If no *before* selector is specified on an [enter selection](#selection_enter), then entering elements are inserted immediately before the next following sibling in the update selection, if any. This allows you to insert elements into the DOM in an order consistent with bound data. Note, however, the slower [*selection*.order](#selection_order) may still be required if updating elements change order.
+An optional *before* selector string or function may be specified. For instance, the selector `:first-child` will prepend nodes before the first child, rather than after the last child. If no *before* selector is specified on an [enter selection](#selection_enter), entering elements are inserted immediately before the next following sibling in the update selection, if any. This allows you to insert elements into the DOM in an order consistent with bound data. Note, however, the slower [*selection*.order](#selection_order) may still be required if updating elements change order.
 
 The specified *name* may have a namespace prefix, such as `svg:text` to specify a `text` attribute in the SVG namespace. See [namespaces](#namespaces) for the map of supported namespaces; additional namespaces can be registered by adding to the map. If no namespace is specified, the namespace will be inherited from the parent element; or, if the name is one of the known prefixes, the corresponding namespace will be used (for example, `svg` implies `svg:svg`).
 
 <a name="selection_remove" href="#selection_remove">#</a> <i>selection</i>.<b>remove</b>()
 
-Removes the selected elements from the document. Returns this selection (the removed elements) which are now detached from the DOM. Note that there is not currently a dedicated API to add removed elements back to the document; however, you can pass a function to [*selection*.append](#selection_append) to re-add elements.
+Removes the selected elements from the document. Returns this selection (the removed elements) which are now detached from the DOM. There is not currently a dedicated API to add removed elements back to the document; however, you can pass a function to [*selection*.append](#selection_append) to re-add elements.
 
 <a name="selection_sort" href="#selection_sort">#</a> <i>selection</i>.<b>sort</b>(<i>comparator</i>)
 
-Sorts the selected elements according to the *comparator* function, and then re-inserts the document elements to match the resulting order. Returns this selection.
+Sorts each group of selected elements in-place according to the *comparator* function, and then re-inserts the document elements to match the resulting order. Returns this selection.
 
 The comparator function, which defaults to [ascending](https://github.com/d3/d3-array#ascending), is passed two elements’ data *a* and *b* to compare. It should return either a negative, positive, or zero value. If negative, then *a* should be before *b*; if positive, then *a* should be after *b*; otherwise, *a* and *b* are considered equal and the order is arbitrary.
 
@@ -256,17 +252,17 @@ Note that sorting is not guaranteed to be stable; however, it is guaranteed to h
 
 <a name="selection_order" href="#selection_order">#</a> <i>selection</i>.<b>order</b>()
 
-Re-inserts elements into the document such that the document order matches the selection order. This is equivalent to calling [*selection*.sort](#selection_sort) if the data is already sorted, but much faster.
+Re-inserts elements into the document such that the document order of each group matches the selection order. This is equivalent to calling [*selection*.sort](#selection_sort) if the data is already sorted, but much faster.
 
 ### Data
 
-For an introduction to D3’s data joins, see [Thinking With Joins](http://bost.ocks.org/mike/join/). Also see the [General Update Pattern](http://bl.ocks.org/mbostock/3808218) example thread.
+For an introduction to D3’s data joins, see [Thinking With Joins](http://bost.ocks.org/mike/join/). Also see the [General Update Pattern](http://bl.ocks.org/mbostock/3808218) examples.
 
 <a name="selection_data" href="#selection_data">#</a> <i>selection</i>.<b>data</b>([<i>data</i>[, <i>key</i>]])
 
 Joins the specified array of *data* with the selected elements, modifying this selection so that it represents the *update* selection: the elements successfully bound to data. Also defines the [enter](#selection_enter) and [exit](#selection_exit) selections, which can be used to add or remove elements to correspond to the new data. The specified *data* is an array of arbitrary values (*e.g.*, numbers or objects), or a function that returns an array of values for each group. When data is assigned to an element, it is stored in the property `__data__`, thus making the data “sticky” and available on re-selection.
 
-The *data* is specified **for each group** in the selection. If the selection has multiple groups (such as [d3.selectAll](#selectAll) followed by [*selection*.selectAll](#selection_selectAll)), then *data* should typically be specified as a function. This function will be invoked for each group, being passed the parent datum *d* (which may be undefined) and the group index *i*, with the parent element as the `this` context. For example, to create an HTML table from a matrix of numbers:
+The *data* is specified **for each group** in the selection. If the selection has multiple groups (such as [d3.selectAll](#selectAll) followed by [*selection*.selectAll](#selection_selectAll)), then *data* should typically be specified as a function. This function will be invoked for each group in order, being passed the parent datum *d* (which may be undefined) and group index *i*, with the parent element as the `this` context. For example, to create an HTML table from a matrix of numbers:
 
 ```js
 var matrix = [
@@ -287,9 +283,9 @@ var td = tr.selectAll("td")
     .text(function(d) { return d; });
 ```
 
-The *data* function here is the identity function: it is invoked for each table row, and returns the numbers for each table cell.
+In this example the *data* function is the identity function: for each table row, it returns the corresponding row from the data matrix.
 
-If a *key* is not specified, then the first datum in *data* is assigned to the first selected element, the second datum to the second selected element, and so on. A *key* function may be specified to control how data is assigned to elements, replacing the default join-by-index. This key function is evaluated for each selected element, in order, being passed the current datum *d* and index *i*, with the `this` context as the current DOM element. The key function is also evaluated for each new datum in *data*, being passed the datum `d`, the index `i`, with the `this` context as the parent DOM element. The datum for a given key is assigned to the element with the matching key. For example, given this document:
+If a *key* function is not specified, then the first datum in *data* is assigned to the first selected element, the second datum to the second selected element, and so on. A *key* function may be specified to control which datum is assigned to which element, replacing the default join-by-index. This key function is evaluated for each selected element, in order, being passed the current datum *d* and index *i*, with the `this` context as the current DOM element. The key function is then also evaluated for each new datum in *data*, being passed the datum `d` and index `i`, with the `this` context as the parent DOM element. The datum for a given key is assigned to the element with the matching key. For example, given this document:
 
 ```html
 <div id="Ford"></div>
@@ -318,7 +314,7 @@ d3.selectAll("div")
     .text(function(d) { return d.number; });
 ```
 
-This key function uses the bound datum *d* if present, and otherwise falls back to the element’s id property.
+This key function uses the datum *d* if present, and otherwise falls back to the element’s id property. Since these elements were not previously bound to data, the datum *d* is null when the key function is evaluated on selected elements; it is non-null only when the key function is evaluated on the new data.
 
 The *update* and *enter* selections are returned in data order, while the *exit* selection preserves the order prior to the data join. If a key function is specified, the order of elements in the selection may not match their order in the document; use [*selection*.order](#order) or [*selection*.sort](#sort) as needed. For more on how the key function affects the join, see [A Bar Chart, Part 2](http://bost.ocks.org/mike/bar/2/).
 
