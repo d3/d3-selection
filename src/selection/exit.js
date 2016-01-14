@@ -1,12 +1,9 @@
 import arrayify from "./arrayify";
+import sparse from "./sparse";
 import {Selection} from "./index";
 
-function exit(update) {
-  var exit = new Array(update.length);
-  exit._parent = update._parent;
-  return exit;
-}
-
 export default function() {
-  return this._exit || (this._exit = new Selection(arrayify(this).map(exit)));
+  var exit = this._exit;
+  if (exit) return delete this._exit, exit;
+  return new Selection(arrayify(this).map(sparse));
 };

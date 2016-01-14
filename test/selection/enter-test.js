@@ -13,13 +13,12 @@ tape("selection.enter initially returns an empty selection", function(test) {
   test.equal(e._[0].length, 1);
   test.ok(!(0 in e._[0]));
   test.equal(e._[0]._parent, undefined);
-  test.equal(e._[0]._update, s._[0]);
   test.equal(e._enter, undefined);
   test.equal(e._exit, undefined);
   test.end();
 });
 
-tape("selection.select moves enter nodes to the update selection", function(test) {
+tape("enter.select copies enter nodes into the update selection", function(test) {
   var document = jsdom.jsdom(),
       nodes = [],
       update = d3.select(document.body).selectAll("p").data([0, 1, 2]),
@@ -37,9 +36,6 @@ tape("selection.select moves enter nodes to the update selection", function(test
   enter.select(function() { var p = this.appendChild(document.createElement("P")); nodes.push(p); return p; });
   test.equal(enter._.length, 1);
   test.equal(enter._[0].length, 3);
-  test.ok(!(0 in enter._[0]));
-  test.ok(!(1 in enter._[0]));
-  test.ok(!(2 in enter._[0]));
   test.equal(update._.length, 1);
   test.equal(update._[0].length, 3);
   test.equal(update._[0][0], nodes[0]);

@@ -1,13 +1,11 @@
 import arrayify from "./arrayify";
+import sparse from "./sparse";
 import {Selection} from "./index";
 
-function enter(update) {
-  var enter = new Array(update.length);
-  enter._parent = update._parent;
-  enter._update = update;
-  return enter;
-}
-
 export default function() {
-  return this._enter || (this._enter = new Selection(arrayify(this).map(enter)));
+  var enter = this._enter;
+  if (enter) return delete this._enter, enter;
+  enter = new Selection(arrayify(this).map(sparse));
+  enter._update = this;
+  return enter;
 };

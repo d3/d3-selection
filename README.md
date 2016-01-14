@@ -236,7 +236,7 @@ The specified *name* may have a namespace prefix, such as `svg:text` to specify 
 
 <a name="selection_remove" href="#selection_remove">#</a> <i>selection</i>.<b>remove</b>()
 
-Removes the selected elements from the document and this selection, returning a new selection containing the removed elements. There is no dedicated API to re-add removed elements back to the document; however, you can pass a function to [*selection*.append](#selection_append) and return a detached element.
+Removes the selected elements from the document. Returns this selection (the removed elements) which are now detached from the DOM. Note that there is not currently a dedicated API to add removed elements back to the document; however, you can pass a function to [*selection*.append](#selection_append) to re-add elements.
 
 <a name="selection_sort" href="#selection_sort">#</a> <i>selection</i>.<b>sort</b>(<i>comparator</i>)
 
@@ -320,7 +320,9 @@ This method cannot be used to clear bound data; use [*selection*.datum](#selecti
 
 <a name="selection_enter" href="#selection_enter">#</a> <i>selection</i>.<b>enter</b>()
 
-Returns the enter selection: placeholder nodes for each datum that had no corresponding DOM element in the selection. The enter selection is always empty until the selection is joined to data by [*selection*.data](#selection_data). The enter selection is typically used to create “missing” elements from new data. For example, to create DIV elements from an array of numbers:
+Returns the enter selection: placeholder nodes for each datum that had no corresponding DOM element in the selection. The enter selection is determined by the previous [*selection*.data](#selection_data), and is thus empty until the selection is joined to data. If the enter selection is retrieved more than once after a data-join, subsequent calls return the empty selection.
+
+The enter selection is typically used to create “missing” elements from new data. For example, to create DIV elements from an array of numbers:
 
 ```js
 var div = d3.select("body").selectAll("div");
@@ -354,7 +356,9 @@ circle.exit().remove(); // removes exiting elements
 
 <a name="selection_exit" href="#selection_exit">#</a> <i>selection</i>.<b>exit</b>()
 
-Returns the exit selection: existing DOM elements in the selection for which no new datum was found. The exit selection is always empty until the selection is joined to data by [*selection*.data](#selection_data). The exit selection is typically used to remove “superfluous” elements from old data. For example, to update the DIV elements created previously with a new array of numbers:
+Returns the exit selection: existing DOM elements in the selection for which no new datum was found. The exit selection is determined by the previous [*selection*.data](#selection_data), and is thus empty until the selection is joined to data. If the exit selection is retrieved more than once after a data-join, subsequent calls return the empty selection.
+
+The exit selection is typically used to remove “superfluous” elements from old data. For example, to update the DIV elements created previously with a new array of numbers:
 
 ```js
 div.data([1, 2, 4, 8, 16, 32], function(d) { return d; });

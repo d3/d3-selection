@@ -111,24 +111,25 @@ export default function(value, key) {
   }
 
   var bind = key ? bindKey : bindIndex,
-      enter = this.enter(), // Note: arrayify’s!
-      exit = this.exit();
+      update = this._,
+      enter = (this._enter = this.enter())._, // Note: arrayify’s!
+      exit = (this._exit = this.exit())._;
 
   if (typeof value !== "function") value = constant(value);
 
-  for (var groups = this._, m = groups.length, j = 0; j < m; ++j) {
-    var update = groups[j],
-        parent = update._parent;
+  for (var m = update.length, j = 0; j < m; ++j) {
+    var group = update[j],
+        parent = group._parent;
 
-    bind(update, enter._[j], exit._[j], value.call(parent, parent && parent.__data__, j, groups), key);
+    bind(group, enter[j], exit[j], value.call(parent, parent && parent.__data__, j, group), key);
 
     // Now connect the enter nodes to their following update node, such that
     // appendChild can insert the materialized enter node before this node,
     // rather than at the end of the parent node.
-    for (var n = update.length, i0 = 0, i1 = 0, previous, next; i0 < n; ++i0) {
-      if (previous = enter._[j][i0]) {
+    for (var n = group.length, i0 = 0, i1 = 0, previous, next; i0 < n; ++i0) {
+      if (previous = enter[j][i0]) {
         if (i0 >= i1) i1 = i0 + 1;
-        while (!(next = update[i1]) && ++i1 < n);
+        while (!(next = group[i1]) && ++i1 < n);
         previous._next = next || null;
       }
     }
