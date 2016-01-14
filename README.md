@@ -535,11 +535,3 @@ The map of registered namespace prefixes. The initial value is:
 ```
 
 Additional prefixes may be assigned as needed to create elements or attributes in other namespaces.
-
-<a name="requote" href="#requote">#</a> d3.<b>requote</b>(<i>string</i>)
-
-Returns a quoted (escaped) version of the specified *string* that may be safely embedded within a regular expression as a string literal. For example:
-
-```js
-d3.requote("[]"); // "\[\]"
-```
