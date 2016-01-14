@@ -236,7 +236,7 @@ The specified *name* may have a namespace prefix, such as `svg:text` to specify 
 
 <a name="selection_remove" href="#selection_remove">#</a> <i>selection</i>.<b>remove</b>()
 
-Removes the selected elements from the document. Returns this selection (the removed elements) which are now detached from the DOM. Note that there is not currently a dedicated API to add removed elements back to the document; however, you can pass a function to [*selection*.append](#selection_append) to re-add elements.
+Removes the selected elements from the document and this selection, returning a new selection containing the removed elements. There is no dedicated API to re-add removed elements back to the document; however, you can pass a function to [*selection*.append](#selection_append) and return a detached element.
 
 <a name="selection_sort" href="#selection_sort">#</a> <i>selection</i>.<b>sort</b>(<i>comparator</i>)
 
