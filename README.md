@@ -442,7 +442,7 @@ If *parameters* is a function, it is evaluated for each selected element, in ord
 
 <a name="event" href="#event">#</a> d3.<b>event</b>
 
-The current [event](https://developer.mozilla.org/en-US/docs/DOM/event), if any. This is set during the invocation of an event listener, and is reset after the listener terminates. Use this to access standard event fields such as event.timeStamp, and methods such as event.preventDefault.
+The current [event](https://developer.mozilla.org/en-US/docs/DOM/event), if any. This is set during the invocation of an event listener, and is reset after the listener terminates. Use this to access standard event fields such as [*event*.timeStamp](https://www.w3.org/TR/dom/#dom-event-timestamp) and methods such as [*event*.preventDefault](https://www.w3.org/TR/dom/#dom-event-preventdefault).
 
 While you can use the native [event.pageX](https://developer.mozilla.org/en/DOM/event.pageX) and [event.pageY](https://developer.mozilla.org/en/DOM/event.pageY), it is often more convenient to transform the event position to the local coordinate system of the container that received the event using [d3.mouse](#mouse), [d3.touch](#touch) or [d3.touches](#touches).
 
