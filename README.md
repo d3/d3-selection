@@ -314,9 +314,9 @@ d3.selectAll("div")
     .text(function(d) { return d.number; });
 ```
 
-This key function uses the datum *d* if present, and otherwise falls back to the element’s id property. Since these elements were not previously bound to data, the datum *d* is null when the key function is evaluated on selected elements; it is non-null only when the key function is evaluated on the new data.
+This key function uses the datum *d* if present, and otherwise falls back to the element’s id property. Since these elements were not previously bound to data, the datum *d* is null when the key function is evaluated on selected elements, and non-null when the key function is evaluated on the new data.
 
-The *update* and *enter* selections are returned in data order, while the *exit* selection preserves the order prior to the data join. If a key function is specified, the order of elements in the selection may not match their order in the document; use [*selection*.order](#order) or [*selection*.sort](#sort) as needed. For more on how the key function affects the join, see [A Bar Chart, Part 2](http://bost.ocks.org/mike/bar/2/).
+The *update* and *enter* selections are returned in data order, while the *exit* selection preserves the selection order prior to the join. If a key function is specified, the order of elements in the selection may not match their order in the document; use [*selection*.order](#order) or [*selection*.sort](#sort) as needed. For more on how the key function affects the join, see [A Bar Chart, Part 2](http://bost.ocks.org/mike/bar/2/) and [Object Constancy](http://bost.ocks.org/mike/constancy/).
 
 If *data* is not specified, this method returns the array of data for the selected elements.
 
@@ -324,9 +324,9 @@ This method cannot be used to clear bound data; use [*selection*.datum](#selecti
 
 <a name="selection_enter" href="#selection_enter">#</a> <i>selection</i>.<b>enter</b>()
 
-Returns the enter selection: placeholder nodes for each datum that had no corresponding DOM element in the selection. The enter selection is determined by the previous [*selection*.data](#selection_data), and is thus empty until the selection is joined to data. If the enter selection is retrieved more than once after a data-join, subsequent calls return the empty selection.
+Returns the enter selection: placeholder nodes for each datum that had no corresponding DOM element in the selection. The enter selection is determined by the previous [*selection*.data](#selection_data), and is thus empty until the selection is joined to data. If the enter selection is retrieved more than once after a data join, subsequent calls return the empty selection.
 
-The enter selection is typically used to create “missing” elements from new data. For example, to create DIV elements from an array of numbers:
+The enter selection is typically used to create “missing” elements corresponding to new data. For example, to create DIV elements from an array of numbers:
 
 ```js
 var div = d3.select("body").selectAll("div");
@@ -347,22 +347,22 @@ If the body is initially empty, the above code will create six new DIV elements,
 
 Conceptually, the enter selection’s placeholders are pointers to the parent element (in this example, the document body). The enter selection is typically only used transiently to append elements.
 
-The enter selection **merges into the update selection** on [append](#selection_append). Rather than applying the same operators to the enter and update selections separately, apply them once to the update selection *after* entering nodes. For example:
+The enter selection **merges into the update selection** on [append](#selection_append) or [select](#selection_select). This enables you to first modify entering and updating elements separately, as needed, and then modify entering and updating elements together, avoiding duplicate code. For example:
 
 ```js
 var circle = svg.selectAll("circle");
 circle.data(data);
-circle.attr(…); // applies to updating (old) elements only
-circle.enter().append("circle").attr(…); // applies to entering (new) elements only
-circle.attr(…); // applies to BOTH updating and entering elements
-circle.exit().remove(); // removes exiting elements
+circle.exit().remove(); // remove exiting elements
+circle.attr(…); // modify ONLY updating elements
+circle.enter().append("circle").attr(…); // modify ONLY entering elements
+circle.attr(…); // modify BOTH updating AND entering elements
 ```
 
 <a name="selection_exit" href="#selection_exit">#</a> <i>selection</i>.<b>exit</b>()
 
-Returns the exit selection: existing DOM elements in the selection for which no new datum was found. The exit selection is determined by the previous [*selection*.data](#selection_data), and is thus empty until the selection is joined to data. If the exit selection is retrieved more than once after a data-join, subsequent calls return the empty selection.
+Returns the exit selection: existing DOM elements in the selection for which no new datum was found. The exit selection is determined by the previous [*selection*.data](#selection_data), and is thus empty until the selection is joined to data. If the exit selection is retrieved more than once after a data join, subsequent calls return the empty selection.
 
-The exit selection is typically used to remove “superfluous” elements from old data. For example, to update the DIV elements created previously with a new array of numbers:
+The exit selection is typically used to remove “superfluous” elements corresponding to old data. For example, to update the DIV elements created previously with a new array of numbers:
 
 ```js
 div.data([1, 2, 4, 8, 16, 32], function(d) { return d; });
