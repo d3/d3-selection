@@ -522,7 +522,7 @@ If the name does not contain a colon, this function merely returns the input nam
 
 <a name="namespaces" href="#namespaces">#</a> d3.<b>namespaces</b>
 
-The map of registered namespace prefixes. The default value is:
+The map of registered namespace prefixes. The initial value is:
 
 ```js
 {
