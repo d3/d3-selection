@@ -424,15 +424,21 @@ For interaction, selections allow listening for and dispatching of events.
 
 Adds or removes a *listener* to each selected element for the specified event *type*. The *type* is a string event type name, such as `click`, `mouseover`, or `submit`; any [DOM event type](https://developer.mozilla.org/en-US/docs/Web/Events#Standard_events) supported by your browser may be used. The *listener* is invoked for each selected element, being passed the current datum *d* and index *i*, with the `this` context as the current DOM element. Listeners always see the latest datum for their element, but the index is a property of the selection and is fixed when the listener is assigned; to update the index, re-assign the listener. To access the current event within a listener, use [d3.event](#event).
 
-If an event listener was previously registered for the same *type* on a selected element, the old listener is removed before the new listener is added. To register multiple listeners for a given type, the type may be followed by an optional name, such as `click.foo` and `click.bar`. To remove a listener, pass null as the *listener*. To remove all listeners for a particular name, pass null as the *listener* and `.foo` as the *type*, where *foo* is the name.
+If an event listener was previously registered for the same *type* on a selected element, the old listener is removed before the new listener is added. To register multiple listeners for a given type, the type may be followed by an optional name, such as `click.foo` and `click.bar`. To remove a listener, pass null as the *listener*. To remove all listeners for a given name, pass null as the *listener* and `.foo` as the *type*, where *foo* is the name.
 
-An optional *capture* flag may be specified, which corresponds to the W3C [useCapture flag](http://www.w3.org/TR/DOM-Level-2-Events/events.html#Events-registration): “After initiating capture, all events of the specified type will be dispatched to the registered EventListener before being dispatched to any EventTargets beneath them in the tree. Events which are bubbling upward through the tree will not trigger an EventListener designated to use capture.”
+An optional *capture* flag may be specified which corresponds to the W3C [useCapture flag](http://www.w3.org/TR/DOM-Level-2-Events/events.html#Events-registration): “After initiating capture, all events of the specified type will be dispatched to the registered EventListener before being dispatched to any EventTargets beneath them in the tree. Events which are bubbling upward through the tree will not trigger an EventListener designated to use capture.”
 
 If a *listener* is not specified, returns the currently-assigned listener for the specified event *type* on the first (non-null) selected element, if any.
 
 <a name="selection_dispatch" href="#selection_dispatch">#</a> <i>selection</i>.<b>dispatch</b>(<i>type</i>[, <i>parameters</i>])
 
-Dispatches a [custom event](http://www.w3.org/TR/dom/#interface-customevent) of the specified *type* to each selected element. An optional *parameters* map may be specified to set additional properties of the event: bubbles, cancelable, and detail. If *parameters* is a function, it is evaluated for each selected element, in order, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. It must return the parameters map for the current element.
+Dispatches a [custom event](http://www.w3.org/TR/dom/#interface-customevent) of the specified *type* to each selected element, in order. An optional *parameters* map may be specified to set additional properties of the event. It may contain the following fields:
+
+* `bubbles` - if true, the event is dispatched to ancestors in reverse tree order.
+* `cancelable` - if true, *event*.preventDefault is allowed.
+* `detail` - any custom data associated with the event.
+
+If *parameters* is a function, it is evaluated for each selected element, in order, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. It must return the parameters map for the current element.
 
 <a name="event" href="#event">#</a> d3.<b>event</b>
 
