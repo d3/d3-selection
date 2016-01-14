@@ -7,11 +7,12 @@ tape("selection.select can select elements (in the simplest case)", function(tes
       h1 = document.querySelector("h1"),
       s = d3.select(document.body).select("h1");
   test.ok(s instanceof d3.selection);
-  test.equal(s._depth, 1);
-  test.ok(Array.isArray(s._root));
-  test.equal(s._root.length, 1);
-  test.equal(s._root[0], h1);
-  test.equal(s._root._parent, undefined);
+  test.ok(Array.isArray(s._));
+  test.equal(s._.length, 1);
+  test.ok(Array.isArray(s._[0]));
+  test.equal(s._[0].length, 1);
+  test.equal(s._[0][0], h1);
+  test.equal(s._[0]._parent, undefined);
   test.equal(s._enter, null);
   test.equal(s._exit, null);
   test.end();
@@ -22,11 +23,12 @@ tape("selection.select will select the first element of multiple matches", funct
       h1 = document.querySelector("h1"),
       s = d3.select(document.body).select("h2,h1");
   test.ok(s instanceof d3.selection);
-  test.equal(s._depth, 1);
-  test.ok(Array.isArray(s._root));
-  test.equal(s._root.length, 1);
-  test.equal(s._root[0], h1);
-  test.equal(s._root._parent, undefined);
+  test.ok(Array.isArray(s._));
+  test.equal(s._.length, 1);
+  test.ok(Array.isArray(s._[0]));
+  test.equal(s._[0].length, 1);
+  test.equal(s._[0][0], h1);
+  test.equal(s._[0]._parent, undefined);
   test.equal(s._enter, null);
   test.equal(s._exit, null);
   test.end();
@@ -38,12 +40,13 @@ tape("selection.select can select elements (with multiple originating elements)"
       h2 = document.querySelector("h2"),
       s = d3.selectAll([h1, h2]).select("span");
   test.ok(s instanceof d3.selection);
-  test.equal(s._depth, 1);
-  test.ok(Array.isArray(s._root));
-  test.equal(s._root.length, 2);
-  test.equal(s._root[0], h1.firstChild);
-  test.equal(s._root[1], h2.firstChild);
-  test.equal(s._root._parent, undefined);
+  test.ok(Array.isArray(s._));
+  test.equal(s._.length, 1);
+  test.ok(Array.isArray(s._[0]));
+  test.equal(s._[0].length, 2);
+  test.equal(s._[0][0], h1.firstChild);
+  test.equal(s._[0][1], h2.firstChild);
+  test.equal(s._[0]._parent, undefined);
   test.equal(s._enter, null);
   test.equal(s._exit, null);
   test.end();
@@ -54,12 +57,13 @@ tape("selection.select can select elements (with a null originating element)", f
       h1 = document.querySelector("h1"),
       s = d3.selectAll([h1, null]).select("span");
   test.ok(s instanceof d3.selection);
-  test.equal(s._depth, 1);
-  test.ok(Array.isArray(s._root));
-  test.equal(s._root.length, 2);
-  test.equal(s._root[0], h1.firstChild);
-  test.ok(!(1 in s._root));
-  test.equal(s._root._parent, undefined);
+  test.ok(Array.isArray(s._));
+  test.equal(s._.length, 1);
+  test.ok(Array.isArray(s._[0]));
+  test.equal(s._[0].length, 2);
+  test.equal(s._[0][0], h1.firstChild);
+  test.ok(!(1 in s._[0]));
+  test.equal(s._[0]._parent, undefined);
   test.equal(s._enter, null);
   test.equal(s._exit, null);
   test.end();
@@ -90,75 +94,71 @@ tape("selection.select will propagate parents if defined on the originating grou
   var document = jsdom.jsdom("<parent><child>1</child></parent><parent><child>2</child></parent>"),
       root = document.body,
       s = d3.select(root).selectAll("parent").select("child");
-  test.equal(s._root[0]._parent, root);
+  test.equal(s._[0]._parent, root);
   test.end();
 });
 
 tape("selection.select can select elements (when the originating selection is nested)", function(test) {
   var document = jsdom.jsdom("<parent id='one'><child><span>1</span></child></parent><parent id='two'><child><span>2</span></child></parent>"),
       s = d3.selectAll(document.querySelectorAll("parent")).selectAll("child").select("span");
-  test.equal(s._depth, 2);
-  test.equal(s._root.length, 2);
-  test.equal(s._root[0].length, 1);
-  test.equal(s._root[1].length, 1);
-  test.ok(Array.isArray(s._root));
-  test.ok(Array.isArray(s._root[0]));
-  test.ok(Array.isArray(s._root[1]));
-  test.equal(s._root._parent, undefined);
-  test.equal(s._root[0]._parent, document.querySelector("#one"));
-  test.equal(s._root[1]._parent, document.querySelector("#two"));
-  test.equal(s._root[0][0], document.querySelector("#one span"));
-  test.equal(s._root[1][0], document.querySelector("#two span"));
+  test.equal(s._.length, 2);
+  test.equal(s._[0].length, 1);
+  test.equal(s._[1].length, 1);
+  test.ok(Array.isArray(s._));
+  test.ok(Array.isArray(s._[0]));
+  test.ok(Array.isArray(s._[1]));
+  test.equal(s._[0]._parent, document.querySelector("#one"));
+  test.equal(s._[1]._parent, document.querySelector("#two"));
+  test.equal(s._[0][0], document.querySelector("#one span"));
+  test.equal(s._[1][0], document.querySelector("#two span"));
   test.end();
 });
 
 tape("selection.select can select elements (when the originating selection contains null)", function(test) {
   var document = jsdom.jsdom("<parent id='one'></parent><parent id='two'><child><span>2</span></child></parent>"),
       s = d3.selectAll(document.querySelectorAll("parent")).select("child").select("span");
-  test.equal(s._depth, 1);
-  test.ok(Array.isArray(s._root));
-  test.equal(s._root.length, 2);
-  test.equal(s._root._parent, undefined);
-  test.ok(!(0 in s._root));
-  test.equal(s._root[1], document.querySelector("#two span"));
+  test.ok(Array.isArray(s._));
+  test.equal(s._.length, 1);
+  test.ok(Array.isArray(s._[0]));
+  test.equal(s._[0].length, 2);
+  test.equal(s._[0]._parent, undefined);
+  test.ok(!(0 in s._[0]));
+  test.equal(s._[0][1], document.querySelector("#two span"));
   test.end();
 });
 
 tape("selection.select can select elements (when the originating selection is nested and contains null)", function(test) {
   var document = jsdom.jsdom("<parent id='one'><child></child></parent><parent id='two'><child><span><b>2</b></span></child></parent>"),
       s = d3.selectAll(document.querySelectorAll("parent")).selectAll("child").select("span").select("b");
-  test.equal(s._depth, 2);
-  test.equal(s._root.length, 2);
-  test.equal(s._root[0].length, 1);
-  test.equal(s._root[1].length, 1);
-  test.ok(Array.isArray(s._root));
-  test.ok(Array.isArray(s._root[0]));
-  test.ok(Array.isArray(s._root[1]));
-  test.ok(!(0 in s._root[0]));
-  test.equal(s._root[1][0], document.querySelector("#two b"));
-  test.equal(s._root._parent, undefined);
-  test.equal(s._root[0]._parent, document.querySelector("#one"));
-  test.equal(s._root[1]._parent, document.querySelector("#two"));
+  test.equal(s._.length, 2);
+  test.equal(s._[0].length, 1);
+  test.equal(s._[1].length, 1);
+  test.ok(Array.isArray(s._));
+  test.ok(Array.isArray(s._[0]));
+  test.ok(Array.isArray(s._[1]));
+  test.ok(!(0 in s._[0]));
+  test.equal(s._[1][0], document.querySelector("#two b"));
+  test.equal(s._[0]._parent, document.querySelector("#one"));
+  test.equal(s._[1]._parent, document.querySelector("#two"));
   test.end();
 });
 
-tape("selection.select passes the selector function data and index", function(test) {
+tape("selection.select passes the selector function data, index and group", function(test) {
   var document = jsdom.jsdom("<parent id='one'><child><span><b>1</b></span></child></parent><parent id='two'><child><span><b>2</b></span></child></parent>"),
       results = [],
-      s = d3.selectAll(document.querySelectorAll("parent")).datum(function(d, i) { return "parent-" + i; }).selectAll("child").datum(function(d, i, p, j) { return "child-" + i + "-" + j; }).select("span").select(function() { results.push({this: this, arguments: [].slice.call(arguments)}); });
+      p = d3.selectAll(document.querySelectorAll("parent")).datum(function(d, i) { return "parent-" + i; }).selectAll("child").datum(function(d, i) { return "child-" + i; }).select("span"),
+      s = p.select(function() { results.push({this: this, arguments: [].slice.call(arguments)}); });
   test.equal(document.querySelector("#one").__data__, "parent-0");
   test.equal(document.querySelector("#two").__data__, "parent-1");
   test.equal(results.length, 2);
   test.equal(results[0].this, document.querySelector("#one span"));
   test.equal(results[1].this, document.querySelector("#two span"));
-  test.equal(results[0].arguments.length, 4);
-  test.equal(results[0].arguments[0], "child-0-0");
+  test.equal(results[0].arguments.length, 3);
+  test.equal(results[0].arguments[0], "child-0");
   test.equal(results[0].arguments[1], 0);
-  test.equal(results[0].arguments[2], "parent-0");
-  test.equal(results[0].arguments[3], 0);
-  test.equal(results[1].arguments[0], "child-0-1");
+  test.equal(results[0].arguments[2], p._[0]);
+  test.equal(results[1].arguments[0], "child-0");
   test.equal(results[1].arguments[1], 0);
-  test.equal(results[1].arguments[2], "parent-1");
-  test.equal(results[1].arguments[3], 1);
+  test.equal(results[1].arguments[2], p._[1]);
   test.end();
 });

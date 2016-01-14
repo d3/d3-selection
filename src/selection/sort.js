@@ -1,4 +1,4 @@
-import arrayify from "../arrayify";
+import arrayify from "./arrayify";
 
 export default function(compare) {
   if (!compare) compare = ascending;
@@ -7,24 +7,10 @@ export default function(compare) {
     return a && b ? compare(a.__data__, b.__data__) : !a - !b;
   }
 
-  function visit(nodes, depth) {
-    if (--depth) {
-      var i = -1,
-          n = nodes.length,
-          node;
-      while (++i < n) {
-        if (node = nodes[i]) {
-          visit(node, depth);
-        }
-      }
-    }
-
-    else {
-      nodes.sort(compare);
-    }
+  for (var groups = arrayify(this), j = 0, m = groups.length; j < m; ++j) {
+    groups[j].sort(compare);
   }
 
-  visit(arrayify(this), this._depth);
   return this.order();
 };
 

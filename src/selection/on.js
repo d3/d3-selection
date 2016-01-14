@@ -1,7 +1,8 @@
 import requote from "../requote";
 import noop from "../noop";
 
-var filterEvents = {};
+var filterEvents = {},
+    slice = Array.prototype.slice;
 
 export var event = null;
 
@@ -12,13 +13,12 @@ if (typeof document !== "undefined") {
   }
 }
 
-function contextListener(listener, ancestors, args) {
+function contextListener(listener, index, group) {
   return function(event1) {
-    var i = ancestors.length, event0 = event; // Events can be reentrant (e.g., focus).
-    while (--i >= 0) args[i << 1] = ancestors[i].__data__;
+    var event0 = event; // Events can be reentrant (e.g., focus).
     event = event1;
     try {
-      listener.apply(ancestors[0], args);
+      listener.call(this, this.__data__, index, group);
     } finally {
       event = event0;
     }
@@ -58,14 +58,12 @@ function onRemoveAll(dotname) {
   };
 }
 
-function onAdd(root, filter, key, type, listener, capture) {
+function onAdd(filter, key, type, listener, capture) {
   if (capture == null) capture = false;
-  return function() {
-    var ancestor = root, i = arguments.length >> 1, ancestors = new Array(i);
-    while (--i >= 0) ancestor = ancestor[arguments[(i << 1) + 1]], ancestors[i] = i ? ancestor._parent : ancestor;
+  return function(d, i, group) {
     var value = this[key];
     if (value) this.removeEventListener(type, value, value._capture);
-    value = contextListener(listener, ancestors, arguments);
+    value = contextListener(listener, i, group);
     if (filter) value = filterListener(value);
     this.addEventListener(type, this[key] = value, value._capture = capture);
     value._listener = listener;
@@ -83,6 +81,6 @@ export default function(type, listener, capture) {
   if (filter = filterEvents.hasOwnProperty(name)) name = filterEvents[name];
 
   return this.each(listener
-      ? (value ? onAdd(this._root, filter, key, type, listener, capture) : noop) // Attempt to add untyped listener is ignored.
+      ? (value ? onAdd(filter, key, type, listener, capture) : noop) // Attempt to add untyped listener is ignored.
       : (value ? onRemove(key, name) : onRemoveAll(name)));
 };

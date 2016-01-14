@@ -24,18 +24,15 @@ import selection_datum from "./datum";
 import selection_on from "./on";
 import selection_dispatch from "./dispatch";
 
-// When depth = 1, root = [Node, …].
-// When depth = 2, root = [[Node, …], …].
-// When depth = 3, root = [[[Node, …], …], …]. etc.
-// Note that [Node, …] and NodeList are used interchangeably; see arrayify.
-export function Selection(root, depth) {
-  this._root = root;
-  this._depth = depth;
-  this._enter = this._update = this._exit = null;
+export function Selection(groups) {
+  this._ = groups;
+  this._enter =
+  this._update =
+  this._exit = null;
 };
 
 function selection() {
-  return new Selection([document.documentElement], 1);
+  return new Selection([[document.documentElement]]);
 }
 
 Selection.prototype = selection.prototype = {

@@ -1,49 +1,17 @@
 import {Selection} from "./index";
 import matcher from "../matcher";
 
-// The filter may either be a selector string (e.g., ".foo")
-// or a function that returns a boolean.
 export default function(match) {
-  var depth = this._depth,
-      stack = new Array(depth * 2);
-
   if (typeof match !== "function") match = matcher(match);
 
-  function visit(nodes, depth) {
-    var i = -1,
-        n = nodes.length,
-        node,
-        subnodes;
-
-    if (--depth) {
-      var stack0 = depth * 2,
-          stack1 = stack0 + 1;
-      subnodes = new Array(n);
-      while (++i < n) {
-        if (node = nodes[i]) {
-          stack[stack0] = node._parent.__data__, stack[stack1] = i;
-          subnodes[i] = visit(node, depth);
-        }
+  for (var groups = this._, m = groups.length, subgroups = new Array(m), j = 0; j < m; ++j) {
+    for (var group = groups[j], n = group.length, subgroup = subgroups[j] = [], node, i = 0; i < n; ++i) {
+      if ((node = group[i]) && match.call(node, node.__data__, i, group)) {
+        subgroup.push(node);
       }
     }
-
-    // The filter operation does not preserve the original index,
-    // so the resulting leaf groups are dense (not sparse).
-    else {
-      subnodes = [];
-      while (++i < n) {
-        if (node = nodes[i]) {
-          stack[0] = node.__data__, stack[1] = i;
-          if (match.apply(node, stack)) {
-            subnodes.push(node);
-          }
-        }
-      }
-    }
-
-    subnodes._parent = nodes._parent;
-    return subnodes;
+    subgroup._parent = group._parent;
   }
 
-  return new Selection(visit(this._root, depth), depth);
+  return new Selection(subgroups);
 };
