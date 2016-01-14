@@ -368,7 +368,7 @@ The exit selection is typically used to remove “superfluous” elements corres
 div.data([1, 2, 4, 8, 16, 32], function(d) { return d; });
 ```
 
-Since a key function was specified (as the identity function), and the new data contains the numbers [4, 8, 16] which match existing elements in the document, the update selection contains three DIV elements. We’ll leave those elements as-is. We can append new elements for [1, 2, 32] using the enter selection:
+Since a key function was specified (as the identity function), and the new data contains the numbers [4, 8, 16] which match existing elements in the document, the update selection contains three DIV elements. Leaving those elements as-is, we can append new elements for [1, 2, 32] using the enter selection:
 
 ```js
 div.enter().append("div").text(function(d) { return d; });
@@ -391,11 +391,11 @@ Now the document body looks like this:
 <div>32</div>
 ```
 
-Note that the order of the DOM elements matches the order of the data. This is because the old data’s order and the new data’s order were consistent. If the new data’s order is different, use [*selection*.order](#selection_order) to reorder the elements in the DOM. See the [General Update Pattern](http://bl.ocks.org/mbostock/3808218) example thread for more on data joins.
+The order of the DOM elements matches the order of the data because the old data’s order and the new data’s order were consistent. If the new data’s order is different, use [*selection*.order](#selection_order) to reorder the elements in the DOM. See the [General Update Pattern](http://bl.ocks.org/mbostock/3808218) example thread for more on data joins.
 
 <a name="selection_datum" href="#selection_datum">#</a> <i>selection</i>.<b>datum</b>([<i>value</i>])
 
-Gets or sets the bound data for each selected element. Unlike [*selection*.data](#selection_data), this method does not compute a join and thus does not affect indexes or the enter and exit selections.
+Gets or sets the bound data for each selected element. Unlike [*selection*.data](#selection_data), this method does not compute a join and does not affect indexes or the enter and exit selections.
 
 If a *value* is specified, sets the element’s bound data to the specified value on all selected elements. If the *value* is a constant, all elements are given the same datum; otherwise, if the *value* is a function, then the function is evaluated for each selected element, in order, being passed the previous datum `d` and the current index `i`, with the `this` context as the current DOM element. The function is then used to set each element’s data. A null value will delete the bound data.
 
@@ -422,9 +422,9 @@ For interaction, selections allow listening for and dispatching of events.
 
 <a name="selection_on" href="#selection_on">#</a> <i>selection</i>.<b>on</b>(<i>type</i>[, <i>listener</i>[, <i>capture</i>]])
 
-Adds or removes a *listener* to each selected element for the specified event *type*. The *type* is a string event type name, such as `click`, `mouseover`, or `submit`. (Any [DOM event type](https://developer.mozilla.org/en-US/docs/Web/Events#Standard_events) supported by your browser may be used.) The *listener* is invoked for each selected element, being passed the current datum *d* and index *i*, with the `this` context as the current DOM element. Listeners always see the latest datum for their element, but the index is a property of the selection and is fixed when the listener is assigned; to update the index, re-assign the listener. To access the current event within a listener, use [d3.event](#event).
+Adds or removes a *listener* to each selected element for the specified event *type*. The *type* is a string event type name, such as `click`, `mouseover`, or `submit`; any [DOM event type](https://developer.mozilla.org/en-US/docs/Web/Events#Standard_events) supported by your browser may be used. The *listener* is invoked for each selected element, being passed the current datum *d* and index *i*, with the `this` context as the current DOM element. Listeners always see the latest datum for their element, but the index is a property of the selection and is fixed when the listener is assigned; to update the index, re-assign the listener. To access the current event within a listener, use [d3.event](#event).
 
-If an event listener was already registered for the same *type* on a selected element, the existing listener is removed before the new listener is added. To register multiple listeners for a given type, the type may be followed by an optional namespace, such as `click.foo` and `click.bar`. To remove a listener, pass null as the *listener*. To remove all listeners for a particular namespace, pass null as the *listener* and `.foo` as the *type*, where *foo* is the namespace.
+If an event listener was previously registered for the same *type* on a selected element, the old listener is removed before the new listener is added. To register multiple listeners for a given type, the type may be followed by an optional name, such as `click.foo` and `click.bar`. To remove a listener, pass null as the *listener*. To remove all listeners for a particular name, pass null as the *listener* and `.foo` as the *type*, where *foo* is the name.
 
 An optional *capture* flag may be specified, which corresponds to the W3C [useCapture flag](http://www.w3.org/TR/DOM-Level-2-Events/events.html#Events-registration): “After initiating capture, all events of the specified type will be dispatched to the registered EventListener before being dispatched to any EventTargets beneath them in the tree. Events which are bubbling upward through the tree will not trigger an EventListener designated to use capture.”
 
