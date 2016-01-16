@@ -16,6 +16,6 @@ export default function(value) {
   return arguments.length
       ? this.each((typeof value === "function"
           ? textFunction
-          : textContent)(value))
+          : textConstant)(value))
       : this.node().textContent;
 };
