@@ -3,12 +3,12 @@ import arrayify from "./arrayify";
 export default function(compare) {
   if (!compare) compare = ascending;
 
-  function comparator(a, b) {
+  function compareNode(a, b) {
     return a && b ? compare(a.__data__, b.__data__) : !a - !b;
   }
 
   for (var groups = arrayify(this), j = 0, m = groups.length; j < m; ++j) {
-    groups[j].sort(comparator);
+    groups[j].sort(compareNode);
   }
 
   return this.order();
