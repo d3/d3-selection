@@ -4,4 +4,4 @@ function raise() {
 
 export default function() {
   return this.each(raise);
-};
+}

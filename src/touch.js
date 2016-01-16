@@ -9,4 +9,4 @@ export default function(node, touches, identifier) {
     }
   }
   return null;
-};
+}

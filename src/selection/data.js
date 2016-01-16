@@ -136,7 +136,7 @@ export default function(value, key) {
   }
 
   return this;
-};
+}
 
 function EnterNode(parent, datum) {
   this.ownerDocument = parent.ownerDocument;

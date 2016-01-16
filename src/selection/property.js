@@ -25,4 +25,4 @@ export default function(name, value) {
           ? propertyFunction
           : propertyConstant)(name, value))
       : this.node()[name];
-};
+}

@@ -4,4 +4,4 @@ function lower() {
 
 export default function() {
   return this.each(lower);
-};
+}

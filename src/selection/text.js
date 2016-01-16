@@ -18,4 +18,4 @@ export default function(value) {
           ? textFunction
           : textConstant)(value))
       : this.node().textContent;
-};
+}

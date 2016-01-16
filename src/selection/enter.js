@@ -8,4 +8,4 @@ export default function() {
   enter = new Selection(arrayify(this).map(sparse));
   enter._update = this;
   return enter;
-};
+}

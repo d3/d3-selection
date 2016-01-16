@@ -41,4 +41,4 @@ export default function(name, before) {
   return this.select(arguments.length < 2
       ? append(create)
       : insert(create, typeof before === "function" ? before : selector(before)));
-};
+}

@@ -7,4 +7,4 @@ export default function(node, touches) {
     points[i] = point(node, touches[i]);
   }
   return points;
-};
+}

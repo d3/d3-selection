@@ -16,4 +16,4 @@ export default function(select) {
   }
 
   return new Selection(subgroups);
-};
+}

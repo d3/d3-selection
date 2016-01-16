@@ -18,4 +18,4 @@ export default function(value) {
           ? htmlFunction
           : htmlConstant)(value))
       : this.node().innerHTML;
-};
+}

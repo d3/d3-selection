@@ -28,7 +28,7 @@ import selection_dispatch from "./dispatch";
 
 export function Selection(groups) {
   this._ = groups;
-};
+}
 
 function selection() {
   return new Selection([[document.documentElement]]);

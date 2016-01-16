@@ -3,4 +3,4 @@ export default function() {
   arguments[0] = this;
   callback.apply(null, arguments);
   return this;
-};
+}

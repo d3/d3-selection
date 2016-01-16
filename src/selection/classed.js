@@ -55,6 +55,6 @@ export default function(name, value) {
   }
 
   return this.each((typeof value === "function"
-      ? setFunction
-      : setConstant)(names.map(classer), value));
-};
+      ? classedFunction
+      : classedConstant)(names.map(classer), value));
+}

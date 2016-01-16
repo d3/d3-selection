@@ -1,8 +1,7 @@
 import requote from "../requote";
 import noop from "../noop";
 
-var filterEvents = {},
-    slice = Array.prototype.slice;
+var filterEvents = {};
 
 export var event = null;
 
@@ -83,4 +82,4 @@ export default function(type, listener, capture) {
   return this.each(listener
       ? (value ? onAdd(filter, key, type, listener, capture) : noop) // Attempt to add untyped listener is ignored.
       : (value ? onRemove(key, name) : onRemoveAll(name)));
-};
+}

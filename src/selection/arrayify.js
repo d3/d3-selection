@@ -10,4 +10,4 @@ export default function(selection) {
   }
 
   return groups;
-};
+}

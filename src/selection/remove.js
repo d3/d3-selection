@@ -5,4 +5,4 @@ function remove() {
 
 export default function() {
   return this.each(remove);
-};
+}

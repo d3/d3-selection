@@ -30,4 +30,4 @@ export default function(name, value, priority) {
       : defaultView(node = this.node())
           .getComputedStyle(node, null)
           .getPropertyValue(name);
-};
+}
