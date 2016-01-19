@@ -25,3 +25,10 @@ tape("selection.node() skips empty groups", function(test) {
   test.equal(d3.selectAll([one, two]).selectAll(function(d, i) { return i ? [this] : []; }).node(), two);
   test.end();
 });
+
+tape("selection.node() returns null for an empty selection", function(test) {
+  test.equal(d3.select(null).node(), null);
+  test.equal(d3.selectAll([]).node(), null);
+  test.equal(d3.selectAll([,,]).node(), null);
+  test.end();
+});
