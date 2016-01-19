@@ -57,7 +57,18 @@ tape("selection.sort() puts missing elements at the end of each group", function
   test.end();
 });
 
-tape("selection.sort(compare) uses the specified data comparator", function(test) {
+tape("selection.sort(function) puts missing elements at the end of each group", function(test) {
+  var document = jsdom.jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
+      one = document.querySelector("#one"),
+      two = document.querySelector("#two"),
+      selection = d3.selectAll([two, one]).datum(function(d, i) { return i; });
+  test.deepEqual(d3.selectAll([, one,, two]).sort(function(a, b) { return b - a; }), {_nodes: [[one, two,,]], _parents: [null]});
+  test.equal(one.nextSibling, two);
+  test.equal(two.nextSibling, null);
+  test.end();
+});
+
+tape("selection.sort(function) uses the specified data comparator function", function(test) {
   var document = jsdom.jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
