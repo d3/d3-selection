@@ -1,5 +1,7 @@
 import {Selection, root} from "./selection/index";
 
 export default function(selector) {
-  return new Selection([typeof selector === "string" ? document.querySelectorAll(selector) : selector], root);
+  return typeof selector === "string"
+      ? new Selection([document.querySelectorAll(selector)], [document.documentElement])
+      : new Selection([selector], root);
 }

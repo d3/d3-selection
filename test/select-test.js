@@ -11,7 +11,7 @@ tape("select(…) returns a selection", function(test) {
 tape("select(string) selects the first element that matches the selector string", function(test) {
   var document = global.document = jsdom.jsdom("<h1 id='one'>foo</h1><h1 id='two'>bar</h1>");
   try {
-    test.deepEqual(d3.select("h1"), {_nodes: [[document.querySelector("h1")]], _parents: [null]});
+    test.deepEqual(d3.select("h1"), {_nodes: [[document.querySelector("h1")]], _parents: [document.documentElement]});
     test.end();
   } finally {
     delete global.document;
