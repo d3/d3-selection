@@ -123,7 +123,7 @@ export default function(value, key) {
     var group = update[j],
         parent = parents[j];
 
-    bind(parent, group, enter[j], exit[j], value.call(parent, parent && parent.__data__, j, group), key);
+    bind(parent, group, enter[j], exit[j], value.call(parent, parent && parent.__data__, j, parents), key);
 
     // Now connect the enter nodes to their following update node, such that
     // appendChild can insert the materialized enter node before this node,
