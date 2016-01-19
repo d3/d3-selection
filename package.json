@@ -22,9 +22,8 @@
   },
   "scripts": {
     "pretest": "mkdir -p build && node -e 'process.stdout.write(\"var version = \\\"\" + require(\"./package.json\").version + \"\\\"; export * from \\\"../index\\\"; export {version};\");' > build/bundle.js && rollup -f umd -u d3-selection -n d3_selection -o build/d3-selection.js -- build/bundle.js",
-    "test": "faucet `find test -name '*-test.js'`",
-    "lint": "eslint index.js src",
-    "prepublish": "npm test && npm run lint && uglifyjs build/d3-selection.js -c -m -o build/d3-selection.min.js && rm -f build/d3-selection.zip && zip -j build/d3-selection.zip -- LICENSE README.md build/d3-selection.js build/d3-selection.min.js"
+    "test": "faucet `find test -name '*-test.js'` && eslint index.js src",
+    "prepublish": "npm test && uglifyjs build/d3-selection.js -c -m -o build/d3-selection.min.js && rm -f build/d3-selection.zip && zip -j build/d3-selection.zip -- LICENSE README.md build/d3-selection.js build/d3-selection.min.js"
   },
   "devDependencies": {
     "faucet": "0.0",

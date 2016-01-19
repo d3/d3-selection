@@ -5,9 +5,9 @@ export default function(select) {
   if (typeof select !== "function") select = selectorAll(select);
 
   for (var groups = this._nodes, m = groups.length, subgroups = [], parents = [], j = 0; j < m; ++j) {
-    for (var group = groups[j], n = group.length, subgroup, node, i = 0; i < n; ++i) {
+    for (var group = groups[j], n = group.length, node, i = 0; i < n; ++i) {
       if (node = group[i]) {
-        subgroups.push(subgroup = select.call(node, node.__data__, i, group));
+        subgroups.push(select.call(node, node.__data__, i, group));
         parents.push(node);
       }
     }
