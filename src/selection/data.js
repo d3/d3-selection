@@ -1,8 +1,9 @@
+import arrayify from "./arrayify";
 import constant from "../constant";
 
 var keyPrefix = "$"; // Protect against keys like “__proto__”.
 
-function bindIndex(update, enter, exit, data) {
+function bindIndex(parent, update, enter, exit, data) {
   var i = 0,
       node,
       nodeLength = update.length,
@@ -17,14 +18,14 @@ function bindIndex(update, enter, exit, data) {
     if (node = update[i]) {
       node.__data__ = data[i];
     } else {
-      enter[i] = new EnterNode(update._parent, data[i]);
+      enter[i] = new EnterNode(parent, data[i]);
     }
   }
 
   // Note: we don’t need to delete update[i] here because this loop only
   // runs when the data length is greater than the node length.
   for (; i < dataLength; ++i) {
-    enter[i] = new EnterNode(update._parent, data[i]);
+    enter[i] = new EnterNode(parent, data[i]);
   }
 
   // Note: and, we don’t need to delete update[i] here because immediately
@@ -38,7 +39,7 @@ function bindIndex(update, enter, exit, data) {
   update.length = dataLength;
 }
 
-function bindKey(update, enter, exit, data, key) {
+function bindKey(parent, update, enter, exit, data, key) {
   var i,
       node,
       dataLength = data.length,
@@ -74,12 +75,12 @@ function bindKey(update, enter, exit, data, key) {
 
   // Compute the keys for each datum.
   for (i = 0; i < dataLength; ++i) {
-    keyValue = keyPrefix + key.call(update._parent, data[i], i, data);
+    keyValue = keyPrefix + key.call(parent, data[i], i, data);
 
     // Is there a node associated with this key?
     // If not, this datum is added to the enter selection.
     if (!(node = nodeByKeyValue[keyValue])) {
-      enter[i] = new EnterNode(update._parent, data[i]);
+      enter[i] = new EnterNode(parent, data[i]);
     }
 
     // Did we already bind a node using this key? (Or is a duplicate?)
@@ -111,17 +112,18 @@ export default function(value, key) {
   }
 
   var bind = key ? bindKey : bindIndex,
-      update = this._,
-      enter = (this._enter = this.enter())._, // Note: arrayify’s!
-      exit = (this._exit = this.exit())._;
+      parents = this._parents,
+      update = arrayify(this),
+      enter = (this._enter = this.enter())._nodes,
+      exit = (this._exit = this.exit())._nodes;
 
   if (typeof value !== "function") value = constant(value);
 
   for (var m = update.length, j = 0; j < m; ++j) {
     var group = update[j],
-        parent = group._parent;
+        parent = parents[j];
 
-    bind(group, enter[j], exit[j], value.call(parent, parent && parent.__data__, j, group), key);
+    bind(parent, group, enter[j], exit[j], value.call(parent, parent && parent.__data__, j, group), key);
 
     // Now connect the enter nodes to their following update node, such that
     // appendChild can insert the materialized enter node before this node,

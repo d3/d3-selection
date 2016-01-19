@@ -4,14 +4,14 @@ import selectorAll from "../selectorAll";
 export default function(select) {
   if (typeof select !== "function") select = selectorAll(select);
 
-  for (var groups = this._, m = groups.length, subgroups = [], j = 0; j < m; ++j) {
+  for (var groups = this._nodes, m = groups.length, subgroups = [], parents = [], j = 0; j < m; ++j) {
     for (var group = groups[j], n = group.length, subgroup, node, i = 0; i < n; ++i) {
       if (node = group[i]) {
         subgroups.push(subgroup = select.call(node, node.__data__, i, group));
-        subgroup._parent = node;
+        parents.push(node);
       }
     }
   }
 
-  return new Selection(subgroups);
+  return new Selection(subgroups, parents);
 }

@@ -26,12 +26,15 @@ import selection_datum from "./datum";
 import selection_on from "./on";
 import selection_dispatch from "./dispatch";
 
-export function Selection(groups) {
-  this._ = groups;
+export var root = [null];
+
+export function Selection(nodes, parents) {
+  this._nodes = nodes;
+  this._parents = parents;
 }
 
 function selection() {
-  return new Selection([[document.documentElement]]);
+  return new Selection([[document.documentElement]], root);
 }
 
 Selection.prototype = selection.prototype = {
