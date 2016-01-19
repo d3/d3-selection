@@ -29,7 +29,7 @@ tape("selection.text(null) clears the text content on the selected elements", fu
   test.end();
 });
 
-tape("selection.text(function) sets the value of the style text content on the selected elements", function(test) {
+tape("selection.text(function) sets the value of the text content on the selected elements", function(test) {
   var one = {textContent: "bar"},
       two = {textContent: "bar"},
       selection = d3.selectAll([one, two]);

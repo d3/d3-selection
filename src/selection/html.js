@@ -1,5 +1,8 @@
+function htmlRemove() {
+  this.innerHTML = "";
+}
+
 function htmlConstant(value) {
-  if (value == null) value = "";
   return function() {
     this.innerHTML = value;
   };
@@ -14,7 +17,8 @@ function htmlFunction(value) {
 
 export default function(value) {
   return arguments.length
-      ? this.each((typeof value === "function"
+      ? this.each(value == null
+          ? htmlRemove : (typeof value === "function"
           ? htmlFunction
           : htmlConstant)(value))
       : this.node().innerHTML;
