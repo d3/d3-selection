@@ -29,7 +29,7 @@ tape("selection.property(name, null) removes the property with the specified nam
   test.end();
 });
 
-tape("selection.property(name, function) sets the value of the style property with the specified name on the selected elements", function(test) {
+tape("selection.property(name, function) sets the value of the property with the specified name on the selected elements", function(test) {
   var one = {foo: "bar"},
       two = {foo: "bar"},
       selection = d3.selectAll([one, two]);

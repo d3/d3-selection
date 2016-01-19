@@ -1,5 +1,8 @@
+function textRemove() {
+  this.textContent = "";
+}
+
 function textConstant(value) {
-  if (value == null) value = "";
   return function() {
     this.textContent = value;
   };
@@ -14,7 +17,8 @@ function textFunction(value) {
 
 export default function(value) {
   return arguments.length
-      ? this.each((typeof value === "function"
+      ? this.each(value == null
+          ? textRemove : (typeof value === "function"
           ? textFunction
           : textConstant)(value))
       : this.node().textContent;
