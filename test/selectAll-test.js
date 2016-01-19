@@ -4,7 +4,7 @@ var tape = require("tape"),
 
 tape("selectAll(…) returns a selection", function(test) {
   var document = jsdom.jsdom("<h1>hello</h1>");
-  test.ok(d3.selectAll([document.body]) instanceof d3.selection);
+  test.ok(d3.selectAll([document]) instanceof d3.selection);
   test.end();
 });
 

@@ -4,7 +4,7 @@ var tape = require("tape"),
 
 tape("selection.select(…) returns a selection", function(test) {
   var document = jsdom.jsdom("<h1>hello</h1>");
-  test.ok(d3.select(document.body).select("h1") instanceof d3.selection);
+  test.ok(d3.select(document).select("h1") instanceof d3.selection);
   test.end();
 });
 
@@ -12,14 +12,14 @@ tape("selection.select(string) selects the first descendant that matches the sel
   var document = jsdom.jsdom("<h1><span id='one'></span><span id='two'></span></h1><h1><span id='three'></span><span id='four'></span></h1>"),
       one = document.querySelector("#one"),
       three = document.querySelector("#three");
-  test.deepEqual(d3.select(document.body).selectAll("h1").select("span"), {_nodes: [[one, three]], _parents: [document.body]});
+  test.deepEqual(d3.select(document).selectAll("h1").select("span"), {_nodes: [[one, three]], _parents: [document]});
   test.end();
 });
 
 tape("selection.select(function) selects the return value of the given function for each selected element", function(test) {
   var document = jsdom.jsdom("<span id='one'></span>"),
       one = document.querySelector("#one");
-  test.deepEqual(d3.select(document.body).select(function() { return one; }), {_nodes: [[one]], _parents: [null]});
+  test.deepEqual(d3.select(document).select(function() { return one; }), {_nodes: [[one]], _parents: [null]});
   test.end();
 });
 
@@ -69,11 +69,10 @@ tape("selection.select(…) will not propagate data if not defined on the origin
 
 tape("selection.select(…) propagates parents from the originating selection", function(test) {
   var document = jsdom.jsdom("<parent><child>1</child></parent><parent><child>2</child></parent>"),
-      body = document.body,
-      parents = d3.select(body).selectAll("parent"),
+      parents = d3.select(document).selectAll("parent"),
       childs = parents.select("child");
-  test.deepEqual(parents, {_nodes: [document.querySelectorAll("parent")], _parents: [body]});
-  test.deepEqual(childs, {_nodes: [document.querySelectorAll("child")], _parents: [body]});
+  test.deepEqual(parents, {_nodes: [document.querySelectorAll("parent")], _parents: [document]});
+  test.deepEqual(childs, {_nodes: [document.querySelectorAll("child")], _parents: [document]});
   test.ok(parents._parents === childs._parents); // Not copied!
   test.end();
 });

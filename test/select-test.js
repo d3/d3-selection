@@ -4,7 +4,7 @@ var tape = require("tape"),
 
 tape("select(…) returns a selection", function(test) {
   var document = jsdom.jsdom("<h1>hello</h1>");
-  test.ok(d3.select(document.body) instanceof d3.selection);
+  test.ok(d3.select(document) instanceof d3.selection);
   test.end();
 });
 
@@ -21,6 +21,7 @@ tape("select(string) selects the first element that matches the selector string"
 tape("select(element) selects the given element", function(test) {
   var document = jsdom.jsdom("<h1>hello</h1>");
   test.deepEqual(d3.select(document.body), {_nodes: [[document.body]], _parents: [null]});
+  test.deepEqual(d3.select(document.documentElement), {_nodes: [[document.documentElement]], _parents: [null]});
   test.end();
 });
 
@@ -33,12 +34,6 @@ tape("select(window) selects the given window", function(test) {
 tape("select(document) selects the given document", function(test) {
   var document = jsdom.jsdom("<h1>hello</h1>");
   test.deepEqual(d3.select(document), {_nodes: [[document]], _parents: [null]});
-  test.end();
-});
-
-tape("select(documentElement) selects the given document element", function(test) {
-  var document = jsdom.jsdom("<h1>hello</h1>");
-  test.deepEqual(d3.select(document.documentElement), {_nodes: [[document.documentElement]], _parents: [null]});
   test.end();
 });
 

@@ -2,130 +2,101 @@ var tape = require("tape"),
     jsdom = require("jsdom"),
     d3 = require("../../");
 
-tape("selection.selectAll can select elements (in the simplest case)", function(test) {
-  var document = jsdom.jsdom("<h1>one</h1><h2>two</h2>"),
-      h1 = document.querySelector("h1"),
-      h2 = document.querySelector("h2"),
-      s = d3.select(document.body).selectAll("h1,h2");
-  test.ok(s instanceof d3.selection);
-  test.ok(Array.isArray(s._));
-  test.ok(s._[0] instanceof document.defaultView.NodeList);
-  test.equal(s._.length, 1)
-  test.equal(s._[0].length, 2);
-  test.equal(s._[0][0], h1);
-  test.equal(s._[0][1], h2);
-  test.equal(s._[0]._parent, document.body);
-  test.equal(s._enter, undefined);
-  test.equal(s._exit, undefined);
+tape("selection.selectAll(…) returns a selection", function(test) {
+  var document = jsdom.jsdom("<h1>hello</h1>");
+  test.ok(d3.select(document).selectAll("h1") instanceof d3.selection);
   test.end();
 });
 
-tape("selection.selectAll can select elements (with multiple originating elements)", function(test) {
-  var document = jsdom.jsdom("<table><tr id='tr-0'><td id='td-0-0'></td><td id='td-0-1'></td></tr><tr id='tr-1'><td id='td-1-0'></td><td id='td-1-1'></td></tr></table>"),
-      tr0 = document.querySelector("#tr-0"),
-      tr1 = document.querySelector("#tr-1"),
-      s = d3.selectAll([tr0, tr1]).selectAll("td");
-  test.ok(s instanceof d3.selection);
-  test.ok(Array.isArray(s._));
-  test.ok(s._[0] instanceof document.defaultView.NodeList);
-  test.ok(s._[1] instanceof document.defaultView.NodeList);
-  test.equal(s._.length, 2);
-  test.equal(s._[0].length, 2);
-  test.equal(s._[1].length, 2);
-  test.equal(s._[0][0], document.querySelector("#td-0-0"));
-  test.equal(s._[0][1], document.querySelector("#td-0-1"));
-  test.equal(s._[1][0], document.querySelector("#td-1-0"));
-  test.equal(s._[1][1], document.querySelector("#td-1-1"));
-  test.equal(s._[0]._parent, tr0);
-  test.equal(s._[1]._parent, tr1);
-  test.equal(s._enter, undefined);
-  test.equal(s._exit, undefined);
+tape("selection.selectAll(string) selects all descendants that match the selector string for each selected element", function(test) {
+  var document = jsdom.jsdom("<h1 id='one'><span></span><span></span></h1><h1 id='two'><span></span><span></span></h1>"),
+      one = document.querySelector("#one"),
+      two = document.querySelector("#two");
+  test.deepEqual(d3.selectAll([one, two]).selectAll("span"), {_nodes: [one.querySelectorAll("span"), two.querySelectorAll("span")], _parents: [one, two]});
   test.end();
 });
 
-tape("selection.selectAll can select elements (with multiple originating elements)", function(test) {
-  var document = jsdom.jsdom("<table><tr><td id='td-0-0'></td><td id='td-0-1'></td></tr></table>"),
-      tr = document.querySelector("tr"),
-      s = d3.selectAll([tr, null]).selectAll("td");
-  test.ok(s instanceof d3.selection);
-  test.ok(Array.isArray(s._));
-  test.ok(s._[0] instanceof document.defaultView.NodeList);
-  test.equal(s._.length, 1);
-  test.equal(s._[0].length, 2);
-  test.equal(s._[0][0], document.querySelector("#td-0-0"));
-  test.equal(s._[0][1], document.querySelector("#td-0-1"));
-  test.equal(s._[0]._parent, tr);
-  test.equal(s._enter, undefined);
-  test.equal(s._exit, undefined);
+tape("selection.selectAll(function) selects the return values of the given function for each selected element", function(test) {
+  var document = jsdom.jsdom("<span id='one'></span>"),
+      one = document.querySelector("#one");
+  test.deepEqual(d3.select(document).selectAll(function() { return [one]; }), {_nodes: [[one]], _parents: [document]});
   test.end();
 });
 
-tape("selection.selectAll will not propagate data", function(test) {
+tape("selection.selectAll(function) passes the selector function data, index and group", function(test) {
+  var document = jsdom.jsdom("<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>"),
+      one = document.querySelector("#one"),
+      two = document.querySelector("#two"),
+      three = document.querySelector("#three"),
+      four = document.querySelector("#four"),
+      five = document.querySelector("#five"),
+      results = [];
+
+  d3.selectAll([one, two])
+      .datum(function(d, i) { return "parent-" + i; })
+    .selectAll("child")
+      .data(function(d, i) { return [0, 1].map(function(j) { return "child-" + i + "-" + j; }); })
+    .selectAll(function(d, i, nodes) { results.push([d, i, nodes]); });
+
+  test.deepEqual(results, [
+    ["child-0-0", 0, [three, four]],
+    ["child-0-1", 1, [three, four]],
+    ["child-1-0", 0, [five, ]]
+  ]);
+  test.end();
+});
+
+tape("selection.selectAll(…) will not propagate data", function(test) {
   var document = jsdom.jsdom("<parent><child>hello</child></parent>"),
       parent = document.querySelector("parent"),
       child = document.querySelector("child");
   parent.__data__ = 42;
   d3.select(parent).selectAll("child");
-  test.equal(child.__data__, undefined);
+  test.ok(!("__data__" in child));
   test.end();
 });
 
-tape("selection.selectAll can select elements (when the originating selection is nested)", function(test) {
-  var document = jsdom.jsdom("<parent id='one'><child><span>1</span></child></parent><parent id='two'><child><span>2</span></child></parent>"),
-      s = d3.selectAll(document.querySelectorAll("parent")).selectAll("child").selectAll("span");
-  test.ok(Array.isArray(s._));
-  test.ok(s._[0] instanceof document.defaultView.NodeList);
-  test.ok(s._[1] instanceof document.defaultView.NodeList);
-  test.equal(s._.length, 2);
-  test.equal(s._[0].length, 1);
-  test.equal(s._[1].length, 1);
-  test.equal(s._[0]._parent, document.querySelector("#one child"));
-  test.equal(s._[1]._parent, document.querySelector("#two child"));
-  test.equal(s._[0][0], document.querySelector("#one span"));
-  test.equal(s._[1][0], document.querySelector("#two span"));
+tape("selection.selectAll(…) groups selected elements by their parent in the originating selection", function(test) {
+  var document = jsdom.jsdom("<parent id='one'><child id='three'></child></parent><parent id='two'><child id='four'></child></parent>"),
+      one = document.querySelector("#one"),
+      two = document.querySelector("#two"),
+      three = document.querySelector("#three"),
+      four = document.querySelector("#four");
+  test.deepEqual(d3.select(document).selectAll("parent").selectAll("child"), {_nodes: [[three], [four]], _parents: [one, two]});
+  test.deepEqual(d3.select(document).selectAll("child"), {_nodes: [[three, four]], _parents: [document]});
   test.end();
 });
 
-tape("selection.selectAll can select elements (when the originating selection contains null)", function(test) {
-  var document = jsdom.jsdom("<parent id='one'></parent><parent id='two'><child><span>2</span></child></parent>"),
-      s = d3.selectAll(document.querySelectorAll("parent")).select("child").selectAll("span");
-  test.ok(Array.isArray(s._));
-  test.ok(s._[0] instanceof document.defaultView.NodeList);
-  test.equal(s._.length, 1);
-  test.equal(s._[0].length, 1);
-  test.equal(s._[0]._parent, document.querySelector("#two child"));
-  test.equal(s._[0][0], document.querySelector("#two span"));
+tape("selection.selectAll(…) can select elements when the originating selection is nested", function(test) {
+  var document = jsdom.jsdom("<parent id='one'><child id='three'><span id='five'></span></child></parent><parent id='two'><child id='four'><span id='six'></span></child></parent>"),
+      one = document.querySelector("#one"),
+      two = document.querySelector("#two"),
+      three = document.querySelector("#three"),
+      four = document.querySelector("#four"),
+      five = document.querySelector("#five"),
+      six = document.querySelector("#six");
+  test.deepEqual(d3.selectAll([one, two]).selectAll("child").selectAll("span"), {_nodes: [[five], [six]], _parents: [three, four]});
   test.end();
 });
 
-tape("selection.selectAll can select elements (when the originating selection is nested and contains null)", function(test) {
-  var document = jsdom.jsdom("<parent id='one'><child></child></parent><parent id='two'><child><span><b>2</b></span></child></parent>"),
-      s = d3.selectAll(document.querySelectorAll("parent")).selectAll("child").select("span").selectAll("b");
-  test.ok(Array.isArray(s._));
-  test.ok(s._[0] instanceof document.defaultView.NodeList);
-  test.equal(s._.length, 1);
-  test.equal(s._[0].length, 1);
-  test.equal(s._[0][0], document.querySelector("#two b"));
-  test.equal(s._[0]._parent, document.querySelector("#two span"));
+tape("selection.selectAll(…) skips missing originating elements", function(test) {
+  var document = jsdom.jsdom("<h1><span>hello</span></h1>"),
+      h1 = document.querySelector("h1"),
+      span = document.querySelector("span");
+  test.deepEqual(d3.selectAll([, h1]).selectAll("span"), {_nodes: [[span]], _parents: [h1]});
+  test.deepEqual(d3.selectAll([null, h1]).selectAll("span"), {_nodes: [[span]], _parents: [h1]});
+  test.deepEqual(d3.selectAll([undefined, h1]).selectAll("span"), {_nodes: [[span]], _parents: [h1]});
   test.end();
 });
 
-tape("selection.selectAll passes the selector function data and index", function(test) {
-  var document = jsdom.jsdom("<parent id='one'><child><span><b>1</b></span></child></parent><parent id='two'><child><span><b>2</b></span></child></parent>"),
-      results = [],
-      p = d3.selectAll(document.querySelectorAll("parent")).datum(function(d, i) { return "parent-" + i; }).selectAll("child").datum(function(d, i) { return "child-" + i; }).select("span"),
-      s = p.selectAll(function() { results.push({this: this, arguments: [].slice.call(arguments)}); return []; });
-  test.equal(document.querySelector("#one").__data__, "parent-0");
-  test.equal(document.querySelector("#two").__data__, "parent-1");
-  test.equal(results.length, 2);
-  test.equal(results[0].this, document.querySelector("#one span"));
-  test.equal(results[1].this, document.querySelector("#two span"));
-  test.equal(results[0].arguments.length, 3);
-  test.equal(results[0].arguments[0], "child-0");
-  test.equal(results[0].arguments[1], 0);
-  test.equal(results[0].arguments[2], p._[0]);
-  test.equal(results[1].arguments[0], "child-0");
-  test.equal(results[1].arguments[1], 0);
-  test.equal(results[1].arguments[2], p._[1]);
+tape("selection.selectAll(…) skips missing originating elements when the originating selection is nested", function(test) {
+  var document = jsdom.jsdom("<parent id='one'><child></child><child id='three'><span id='five'></span></child></parent><parent id='two'><child></child><child id='four'><span id='six'></span></child></parent>"),
+      one = document.querySelector("#one"),
+      two = document.querySelector("#two"),
+      three = document.querySelector("#three"),
+      four = document.querySelector("#four"),
+      five = document.querySelector("#five"),
+      six = document.querySelector("#six");
+  test.deepEqual(d3.selectAll([one, two]).selectAll("child").select(function(d, i) { return i & 1 ? this : null; }).selectAll("span"), {_nodes: [[five], [six]], _parents: [three, four]});
   test.end();
 });
