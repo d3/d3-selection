@@ -84,7 +84,7 @@ tape("selection.attr(name, null) removes the attribute with the specified name o
   test.end();
 });
 
-tape("selection.attr(name, value) sets the value of the attribute with the specified name on the selected elements", function(test) {
+tape("selection.attr(name, function) sets the value of the attribute with the specified name on the selected elements", function(test) {
   var document = jsdom.jsdom("<h1 id='one' class='c1 c2'>hello</h1><h1 id='two' class='c3'></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
