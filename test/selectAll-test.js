@@ -2,7 +2,7 @@ var tape = require("tape"),
     jsdom = require("jsdom"),
     d3 = require("../");
 
-tape("selectAll(array) returns a selection", function(test) {
+tape("selectAll(…) returns a selection", function(test) {
   var document = jsdom.jsdom("<h1>hello</h1>");
   test.ok(d3.selectAll([document.body]) instanceof d3.selection);
   test.end();
@@ -18,17 +18,17 @@ tape("selectAll(string) selects all elements that match the selector string, in 
   }
 });
 
+tape("selectAll(nodeList) selects a NodeList of elements", function(test) {
+  var document = jsdom.jsdom("<h1>hello</h1><h2>world</h2>");
+  test.deepEqual(d3.selectAll(document.querySelectorAll("h1,h2")), {_nodes: [document.querySelectorAll("h1,h2")], _parents: [null]});
+  test.end();
+});
+
 tape("selectAll(array) selects an array of elements", function(test) {
   var document = jsdom.jsdom("<h1>hello</h1><h2>world</h2>"),
       h1 = document.querySelector("h1"),
       h2 = document.querySelector("h2");
   test.deepEqual(d3.selectAll([h1, h2]), {_nodes: [[h1, h2]], _parents: [null]});
-  test.end();
-});
-
-tape("selectAll(nodeList) selects a NodeList of elements", function(test) {
-  var document = jsdom.jsdom("<h1>hello</h1><h2>world</h2>");
-  test.deepEqual(d3.selectAll(document.querySelectorAll("h1,h2")), {_nodes: [document.querySelectorAll("h1,h2")], _parents: [null]});
   test.end();
 });
 

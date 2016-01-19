@@ -2,7 +2,7 @@ var tape = require("tape"),
     jsdom = require("jsdom"),
     d3 = require("../");
 
-tape("select(node) returns a selection", function(test) {
+tape("select(…) returns a selection", function(test) {
   var document = jsdom.jsdom("<h1>hello</h1>");
   test.ok(d3.select(document.body) instanceof d3.selection);
   test.end();
