@@ -170,15 +170,15 @@ If a *value* is not specified, returns the current value of the specified attrib
 
 The specified *name* may have a namespace prefix, such as `xlink:href` to specify the `href` attribute in the XLink namespace. See [namespaces](#namespaces) for the map of supported namespaces; additional namespaces can be registered by adding to the map.
 
-<a name="selection_classed" href="#selection_classed">#</a> <i>selection</i>.<b>classed</b>(<i>classes</i>[, <i>value</i>])
+<a name="selection_classed" href="#selection_classed">#</a> <i>selection</i>.<b>classed</b>(<i>names</i>[, <i>value</i>])
 
-If a *value* is specified, assigns or unassigns the specified CSS *classes* on the selected elements by setting the `class` attribute or modifying the `classList` property and returns this selection. The specified *classes* is a string of space-separated class names. For example, to assign the classes `foo` and `bar` to the selected elements:
+If a *value* is specified, assigns or unassigns the specified CSS class *names* on the selected elements by setting the `class` attribute or modifying the `classList` property and returns this selection. The specified *names* is a string of space-separated class names. For example, to assign the classes `foo` and `bar` to the selected elements:
 
 ```js
 selection.classed("foo bar", true);
 ```
 
-If the *value* is truthy, then all elements are assigned the specified *classes*; otherwise, the classes are unassigned. If the *value* is a function, then the function is evaluated for each selected element, in order, being passed the current datum *d* and index *i*, with the `this` context as the current DOM element. The function’s return value is then used to assign or unassign classes on each element. For example, to randomly associate the class *foo* with on average half the selected elements:
+If the *value* is truthy, then all elements are assigned the specified classes; otherwise, the classes are unassigned. If the *value* is a function, then the function is evaluated for each selected element, in order, being passed the current datum *d* and index *i*, with the `this` context as the current DOM element. The function’s return value is then used to assign or unassign classes on each element. For example, to randomly associate the class *foo* with on average half the selected elements:
 
 ```js
 selection.classed("foo", function() { return Math.random(); });
@@ -242,11 +242,11 @@ The specified *name* may have a namespace prefix, such as `svg:text` to specify 
 
 Removes the selected elements from the document. Returns this selection (the removed elements) which are now detached from the DOM. There is not currently a dedicated API to add removed elements back to the document; however, you can pass a function to [*selection*.append](#selection_append) to re-add elements.
 
-<a name="selection_sort" href="#selection_sort">#</a> <i>selection</i>.<b>sort</b>(<i>comparator</i>)
+<a name="selection_sort" href="#selection_sort">#</a> <i>selection</i>.<b>sort</b>(<i>compare</i>)
 
-Sorts each group of selected elements in-place according to the *comparator* function, and then re-inserts the document elements to match the resulting order. Returns this selection.
+Sorts each group of selected elements in-place according to the *compare* function, and then re-inserts the document elements to match the resulting order. Returns this selection.
 
-The comparator function, which defaults to [ascending](https://github.com/d3/d3-array#ascending), is passed two elements’ data *a* and *b* to compare. It should return either a negative, positive, or zero value. If negative, then *a* should be before *b*; if positive, then *a* should be after *b*; otherwise, *a* and *b* are considered equal and the order is arbitrary.
+The compare function, which defaults to [ascending](https://github.com/d3/d3-array#ascending), is passed two elements’ data *a* and *b* to compare. It should return either a negative, positive, or zero value. If negative, then *a* should be before *b*; if positive, then *a* should be after *b*; otherwise, *a* and *b* are considered equal and the order is arbitrary.
 
 Note that sorting is not guaranteed to be stable; however, it is guaranteed to have the same behavior as your browser’s built-in [sort](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/sort) method on arrays.
 
@@ -507,8 +507,6 @@ This is equivalent to:
 ```javascript
 name(d3.selectAll("div"), "John", "Snow");
 ```
-
-The `this` context of the called function is also the current selection.
 
 <a name="selection_empty" href="#selection_empty">#</a> <i>selection</i>.<b>empty</b>()
 
