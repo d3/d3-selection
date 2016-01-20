@@ -19,6 +19,63 @@ tape("selection.append(name) appends a new element of the specified name as the 
   test.end();
 });
 
+tape("selection.append(name) observes the specified namespace, if any", function(test) {
+  var document = jsdom.jsdom("<div id='one'></div><div id='two'></div>"),
+      one = document.querySelector("#one"),
+      two = document.querySelector("#two"),
+      selection = d3.selectAll([one, two]).append("svg:g"),
+      three = one.querySelector("g"),
+      four = two.querySelector("g");
+  test.equal(three.namespaceURI, "http://www.w3.org/2000/svg");
+  test.equal(four.namespaceURI, "http://www.w3.org/2000/svg");
+  test.deepEqual(selection, {_nodes: [[three, four]], _parents: [null]});
+  test.end();
+});
+
+tape("selection.append(name) observes the implicit namespace, if any", function(test) {
+  var document = jsdom.jsdom("<div id='one'></div><div id='two'></div>"),
+      one = document.querySelector("#one"),
+      two = document.querySelector("#two"),
+      selection = d3.selectAll([one, two]).append("svg"),
+      three = one.querySelector("svg"),
+      four = two.querySelector("svg");
+  test.equal(three.namespaceURI, "http://www.w3.org/2000/svg");
+  test.equal(four.namespaceURI, "http://www.w3.org/2000/svg");
+  test.deepEqual(selection, {_nodes: [[three, four]], _parents: [null]});
+  test.end();
+});
+
+tape("selection.append(name) observes the inherited namespace, if any", function(test) {
+  var document = jsdom.jsdom("<div id='one'></div><div id='two'></div>"),
+      one = document.querySelector("#one"),
+      two = document.querySelector("#two"),
+      selection = d3.selectAll([one, two]).append("svg").append("g"),
+      three = one.querySelector("g"),
+      four = two.querySelector("g");
+  test.equal(three.namespaceURI, "http://www.w3.org/2000/svg");
+  test.equal(four.namespaceURI, "http://www.w3.org/2000/svg");
+  test.deepEqual(selection, {_nodes: [[three, four]], _parents: [null]});
+  test.end();
+});
+
+tape("selection.append(name) observes a custom namespace, if any", function(test) {
+  try {
+    d3.namespaces.d3js = "https://d3js.org/2016/namespace";
+    var document = jsdom.jsdom("<div id='one'></div><div id='two'></div>"),
+        one = document.querySelector("#one"),
+        two = document.querySelector("#two"),
+        selection = d3.selectAll([one, two]).append("d3js"),
+        three = one.querySelector("d3js"),
+        four = two.querySelector("d3js");
+    test.equal(three.namespaceURI, "https://d3js.org/2016/namespace");
+    test.equal(four.namespaceURI, "https://d3js.org/2016/namespace");
+    test.deepEqual(selection, {_nodes: [[three, four]], _parents: [null]});
+    test.end();
+  } finally {
+    delete d3.namespaces.d3js;
+  }
+});
+
 tape("selection.append(function) appends the returned element as the last child of each selected element", function(test) {
   var document = jsdom.jsdom("<div id='one'><span class='before'></span></div><div id='two'><span class='before'></span></div>"),
       one = document.querySelector("#one"),
