@@ -36,9 +36,16 @@ function insert(create, select) {
   };
 }
 
+function constantNull() {
+  return null;
+}
+
 export default function(name, before) {
   var create = typeof name === "function" ? name : creator(name);
   return this.select(arguments.length < 2
       ? append(create)
-      : insert(create, typeof before === "function" ? before : selector(before)));
+      : insert(create, before == null
+          ? constantNull : typeof before === "function"
+          ? before
+          : selector(before)));
 }

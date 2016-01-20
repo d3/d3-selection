@@ -143,7 +143,7 @@ tape("selection.data(function) passes the values function data, index and parent
   d3.selectAll([one, two])
       .datum(function(d, i) { return "parent-" + i; })
     .selectAll("child")
-      .data(function(d, i, nodes) { results.push([this, d, i, nodes]); return [0, 1].map(function(j) { return "child-" + i + "-" + j; }); });
+      .data(function(d, i, nodes) { results.push([this, d, i, nodes]); return ["foo", "bar"]; });
 
   test.deepEqual(results, [
     [one, "parent-0", 0, [one, two]],
@@ -151,3 +151,5 @@ tape("selection.data(function) passes the values function data, index and parent
   ]);
   test.end();
 });
+
+// TODO key functions
