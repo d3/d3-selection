@@ -15,12 +15,12 @@ tape("selection.data(values) binds the specified values to the selected elements
     _nodes: [[one, two, three]],
     _parents: [body],
     _enter: {
-      _nodes: [[,,]],
+      _nodes: [[,, ]],
       _parents: [body],
       _update: selection
     },
     _exit: {
-      _nodes: [[,,]],
+      _nodes: [[,, ]],
       _parents: [body]
     }
   });
@@ -35,7 +35,7 @@ tape("selection.data(values) puts unbound data in the enter selection", function
   test.equal(one.__data__, "foo");
   test.equal(two.__data__, "bar");
   test.deepEqual(selection, {
-    _nodes: [[one, two,]],
+    _nodes: [[one, two, ]],
     _parents: [body],
     _enter: {
       _nodes: [[,, {
@@ -49,7 +49,7 @@ tape("selection.data(values) puts unbound data in the enter selection", function
       _update: selection
     },
     _exit: {
-      _nodes: [[,,]],
+      _nodes: [[,, ]],
       _parents: [body]
     }
   });
@@ -65,10 +65,10 @@ tape("selection.data(values) puts unbound elements in the exit selection", funct
   test.equal(one.__data__, "foo");
   test.equal(two.__data__, "bar");
   test.deepEqual(selection, {
-    _nodes: [[one, two,]],
+    _nodes: [[one, two, ]],
     _parents: [body],
     _enter: {
-      _nodes: [[,,,]],
+      _nodes: [[,,, ]],
       _parents: [body],
       _update: selection
     },
@@ -97,12 +97,12 @@ tape("selection.data(values) binds the specified values to each group independen
     _nodes: [[one, two], [four, five]],
     _parents: [zero, three],
     _enter: {
-      _nodes: [[,], [,]],
+      _nodes: [[, ], [, ]],
       _parents: [zero, three],
       _update: selection
     },
     _exit: {
-      _nodes: [[,], [,]],
+      _nodes: [[, ], [, ]],
       _parents: [zero, three]
     }
   });
@@ -122,19 +122,19 @@ tape("selection.data(function) binds the specified return values to the selected
     _nodes: [[one, two, three]],
     _parents: [body],
     _enter: {
-      _nodes: [[,,]],
+      _nodes: [[,, ]],
       _parents: [body],
       _update: selection
     },
     _exit: {
-      _nodes: [[,,]],
+      _nodes: [[,, ]],
       _parents: [body]
     }
   });
   test.end();
 });
 
-tape("selection.data(function) passes the values function data, index and parents", function(test) {
+tape("selection.data(function) passes the values function datum, index and parents", function(test) {
   var document = jsdom.jsdom("<parent id='one'><child></child><child></child></parent><parent id='two'><child></child></parent>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
@@ -152,4 +152,85 @@ tape("selection.data(function) passes the values function data, index and parent
   test.end();
 });
 
-// TODO key functions
+tape("selection.data(values, function) joins data to element using the computed keys", function(test) {
+  var body = jsdom.jsdom("<node id='one'></node><node id='two'></node><node id='three'></node>").body,
+      one = body.querySelector("#one"),
+      two = body.querySelector("#two"),
+      three = body.querySelector("#three"),
+      selection = d3.select(body).selectAll("node").data(["one", "four", "three"], function(d) { return d || this.id; });
+  test.deepEqual(selection, {
+    _nodes: [[one,, three]],
+    _parents: [body],
+    _enter: {
+      _nodes: [[, {
+        __data__: "four",
+        _next: three,
+        _parent: body,
+        namespaceURI: "http://www.w3.org/1999/xhtml",
+        ownerDocument: body.ownerDocument
+      }, ]],
+      _parents: [body],
+      _update: selection
+    },
+    _exit: {
+      _nodes: [[, two, ]],
+      _parents: [body]
+    }
+  });
+  test.end();
+});
+
+tape("selection.data(values, function) passes the key function datum, index and nodes or data", function(test) {
+  var body = jsdom.jsdom("<node id='one'></node><node id='two'></node>").body,
+      one = body.querySelector("#one"),
+      two = body.querySelector("#two"),
+      results = [];
+
+  d3.select(one)
+      .datum("foo");
+
+  d3.select(body).selectAll("node")
+      .data(["foo", "bar"], function(d, i, nodes) { results.push([this, d, i, nodes.slice()]); return d || this.id; });
+
+  test.deepEqual(results, [
+    [one, "foo", 0, [one, two]],
+    [two, undefined, 1, [one, two]],
+    [body, "foo", 0, ["foo", "bar"]],
+    [body, "bar", 1, ["foo", "bar"]]
+  ]);
+  test.end();
+});
+
+tape("selection.data(values, function) applies the order of the data", function(test) {
+  var body = jsdom.jsdom("<div id='one'></div><div id='two'></div><div id='three'></div>").body,
+      one = body.querySelector("#one"),
+      two = body.querySelector("#two"),
+      three = body.querySelector("#three"),
+      selection = d3.select(body).selectAll("div").data(["four", "three", "one", "five", "two"], function(d) { return d || this.id; });
+  test.deepEqual(selection, {
+    _nodes: [[, three, one,, two]],
+    _parents: [body],
+    _enter: {
+      _nodes: [[{
+        __data__: "four",
+        _next: three,
+        _parent: body,
+        namespaceURI: "http://www.w3.org/1999/xhtml",
+        ownerDocument: body.ownerDocument
+      },,, {
+        __data__: "five",
+        _next: two,
+        _parent: body,
+        namespaceURI: "http://www.w3.org/1999/xhtml",
+        ownerDocument: body.ownerDocument
+      }, ]],
+      _parents: [body],
+      _update: selection
+    },
+    _exit: {
+      _nodes: [[,,,]],
+      _parents: [body]
+    }
+  });
+  test.end();
+});

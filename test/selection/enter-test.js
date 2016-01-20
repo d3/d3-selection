@@ -52,6 +52,32 @@ tape("selection.enter() clears the enter selection associated with the given sel
   test.end();
 });
 
+tape("selection.enter() uses the order of the data", function(test) {
+  var body = jsdom.jsdom("<div id='one'></div><div id='two'></div><div id='three'></div>").body,
+      one = body.querySelector("#one"),
+      two = body.querySelector("#two"),
+      three = body.querySelector("#three"),
+      selection = d3.select(body).selectAll("div").data(["one", "four", "three", "five"], function(d) { return d || this.id; });
+  test.deepEqual(selection.enter(), {
+    _nodes: [[, {
+      __data__: "four",
+      _next: three,
+      _parent: body,
+      namespaceURI: "http://www.w3.org/1999/xhtml",
+      ownerDocument: body.ownerDocument
+    },, {
+      __data__: "five",
+      _next: null,
+      _parent: body,
+      namespaceURI: "http://www.w3.org/1999/xhtml",
+      ownerDocument: body.ownerDocument
+    }]],
+    _parents: [body],
+    _update: selection
+  });
+  test.end();
+});
+
 tape("enter.select(…) copies entering nodes into the update selection", function(test) {
   var document = jsdom.jsdom(),
       body = document.body,
