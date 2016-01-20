@@ -1,0 +1,158 @@
+var tape = require("tape"),
+    jsdom = require("jsdom"),
+    d3 = require("../../");
+
+tape("selection.append(…) returns a selection", function(test) {
+  var document = jsdom.jsdom();
+  test.ok(d3.select(document.body).append("h1") instanceof d3.selection);
+  test.end();
+});
+
+tape("selection.append(name) appends a new element of the specified name as the last child of each selected element", function(test) {
+  var document = jsdom.jsdom("<div id='one'><span class='before'></span></div><div id='two'><span class='before'></span></div>"),
+      one = document.querySelector("#one"),
+      two = document.querySelector("#two"),
+      selection = d3.selectAll([one, two]).append("span"),
+      three = one.querySelector("span:last-child"),
+      four = two.querySelector("span:last-child");
+  test.deepEqual(selection, {_nodes: [[three, four]], _parents: [null]});
+  test.end();
+});
+
+tape("selection.append(function) appends the returned element as the last child of each selected element", function(test) {
+  var document = jsdom.jsdom("<div id='one'><span class='before'></span></div><div id='two'><span class='before'></span></div>"),
+      one = document.querySelector("#one"),
+      two = document.querySelector("#two"),
+      selection = d3.selectAll([one, two]).append(function() { return document.createElement("SPAN"); }),
+      three = one.querySelector("span:last-child"),
+      four = two.querySelector("span:last-child");
+  test.deepEqual(selection, {_nodes: [[three, four]], _parents: [null]});
+  test.end();
+});
+
+tape("selection.append(name, before) appends a new element of the specified name before the specified child of each selected element", function(test) {
+  var document = jsdom.jsdom("<div id='one'><span class='before'></span></div><div id='two'><span class='before'></span></div>"),
+      one = document.querySelector("#one"),
+      two = document.querySelector("#two"),
+      selection = d3.selectAll([one, two]).append("span", ".before"),
+      three = one.querySelector("span:first-child"),
+      four = two.querySelector("span:first-child");
+  test.deepEqual(selection, {_nodes: [[three, four]], _parents: [null]});
+  test.end();
+});
+
+tape("selection.append(function, function) appends the returned element before the specified child of each selected element", function(test) {
+  var document = jsdom.jsdom("<div id='one'><span class='before'></span></div><div id='two'><span class='before'></span></div>"),
+      one = document.querySelector("#one"),
+      two = document.querySelector("#two"),
+      selection = d3.selectAll([one, two]).append(function() { return document.createElement("SPAN"); }, function() { return this.firstChild; }),
+      three = one.querySelector("span:first-child"),
+      four = two.querySelector("span:first-child");
+  test.deepEqual(selection, {_nodes: [[three, four]], _parents: [null]});
+  test.end();
+});
+
+tape("selection.append(function, function) appends the returned element as the last child if the selector function returns null", function(test) {
+  var document = jsdom.jsdom("<div id='one'><span class='before'></span></div><div id='two'><span class='before'></span></div>"),
+      one = document.querySelector("#one"),
+      two = document.querySelector("#two"),
+      selection = d3.selectAll([one, two]).append(function() { return document.createElement("SPAN"); }, function() { return; }),
+      three = one.querySelector("span:last-child"),
+      four = two.querySelector("span:last-child");
+  test.deepEqual(selection, {_nodes: [[three, four]], _parents: [null]});
+  test.end();
+});
+
+tape("selection.append(function) passes the creator function data, index and group", function(test) {
+  var document = jsdom.jsdom("<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>"),
+      one = document.querySelector("#one"),
+      two = document.querySelector("#two"),
+      three = document.querySelector("#three"),
+      four = document.querySelector("#four"),
+      five = document.querySelector("#five"),
+      results = [];
+
+  d3.selectAll([one, two])
+      .datum(function(d, i) { return "parent-" + i; })
+    .selectAll("child")
+      .data(function(d, i) { return [0, 1].map(function(j) { return "child-" + i + "-" + j; }); })
+      .append(function(d, i, nodes) { results.push([d, i, nodes]); return document.createElement("SPAN"); });
+
+  test.deepEqual(results, [
+    ["child-0-0", 0, [three, four]],
+    ["child-0-1", 1, [three, four]],
+    ["child-1-0", 0, [five, ]]
+  ]);
+  test.end();
+});
+
+tape("selection.append(name, function) passes the selector function data, index and group", function(test) {
+  var document = jsdom.jsdom("<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>"),
+      one = document.querySelector("#one"),
+      two = document.querySelector("#two"),
+      three = document.querySelector("#three"),
+      four = document.querySelector("#four"),
+      five = document.querySelector("#five"),
+      results = [];
+
+  d3.selectAll([one, two])
+      .datum(function(d, i) { return "parent-" + i; })
+    .selectAll("child")
+      .data(function(d, i) { return [0, 1].map(function(j) { return "child-" + i + "-" + j; }); })
+      .append("span", function(d, i, nodes) { results.push([d, i, nodes]); });
+
+  test.deepEqual(results, [
+    ["child-0-0", 0, [three, four]],
+    ["child-0-1", 1, [three, four]],
+    ["child-1-0", 0, [five, ]]
+  ]);
+  test.end();
+});
+
+tape("selection.append(…) propagates data if defined on the originating element", function(test) {
+  var document = jsdom.jsdom("<parent><child>hello</child></parent>"),
+      parent = document.querySelector("parent");
+  parent.__data__ = 0; // still counts as data even though falsey
+  test.equal(d3.select(parent).append("child").datum(), 0);
+  test.end();
+});
+
+tape("selection.append(…) will not propagate data if not defined on the originating element", function(test) {
+  var document = jsdom.jsdom("<parent><child>hello</child></parent>"),
+      parent = document.querySelector("parent"),
+      child = document.querySelector("child");
+  child.__data__ = 42;
+  d3.select(parent).append(function() { return child; });
+  test.equal(child.__data__, 42);
+  test.end();
+});
+
+tape("selection.append(…) propagates parents from the originating selection", function(test) {
+  var document = jsdom.jsdom("<parent></parent><parent></parent>"),
+      parents = d3.select(document).selectAll("parent"),
+      childs = parents.append("child");
+  test.deepEqual(parents, {_nodes: [document.querySelectorAll("parent")], _parents: [document]});
+  test.deepEqual(childs, {_nodes: [document.querySelectorAll("child")], _parents: [document]});
+  test.ok(parents._parents === childs._parents); // Not copied!
+  test.end();
+});
+
+tape("selection.append(…) can select elements when the originating selection is nested", function(test) {
+  var document = jsdom.jsdom("<parent id='one'><child></child></parent><parent id='two'><child></child></parent>"),
+      one = document.querySelector("#one"),
+      two = document.querySelector("#two"),
+      selection = d3.selectAll([one, two]).selectAll("child").append("span"),
+      three = one.querySelector("span"),
+      four = two.querySelector("span");
+  test.deepEqual(selection, {_nodes: [[three], [four]], _parents: [one, two]});
+  test.end();
+});
+
+tape("selection.append(…) skips missing originating elements", function(test) {
+  var document = jsdom.jsdom("<h1></h1>"),
+      h1 = document.querySelector("h1"),
+      selection = d3.selectAll([, h1]).append("span"),
+      span = h1.querySelector("span");
+  test.deepEqual(selection, {_nodes: [[, span]], _parents: [null]});
+  test.end();
+});
