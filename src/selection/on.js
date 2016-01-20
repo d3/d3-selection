@@ -58,14 +58,13 @@ function onRemoveAll(dotname) {
 }
 
 function onAdd(filter, key, type, listener, capture) {
-  if (capture == null) capture = false;
   return function(d, i, group) {
     var value = this[key];
     if (value) this.removeEventListener(type, value, value._capture);
     value = contextListener(listener, i, group);
     if (filter) value = filterListener(value);
-    this.addEventListener(type, this[key] = value, value._capture = capture);
     value._listener = listener;
+    this.addEventListener(type, this[key] = value, value._capture = capture);
   };
 }
 
@@ -80,6 +79,6 @@ export default function(type, listener, capture) {
   if (filter = filterEvents.hasOwnProperty(name)) name = filterEvents[name];
 
   return this.each(listener
-      ? (value ? onAdd(filter, key, type, listener, capture) : noop) // Attempt to add untyped listener is ignored.
+      ? (value ? onAdd(filter, key, name, listener, capture == null ? false : capture) : noop) // Attempt to add untyped listener is ignored.
       : (value ? onRemove(key, name) : onRemoveAll(name)));
 }
