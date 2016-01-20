@@ -133,12 +133,12 @@ tape("selection.append(function) passes the creator function data, index and gro
       .datum(function(d, i) { return "parent-" + i; })
     .selectAll("child")
       .data(function(d, i) { return [0, 1].map(function(j) { return "child-" + i + "-" + j; }); })
-      .append(function(d, i, nodes) { results.push([d, i, nodes]); return document.createElement("SPAN"); });
+      .append(function(d, i, nodes) { results.push([this, d, i, nodes]); return document.createElement("SPAN"); });
 
   test.deepEqual(results, [
-    ["child-0-0", 0, [three, four]],
-    ["child-0-1", 1, [three, four]],
-    ["child-1-0", 0, [five, ]]
+    [three, "child-0-0", 0, [three, four]],
+    [four, "child-0-1", 1, [three, four]],
+    [five, "child-1-0", 0, [five, ]]
   ]);
   test.end();
 });
@@ -156,12 +156,12 @@ tape("selection.append(name, function) passes the selector function data, index 
       .datum(function(d, i) { return "parent-" + i; })
     .selectAll("child")
       .data(function(d, i) { return [0, 1].map(function(j) { return "child-" + i + "-" + j; }); })
-      .append("span", function(d, i, nodes) { results.push([d, i, nodes]); });
+      .append("span", function(d, i, nodes) { results.push([this, d, i, nodes]); });
 
   test.deepEqual(results, [
-    ["child-0-0", 0, [three, four]],
-    ["child-0-1", 1, [three, four]],
-    ["child-1-0", 0, [five, ]]
+    [three, "child-0-0", 0, [three, four]],
+    [four, "child-0-1", 1, [three, four]],
+    [five, "child-1-0", 0, [five, ]]
   ]);
   test.end();
 });

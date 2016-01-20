@@ -194,14 +194,14 @@ tape("selection.on(type, listener) passes the listener data, index and group", f
       .datum(function(d, i) { return "parent-" + i; })
     .selectAll("child")
       .data(function(d, i) { return [0, 1].map(function(j) { return "child-" + i + "-" + j; }); })
-      .on("foo", function(d, i, nodes) { results.push([d, i, nodes]); });
+      .on("foo", function(d, i, nodes) { results.push([this, d, i, nodes]); });
 
   test.deepEqual(results, []);
   selection.dispatch("foo");
   test.deepEqual(results, [
-    ["child-0-0", 0, [three, four]],
-    ["child-0-1", 1, [three, four]],
-    ["child-1-0", 0, [five, ]]
+    [three, "child-0-0", 0, [three, four]],
+    [four, "child-0-1", 1, [three, four]],
+    [five, "child-1-0", 0, [five, ]]
   ]);
   test.end();
 });

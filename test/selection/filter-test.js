@@ -39,12 +39,12 @@ tape("selection.filter(function) passes the selector function data, index and gr
       .datum(function(d, i) { return "parent-" + i; })
     .selectAll("child")
       .data(function(d, i) { return [0, 1].map(function(j) { return "child-" + i + "-" + j; }); })
-      .filter(function(d, i, nodes) { results.push([d, i, nodes]); });
+      .filter(function(d, i, nodes) { results.push([this, d, i, nodes]); });
 
   test.deepEqual(results, [
-    ["child-0-0", 0, [three, four]],
-    ["child-0-1", 1, [three, four]],
-    ["child-1-0", 0, [five, ]]
+    [three, "child-0-0", 0, [three, four]],
+    [four, "child-0-1", 1, [three, four]],
+    [five, "child-1-0", 0, [five, ]]
   ]);
   test.end();
 });
