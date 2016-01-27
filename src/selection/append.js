@@ -5,7 +5,7 @@ function creatorInherit(name) {
   return function() {
     var document = this.ownerDocument,
         uri = this.namespaceURI;
-    return uri
+    return uri && uri !== document.documentElement.namespaceURI
         ? document.createElementNS(uri, name)
         : document.createElement(name);
   };

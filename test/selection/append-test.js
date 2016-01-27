@@ -32,6 +32,26 @@ tape("selection.append(name) observes the specified namespace, if any", function
   test.end();
 });
 
+tape("selection.append(name) uses createElement, not createElementNS, if the implied namespace is the same as the document", function(test) {
+  var pass = 0,
+      document = jsdom.jsdom("<div id='one'></div><div id='two'></div>"),
+      one = document.querySelector("#one"),
+      two = document.querySelector("#two"),
+      createElement = document.createElement;
+
+  document.createElement = function() {
+    ++pass;
+    return createElement.apply(this, arguments);
+  };
+
+  var selection = d3.selectAll([one, two]).append("P"),
+      three = one.querySelector("p"),
+      four = two.querySelector("p");
+  test.equal(pass, 2);
+  test.deepEqual(selection, {_nodes: [[three, four]], _parents: [null]});
+  test.end();
+});
+
 tape("selection.append(name) observes the implicit namespace, if any", function(test) {
   var document = jsdom.jsdom("<div id='one'></div><div id='two'></div>"),
       one = document.querySelector("#one"),
