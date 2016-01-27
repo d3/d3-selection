@@ -228,7 +228,7 @@ This is equivalent to:
 
 ```js
 d3.selectAll("p").append(function() {
-  return document.createElement("DIV");
+  return document.createElement("div");
 });
 ```
 
