@@ -3,10 +3,9 @@ var tape = require("tape"),
     d3 = require("../../");
 
 tape("d3.selection() returns a selection of the document element", function(test) {
+  var document = global.document = jsdom.jsdom();
   try {
-    var document = global.document = jsdom.jsdom(),
-        s = d3.selection();
-    test.equal(s.node(), document.documentElement);
+    test.equal(d3.selection().node(), document.documentElement);
     test.end();
   } finally {
     delete global.document;
