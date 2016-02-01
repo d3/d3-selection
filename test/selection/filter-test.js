@@ -12,7 +12,7 @@ tape("selection.filter(string) retains the selected elements that matches the se
   var document = jsdom.jsdom("<h1><span id='one'></span><span id='two'></span></h1><h1><span id='three'></span><span id='four'></span></h1>"),
       one = document.querySelector("#one"),
       three = document.querySelector("#three");
-  test.deepEqual(d3.select(document).selectAll("span").filter("#one,#three"), {_nodes: [[one, three]], _parents: [document]});
+  test.deepEqual(d3.select(document).selectAll("span").filter("#one,#three"), {_groups: [[one, three]], _parents: [document]});
   test.end();
 });
 
@@ -22,7 +22,7 @@ tape("selection.filter(function) retains elements for which the given function r
       two = document.querySelector("#two"),
       three = document.querySelector("#three"),
       four = document.querySelector("#four");
-  test.deepEqual(d3.selectAll([one, two, three, four]).filter(function(d, i) { return i & 1; }), {_nodes: [[two, four]], _parents: [null]});
+  test.deepEqual(d3.selectAll([one, two, three, four]).filter(function(d, i) { return i & 1; }), {_groups: [[two, four]], _parents: [null]});
   test.end();
 });
 
@@ -53,8 +53,8 @@ tape("selection.filter(…) propagates parents from the originating selection", 
   var document = jsdom.jsdom("<parent><child>1</child></parent><parent><child>2</child></parent>"),
       parents = d3.select(document).selectAll("parent"),
       parents2 = parents.filter(function() { return true; });
-  test.deepEqual(parents, {_nodes: [document.querySelectorAll("parent")], _parents: [document]});
-  test.deepEqual(parents2, {_nodes: [document.querySelectorAll("parent")], _parents: [document]});
+  test.deepEqual(parents, {_groups: [document.querySelectorAll("parent")], _parents: [document]});
+  test.deepEqual(parents2, {_groups: [document.querySelectorAll("parent")], _parents: [document]});
   test.ok(parents._parents === parents2._parents); // Not copied!
   test.end();
 });
@@ -65,16 +65,16 @@ tape("selection.filter(…) can filter elements when the originating selection i
       two = document.querySelector("#two"),
       three = document.querySelector("#three"),
       four = document.querySelector("#four");
-  test.deepEqual(d3.selectAll([one, two]).selectAll("span").filter("*"), {_nodes: [[three], [four]], _parents: [one, two]});
+  test.deepEqual(d3.selectAll([one, two]).selectAll("span").filter("*"), {_groups: [[three], [four]], _parents: [one, two]});
   test.end();
 });
 
 tape("selection.filter(…) skips missing originating elements and does not retain the original indexes", function(test) {
   var document = jsdom.jsdom("<h1>hello</h1>"),
       h1 = document.querySelector("h1");
-  test.deepEqual(d3.selectAll([, h1]).filter("*"), {_nodes: [[h1]], _parents: [null]});
-  test.deepEqual(d3.selectAll([null, h1]).filter("*"), {_nodes: [[h1]], _parents: [null]});
-  test.deepEqual(d3.selectAll([undefined, h1]).filter("*"), {_nodes: [[h1]], _parents: [null]});
+  test.deepEqual(d3.selectAll([, h1]).filter("*"), {_groups: [[h1]], _parents: [null]});
+  test.deepEqual(d3.selectAll([null, h1]).filter("*"), {_groups: [[h1]], _parents: [null]});
+  test.deepEqual(d3.selectAll([undefined, h1]).filter("*"), {_groups: [[h1]], _parents: [null]});
   test.end();
 });
 
@@ -84,6 +84,6 @@ tape("selection.filter(…) skips missing originating elements when the originat
       two = document.querySelector("#two"),
       three = document.querySelector("#three"),
       four = document.querySelector("#four");
-  test.deepEqual(d3.selectAll([one, two]).selectAll("child").select(function(d, i) { return i & 1 ? this : null; }).filter("*"), {_nodes: [[three], [four]], _parents: [one, two]});
+  test.deepEqual(d3.selectAll([one, two]).selectAll("child").select(function(d, i) { return i & 1 ? this : null; }).filter("*"), {_groups: [[three], [four]], _parents: [one, two]});
   test.end();
 });

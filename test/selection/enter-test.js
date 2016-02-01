@@ -5,7 +5,7 @@ var tape = require("tape"),
 tape("selection.enter() returns an empty selection before a data-join", function(test) {
   var body = jsdom.jsdom("<h1>hello</h1>").body,
       selection = d3.select(body);
-  test.deepEqual(selection.enter(), {_nodes: [[]], _parents: [null], _update: selection});
+  test.deepEqual(selection.enter(), {_groups: [[]], _parents: [null], _update: selection});
   test.end();
 });
 
@@ -20,7 +20,7 @@ tape("selection.enter() returns a new selection each time", function(test) {
   var body = jsdom.jsdom("<h1>hello</h1>").body,
       selection = d3.select(body);
   test.ok(selection.enter() !== selection.enter());
-  test.ok(selection.enter()._nodes[0] !== selection.enter()._nodes[0]);
+  test.ok(selection.enter()._groups[0] !== selection.enter()._groups[0]);
   test.end();
 });
 
@@ -30,7 +30,7 @@ tape("selection.enter() contains unbound data after a data-join", function(test)
       two = body.querySelector("#two"),
       selection = d3.select(body).selectAll("div").data(["foo", "bar", "baz"]);
   test.deepEqual(selection.enter(), {
-    _nodes: [[,, {
+    _groups: [[,, {
       __data__: "baz",
       _next: null,
       _parent: body,
@@ -59,7 +59,7 @@ tape("selection.enter() uses the order of the data", function(test) {
       three = body.querySelector("#three"),
       selection = d3.select(body).selectAll("div").data(["one", "four", "three", "five"], function(d) { return d || this.id; });
   test.deepEqual(selection.enter(), {
-    _nodes: [[, {
+    _groups: [[, {
       __data__: "four",
       _next: three,
       _parent: body,
@@ -83,15 +83,15 @@ tape("enter.select(…) copies entering nodes into the update selection", functi
       body = document.body,
       data = ["foo", "bar", "baz"],
       selection = d3.select(body).selectAll("p").data(data);
-  test.deepEqual(selection._nodes, [[,,]]);
+  test.deepEqual(selection._groups, [[,,]]);
   var enter = selection.enter(),
       append = enter.select(function() { return this.appendChild(document.createElement("P")); }),
       p = body.querySelectorAll("p");
   test.equal(p.length, data.length);
   test.ok(Array.prototype.every.call(p, function(element) { return element.tagName === "P"; }));
-  test.deepEqual(enter._nodes, [data.map(function(d) { return {__data__: d, _next: null, _parent: body, namespaceURI: "http://www.w3.org/1999/xhtml", ownerDocument: body.ownerDocument}; })]);
-  test.deepEqual(append._nodes, [p]);
-  test.deepEqual(selection._nodes, [p]);
+  test.deepEqual(enter._groups, [data.map(function(d) { return {__data__: d, _next: null, _parent: body, namespaceURI: "http://www.w3.org/1999/xhtml", ownerDocument: body.ownerDocument}; })]);
+  test.deepEqual(append._groups, [p]);
+  test.deepEqual(selection._groups, [p]);
   test.end();
 });
 

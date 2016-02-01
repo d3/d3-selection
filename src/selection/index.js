@@ -28,8 +28,8 @@ import selection_dispatch from "./dispatch";
 
 export var root = [null];
 
-export function Selection(nodes, parents) {
-  this._nodes = nodes;
+export function Selection(groups, parents) {
+  this._groups = groups;
   this._parents = parents;
 }
 

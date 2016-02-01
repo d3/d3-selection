@@ -114,8 +114,8 @@ export default function(value, key) {
   var bind = key ? bindKey : bindIndex,
       parents = this._parents,
       update = arrayify(this),
-      enter = (this._enter = this.enter())._nodes,
-      exit = (this._exit = this.exit())._nodes;
+      enter = (this._enter = this.enter())._groups,
+      exit = (this._exit = this.exit())._groups;
 
   if (typeof value !== "function") value = constant(value);
 

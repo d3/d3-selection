@@ -15,7 +15,7 @@ tape("selection.append(name) appends a new element of the specified name as the 
       selection = d3.selectAll([one, two]).append("span"),
       three = one.querySelector("span:last-child"),
       four = two.querySelector("span:last-child");
-  test.deepEqual(selection, {_nodes: [[three, four]], _parents: [null]});
+  test.deepEqual(selection, {_groups: [[three, four]], _parents: [null]});
   test.end();
 });
 
@@ -28,7 +28,7 @@ tape("selection.append(name) observes the specified namespace, if any", function
       four = two.querySelector("g");
   test.equal(three.namespaceURI, "http://www.w3.org/2000/svg");
   test.equal(four.namespaceURI, "http://www.w3.org/2000/svg");
-  test.deepEqual(selection, {_nodes: [[three, four]], _parents: [null]});
+  test.deepEqual(selection, {_groups: [[three, four]], _parents: [null]});
   test.end();
 });
 
@@ -48,7 +48,7 @@ tape("selection.append(name) uses createElement, not createElementNS, if the imp
       three = one.querySelector("p"),
       four = two.querySelector("p");
   test.equal(pass, 2);
-  test.deepEqual(selection, {_nodes: [[three, four]], _parents: [null]});
+  test.deepEqual(selection, {_groups: [[three, four]], _parents: [null]});
   test.end();
 });
 
@@ -61,7 +61,7 @@ tape("selection.append(name) observes the implicit namespace, if any", function(
       four = two.querySelector("svg");
   test.equal(three.namespaceURI, "http://www.w3.org/2000/svg");
   test.equal(four.namespaceURI, "http://www.w3.org/2000/svg");
-  test.deepEqual(selection, {_nodes: [[three, four]], _parents: [null]});
+  test.deepEqual(selection, {_groups: [[three, four]], _parents: [null]});
   test.end();
 });
 
@@ -74,7 +74,7 @@ tape("selection.append(name) observes the inherited namespace, if any", function
       four = two.querySelector("g");
   test.equal(three.namespaceURI, "http://www.w3.org/2000/svg");
   test.equal(four.namespaceURI, "http://www.w3.org/2000/svg");
-  test.deepEqual(selection, {_nodes: [[three, four]], _parents: [null]});
+  test.deepEqual(selection, {_groups: [[three, four]], _parents: [null]});
   test.end();
 });
 
@@ -89,7 +89,7 @@ tape("selection.append(name) observes a custom namespace, if any", function(test
         four = two.querySelector("d3js");
     test.equal(three.namespaceURI, "https://d3js.org/2016/namespace");
     test.equal(four.namespaceURI, "https://d3js.org/2016/namespace");
-    test.deepEqual(selection, {_nodes: [[three, four]], _parents: [null]});
+    test.deepEqual(selection, {_groups: [[three, four]], _parents: [null]});
     test.end();
   } finally {
     delete d3.namespaces.d3js;
@@ -103,7 +103,7 @@ tape("selection.append(function) appends the returned element as the last child 
       selection = d3.selectAll([one, two]).append(function() { return document.createElement("SPAN"); }),
       three = one.querySelector("span:last-child"),
       four = two.querySelector("span:last-child");
-  test.deepEqual(selection, {_nodes: [[three, four]], _parents: [null]});
+  test.deepEqual(selection, {_groups: [[three, four]], _parents: [null]});
   test.end();
 });
 
@@ -114,7 +114,7 @@ tape("selection.append(name, before) appends a new element of the specified name
       selection = d3.selectAll([one, two]).append("span", ".before"),
       three = one.querySelector("span:first-child"),
       four = two.querySelector("span:first-child");
-  test.deepEqual(selection, {_nodes: [[three, four]], _parents: [null]});
+  test.deepEqual(selection, {_groups: [[three, four]], _parents: [null]});
   test.end();
 });
 
@@ -125,7 +125,7 @@ tape("selection.append(function, function) appends the returned element before t
       selection = d3.selectAll([one, two]).append(function() { return document.createElement("SPAN"); }, function() { return this.firstChild; }),
       three = one.querySelector("span:first-child"),
       four = two.querySelector("span:first-child");
-  test.deepEqual(selection, {_nodes: [[three, four]], _parents: [null]});
+  test.deepEqual(selection, {_groups: [[three, four]], _parents: [null]});
   test.end();
 });
 
@@ -136,7 +136,7 @@ tape("selection.append(function, function) appends the returned element as the l
       selection = d3.selectAll([one, two]).append(function() { return document.createElement("SPAN"); }, function() { return; }),
       three = one.querySelector("span:last-child"),
       four = two.querySelector("span:last-child");
-  test.deepEqual(selection, {_nodes: [[three, four]], _parents: [null]});
+  test.deepEqual(selection, {_groups: [[three, four]], _parents: [null]});
   test.end();
 });
 
@@ -208,8 +208,8 @@ tape("selection.append(…) propagates parents from the originating selection", 
   var document = jsdom.jsdom("<parent></parent><parent></parent>"),
       parents = d3.select(document).selectAll("parent"),
       childs = parents.append("child");
-  test.deepEqual(parents, {_nodes: [document.querySelectorAll("parent")], _parents: [document]});
-  test.deepEqual(childs, {_nodes: [document.querySelectorAll("child")], _parents: [document]});
+  test.deepEqual(parents, {_groups: [document.querySelectorAll("parent")], _parents: [document]});
+  test.deepEqual(childs, {_groups: [document.querySelectorAll("child")], _parents: [document]});
   test.ok(parents._parents === childs._parents); // Not copied!
   test.end();
 });
@@ -221,7 +221,7 @@ tape("selection.append(…) can select elements when the originating selection i
       selection = d3.selectAll([one, two]).selectAll("child").append("span"),
       three = one.querySelector("span"),
       four = two.querySelector("span");
-  test.deepEqual(selection, {_nodes: [[three], [four]], _parents: [one, two]});
+  test.deepEqual(selection, {_groups: [[three], [four]], _parents: [one, two]});
   test.end();
 });
 
@@ -230,6 +230,6 @@ tape("selection.append(…) skips missing originating elements", function(test) 
       h1 = document.querySelector("h1"),
       selection = d3.selectAll([, h1]).append("span"),
       span = h1.querySelector("span");
-  test.deepEqual(selection, {_nodes: [[, span]], _parents: [null]});
+  test.deepEqual(selection, {_groups: [[, span]], _parents: [null]});
   test.end();
 });

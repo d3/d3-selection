@@ -9,7 +9,7 @@ tape("selection.sort(…) sorts each group’s data, and then orders the element
       three = document.querySelector("#three"),
       selection = d3.selectAll([two, three, one]).datum(function() { return +this.getAttribute("data-value"); });
   test.equal(selection.sort(function(a, b) { return a - b; }), selection);
-  test.deepEqual(selection, {_nodes: [[two, one, three]], _parents: [null]});
+  test.deepEqual(selection, {_groups: [[two, one, three]], _parents: [null]});
   test.equal(two.nextSibling, one);
   test.equal(one.nextSibling, three);
   test.equal(three.nextSibling, null);
@@ -26,7 +26,7 @@ tape("selection.sort(…) sorts each group separately", function(test) {
       six = document.querySelector("#six"),
       selection = d3.selectAll([one, two]).selectAll("h1").datum(function() { return +this.getAttribute("data-value"); });
   test.equal(selection.sort(function(a, b) { return a - b; }), selection);
-  test.deepEqual(selection, {_nodes: [[four, three], [six, five]], _parents: [one, two]});
+  test.deepEqual(selection, {_groups: [[four, three], [six, five]], _parents: [one, two]});
   test.equal(four.nextSibling, three);
   test.equal(three.nextSibling, null);
   test.equal(six.nextSibling, five);
@@ -40,7 +40,7 @@ tape("selection.sort() uses natural ascending order", function(test) {
       two = document.querySelector("#two"),
       selection = d3.selectAll([two, one]).datum(function(d, i) { i; });
   test.equal(selection.sort(), selection);
-  test.deepEqual(selection, {_nodes: [[two, one]], _parents: [null]});
+  test.deepEqual(selection, {_groups: [[two, one]], _parents: [null]});
   test.equal(one.nextSibling, null);
   test.equal(two.nextSibling, one);
   test.end();
@@ -51,7 +51,7 @@ tape("selection.sort() puts missing elements at the end of each group", function
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection = d3.selectAll([two, one]).datum(function(d, i) { return i; });
-  test.deepEqual(d3.selectAll([, one,, two]).sort(), {_nodes: [[two, one,,]], _parents: [null]});
+  test.deepEqual(d3.selectAll([, one,, two]).sort(), {_groups: [[two, one,,]], _parents: [null]});
   test.equal(two.nextSibling, one);
   test.equal(one.nextSibling, null);
   test.end();
@@ -62,7 +62,7 @@ tape("selection.sort(function) puts missing elements at the end of each group", 
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection = d3.selectAll([two, one]).datum(function(d, i) { return i; });
-  test.deepEqual(d3.selectAll([, one,, two]).sort(function(a, b) { return b - a; }), {_nodes: [[one, two,,]], _parents: [null]});
+  test.deepEqual(d3.selectAll([, one,, two]).sort(function(a, b) { return b - a; }), {_groups: [[one, two,,]], _parents: [null]});
   test.equal(one.nextSibling, two);
   test.equal(two.nextSibling, null);
   test.end();
@@ -74,7 +74,7 @@ tape("selection.sort(function) uses the specified data comparator function", fun
       two = document.querySelector("#two"),
       selection = d3.selectAll([two, one]).datum(function(d, i) { return i; });
   test.equal(selection.sort(function(a, b) { return b - a; }), selection);
-  test.deepEqual(selection, {_nodes: [[one, two]], _parents: [null]});
+  test.deepEqual(selection, {_groups: [[one, two]], _parents: [null]});
   test.equal(one.nextSibling, two);
   test.equal(two.nextSibling, null);
   test.end();

@@ -12,15 +12,15 @@ tape("selection.data(values) binds the specified values to the selected elements
   test.equal(two.__data__, "bar");
   test.equal(three.__data__, "baz");
   test.deepEqual(selection, {
-    _nodes: [[one, two, three]],
+    _groups: [[one, two, three]],
     _parents: [body],
     _enter: {
-      _nodes: [[,, ]],
+      _groups: [[,, ]],
       _parents: [body],
       _update: selection
     },
     _exit: {
-      _nodes: [[,, ]],
+      _groups: [[,, ]],
       _parents: [body]
     }
   });
@@ -35,10 +35,10 @@ tape("selection.data(values) puts unbound data in the enter selection", function
   test.equal(one.__data__, "foo");
   test.equal(two.__data__, "bar");
   test.deepEqual(selection, {
-    _nodes: [[one, two, ]],
+    _groups: [[one, two, ]],
     _parents: [body],
     _enter: {
-      _nodes: [[,, {
+      _groups: [[,, {
         __data__: "baz",
         _next: null,
         _parent: body,
@@ -49,7 +49,7 @@ tape("selection.data(values) puts unbound data in the enter selection", function
       _update: selection
     },
     _exit: {
-      _nodes: [[,, ]],
+      _groups: [[,, ]],
       _parents: [body]
     }
   });
@@ -65,15 +65,15 @@ tape("selection.data(values) puts unbound elements in the exit selection", funct
   test.equal(one.__data__, "foo");
   test.equal(two.__data__, "bar");
   test.deepEqual(selection, {
-    _nodes: [[one, two, ]],
+    _groups: [[one, two, ]],
     _parents: [body],
     _enter: {
-      _nodes: [[,,, ]],
+      _groups: [[,,, ]],
       _parents: [body],
       _update: selection
     },
     _exit: {
-      _nodes: [[,, three]],
+      _groups: [[,, three]],
       _parents: [body]
     }
   });
@@ -94,15 +94,15 @@ tape("selection.data(values) binds the specified values to each group independen
   test.equal(four.__data__, "foo");
   test.equal(five.__data__, "bar");
   test.deepEqual(selection, {
-    _nodes: [[one, two], [four, five]],
+    _groups: [[one, two], [four, five]],
     _parents: [zero, three],
     _enter: {
-      _nodes: [[, ], [, ]],
+      _groups: [[, ], [, ]],
       _parents: [zero, three],
       _update: selection
     },
     _exit: {
-      _nodes: [[, ], [, ]],
+      _groups: [[, ], [, ]],
       _parents: [zero, three]
     }
   });
@@ -119,15 +119,15 @@ tape("selection.data(function) binds the specified return values to the selected
   test.equal(two.__data__, "bar");
   test.equal(three.__data__, "baz");
   test.deepEqual(selection, {
-    _nodes: [[one, two, three]],
+    _groups: [[one, two, three]],
     _parents: [body],
     _enter: {
-      _nodes: [[,, ]],
+      _groups: [[,, ]],
       _parents: [body],
       _update: selection
     },
     _exit: {
-      _nodes: [[,, ]],
+      _groups: [[,, ]],
       _parents: [body]
     }
   });
@@ -159,10 +159,10 @@ tape("selection.data(values, function) joins data to element using the computed 
       three = body.querySelector("#three"),
       selection = d3.select(body).selectAll("node").data(["one", "four", "three"], function(d) { return d || this.id; });
   test.deepEqual(selection, {
-    _nodes: [[one,, three]],
+    _groups: [[one,, three]],
     _parents: [body],
     _enter: {
-      _nodes: [[, {
+      _groups: [[, {
         __data__: "four",
         _next: three,
         _parent: body,
@@ -173,7 +173,7 @@ tape("selection.data(values, function) joins data to element using the computed 
       _update: selection
     },
     _exit: {
-      _nodes: [[, two, ]],
+      _groups: [[, two, ]],
       _parents: [body]
     }
   });
@@ -208,10 +208,10 @@ tape("selection.data(values, function) applies the order of the data", function(
       three = body.querySelector("#three"),
       selection = d3.select(body).selectAll("div").data(["four", "three", "one", "five", "two"], function(d) { return d || this.id; });
   test.deepEqual(selection, {
-    _nodes: [[, three, one,, two]],
+    _groups: [[, three, one,, two]],
     _parents: [body],
     _enter: {
-      _nodes: [[{
+      _groups: [[{
         __data__: "four",
         _next: three,
         _parent: body,
@@ -228,7 +228,7 @@ tape("selection.data(values, function) applies the order of the data", function(
       _update: selection
     },
     _exit: {
-      _nodes: [[,,,]],
+      _groups: [[,,,]],
       _parents: [body]
     }
   });

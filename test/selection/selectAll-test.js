@@ -12,14 +12,14 @@ tape("selection.selectAll(string) selects all descendants that match the selecto
   var document = jsdom.jsdom("<h1 id='one'><span></span><span></span></h1><h1 id='two'><span></span><span></span></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two");
-  test.deepEqual(d3.selectAll([one, two]).selectAll("span"), {_nodes: [one.querySelectorAll("span"), two.querySelectorAll("span")], _parents: [one, two]});
+  test.deepEqual(d3.selectAll([one, two]).selectAll("span"), {_groups: [one.querySelectorAll("span"), two.querySelectorAll("span")], _parents: [one, two]});
   test.end();
 });
 
 tape("selection.selectAll(function) selects the return values of the given function for each selected element", function(test) {
   var document = jsdom.jsdom("<span id='one'></span>"),
       one = document.querySelector("#one");
-  test.deepEqual(d3.select(document).selectAll(function() { return [one]; }), {_nodes: [[one]], _parents: [document]});
+  test.deepEqual(d3.select(document).selectAll(function() { return [one]; }), {_groups: [[one]], _parents: [document]});
   test.end();
 });
 
@@ -62,8 +62,8 @@ tape("selection.selectAll(…) groups selected elements by their parent in the o
       two = document.querySelector("#two"),
       three = document.querySelector("#three"),
       four = document.querySelector("#four");
-  test.deepEqual(d3.select(document).selectAll("parent").selectAll("child"), {_nodes: [[three], [four]], _parents: [one, two]});
-  test.deepEqual(d3.select(document).selectAll("child"), {_nodes: [[three, four]], _parents: [document]});
+  test.deepEqual(d3.select(document).selectAll("parent").selectAll("child"), {_groups: [[three], [four]], _parents: [one, two]});
+  test.deepEqual(d3.select(document).selectAll("child"), {_groups: [[three, four]], _parents: [document]});
   test.end();
 });
 
@@ -75,7 +75,7 @@ tape("selection.selectAll(…) can select elements when the originating selectio
       four = document.querySelector("#four"),
       five = document.querySelector("#five"),
       six = document.querySelector("#six");
-  test.deepEqual(d3.selectAll([one, two]).selectAll("child").selectAll("span"), {_nodes: [[five], [six]], _parents: [three, four]});
+  test.deepEqual(d3.selectAll([one, two]).selectAll("child").selectAll("span"), {_groups: [[five], [six]], _parents: [three, four]});
   test.end();
 });
 
@@ -83,9 +83,9 @@ tape("selection.selectAll(…) skips missing originating elements", function(tes
   var document = jsdom.jsdom("<h1><span>hello</span></h1>"),
       h1 = document.querySelector("h1"),
       span = document.querySelector("span");
-  test.deepEqual(d3.selectAll([, h1]).selectAll("span"), {_nodes: [[span]], _parents: [h1]});
-  test.deepEqual(d3.selectAll([null, h1]).selectAll("span"), {_nodes: [[span]], _parents: [h1]});
-  test.deepEqual(d3.selectAll([undefined, h1]).selectAll("span"), {_nodes: [[span]], _parents: [h1]});
+  test.deepEqual(d3.selectAll([, h1]).selectAll("span"), {_groups: [[span]], _parents: [h1]});
+  test.deepEqual(d3.selectAll([null, h1]).selectAll("span"), {_groups: [[span]], _parents: [h1]});
+  test.deepEqual(d3.selectAll([undefined, h1]).selectAll("span"), {_groups: [[span]], _parents: [h1]});
   test.end();
 });
 
@@ -97,6 +97,6 @@ tape("selection.selectAll(…) skips missing originating elements when the origi
       four = document.querySelector("#four"),
       five = document.querySelector("#five"),
       six = document.querySelector("#six");
-  test.deepEqual(d3.selectAll([one, two]).selectAll("child").select(function(d, i) { return i & 1 ? this : null; }).selectAll("span"), {_nodes: [[five], [six]], _parents: [three, four]});
+  test.deepEqual(d3.selectAll([one, two]).selectAll("child").select(function(d, i) { return i & 1 ? this : null; }).selectAll("span"), {_groups: [[five], [six]], _parents: [three, four]});
   test.end();
 });
