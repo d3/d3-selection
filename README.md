@@ -142,6 +142,50 @@ Note that the `:nth-child` pseudo-class is a one-based index rather than a zero-
 
 The returned selection may not preserve the index of the original selection, as some elements may be removed; you can use [*selection*.select](#selection_select) to preserve the index, if needed.
 
+<a name="matcher" href="#matcher">#</a> d3.<b>matcher</b>(<i>selector</i>)
+
+Given the specified *selector*, returns a function which returns true if `this` element [matches](https://developer.mozilla.org/en-US/docs/Web/API/Element/matches) the specified selector. This method is used internally by [*selection*.filter](#selection_filter). For example, this:
+
+```js
+var div = selection.filter("div");
+```
+
+Is equivalent to:
+
+```js
+var div = selection.filter(d3.matcher("div"));
+```
+
+(Although D3 is not a compatibility layer, this implementation does support vendor-prefixed implementations due to the recent standardization of *element*.matches.)
+
+<a name="selector" href="#selector">#</a> d3.<b>selector</b>(<i>selector</i>)
+
+Given the specified *selector*, returns a function which returns the first descendant of `this` element that matches the specified selector. This method is used internally by [*selection*.select](#selection_select). For example, this:
+
+```js
+var div = selection.select("div");
+```
+
+Is equivalent to:
+
+```js
+var div = selection.select(d3.selector("div"));
+```
+
+<a name="selectorAll" href="#selectorAll">#</a> d3.<b>selectorAll</b>(<i>selector</i>)
+
+Given the specified *selector*, returns a function which returns all descendants of `this` element that match the specified selector. This method is used internally by [*selection*.selectAll](#selection_selectAll). For example, this:
+
+```js
+var div = selection.selectAll("div");
+```
+
+Is equivalent to:
+
+```js
+var div = selection.selectAll(d3.selectorAll("div"));
+```
+
 ### Modifying Elements
 
 After selecting elements, use the selection’s transformation methods to affect document content. Selection methods return the current selection, allowing the concise application of multiple methods on a given selection via method chaining. For example, to set the name attribute and color style of an anchor element:
@@ -273,6 +317,22 @@ selection.each(function() {
   this.parentNode.insertBefore(this, this.parentNode.firstChild);
 });
 ```
+
+<a name="creator" href="#creator">#</a> d3.<b>creator</b>(<i>name</i>)
+
+Given the specified element *name*, returns a function which creates an element of the given name, assuming that `this` is the parent element. This method is used internally by [*selection*.append](#selection_append) to create new elements. For example, this:
+
+```js
+selection.append("div");
+```
+
+Is equivalent to:
+
+```js
+selection.append(d3.creator("div"));
+```
+
+See [namespace](#namespace) for details on supported namespace prefixes, such as for SVG elements.
 
 ### Joining Data
 
