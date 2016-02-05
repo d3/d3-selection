@@ -1,4 +1,4 @@
-import defaultView from "../defaultView";
+import defaultView from "../window";
 
 function dispatchEvent(node, type, params) {
   var window = defaultView(node),

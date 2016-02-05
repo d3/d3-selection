@@ -334,6 +334,10 @@ selection.append(d3.creator("div"));
 
 See [namespace](#namespace) for details on supported namespace prefixes, such as for SVG elements.
 
+<a name="window" href="#window">#</a> d3.<b>window</b>(<i>node</i>)
+
+Returns the owner window for the specified *node*. If *node* is a node, returns the owner document’s default view; if *node* is a document, returns its default view; otherwise returns the *node*.
+
 ### Joining Data
 
 For an introduction to D3’s data joins, see [Thinking With Joins](http://bost.ocks.org/mike/join/). Also see the [General Update Pattern](http://bl.ocks.org/mbostock/3808218) examples.

@@ -2,7 +2,7 @@ var tape = require("tape"),
     jsdom = require("jsdom"),
     d3 = require("../");
 
-tape("event is set exactly during the callback of an event listener", function(test) {
+tape("d3.event is set exactly during the callback of an event listener", function(test) {
   var event,
       document = jsdom.jsdom("<h1 id='one'></h1>"),
       one = document.querySelector("#one"),
@@ -15,7 +15,7 @@ tape("event is set exactly during the callback of an event listener", function(t
   test.end();
 });
 
-tape("event is restored to its previous value during reentrant events", function(test) {
+tape("d3.event is restored to its previous value during reentrant events", function(test) {
   var event1,
       event2,
       event3,

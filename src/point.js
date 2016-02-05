@@ -1,4 +1,4 @@
-import defaultView from "./defaultView";
+import defaultView from "./window";
 import select from "./select";
 
 var bug44083 = typeof navigator !== "undefined" && /WebKit/.test(navigator.userAgent) ? -1 : 0; // https://bugs.webkit.org/show_bug.cgi?id=44083

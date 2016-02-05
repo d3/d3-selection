@@ -1,4 +1,4 @@
-import defaultView from "../defaultView";
+import defaultView from "../window";
 
 function styleRemove(name) {
   return function() {

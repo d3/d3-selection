@@ -30,9 +30,12 @@ tape("d3.selection.prototype can be extended", function(test) {
   }
 });
 
-tape("selections are instanceof d3.selection", function(test) {
-  var document = jsdom.jsdom(),
-      s = d3.select(document.body);
-  test.ok(s instanceof d3.selection);
-  test.end();
+tape("d3.selection() returns an instanceof d3.selection", function(test) {
+  var document = global.document = jsdom.jsdom();
+  try {
+    test.ok(d3.selection() instanceof d3.selection);
+    test.end();
+  } finally {
+    delete global.document;
+  }
 });

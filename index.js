@@ -10,4 +10,5 @@ export {default as selector} from "./src/selector";
 export {default as selectorAll} from "./src/selectorAll";
 export {default as touch} from "./src/touch";
 export {default as touches} from "./src/touches";
+export {default as window} from "./src/window";
 export {event} from "./src/selection/on";
