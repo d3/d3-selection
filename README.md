@@ -544,7 +544,7 @@ For advanced usage, selections provide methods for custom control flow.
 
 Invokes the specified *function* for each selected element, passing in the current datum `d` and index `i`, with the `this` context of the current DOM element. This method is used internally by many [transformation methods](#modifying-elements) and can be used to invoke arbitrary code for each selected element.
 
-<a name="selection_call" href="#selection_call">#</a> <i>selection</i>.<b>call</b>(<i>selection</i>[, <i>arguments…</i>])
+<a name="selection_call" href="#selection_call">#</a> <i>selection</i>.<b>call</b>(<i>function</i>[, <i>arguments…</i>])
 
 Invokes the specified *function* (exactly once), passing in the current selection along with any optional *arguments*. Returns the current selection. This is equivalent to invoking the function by hand but facilitates method chaining. For example, to set several attributes in a reusable function:
 
