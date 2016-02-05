@@ -186,6 +186,10 @@ Is equivalent to:
 var div = selection.selectAll(d3.selectorAll("div"));
 ```
 
+<a name="window" href="#window">#</a> d3.<b>window</b>(<i>node</i>)
+
+Returns the owner window for the specified *node*. If *node* is a node, returns the owner document’s default view; if *node* is a document, returns its default view; otherwise returns the *node*.
+
 ### Modifying Elements
 
 After selecting elements, use the selection’s transformation methods to affect document content. Selection methods return the current selection, allowing the concise application of multiple methods on a given selection via method chaining. For example, to set the name attribute and color style of an anchor element:
@@ -333,10 +337,6 @@ selection.append(d3.creator("div"));
 ```
 
 See [namespace](#namespace) for details on supported namespace prefixes, such as for SVG elements.
-
-<a name="window" href="#window">#</a> d3.<b>window</b>(<i>node</i>)
-
-Returns the owner window for the specified *node*. If *node* is a node, returns the owner document’s default view; if *node* is a document, returns its default view; otherwise returns the *node*.
 
 ### Joining Data
 
