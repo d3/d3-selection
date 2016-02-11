@@ -1,6 +1,6 @@
 {
   "name": "d3-selection",
-  "version": "0.6.9",
+  "version": "0.6.10",
   "description": "Data-driven DOM manipulation: select elements and join them to data.",
   "keywords": [
     "d3",
