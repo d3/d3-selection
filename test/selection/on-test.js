@@ -31,11 +31,9 @@ tape("selection.on(type, listener) observes the specified name, if any", functio
 
 tape("selection.on(type, listener, capture) observes the specified capture flag, if any", function(test) {
   var result,
-      node = {addEventListener: function(type, listener, capture) { result = [this, type, listener._listener, capture]; }},
-      listener = function() {},
-      selection = d3.select(node);
-  test.equal(selection.on("click.foo", listener, true), selection);
-  test.deepEqual(result, [node, "click", listener, true]);
+      selection = d3.select({addEventListener: function(type, listener, capture) { result = capture; }});
+  test.equal(selection.on("click.foo", function() {}, true), selection);
+  test.deepEqual(result, true);
   test.end();
 });
 
@@ -95,15 +93,15 @@ tape("selection.on(type, null) observes the specified name, if any", function(te
 });
 
 tape("selection.on(type, null, capture) ignores the specified capture flag, if any", function(test) {
-  var result,
-      node = {
-        removeEventListener: function(type, listener, capture) { result = [this, type, listener._listener, capture]; },
-        addEventListener: function(type, listener, capture) {}
-      },
-      listener = function() {},
-      selection = d3.select(node).on("click.foo", listener, true);
-  test.equal(selection.on("click.foo", null, false), selection);
-  test.deepEqual(result, [node, "click", listener, true]);
+  var clicks = 0,
+      clicked = function() { ++clicks; },
+      document = jsdom.jsdom(),
+      selection = d3.select(document).on("click.foo", clicked, true);
+  selection.dispatch("click");
+  test.equal(clicks, 1);
+  selection.on(".foo", null, false).dispatch("click");
+  test.equal(clicks, 1);
+  test.equal(selection.on("click.foo"), undefined);
   test.end();
 });
 
@@ -133,15 +131,15 @@ tape("selection.on(name, null) removes all listeners with the specified name", f
 });
 
 tape("selection.on(name, null) can remove a listener with capture", function(test) {
-  var result,
-      node = {
-        removeEventListener: function(type, listener, capture) { result = [this, type, listener._listener, capture]; },
-        addEventListener: function(type, listener, capture) {}
-      },
-      listener = function() {},
-      selection = d3.select(node).on("click.foo", listener, true);
-  test.equal(selection.on(".foo", null), selection);
-  test.deepEqual(result, [node, "click", listener, true]);
+  var clicks = 0,
+      clicked = function() { ++clicks; },
+      document = jsdom.jsdom(),
+      selection = d3.select(document).on("click.foo", clicked, true);
+  selection.dispatch("click");
+  test.equal(clicks, 1);
+  selection.on(".foo", null).dispatch("click");
+  test.equal(clicks, 1);
+  test.equal(selection.on("click.foo"), undefined);
   test.end();
 });
 

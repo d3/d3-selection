@@ -1,6 +1,3 @@
-import requote from "../requote";
-import noop from "../noop";
-
 var filterEvents = {};
 
 export var event = null;
@@ -10,6 +7,15 @@ if (typeof document !== "undefined") {
   if (!("onmouseenter" in element)) {
     filterEvents = {mouseenter: "mouseover", mouseleave: "mouseout"};
   }
+}
+
+function filterListener(listener) {
+  return function(event) {
+    var related = event.relatedTarget;
+    if (!related || (related !== this && !(related.compareDocumentPosition(this) & 8))) {
+      listener(event);
+    }
+  };
 }
 
 function contextListener(listener, index, group) {
@@ -24,61 +30,66 @@ function contextListener(listener, index, group) {
   };
 }
 
-function filterListener(listener) {
-  return function(event) {
-    var related = event.relatedTarget;
-    if (!related || (related !== this && !(related.compareDocumentPosition(this) & 8))) {
-      listener(event);
-    }
-  };
+function parseTypenames(typenames) {
+  return typenames.trim().split(/^|\s+/).map(function(t) {
+    var name = "", i = t.indexOf(".");
+    if (i >= 0) name = t.slice(i + 1), t = t.slice(0, i);
+    return {type: t, name: name};
+  });
 }
 
-function onRemove(key, type) {
+function onRemove(typename) {
   return function() {
-    var l = this[key];
-    if (l) {
-      this.removeEventListener(type, l, l._capture);
-      delete this[key];
-    }
-  };
-}
-
-function onRemoveAll(dotname) {
-  var re = new RegExp("^__on([^.]+)" + requote(dotname) + "$");
-  return function() {
-    for (var key in this) {
-      var match = key.match(re);
-      if (match) {
-        var l = this[key];
-        this.removeEventListener(match[1], l, l._capture);
-        delete this[key];
+    var on = this.__on;
+    if (!on) return;
+    for (var j = 0, i = -1, m = on.length, o; j < m; ++j) {
+      if (o = on[j], (!typename.type || o.type === typename.type) && o.name === typename.name) {
+        this.removeEventListener(o.type, o.listener, o.capture);
+      } else {
+        on[++i] = o;
       }
     }
+    if (++i) on.length = i;
+    else delete this.__on;
   };
 }
 
-function onAdd(filter, key, type, listener, capture) {
+function onAdd(typename, value, capture) {
   return function(d, i, group) {
-    var value = this[key];
-    if (value) this.removeEventListener(type, value, value._capture);
-    value = contextListener(listener, i, group);
-    if (filter) value = filterListener(value);
-    value._listener = listener;
-    this.addEventListener(type, this[key] = value, value._capture = capture);
+    var on = this.__on, o, listener = contextListener(value, i, group);
+    if (filterEvents.hasOwnProperty(typename.type)) listener = filterListener(listener);
+    if (on) for (var j = 0, m = on.length; j < m; ++j) {
+      if ((o = on[j]).type === typename.type && o.name === typename.name) {
+        this.removeEventListener(o.type, o.listener, o.capture);
+        this.addEventListener(o.type, o.listener = listener, o.capture = capture);
+        o.value = value;
+        return;
+      }
+    }
+    this.addEventListener(typename.type, listener, capture);
+    o = {type: typename.type, name: typename.name, value: value, listener: listener, capture: capture};
+    if (!on) this.__on = [o];
+    else on.push(o);
   };
 }
 
-export default function(type, listener, capture) {
-  var value,
-      name = type + "",
-      key = "__on" + name,
-      filter;
+export default function(typename, value, capture) {
+  var typenames = parseTypenames(typename + ""), i, n = typenames.length, t;
 
-  if (arguments.length < 2) return (value = this.node()[key]) && value._listener;
-  if ((value = name.indexOf(".")) > 0) name = name.slice(0, value);
-  if (filter = filterEvents.hasOwnProperty(name)) name = filterEvents[name];
+  if (arguments.length < 2) {
+    var on = this.node().__on;
+    if (on) for (var j = 0, m = on.length, o; j < m; ++j) {
+      for (i = 0, o = on[j]; i < n; ++i) {
+        if ((t = typenames[i]).type === o.type && t.name === o.name) {
+          return o.value;
+        }
+      }
+    }
+    return;
+  }
 
-  return this.each(listener
-      ? (value ? onAdd(filter, key, name, listener, capture == null ? false : capture) : noop) // Attempt to add untyped listener is ignored.
-      : (value ? onRemove(key, name) : onRemoveAll(name)));
+  on = value ? onAdd : onRemove;
+  if (capture == null) capture = false;
+  for (i = 0; i < n; ++i) this.each(on(typenames[i], value, capture));
+  return this;
 }
