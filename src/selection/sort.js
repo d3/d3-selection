@@ -1,5 +1,3 @@
-import arrayify from "./arrayify";
-
 export default function(compare) {
   if (!compare) compare = ascending;
 
@@ -7,8 +5,13 @@ export default function(compare) {
     return a && b ? compare(a.__data__, b.__data__) : !a - !b;
   }
 
-  for (var groups = arrayify(this), j = 0, m = groups.length; j < m; ++j) {
-    groups[j].sort(compareNode);
+  for (var groups = this._groups, m = groups.length, sortgroups = this._groups = new Array(m), j = 0; j < m; ++j) {
+    for (var group = groups[j], n = group.length, sortgroup = sortgroups[j] = new Array(n), node, i = 0; i < n; ++i) {
+      if (node = group[i]) {
+        sortgroup[i] = node;
+      }
+    }
+    sortgroup.sort(compareNode);
   }
 
   return this.order();

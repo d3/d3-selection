@@ -79,3 +79,19 @@ tape("selection.sort(function) uses the specified data comparator function", fun
   test.equal(two.nextSibling, null);
   test.end();
 });
+
+tape("selection.sort(function) does not modify the groups array in-place", function(test) {
+  var document = jsdom.jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
+      one = document.querySelector("#one"),
+      two = document.querySelector("#two"),
+      selection = d3.selectAll([one, two]).datum(function(d, i) { return i; });
+  var groups0 = selection._groups;
+  test.deepEqual(groups0, [[one, two]]);
+  var groups1 = selection.sort(function(a, b) { return b - a; })._groups;
+  test.deepEqual(groups1, [[two, one]]);
+  test.deepEqual(groups0, [[one, two]]);
+  var groups2 = selection.sort()._groups;
+  test.deepEqual(groups2, [[one, two]]);
+  test.deepEqual(groups0, [[one, two]]);
+  test.end();
+});
