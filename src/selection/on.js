@@ -9,11 +9,12 @@ if (typeof document !== "undefined") {
   }
 }
 
-function filterListener(listener) {
+function filterContextListener(listener, index, group) {
+  listener = contextListener(listener, index, group);
   return function(event) {
     var related = event.relatedTarget;
     if (!related || (related !== this && !(related.compareDocumentPosition(this) & 8))) {
-      listener(event);
+      listener.call(this, event);
     }
   };
 }
@@ -55,9 +56,9 @@ function onRemove(typename) {
 }
 
 function onAdd(typename, value, capture) {
+  var wrap = filterEvents.hasOwnProperty(typename.type) ? filterContextListener : contextListener;
   return function(d, i, group) {
-    var on = this.__on, o, listener = contextListener(value, i, group);
-    if (filterEvents.hasOwnProperty(typename.type)) listener = filterListener(listener);
+    var on = this.__on, o, listener = wrap(value, i, group);
     if (on) for (var j = 0, m = on.length; j < m; ++j) {
       if ((o = on[j]).type === typename.type && o.name === typename.name) {
         this.removeEventListener(o.type, o.listener, o.capture);
