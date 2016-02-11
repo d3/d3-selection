@@ -190,7 +190,7 @@ tape("selection.data(values, function) passes the key function datum, index and 
       .datum("foo");
 
   d3.select(body).selectAll("node")
-      .data(["foo", "bar"], function(d, i, nodes) { results.push([this, d, i, nodes.slice()]); return d || this.id; });
+      .data(["foo", "bar"], function(d, i, nodes) { results.push([this, d, i, nodes]); return d || this.id; });
 
   test.deepEqual(results, [
     [one, "foo", 0, [one, two]],
@@ -232,5 +232,80 @@ tape("selection.data(values, function) applies the order of the data", function(
       _parents: [body]
     }
   });
+  test.end();
+});
+
+tape("selection.data(values) does not modify the groups array in-place", function(test) {
+  var document = jsdom.jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
+      root = document.documentElement,
+      one = document.querySelector("#one"),
+      two = document.querySelector("#two"),
+      selection = d3.select(root).selectAll("h1"),
+      groups0 = selection._groups,
+      group0 = groups0[0],
+      updates1 = selection.data([1, 2, 3])._groups,
+      update1 = updates1[0],
+      enters1 = selection._enter._groups,
+      enter1 = enters1[0],
+      exits1 = selection._exit._groups,
+      exit1 = exits1[0],
+      updates2 = selection.data([1])._groups,
+      update2 = updates2[0],
+      enters2 = selection._enter._groups,
+      enter2 = enters2[0],
+      exits2 = selection._exit._groups,
+      exit2 = exits2[0];
+  test.deepEqual(group0, [one, two]);
+  test.deepEqual(groups0, [[one, two]]);
+  test.deepEqual(update1, [one, two,]);
+  test.deepEqual(updates1, [[one, two,]]);
+  test.deepEqual(enter1, [,, {__data__: 3, _next: null, _parent: root, namespaceURI: "http://www.w3.org/1999/xhtml", ownerDocument: document}]);
+  test.deepEqual(enters1, [[,, {__data__: 3, _next: null, _parent: root, namespaceURI: "http://www.w3.org/1999/xhtml", ownerDocument: document}]]);
+  test.deepEqual(exit1, [,]);
+  test.deepEqual(exits1, [[,]]);
+  test.deepEqual(update2, [one]);
+  test.deepEqual(updates2, [[one]]);
+  test.deepEqual(enter2, [,]);
+  test.deepEqual(enters2, [[,]]);
+  test.deepEqual(exit2, [, two]);
+  test.deepEqual(exits2, [[, two]]);
+  test.end();
+});
+
+tape("selection.data(values, key) does not modify the groups array in-place", function(test) {
+  var document = jsdom.jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
+      root = document.documentElement,
+      one = document.querySelector("#one"),
+      two = document.querySelector("#two"),
+      selection = d3.select(root).selectAll("h1"),
+      key = function(d, i) { return i; },
+      groups0 = selection._groups,
+      group0 = groups0[0],
+      updates1 = selection.data([1, 2, 3], key)._groups,
+      update1 = updates1[0],
+      enters1 = selection._enter._groups,
+      enter1 = enters1[0],
+      exits1 = selection._exit._groups,
+      exit1 = exits1[0],
+      updates2 = selection.data([1], key)._groups,
+      update2 = updates2[0],
+      enters2 = selection._enter._groups,
+      enter2 = enters2[0],
+      exits2 = selection._exit._groups,
+      exit2 = exits2[0];
+  test.deepEqual(group0, [one, two]);
+  test.deepEqual(groups0, [[one, two]]);
+  test.deepEqual(update1, [one, two,]);
+  test.deepEqual(updates1, [[one, two,]]);
+  test.deepEqual(enter1, [,, {__data__: 3, _next: null, _parent: root, namespaceURI: "http://www.w3.org/1999/xhtml", ownerDocument: document}]);
+  test.deepEqual(enters1, [[,, {__data__: 3, _next: null, _parent: root, namespaceURI: "http://www.w3.org/1999/xhtml", ownerDocument: document}]]);
+  test.deepEqual(exit1, [,]);
+  test.deepEqual(exits1, [[,]]);
+  test.deepEqual(update2, [one]);
+  test.deepEqual(updates2, [[one]]);
+  test.deepEqual(enter2, [,]);
+  test.deepEqual(enters2, [[,]]);
+  test.deepEqual(exit2, [, two]);
+  test.deepEqual(exits2, [[, two]]);
   test.end();
 });
