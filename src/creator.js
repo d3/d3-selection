@@ -1,12 +1,13 @@
 import namespace from "./namespace";
+import {xhtml} from "./namespaces";
 
 function creatorInherit(name) {
   return function() {
     var document = this.ownerDocument,
         uri = this.namespaceURI;
-    return uri && uri !== document.documentElement.namespaceURI
-        ? document.createElementNS(uri, name)
-        : document.createElement(name);
+    return uri === xhtml && document.documentElement.namespaceURI === xhtml
+        ? document.createElement(name)
+        : document.createElementNS(uri, name);
   };
 }
 
