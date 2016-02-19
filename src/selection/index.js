@@ -4,6 +4,7 @@ import selection_filter from "./filter";
 import selection_data from "./data";
 import selection_enter from "./enter";
 import selection_exit from "./exit";
+import selection_merge from "./merge";
 import selection_order from "./order";
 import selection_sort from "./sort";
 import selection_call from "./call";
@@ -45,6 +46,7 @@ Selection.prototype = selection.prototype = {
   data: selection_data,
   enter: selection_enter,
   exit: selection_exit,
+  merge: selection_merge,
   order: selection_order,
   sort: selection_sort,
   call: selection_call,

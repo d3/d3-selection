@@ -118,10 +118,10 @@ export default function(value, key) {
     }
   }
 
-  this._groups = update;
-  (this._enter = new Selection(enter, parents))._update = this;
-  this._exit = new Selection(exit, parents);
-  return this;
+  update = new Selection(update, parents);
+  update._enter = new Selection(enter, parents);
+  update._exit = new Selection(exit, parents);
+  return update;
 }
 
 function EnterNode(parent, datum) {
