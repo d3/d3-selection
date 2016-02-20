@@ -16,8 +16,7 @@ tape("selection.data(values) binds the specified values to the selected elements
     _parents: [body],
     _enter: {
       _groups: [[,, ]],
-      _parents: [body],
-      _update: selection
+      _parents: [body]
     },
     _exit: {
       _groups: [[,, ]],
@@ -45,8 +44,7 @@ tape("selection.data(values) puts unbound data in the enter selection", function
         namespaceURI: "http://www.w3.org/1999/xhtml",
         ownerDocument: body.ownerDocument
       }]],
-      _parents: [body],
-      _update: selection
+      _parents: [body]
     },
     _exit: {
       _groups: [[,, ]],
@@ -69,8 +67,7 @@ tape("selection.data(values) puts unbound elements in the exit selection", funct
     _parents: [body],
     _enter: {
       _groups: [[,,, ]],
-      _parents: [body],
-      _update: selection
+      _parents: [body]
     },
     _exit: {
       _groups: [[,, three]],
@@ -98,8 +95,7 @@ tape("selection.data(values) binds the specified values to each group independen
     _parents: [zero, three],
     _enter: {
       _groups: [[, ], [, ]],
-      _parents: [zero, three],
-      _update: selection
+      _parents: [zero, three]
     },
     _exit: {
       _groups: [[, ], [, ]],
@@ -123,8 +119,7 @@ tape("selection.data(function) binds the specified return values to the selected
     _parents: [body],
     _enter: {
       _groups: [[,, ]],
-      _parents: [body],
-      _update: selection
+      _parents: [body]
     },
     _exit: {
       _groups: [[,, ]],
@@ -169,8 +164,7 @@ tape("selection.data(values, function) joins data to element using the computed 
         namespaceURI: "http://www.w3.org/1999/xhtml",
         ownerDocument: body.ownerDocument
       }, ]],
-      _parents: [body],
-      _update: selection
+      _parents: [body]
     },
     _exit: {
       _groups: [[, two, ]],
@@ -224,8 +218,7 @@ tape("selection.data(values, function) applies the order of the data", function(
         namespaceURI: "http://www.w3.org/1999/xhtml",
         ownerDocument: body.ownerDocument
       }, ]],
-      _parents: [body],
-      _update: selection
+      _parents: [body]
     },
     _exit: {
       _groups: [[,,,]],
@@ -235,40 +228,42 @@ tape("selection.data(values, function) applies the order of the data", function(
   test.end();
 });
 
-tape("selection.data(values) does not modify the groups array in-place", function(test) {
+tape("selection.data(values) returns a new selection, and does not modify the original selection", function(test) {
   var document = jsdom.jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
       root = document.documentElement,
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
-      selection = d3.select(root).selectAll("h1"),
-      groups0 = selection._groups,
-      group0 = groups0[0],
-      updates1 = selection.data([1, 2, 3])._groups,
-      update1 = updates1[0],
-      enters1 = selection._enter._groups,
-      enter1 = enters1[0],
-      exits1 = selection._exit._groups,
-      exit1 = exits1[0],
-      updates2 = selection.data([1])._groups,
-      update2 = updates2[0],
-      enters2 = selection._enter._groups,
-      enter2 = enters2[0],
-      exits2 = selection._exit._groups,
-      exit2 = exits2[0];
-  test.deepEqual(group0, [one, two]);
-  test.deepEqual(groups0, [[one, two]]);
-  test.deepEqual(update1, [one, two,]);
-  test.deepEqual(updates1, [[one, two,]]);
-  test.deepEqual(enter1, [,, {__data__: 3, _next: null, _parent: root, namespaceURI: "http://www.w3.org/1999/xhtml", ownerDocument: document}]);
-  test.deepEqual(enters1, [[,, {__data__: 3, _next: null, _parent: root, namespaceURI: "http://www.w3.org/1999/xhtml", ownerDocument: document}]]);
-  test.deepEqual(exit1, [,]);
-  test.deepEqual(exits1, [[,]]);
-  test.deepEqual(update2, [one]);
-  test.deepEqual(updates2, [[one]]);
-  test.deepEqual(enter2, [,]);
-  test.deepEqual(enters2, [[,]]);
-  test.deepEqual(exit2, [, two]);
-  test.deepEqual(exits2, [[, two]]);
+      selection0 = d3.select(root).selectAll("h1"),
+      selection1 = selection0.data([1, 2, 3]),
+      selection2 = selection1.data([1]);
+  test.deepEqual(selection0, {
+    _groups: [[one, two]],
+    _parents: [root]
+  });
+  test.deepEqual(selection1, {
+    _groups: [[one, two, ]],
+    _parents: [root],
+    _enter: {
+      _groups: [[,, {__data__: 3, _next: null, _parent: root, namespaceURI: "http://www.w3.org/1999/xhtml", ownerDocument: document}]],
+      _parents: [root]
+    },
+    _exit: {
+      _groups: [[,]],
+      _parents: [root]
+    }
+  });
+  test.deepEqual(selection2, {
+    _groups: [[one]],
+    _parents: [root],
+    _enter: {
+      _groups: [[,]],
+      _parents: [root]
+    },
+    _exit: {
+      _groups: [[, two]],
+      _parents: [root]
+    }
+  });
   test.end();
 });
 
@@ -277,35 +272,37 @@ tape("selection.data(values, key) does not modify the groups array in-place", fu
       root = document.documentElement,
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
-      selection = d3.select(root).selectAll("h1"),
       key = function(d, i) { return i; },
-      groups0 = selection._groups,
-      group0 = groups0[0],
-      updates1 = selection.data([1, 2, 3], key)._groups,
-      update1 = updates1[0],
-      enters1 = selection._enter._groups,
-      enter1 = enters1[0],
-      exits1 = selection._exit._groups,
-      exit1 = exits1[0],
-      updates2 = selection.data([1], key)._groups,
-      update2 = updates2[0],
-      enters2 = selection._enter._groups,
-      enter2 = enters2[0],
-      exits2 = selection._exit._groups,
-      exit2 = exits2[0];
-  test.deepEqual(group0, [one, two]);
-  test.deepEqual(groups0, [[one, two]]);
-  test.deepEqual(update1, [one, two,]);
-  test.deepEqual(updates1, [[one, two,]]);
-  test.deepEqual(enter1, [,, {__data__: 3, _next: null, _parent: root, namespaceURI: "http://www.w3.org/1999/xhtml", ownerDocument: document}]);
-  test.deepEqual(enters1, [[,, {__data__: 3, _next: null, _parent: root, namespaceURI: "http://www.w3.org/1999/xhtml", ownerDocument: document}]]);
-  test.deepEqual(exit1, [,]);
-  test.deepEqual(exits1, [[,]]);
-  test.deepEqual(update2, [one]);
-  test.deepEqual(updates2, [[one]]);
-  test.deepEqual(enter2, [,]);
-  test.deepEqual(enters2, [[,]]);
-  test.deepEqual(exit2, [, two]);
-  test.deepEqual(exits2, [[, two]]);
+      selection0 = d3.select(root).selectAll("h1"),
+      selection1 = selection0.data([1, 2, 3], key),
+      selection2 = selection1.data([1], key);
+  test.deepEqual(selection0, {
+    _groups: [[one, two]],
+    _parents: [root]
+  });
+  test.deepEqual(selection1, {
+    _groups: [[one, two, ]],
+    _parents: [root],
+    _enter: {
+      _groups: [[,, {__data__: 3, _next: null, _parent: root, namespaceURI: "http://www.w3.org/1999/xhtml", ownerDocument: document}]],
+      _parents: [root]
+    },
+    _exit: {
+      _groups: [[,]],
+      _parents: [root]
+    }
+  });
+  test.deepEqual(selection2, {
+    _groups: [[one]],
+    _parents: [root],
+    _enter: {
+      _groups: [[,]],
+      _parents: [root]
+    },
+    _exit: {
+      _groups: [[, two]],
+      _parents: [root]
+    }
+  });
   test.end();
 });

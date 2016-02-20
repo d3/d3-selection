@@ -5,7 +5,7 @@ var tape = require("tape"),
 tape("selection.enter() returns an empty selection before a data-join", function(test) {
   var body = jsdom.jsdom("<h1>hello</h1>").body,
       selection = d3.select(body);
-  test.deepEqual(selection.enter(), {_groups: [[]], _parents: [null], _update: selection});
+  test.deepEqual(selection.enter(), {_groups: [[]], _parents: [null]});
   test.end();
 });
 
@@ -23,11 +23,10 @@ tape("selection.enter() shares the update selection’s parents", function(test)
   test.end();
 });
 
-tape("selection.enter() returns a new selection each time", function(test) {
+tape("selection.enter() returns the same selection each time", function(test) {
   var body = jsdom.jsdom("<h1>hello</h1>").body,
       selection = d3.select(body);
-  test.ok(selection.enter() !== selection.enter());
-  test.ok(selection.enter()._groups[0] !== selection.enter()._groups[0]);
+  test.ok(selection.enter() === selection.enter());
   test.end();
 });
 
@@ -44,18 +43,8 @@ tape("selection.enter() contains unbound data after a data-join", function(test)
       namespaceURI: "http://www.w3.org/1999/xhtml",
       ownerDocument: body.ownerDocument
     }]],
-    _parents: [body],
-    _update: selection
+    _parents: [body]
   });
-  test.end();
-});
-
-tape("selection.enter() clears the enter selection associated with the given selection", function(test) {
-  var body = jsdom.jsdom("<h1>hello</h1>").body,
-      selection = d3.select(body).data(["foo"]);
-  test.ok(selection._enter != null);
-  selection.enter();
-  test.ok(selection._enter == null);
   test.end();
 });
 
@@ -79,26 +68,8 @@ tape("selection.enter() uses the order of the data", function(test) {
       namespaceURI: "http://www.w3.org/1999/xhtml",
       ownerDocument: body.ownerDocument
     }]],
-    _parents: [body],
-    _update: selection
+    _parents: [body]
   });
-  test.end();
-});
-
-tape("enter.select(…) copies entering nodes into the update selection", function(test) {
-  var document = jsdom.jsdom(),
-      body = document.body,
-      data = ["foo", "bar", "baz"],
-      selection = d3.select(body).selectAll("p").data(data);
-  test.deepEqual(selection._groups, [[,,]]);
-  var enter = selection.enter(),
-      append = enter.select(function() { return this.appendChild(document.createElement("P")); }),
-      p = body.querySelectorAll("p");
-  test.equal(p.length, data.length);
-  test.ok(Array.prototype.every.call(p, function(element) { return element.tagName === "P"; }));
-  test.deepEqual(enter._groups, [data.map(function(d) { return {__data__: d, _next: null, _parent: body, namespaceURI: "http://www.w3.org/1999/xhtml", ownerDocument: body.ownerDocument}; })]);
-  test.deepEqual(append._groups, [p]);
-  test.deepEqual(selection._groups, [p]);
   test.end();
 });
 
@@ -124,30 +95,36 @@ tape("enter.append(…) does not override an explicit namespace", function(test)
 
 tape("enter.append(…) inserts entering nodes before the next node in the update selection", function(test) {
   var document = jsdom.jsdom(),
-      p = d3.select(document.body).selectAll("p"),
-      identity = function(d) { return d; };
-  p.data([1, 3], identity).enter().append("p").text(identity);
-  p.data([0, 1, 2, 3, 4], identity).enter().append("p").text(identity);
+      identity = function(d) { return d; },
+      p = d3.select(document.body).selectAll("p");
+  p = p.data([1, 3], identity);
+  p = p.enter().append("p").text(identity).merge(p);
+  p = p.data([0, 1, 2, 3, 4], identity);
+  p = p.enter().append("p").text(identity).merge(p);
   test.equal(document.body.innerHTML, "<p>0</p><p>1</p><p>2</p><p>3</p><p>4</p>");
   test.end();
 });
 
 tape("enter.append(…, before) inserts entering nodes before the sibling matching the specified selector", function(test) {
   var document = jsdom.jsdom("<hr>"),
-      p = d3.select(document.body).selectAll("p"),
-      identity = function(d) { return d; };
-  p.data([1, 3], identity).enter().append("p", "hr").text(identity);
-  p.data([0, 1, 2, 3, 4], identity).enter().append("p", "hr").text(identity);
+      identity = function(d) { return d; },
+      p = d3.select(document.body).selectAll("p");
+  p = p.data([1, 3], identity);
+  p = p.enter().append("p", "hr").text(identity).merge(p);
+  p = p.data([0, 1, 2, 3, 4], identity);
+  p = p.enter().append("p", "hr").text(identity).merge(p);
   test.equal(document.body.innerHTML, "<p>1</p><p>3</p><p>0</p><p>2</p><p>4</p><hr>");
   test.end();
 });
 
 tape("enter.append(…, null) inserts entering nodes after the last child", function(test) {
   var document = jsdom.jsdom(),
-      p = d3.select(document.body).selectAll("p"),
-      identity = function(d) { return d; };
-  p.data([1, 3], identity).enter().append("p", null).text(identity);
-  p.data([0, 1, 2, 3, 4], identity).enter().append("p", null).text(identity);
+      identity = function(d) { return d; },
+      p = d3.select(document.body).selectAll("p");
+  p = p.data([1, 3], identity);
+  p = p.enter().append("p", null).text(identity).merge(p);
+  p = p.data([0, 1, 2, 3, 4], identity);
+  p = p.enter().append("p", null).text(identity).merge(p);
   test.equal(document.body.innerHTML, "<p>1</p><p>3</p><p>0</p><p>2</p><p>4</p>");
   test.end();
 });

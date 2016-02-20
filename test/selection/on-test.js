@@ -212,7 +212,7 @@ tape("selection.on(type, listener) passes the listener the index as of registrat
   selection.dispatch("click");
   test.deepEqual(selection, {_groups: [[, one]], _parents: [null]});
   test.equal(result, 1);
-  selection.sort().dispatch("click");
+  selection = selection.sort().dispatch("click");
   test.deepEqual(selection, {_groups: [[one, ]], _parents: [null]});
   test.equal(result, 1);
   test.end();

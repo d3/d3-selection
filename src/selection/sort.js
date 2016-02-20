@@ -1,3 +1,5 @@
+import {Selection} from "./index";
+
 export default function(compare) {
   if (!compare) compare = ascending;
 

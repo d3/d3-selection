@@ -16,11 +16,10 @@ tape("selection.exit() shares the update selection’s parents", function(test) 
   test.end();
 });
 
-tape("selection.exit() returns a new selection each time", function(test) {
+tape("selection.exit() returns the same selection each time", function(test) {
   var body = jsdom.jsdom("<h1>hello</h1>").body,
       selection = d3.select(body);
-  test.ok(selection.exit() !== selection.exit());
-  test.ok(selection.exit()._groups[0] !== selection.exit()._groups[0]);
+  test.ok(selection.exit() === selection.exit());
   test.end();
 });
 
@@ -46,14 +45,5 @@ tape("selection.exit() uses the order of the originating selection", function(te
     _groups: [[, two, ]],
     _parents: [body]
   });
-  test.end();
-});
-
-tape("selection.exit() clears the exit selection associated with the given selection", function(test) {
-  var body = jsdom.jsdom("<h1>hello</h1>").body,
-      selection = d3.select(body).data(["foo"]);
-  test.ok(selection._exit != null);
-  selection.exit();
-  test.ok(selection._exit == null);
   test.end();
 });
