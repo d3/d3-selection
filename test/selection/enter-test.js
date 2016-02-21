@@ -9,6 +9,13 @@ tape("selection.enter() returns an empty selection before a data-join", function
   test.end();
 });
 
+tape("selection.enter() contains EnterNodes", function(test) {
+  var body = jsdom.jsdom().body,
+      selection = d3.select(body).selectAll("div").data([1, 2, 3]);
+  test.equal(selection.enter().node().constructor.name, "EnterNode");
+  test.end();
+});
+
 tape("selection.enter() shares the update selection’s parents", function(test) {
   var body = jsdom.jsdom("<h1>hello</h1>").body,
       selection = d3.select(body);

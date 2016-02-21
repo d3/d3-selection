@@ -34,6 +34,7 @@ tape("d3.selection() returns an instanceof d3.selection", function(test) {
   var document = global.document = jsdom.jsdom();
   try {
     test.ok(d3.selection() instanceof d3.selection);
+    test.equal(d3.selection().constructor.name, "Selection");
     test.end();
   } finally {
     delete global.document;

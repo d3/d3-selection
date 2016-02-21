@@ -38,6 +38,7 @@ function selection() {
 }
 
 Selection.prototype = selection.prototype = {
+  constructor: Selection,
   select: selection_select,
   selectAll: selection_selectAll,
   filter: selection_filter,
