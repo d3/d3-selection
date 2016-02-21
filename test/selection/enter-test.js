@@ -26,7 +26,7 @@ tape("selection.enter() shares the update selection’s parents", function(test)
 tape("selection.enter() returns the same selection each time", function(test) {
   var body = jsdom.jsdom("<h1>hello</h1>").body,
       selection = d3.select(body);
-  test.ok(selection.enter() === selection.enter());
+  test.deepEqual(selection.enter(), selection.enter());
   test.end();
 });
 

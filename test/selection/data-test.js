@@ -14,14 +14,8 @@ tape("selection.data(values) binds the specified values to the selected elements
   test.deepEqual(selection, {
     _groups: [[one, two, three]],
     _parents: [body],
-    _enter: {
-      _groups: [[,, ]],
-      _parents: [body]
-    },
-    _exit: {
-      _groups: [[,, ]],
-      _parents: [body]
-    }
+    _enter: [[,, ]],
+    _exit: [[,, ]]
   });
   test.end();
 });
@@ -36,20 +30,14 @@ tape("selection.data(values) puts unbound data in the enter selection", function
   test.deepEqual(selection, {
     _groups: [[one, two, ]],
     _parents: [body],
-    _enter: {
-      _groups: [[,, {
-        __data__: "baz",
-        _next: null,
-        _parent: body,
-        namespaceURI: "http://www.w3.org/1999/xhtml",
-        ownerDocument: body.ownerDocument
-      }]],
-      _parents: [body]
-    },
-    _exit: {
-      _groups: [[,, ]],
-      _parents: [body]
-    }
+    _enter: [[,, {
+      __data__: "baz",
+      _next: null,
+      _parent: body,
+      namespaceURI: "http://www.w3.org/1999/xhtml",
+      ownerDocument: body.ownerDocument
+    }]],
+    _exit: [[,, ]]
   });
   test.end();
 });
@@ -65,14 +53,8 @@ tape("selection.data(values) puts unbound elements in the exit selection", funct
   test.deepEqual(selection, {
     _groups: [[one, two, ]],
     _parents: [body],
-    _enter: {
-      _groups: [[,,, ]],
-      _parents: [body]
-    },
-    _exit: {
-      _groups: [[,, three]],
-      _parents: [body]
-    }
+    _enter: [[,,, ]],
+    _exit: [[,, three]]
   });
   test.end();
 });
@@ -93,14 +75,8 @@ tape("selection.data(values) binds the specified values to each group independen
   test.deepEqual(selection, {
     _groups: [[one, two], [four, five]],
     _parents: [zero, three],
-    _enter: {
-      _groups: [[, ], [, ]],
-      _parents: [zero, three]
-    },
-    _exit: {
-      _groups: [[, ], [, ]],
-      _parents: [zero, three]
-    }
+    _enter: [[, ], [, ]],
+    _exit: [[, ], [, ]]
   });
   test.end();
 });
@@ -117,14 +93,8 @@ tape("selection.data(function) binds the specified return values to the selected
   test.deepEqual(selection, {
     _groups: [[one, two, three]],
     _parents: [body],
-    _enter: {
-      _groups: [[,, ]],
-      _parents: [body]
-    },
-    _exit: {
-      _groups: [[,, ]],
-      _parents: [body]
-    }
+    _enter: [[,, ]],
+    _exit: [[,, ]]
   });
   test.end();
 });
@@ -156,20 +126,14 @@ tape("selection.data(values, function) joins data to element using the computed 
   test.deepEqual(selection, {
     _groups: [[one,, three]],
     _parents: [body],
-    _enter: {
-      _groups: [[, {
-        __data__: "four",
-        _next: three,
-        _parent: body,
-        namespaceURI: "http://www.w3.org/1999/xhtml",
-        ownerDocument: body.ownerDocument
-      }, ]],
-      _parents: [body]
-    },
-    _exit: {
-      _groups: [[, two, ]],
-      _parents: [body]
-    }
+    _enter: [[, {
+      __data__: "four",
+      _next: three,
+      _parent: body,
+      namespaceURI: "http://www.w3.org/1999/xhtml",
+      ownerDocument: body.ownerDocument
+    }, ]],
+    _exit: [[, two, ]]
   });
   test.end();
 });
@@ -204,26 +168,20 @@ tape("selection.data(values, function) applies the order of the data", function(
   test.deepEqual(selection, {
     _groups: [[, three, one,, two]],
     _parents: [body],
-    _enter: {
-      _groups: [[{
-        __data__: "four",
-        _next: three,
-        _parent: body,
-        namespaceURI: "http://www.w3.org/1999/xhtml",
-        ownerDocument: body.ownerDocument
-      },,, {
-        __data__: "five",
-        _next: two,
-        _parent: body,
-        namespaceURI: "http://www.w3.org/1999/xhtml",
-        ownerDocument: body.ownerDocument
-      }, ]],
-      _parents: [body]
-    },
-    _exit: {
-      _groups: [[,,,]],
-      _parents: [body]
-    }
+    _enter: [[{
+      __data__: "four",
+      _next: three,
+      _parent: body,
+      namespaceURI: "http://www.w3.org/1999/xhtml",
+      ownerDocument: body.ownerDocument
+    },,, {
+      __data__: "five",
+      _next: two,
+      _parent: body,
+      namespaceURI: "http://www.w3.org/1999/xhtml",
+      ownerDocument: body.ownerDocument
+    }, ]],
+    _exit: [[,,,]]
   });
   test.end();
 });
@@ -243,26 +201,14 @@ tape("selection.data(values) returns a new selection, and does not modify the or
   test.deepEqual(selection1, {
     _groups: [[one, two, ]],
     _parents: [root],
-    _enter: {
-      _groups: [[,, {__data__: 3, _next: null, _parent: root, namespaceURI: "http://www.w3.org/1999/xhtml", ownerDocument: document}]],
-      _parents: [root]
-    },
-    _exit: {
-      _groups: [[,]],
-      _parents: [root]
-    }
+    _enter: [[,, {__data__: 3, _next: null, _parent: root, namespaceURI: "http://www.w3.org/1999/xhtml", ownerDocument: document}]],
+    _exit: [[,]]
   });
   test.deepEqual(selection2, {
     _groups: [[one]],
     _parents: [root],
-    _enter: {
-      _groups: [[,]],
-      _parents: [root]
-    },
-    _exit: {
-      _groups: [[, two]],
-      _parents: [root]
-    }
+    _enter: [[,]],
+    _exit: [[, two]]
   });
   test.end();
 });
@@ -283,26 +229,14 @@ tape("selection.data(values, key) does not modify the groups array in-place", fu
   test.deepEqual(selection1, {
     _groups: [[one, two, ]],
     _parents: [root],
-    _enter: {
-      _groups: [[,, {__data__: 3, _next: null, _parent: root, namespaceURI: "http://www.w3.org/1999/xhtml", ownerDocument: document}]],
-      _parents: [root]
-    },
-    _exit: {
-      _groups: [[,]],
-      _parents: [root]
-    }
+    _enter: [[,, {__data__: 3, _next: null, _parent: root, namespaceURI: "http://www.w3.org/1999/xhtml", ownerDocument: document}]],
+    _exit: [[,]]
   });
   test.deepEqual(selection2, {
     _groups: [[one]],
     _parents: [root],
-    _enter: {
-      _groups: [[,]],
-      _parents: [root]
-    },
-    _exit: {
-      _groups: [[, two]],
-      _parents: [root]
-    }
+    _enter: [[,]],
+    _exit: [[, two]]
   });
   test.end();
 });

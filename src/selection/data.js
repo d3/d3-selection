@@ -119,8 +119,8 @@ export default function(value, key) {
   }
 
   update = new Selection(update, parents);
-  update._enter = new Selection(enter, parents);
-  update._exit = new Selection(exit, parents);
+  update._enter = enter;
+  update._exit = exit;
   return update;
 }
 
