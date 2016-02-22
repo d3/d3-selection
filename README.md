@@ -116,7 +116,9 @@ Unlike [*selection*.select](#selection_select), *selection*.selectAll does affec
 
 <a name="selection_filter" href="#selection_filter">#</a> <i>selection</i>.<b>filter</b>(<i>filter</i>)
 
-Filters the selection, returning a new selection that contains only the elements for which the specified *filter* is true. The returned filtered selection preserves the index and parents of this selection. The *filter* may be specified either as a selector string or a function. If a function, it is evaluated for each selected element, in order, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. For example, to filter a selection of table rows to contain only even rows:
+Filters the selection, returning a new selection that contains only the elements for which the specified *filter* is true. The returned filtered selection preserves the index and parents of this selection, using null to represent missing (filtered-out) elements. The *filter* may be specified either as a selector string or a function. If a function, it is evaluated for each selected element, in order, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element.
+
+For example, to filter a selection of table rows to contain only even rows:
 
 ```js
 var even = d3.selectAll("tr").filter(":nth-child(even)");
