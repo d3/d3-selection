@@ -157,7 +157,7 @@ var circle = svg.selectAll("circle").data(data).style("fill", "blue"), // blue o
 circle.merge(circleEnter).style("stroke", "black"); // stroke on UPDATE or ENTER
 ```
 
-This method is also useful for merging [filtered](#selection_filter) selections because a filtered selection retains the index structure of the originating selection. Note, however, that this method is not useful for concatenating arbitrary selections, as if this selection and the specified *selection* both have (non-null) elements at the same index, then this selection’s element is returned in the merged selection, and the specified *selection*’s element is ignored.
+This method is also useful for merging [filtered](#selection_filter) selections because filtered selections retain the index structure of the originating selection. Note, however, that this method is not useful for concatenating arbitrary selections: if both this selection and the specified *selection* have (non-null) elements at the same index, this selection’s element is returned in the merge and the specified *selection*’s element is ignored.
 
 <a name="matcher" href="#matcher">#</a> d3.<b>matcher</b>(<i>selector</i>)
 
