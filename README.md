@@ -39,7 +39,7 @@ Selections are immutable. All selection methods that affect which elements are s
 If you use NPM, `npm install d3-selection`. Otherwise, download the [latest release](https://github.com/d3/d3-selection/releases/latest). The released bundle supports AMD, CommonJS, and vanilla environments. Create a custom build using [Rollup](https://github.com/rollup/rollup) or your preferred bundler. You can also load directly from [d3js.org](https://d3js.org):
 
 ```html
-<script src="https://d3js.org/d3-selection.v0.6.min.js"></script>
+<script src="https://d3js.org/d3-selection.v0.7.min.js"></script>
 ```
 
 In a vanilla environment, a `d3_selection` global is exported. [Try d3-selection in your browser.](https://tonicdev.com/npm/d3-selection)
