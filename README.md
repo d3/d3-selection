@@ -2,6 +2,37 @@
 
 Selections allow powerful data-driven transformation of the document object model (DOM): set [attributes](#selection_attr), [styles](#selection_style), [properties](#selection_property), [HTML](#selection_html) or [text](#selection_text) content, and more. Using the [data join](#binding-data)’s [enter](#selection_enter) and [exit](#selection_enter) selections, you can also [add](#selection_append) or [remove](#selection_remove) elements to correspond to data.
 
+Selection methods typically return the current selection, or a new selection, allowing the concise application of multiple methods on a given selection via method chaining. For example, to set the name attribute and color style of an anchor element:
+
+```js
+d3.select("a")
+    .attr("name", "fred")
+    .style("color", "red");
+```
+
+This is equivalent to:
+
+```js
+var anchor = d3.select("a");
+anchor.attr("name", "fred");
+anchor.style("color", "red");
+```
+
+By convention, selection methods that return the current selection use four spaces of indent, while selection methods that return a new selection use only two spaces of indent. This reveals changes of context by making them stick out of the chain:
+
+```js
+d3.select("body").append("svg")
+    .attr("width", 960)
+    .attr("height", 500)
+  .append("g")
+    .attr("transform", "translate(20,20)")
+  .append("rect")
+    .attr("width", 920)
+    .attr("height", 460);
+```
+
+**Selections are immutable.** All selection methods that affect which elements are selected (or their order) return a new selection rather than modifying the current selection. However, note that the selected elements themselves *are* mutable, as selections of course drive transformations of the document!
+
 ## Installing
 
 If you use NPM, `npm install d3-selection`. Otherwise, download the [latest release](https://github.com/d3/d3-selection/releases/latest). The released bundle supports AMD, CommonJS, and vanilla environments. Create a custom build using [Rollup](https://github.com/rollup/rollup) or your preferred bundler. You can also load directly from [d3js.org](https://d3js.org):
@@ -24,8 +55,6 @@ In a vanilla environment, a `d3_selection` global is exported. [Try d3-selection
 ### Selecting Elements
 
 Selection methods accept [W3C selector strings](http://www.w3.org/TR/selectors-api/) such as `.fancy` to select elements with the class *fancy*, or `div` to select DIV elements. Selection methods come in two forms: select and selectAll: the former selects only the first matching element, while the latter selects all matching elements in document order. The top-level selection methods, [d3.select](#select) and [d3.selectAll](#selectAll), query the entire document; the subselection methods, [*selection*.select](#selection_select) and [*selection*.selectAll](#selection_selectAll), restrict selection to descendants of the selected elements.
-
-**Selections are immutable.** All selection methods that affect which elements are selected (or their order) return a new selection rather than modifying the current selection. However, note that the selected elements themselves *are* mutable, as selections of course drive transformations of the document!
 
 <a name="selection" href="#selection">#</a> d3.<b>selection</b>()
 
@@ -209,20 +238,12 @@ Returns the owner window for the specified *node*. If *node* is a node, returns 
 
 ### Modifying Elements
 
-After selecting elements, use the selection’s transformation methods to affect document content. Selection methods return the current selection, allowing the concise application of multiple methods on a given selection via method chaining. For example, to set the name attribute and color style of an anchor element:
+After selecting elements, use the selection’s transformation methods to affect document content. For example, to set the name attribute and color style of an anchor element:
 
 ```js
 d3.select("a")
     .attr("name", "fred")
     .style("color", "red");
-```
-
-This is equivalent to:
-
-```js
-var anchor = d3.select("a");
-anchor.attr("name", "fred");
-anchor.style("color", "red");
 ```
 
 To experiment with selections, visit [d3js.org](https://d3js.org) and open your browser’s developer console! (In Chrome, open the console with ⌥⌘J.) Select elements and then inspect the returned selection to see which elements are selected and how they are grouped. Call selection methods and see how the page content changes.
