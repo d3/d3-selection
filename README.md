@@ -25,6 +25,8 @@ In a vanilla environment, a `d3_selection` global is exported. [Try d3-selection
 
 Selection methods accept [W3C selector strings](http://www.w3.org/TR/selectors-api/) such as `.fancy` to select elements with the class *fancy*, or `div` to select DIV elements. Selection methods come in two forms: select and selectAll: the former selects only the first matching element, while the latter selects all matching elements in document order. The top-level selection methods, [d3.select](#select) and [d3.selectAll](#selectAll), query the entire document; the subselection methods, [*selection*.select](#selection_select) and [*selection*.selectAll](#selection_selectAll), restrict selection to descendants of the selected elements.
 
+**Selections are immutable.** All selection methods that affect which elements are selected (or their order) return a new selection rather than modifying the current selection. However, note that the selected elements themselves *are* of course mutable, as selections drive transformations of the document!
+
 <a name="selection" href="#selection">#</a> d3.<b>selection</b>()
 
 [Selects](#select) the root element, `document.documentElement`. This function can also be used to check if an object is a selection (`instanceof selection`) or to extend the selection prototype. For example, to add a method to check checkboxes:
@@ -141,6 +143,17 @@ var even = d3.selectAll("tr").select(function(d, i) { return i & 1 ? this : null
 Note that the `:nth-child` pseudo-class is a one-based index rather than a zero-based index. Also, the above filter functions do not have precisely the same meaning as `:nth-child`; they rely on the selection index rather than the number of preceeding sibling elements in the DOM.
 
 The returned selection may not preserve the index of the original selection, as some elements may be removed; you can use [*selection*.select](#selection_select) to preserve the index, if needed.
+
+<a name="selection_merge" href="#selection_merge">#</a> <i>selection</i>.<b>merge</b>(<i>selection</i>)
+
+Returns a new selection merging this selection with the specified *selection*. The returned selection has the same number of groups and the same parents as this selection; any null elements in this selection may be filled with the corresponding element from the specified *selection*. This method is commonly used to merge the enter and update selections after a [data-join](#joining-data). After performing operations on entering and updating elements separately, you can merge the two selections and perform additional operations, avoiding duplicate code. For example:
+
+```js
+var circle = svg.selectAll("circle").data(data).style("fill", "blue"), // make updating circles blue
+    circleExit = circle.exit().remove(), // remove exiting circles
+    circleEnter = circle.enter().append("circle").style("fill", "green"); // make entering circles green
+circle.merge(circleEnter).style("stroke", "black"); // give updating OR entering circles a black stroke
+```
 
 <a name="matcher" href="#matcher">#</a> d3.<b>matcher</b>(<i>selector</i>)
 
@@ -292,7 +305,7 @@ Removes the selected elements from the document. Returns this selection (the rem
 
 <a name="selection_sort" href="#selection_sort">#</a> <i>selection</i>.<b>sort</b>(<i>compare</i>)
 
-Sorts each group of selected elements in-place according to the *compare* function, and then re-inserts the document elements to match the resulting order. Returns this selection.
+Returns a new selection that contains a copy of each group in this selection sorted according to the *compare* function. After sorting, re-inserts elements to match the resulting order (per [*selection*.order](#selection_order)).
 
 The compare function, which defaults to [ascending](https://github.com/d3/d3-array#ascending), is passed two elements’ data *a* and *b* to compare. It should return either a negative, positive, or zero value. If negative, then *a* should be before *b*; if positive, then *a* should be after *b*; otherwise, *a* and *b* are considered equal and the order is arbitrary.
 
@@ -344,7 +357,7 @@ For an introduction to D3’s data joins, see [Thinking With Joins](http://bost.
 
 <a name="selection_data" href="#selection_data">#</a> <i>selection</i>.<b>data</b>([<i>data</i>[, <i>key</i>]])
 
-Joins the specified array of *data* with the selected elements, modifying this selection so that it represents the *update* selection: the elements successfully bound to data. Also defines the [enter](#selection_enter) and [exit](#selection_exit) selections, which can be used to add or remove elements to correspond to the new data. The specified *data* is an array of arbitrary values (*e.g.*, numbers or objects), or a function that returns an array of values for each group. When data is assigned to an element, it is stored in the property `__data__`, thus making the data “sticky” and available on re-selection.
+Joins the specified array of *data* with the selected elements, returning a new selection that it represents the *update* selection: the elements successfully bound to data. Also defines the [enter](#selection_enter) and [exit](#selection_exit) selections on the returned selection, which can be used to add or remove elements to correspond to the new data. The specified *data* is an array of arbitrary values (*e.g.*, numbers or objects), or a function that returns an array of values for each group. When data is assigned to an element, it is stored in the property `__data__`, thus making the data “sticky” and available on re-selection.
 
 The *data* is specified **for each group** in the selection. If the selection has multiple groups (such as [d3.selectAll](#selectAll) followed by [*selection*.selectAll](#selection_selectAll)), then *data* should typically be specified as a function. This function will be invoked for each group in order, being passed the parent datum *d* (which may be undefined) and group index *i*, with the parent element as the `this` context. For example, to create an HTML table from a matrix of numbers:
 
@@ -358,11 +371,11 @@ var matrix = [
 
 var tr = d3.select("body").append("table")
   .selectAll("tr")
-    .data(matrix)
+  .data(matrix)
   .enter().append("tr");
 
 var td = tr.selectAll("td")
-    .data(function(d) { return d; })
+  .data(function(d) { return d; })
   .enter().append("td")
     .text(function(d) { return d; });
 ```
@@ -394,7 +407,7 @@ var data = [
 ];
 
 d3.selectAll("div")
-    .data(data, function(d) { return d ? d.name : this.id; })
+  .data(data, function(d) { return d ? d.name : this.id; })
     .text(function(d) { return d.number; });
 ```
 
@@ -408,14 +421,14 @@ This method cannot be used to clear bound data; use [*selection*.datum](#selecti
 
 <a name="selection_enter" href="#selection_enter">#</a> <i>selection</i>.<b>enter</b>()
 
-Returns the enter selection: placeholder nodes for each datum that had no corresponding DOM element in the selection. The enter selection is determined by the previous [*selection*.data](#selection_data), and is thus empty until the selection is joined to data. If the enter selection is retrieved more than once after a data join, subsequent calls return the empty selection.
+Returns the enter selection: placeholder nodes for each datum that had no corresponding DOM element in the selection. The enter selection is determined by [*selection*.data](#selection_data), and is empty on a selection that is not joined to data.
 
 The enter selection is typically used to create “missing” elements corresponding to new data. For example, to create DIV elements from an array of numbers:
 
 ```js
-var div = d3.select("body").selectAll("div");
-div.data([4, 8, 15, 16, 23, 42]);
-div.enter().append("div").text(function(d) { return d; });
+var div = d3.select("body").selectAll("div")
+  .data([4, 8, 15, 16, 23, 42])
+  .enter().append("div").text(function(d) { return d; });
 ```
 
 If the body is initially empty, the above code will create six new DIV elements, append them to the body in-order, and assign their text content as the associated (string-coerced) number:
@@ -431,16 +444,7 @@ If the body is initially empty, the above code will create six new DIV elements,
 
 Conceptually, the enter selection’s placeholders are pointers to the parent element (in this example, the document body). The enter selection is typically only used transiently to append elements.
 
-The enter selection **merges into the update selection** on [append](#selection_append) or [select](#selection_select). This enables you to first modify entering and updating elements separately, as needed, and then modify entering and updating elements together, avoiding duplicate code. For example:
-
-```js
-var circle = svg.selectAll("circle");
-circle.data(data);
-circle.exit().remove(); // remove exiting elements
-circle.attr(…); // modify ONLY updating elements
-circle.enter().append("circle").attr(…); // modify ONLY entering elements
-circle.attr(…); // modify BOTH updating AND entering elements
-```
+The enter selection is often [merged](#selection_merge) with the update selection after appending elements, such that modifications can be applied to both entering and updating elements simultaneously.
 
 <a name="selection_exit" href="#selection_exit">#</a> <i>selection</i>.<b>exit</b>()
 
@@ -449,7 +453,7 @@ Returns the exit selection: existing DOM elements in the selection for which no 
 The exit selection is typically used to remove “superfluous” elements corresponding to old data. For example, to update the DIV elements created previously with a new array of numbers:
 
 ```js
-div.data([1, 2, 4, 8, 16, 32], function(d) { return d; });
+div = div.data([1, 2, 4, 8, 16, 32], function(d) { return d; });
 ```
 
 Since a key function was specified (as the identity function), and the new data contains the numbers [4, 8, 16] which match existing elements in the document, the update selection contains three DIV elements. Leaving those elements as-is, we can append new elements for [1, 2, 32] using the enter selection:
