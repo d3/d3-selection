@@ -25,7 +25,7 @@ In a vanilla environment, a `d3_selection` global is exported. [Try d3-selection
 
 Selection methods accept [W3C selector strings](http://www.w3.org/TR/selectors-api/) such as `.fancy` to select elements with the class *fancy*, or `div` to select DIV elements. Selection methods come in two forms: select and selectAll: the former selects only the first matching element, while the latter selects all matching elements in document order. The top-level selection methods, [d3.select](#select) and [d3.selectAll](#selectAll), query the entire document; the subselection methods, [*selection*.select](#selection_select) and [*selection*.selectAll](#selection_selectAll), restrict selection to descendants of the selected elements.
 
-**Selections are immutable.** All selection methods that affect which elements are selected (or their order) return a new selection rather than modifying the current selection. However, note that the selected elements themselves *are* of course mutable, as selections drive transformations of the document!
+**Selections are immutable.** All selection methods that affect which elements are selected (or their order) return a new selection rather than modifying the current selection. However, note that the selected elements themselves *are* mutable, as selections of course drive transformations of the document!
 
 <a name="selection" href="#selection">#</a> d3.<b>selection</b>()
 
