@@ -21,7 +21,8 @@ p.style("color", "red");
 By convention, selection methods that return the current selection use *four* spaces of indent, while methods that return a new selection use only *two*. This helps reveal changes of context by making them stick out of the chain:
 
 ```js
-d3.select("body").append("svg")
+d3.select("body")
+  .append("svg")
     .attr("width", 960)
     .attr("height", 500)
   .append("g")
