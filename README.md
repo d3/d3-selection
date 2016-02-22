@@ -31,7 +31,7 @@ d3.select("body").append("svg")
     .attr("height", 460);
 ```
 
-**Selections are immutable.** All selection methods that affect which elements are selected (or their order) return a new selection rather than modifying the current selection. However, note that the selected elements themselves *are* mutable, as selections of course drive transformations of the document!
+Selections are immutable. All selection methods that affect which elements are selected (or their order) return a new selection rather than modifying the current selection. However, note that elements *are* necessarily mutable, as selections drive transformations of the document!
 
 ## Installing
 
