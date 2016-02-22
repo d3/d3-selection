@@ -446,9 +446,7 @@ If the body is initially empty, the above code will create six new DIV elements,
 <div>42</div>
 ```
 
-Conceptually, the enter selection’s placeholders are pointers to the parent element (in this example, the document body). The enter selection is typically only used transiently to append elements.
-
-The enter selection is often [merged](#selection_merge) with the update selection after appending elements, such that modifications can be applied to both entering and updating elements simultaneously.
+Conceptually, the enter selection’s placeholders are pointers to the parent element (in this example, the document body). The enter selection is typically only used transiently to append elements, and is often [merged](#selection_merge) with the update selection after appending, such that modifications can be applied to both entering and updating elements.
 
 <a name="selection_exit" href="#selection_exit">#</a> <i>selection</i>.<b>exit</b>()
 
