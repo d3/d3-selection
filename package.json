@@ -1,6 +1,6 @@
 {
   "name": "d3-selection",
-  "version": "0.6.12",
+  "version": "0.7.0",
   "description": "Data-driven DOM manipulation: select elements and join them to data.",
   "keywords": [
     "d3",
@@ -24,7 +24,7 @@
     "pretest": "mkdir -p build && node -e 'process.stdout.write(\"var version = \\\"\" + require(\"./package.json\").version + \"\\\"; export * from \\\"../index\\\"; export {version};\");' > build/bundle.js && rollup -f umd -n d3_selection -o build/d3-selection.js -- build/bundle.js",
     "test": "faucet `find test -name '*-test.js'` && eslint index.js src",
     "prepublish": "npm test && uglifyjs build/d3-selection.js -c -m -o build/d3-selection.min.js && rm -f build/d3-selection.zip && zip -j build/d3-selection.zip -- LICENSE README.md build/d3-selection.js build/d3-selection.min.js",
-    "postpublish": "VERSION=`node -e 'console.log(require(\"./package.json\").version)'`; git push && git push --tags && cp build/d3-selection.js ../d3.github.com/d3-selection.v0.6.js && cp build/d3-selection.min.js ../d3.github.com/d3-selection.v0.6.min.js && cd ../d3.github.com && git add d3-selection.v0.6.js d3-selection.v0.6.min.js && git commit -m \"d3-selection ${VERSION}\" && git push"
+    "postpublish": "VERSION=`node -e 'console.log(require(\"./package.json\").version)'`; git push && git push --tags && cp build/d3-selection.js ../d3.github.com/d3-selection.v0.7.js && cp build/d3-selection.min.js ../d3.github.com/d3-selection.v0.7.min.js && cd ../d3.github.com && git add d3-selection.v0.7.js d3-selection.v0.7.min.js && git commit -m \"d3-selection ${VERSION}\" && git push"
   },
   "devDependencies": {
     "faucet": "0.0",
