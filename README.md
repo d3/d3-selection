@@ -18,7 +18,7 @@ p.attr("class", "graf");
 p.style("color", "red");
 ```
 
-By convention, selection methods that return the current selection use *four* spaces of indent, while selection methods that return a new selection use only *two* spaces of indent. This helps reveal changes of context by making them stick out of the chain:
+By convention, selection methods that return the current selection use *four* spaces of indent, while methods that return a new selection use only *two* spaces of indent. This helps reveal changes of context by making them stick out of the chain:
 
 ```js
 d3.select("body").append("svg")
@@ -31,7 +31,7 @@ d3.select("body").append("svg")
     .attr("height", 460);
 ```
 
-Selections are immutable. All selection methods that affect which elements are selected (or their order) return a new selection rather than modifying the current selection. However, note that elements *are* necessarily mutable, as selections drive transformations of the document!
+Selections are immutable. All selection methods that affect which elements are selected (or their order) return a new selection rather than modifying the current selection. However, note that elements are necessarily mutable, as selections drive transformations of the document!
 
 ## Installing
 
