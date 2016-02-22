@@ -124,7 +124,7 @@ For example, to filter a selection of table rows to contain only even rows:
 var even = d3.selectAll("tr").filter(":nth-child(even)");
 ```
 
-Equivalently, using [d3.selectAll](#selectAll) directly:
+This is approximately equivalent to using [d3.selectAll](#selectAll) directly, although the indexes may be different:
 
 ```js
 var even = d3.selectAll("tr:nth-child(even)");
