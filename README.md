@@ -148,7 +148,7 @@ The returned selection may not preserve the index of the original selection, as 
 
 Returns a new selection merging this selection with the specified *selection*. The returned selection has the same number of groups and the same parents as this selection. Any missing (null) elements in this selection are filled with the corresponding element from the specified *selection*, if present (not null).
 
-This method is commonly used to merge the [enter](#selection_enter) and [update](#selection_data) selections after a [data-join](#joining-data). After performing operations on entering and updating elements separately, you can merge the two selections and perform additional operations, avoiding duplicate code. For example:
+This method is commonly used to merge the [enter](#selection_enter) and [update](#selection_data) selections after a [data-join](#joining-data). After modifying the entering and updating elements separately, you can merge the two selections and perform operations on both without duplicate code. For example:
 
 ```js
 var circle = svg.selectAll("circle").data(data).style("fill", "blue"), // make updating circles blue
