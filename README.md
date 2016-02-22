@@ -151,10 +151,10 @@ Returns a new selection merging this selection with the specified *selection*. T
 This method is commonly used to merge the [enter](#selection_enter) and [update](#selection_data) selections after a [data-join](#joining-data). After modifying the entering and updating elements separately, you can merge the two selections and perform operations on both without duplicate code. For example:
 
 ```js
-var circle = svg.selectAll("circle").data(data).style("fill", "blue"), // make updating circles blue
-    circleExit = circle.exit().remove(), // remove exiting circles
-    circleEnter = circle.enter().append("circle").style("fill", "green"); // make entering circles green
-circle.merge(circleEnter).style("stroke", "black"); // give updating OR entering circles a black stroke
+var circle = svg.selectAll("circle").data(data).style("fill", "blue"), // blue on UPDATE
+    circleExit = circle.exit().remove(), // remove on EXIT
+    circleEnter = circle.enter().append("circle").style("fill", "green"); // green on ENTER
+circle.merge(circleEnter).style("stroke", "black"); // stroke on UPDATE or ENTER
 ```
 
 This method is also useful for merging [filtered](#selection_filter) selections because a filtered selection retains the index structure of the originating selection. Note, however, that this method is not useful for concatenating arbitrary selections, as if this selection and the specified *selection* both have (non-null) elements at the same index, then this selection’s element is returned in the merged selection, and the specified *selection*’s element is ignored.
