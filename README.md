@@ -116,7 +116,7 @@ Unlike [*selection*.select](#selection_select), *selection*.selectAll does affec
 
 <a name="selection_filter" href="#selection_filter">#</a> <i>selection</i>.<b>filter</b>(<i>filter</i>)
 
-Filters the selection, returning a new selection that contains only the elements for which the specified *filter* is true. The *filter* may be specified either as a selector string or a function. If a function, it is evaluated for each selected element, in order, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. For example, to filter a selection of table rows to contain only even rows:
+Filters the selection, returning a new selection that contains only the elements for which the specified *filter* is true. The returned filtered selection preserves the index and parents of this selection. The *filter* may be specified either as a selector string or a function. If a function, it is evaluated for each selected element, in order, being passed the current datum `d` and index `i`, with the `this` context as the current DOM element. For example, to filter a selection of table rows to contain only even rows:
 
 ```js
 var even = d3.selectAll("tr").filter(":nth-child(even)");
@@ -142,11 +142,9 @@ var even = d3.selectAll("tr").select(function(d, i) { return i & 1 ? this : null
 
 Note that the `:nth-child` pseudo-class is a one-based index rather than a zero-based index. Also, the above filter functions do not have precisely the same meaning as `:nth-child`; they rely on the selection index rather than the number of preceeding sibling elements in the DOM.
 
-The returned selection may not preserve the index of the original selection, as some elements may be removed; you can use [*selection*.select](#selection_select) to preserve the index, if needed.
-
 <a name="selection_merge" href="#selection_merge">#</a> <i>selection</i>.<b>merge</b>(<i>selection</i>)
 
-Returns a new selection merging this selection with the specified *selection*. The returned selection has the same number of groups and the same parents as this selection. Any missing (null) elements in this selection are filled with the corresponding element from the specified *selection*, if present (not null).
+Returns a new selection merging this selection with the specified *selection*. The returned selection has the same number of groups and the same parents as this selection. Any missing (null) elements in this selection are filled with the corresponding element, if present (not null), from the specified *selection*.
 
 This method is commonly used to merge the [enter](#selection_enter) and [update](#selection_data) selections after a [data-join](#joining-data). After modifying the entering and updating elements separately, you can merge the two selections and perform operations on both without duplicate code. For example:
 
@@ -156,6 +154,8 @@ var circle = svg.selectAll("circle").data(data).style("fill", "blue"), // make u
     circleEnter = circle.enter().append("circle").style("fill", "green"); // make entering circles green
 circle.merge(circleEnter).style("stroke", "black"); // give updating OR entering circles a black stroke
 ```
+
+This method is also useful for merging [filtered](#selection_filter) selections because a filtered selection retains the index structure of the originating selection. Note, however, that this method is not useful for concatenating arbitrary selections, as if this selection and the specified *selection* both have (non-null) elements at the same index, then this selection’s element is returned in the merged selection, and the specified *selection*’s element is ignored.
 
 <a name="matcher" href="#matcher">#</a> d3.<b>matcher</b>(<i>selector</i>)
 
