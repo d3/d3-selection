@@ -2,20 +2,20 @@
 
 Selections allow powerful data-driven transformation of the document object model (DOM): set [attributes](#selection_attr), [styles](#selection_style), [properties](#selection_property), [HTML](#selection_html) or [text](#selection_text) content, and more. Using the [data join](#binding-data)’s [enter](#selection_enter) and [exit](#selection_enter) selections, you can also [add](#selection_append) or [remove](#selection_remove) elements to correspond to data.
 
-Selection methods typically return the current selection, or a new selection, allowing the concise application of multiple methods on a given selection via method chaining. For example, to set the name attribute and color style of an anchor element:
+Selection methods typically return the current selection, or a new selection, allowing the concise application of multiple operations on a given selection via method chaining. For example, to set the class and color style of all paragraph elements in the current document:
 
 ```js
-d3.select("a")
-    .attr("name", "fred")
+d3.selectAll("p")
+    .attr("class", "graf")
     .style("color", "red");
 ```
 
 This is equivalent to:
 
 ```js
-var anchor = d3.select("a");
-anchor.attr("name", "fred");
-anchor.style("color", "red");
+var p = d3.selectAll("p");
+p.attr("class", "graf");
+p.style("color", "red");
 ```
 
 By convention, selection methods that return the current selection use four spaces of indent, while selection methods that return a new selection use only two spaces of indent. This reveals changes of context by making them stick out of the chain:
