@@ -181,10 +181,17 @@ Returns a new selection merging this selection with the specified *selection*. T
 This method is commonly used to merge the [enter](#selection_enter) and [update](#selection_data) selections after a [data-join](#joining-data). After modifying the entering and updating elements separately, you can merge the two selections and perform operations on both without duplicate code. For example:
 
 ```js
-var circle = svg.selectAll("circle").data(data).style("fill", "blue"), // blue on UPDATE
-    circleExit = circle.exit().remove(), // remove on EXIT
-    circleEnter = circle.enter().append("circle").style("fill", "green"); // green on ENTER
-circle.merge(circleEnter).style("stroke", "black"); // stroke on UPDATE or ENTER
+var circle = svg.selectAll("circle").data(data) // UPDATE
+    .style("fill", "blue");
+
+var circleExit = circle.exit() // EXIT
+    .remove();
+
+var circleEnter = circle.enter().append("circle") // ENTER
+    .style("fill", "green");
+
+circle.merge(circleEnter) // ENTER + UPDATE
+    .style("stroke", "black");
 ```
 
 This method is also useful for merging [filtered](#selection_filter) selections because filtered selections retain the index structure of the originating selection. Note, however, that this method is not useful for concatenating arbitrary selections: if both this selection and the specified *selection* have (non-null) elements at the same index, this selection’s element is returned in the merge and the specified *selection*’s element is ignored.
