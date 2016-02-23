@@ -187,8 +187,7 @@ var circle = svg.selectAll("circle").data(data) // UPDATE
 var circleExit = circle.exit() // EXIT
     .remove();
 
-var circleEnter = circle.enter() // ENTER
-  .append("circle")
+var circleEnter = circle.enter().append("circle") // ENTER
     .style("fill", "green");
 
 circle.merge(circleEnter) // ENTER + UPDATE
