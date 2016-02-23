@@ -184,13 +184,12 @@ This method is commonly used to merge the [enter](#selection_enter) and [update]
 var circle = svg.selectAll("circle").data(data) // UPDATE
     .style("fill", "blue");
 
-var circleExit = circle.exit() // EXIT
+circle.exit() // EXIT
     .remove();
 
-var circleEnter = circle.enter().append("circle") // ENTER
-    .style("fill", "green");
-
-circle.merge(circleEnter) // ENTER + UPDATE
+circle.enter().append("circle") // ENTER
+    .style("fill", "green")
+  .merge(circle) // ENTER + UPDATE
     .style("stroke", "black");
 ```
 
