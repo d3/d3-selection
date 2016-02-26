@@ -600,7 +600,7 @@ See [Sized Donut Multiples](http://bl.ocks.org/mbostock/4c5fad723c87d2fd8273) fo
 
 <a name="selection_call" href="#selection_call">#</a> <i>selection</i>.<b>call</b>(<i>function</i>[, <i>arguments…</i>])
 
-Invokes the specified *function* (exactly once), passing in this selection along with any optional *arguments*. Returns this selection. This is equivalent to invoking the function by hand but facilitates method chaining. For example, to set several attributes in a reusable function:
+Invokes the specified *function* exactly once, passing in this selection along with any optional *arguments*. Returns this selection. This is equivalent to invoking the function by hand but facilitates method chaining. For example, to set several attributes in a reusable function:
 
 ```javascript
 function name(selection, first, last) {
