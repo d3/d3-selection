@@ -586,7 +586,17 @@ For advanced usage, selections provide methods for custom control flow.
 
 <a name="selection_each" href="#selection_each">#</a> <i>selection</i>.<b>each</b>(<i>function</i>)
 
-Invokes the specified *function* for each selected element, passing in the current datum `d` and index `i`, with the `this` context of the current DOM element. This method is used internally by many [transformation methods](#modifying-elements) and can be used to invoke arbitrary code for each selected element.
+Invokes the specified *function* for each selected element, passing in the current datum `d` and index `i`, with the `this` context of the current DOM element. This method can be used to invoke arbitrary code for each selected element, and is useful for creating a context to access parent and child data simultaneously, such as:
+
+```js
+parent.each(function(p, j) {
+  d3.select(this)
+    .selectAll(".child")
+      .text(function(d, i) { return "child " + d.name + " of " + p.name; });
+});
+```
+
+See [Sized Donut Multiples](http://bl.ocks.org/mbostock/4c5fad723c87d2fd8273) for an example.
 
 <a name="selection_call" href="#selection_call">#</a> <i>selection</i>.<b>call</b>(<i>function</i>[, <i>arguments…</i>])
 
