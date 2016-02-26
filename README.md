@@ -624,7 +624,7 @@ name(d3.selectAll("div"), "John", "Snow");
 
 <a name="selection_empty" href="#selection_empty">#</a> <i>selection</i>.<b>empty</b>()
 
-Returns true if this selection is empty. A selection is empty if it contains no elements, or all elements are null.
+Returns true if this selection contains no (non-null) elements.
 
 <a name="selection_nodes" href="#selection_nodes">#</a> <i>selection</i>.<b>nodes</b>()
 
