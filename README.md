@@ -64,7 +64,7 @@ Selection methods accept [W3C selector strings](http://www.w3.org/TR/selectors-a
 
 <a name="selection" href="#selection">#</a> d3.<b>selection</b>()
 
-[Selects](#select) the root element, `document.documentElement`. This function can also be used to check if an object is a selection (`instanceof d3.selection`) or to extend the selection prototype. For example, to add a method to check checkboxes:
+[Selects](#select) the root element, `document.documentElement`. This function can also be used to test for selections (`instanceof d3.selection`) or to extend the selection prototype. For example, to add a method to check checkboxes:
 
 ```js
 d3.selection.prototype.checked = function(value) {
