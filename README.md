@@ -130,7 +130,7 @@ Unlike [*selection*.selectAll](#selection_selectAll), *selection*.select does no
 
 <a name="selection_selectAll" href="#selection_selectAll">#</a> <i>selection</i>.<b>selectAll</b>(<i>selector</i>)
 
-For each selected element, selects the descendant elements that match the specified *selector* string. The elements in the returned selection are grouped by their corresponding parent node in this selection. If no element matches the specified selector for the current element, the group at the current index will be empty. The selected elements do not inherit data from the current selection; use [*selection*.data](#selection_data) to propagate data to children. For example, to select the bold elements in every paragraph:
+For each selected element, selects the descendant elements that match the specified *selector* string. The elements in the returned selection are grouped by their corresponding parent node in this selection. If no element matches the specified selector for the current element, the group at the current index will be empty. The selected elements do not inherit data from this selection; use [*selection*.data](#selection_data) to propagate data to children. For example, to select the bold elements in every paragraph:
 
 ```js
 var b = d3.selectAll("p").selectAll("b");
@@ -315,7 +315,7 @@ Use [*selection*.append](#selection_append) instead to create data-driven conten
 
 <a name="selection_append" href="#selection_append">#</a> <i>selection</i>.<b>append</b>(<i>type</i>[, <i>before</i>])
 
-If the specified *type* is a string, appends a new element of this type (tag name) as the last child of each element in the current selection. Otherwise, the *type* may be a function which is evaluated for each selected element, in order, being passed the current datum *d* and index *i*, with the `this` context as the current DOM element. This function should return an element to be appended. Typically, the function creates a new element, but it may instead return an existing element. For example, to append a DIV element to each paragraph:
+If the specified *type* is a string, appends a new element of this type (tag name) as the last child of each element in this selection. Otherwise, the *type* may be a function which is evaluated for each selected element, in order, being passed the current datum *d* and index *i*, with the `this` context as the current DOM element. This function should return an element to be appended. Typically, the function creates a new element, but it may instead return an existing element. For example, to append a DIV element to each paragraph:
 
 ```js
 d3.selectAll("p").append("div");
@@ -600,7 +600,7 @@ See [Sized Donut Multiples](http://bl.ocks.org/mbostock/4c5fad723c87d2fd8273) fo
 
 <a name="selection_call" href="#selection_call">#</a> <i>selection</i>.<b>call</b>(<i>function</i>[, <i>arguments…</i>])
 
-Invokes the specified *function* (exactly once), passing in the current selection along with any optional *arguments*. Returns the current selection. This is equivalent to invoking the function by hand but facilitates method chaining. For example, to set several attributes in a reusable function:
+Invokes the specified *function* (exactly once), passing in this selection along with any optional *arguments*. Returns this selection. This is equivalent to invoking the function by hand but facilitates method chaining. For example, to set several attributes in a reusable function:
 
 ```javascript
 function name(selection, first, last) {
