@@ -55,11 +55,3 @@ tape("selection.merge(selection) reuses this selection’s parents", function(te
   test.equal(selection10._parents, selection1._parents);
   test.end();
 });
-
-tape("selection.merge(selection) throws an Error if the specified selection is not a selection", function(test) {
-  var document = jsdom.jsdom("<parent><child></child><child></child></parent><parent><child></child><child></child></parent>"),
-      body = document.body,
-      selection = d3.select(body).selectAll("parent").selectAll("child");
-  test.throws(function() { selection.merge({_groups: selection._groups, _parents: selection._parents}); }, /Error/);
-  test.end();
-});
