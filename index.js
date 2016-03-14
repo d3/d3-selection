@@ -1,4 +1,4 @@
-export {version} from "./build/version";
+export {version} from "./build/package";
 export {default as creator} from "./src/creator";
 export {default as matcher} from "./src/matcher";
 export {default as mouse} from "./src/mouse";
