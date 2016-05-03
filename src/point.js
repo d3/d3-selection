@@ -1,6 +1,3 @@
-import defaultView from "./window";
-import select from "./select";
-
 export default function(node, event) {
   var svg = node.ownerSVGElement || node;
 

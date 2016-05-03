@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "json2module": "0.0",
-    "rollup": "0.25",
+    "rollup": "0.26",
     "jsdom": "8",
     "tape": "4",
     "uglify-js": "2"
