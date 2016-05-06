@@ -94,3 +94,14 @@ export default function(typename, value, capture) {
   for (i = 0; i < n; ++i) this.each(on(typenames[i], value, capture));
   return this;
 }
+
+export function customEvent(event1, callback, that, args) {
+  var event0 = event;
+  event1.sourceEvent = event;
+  event = event1;
+  try {
+    return callback.apply(that, args);
+  } finally {
+    event = event0;
+  }
+}
