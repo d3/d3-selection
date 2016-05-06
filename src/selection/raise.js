@@ -1,5 +1,5 @@
 function raise() {
-  this.parentNode.appendChild(this);
+  if (this.nextSibling) this.parentNode.appendChild(this);
 }
 
 export default function() {
