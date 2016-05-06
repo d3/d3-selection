@@ -95,12 +95,12 @@ export default function(typename, value, capture) {
   return this;
 }
 
-export function customEvent(event1, callback, that, args) {
+export function customEvent(event1, listener, that, args) {
   var event0 = event;
   event1.sourceEvent = event;
   event = event1;
   try {
-    return callback.apply(that, args);
+    return listener.apply(that, args);
   } finally {
     event = event0;
   }
