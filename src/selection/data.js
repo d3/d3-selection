@@ -39,43 +39,35 @@ function bindKey(parent, group, enter, update, exit, data, key) {
       keyValue;
 
   // Compute the key for each node.
-  // If multiple nodes have the same key, only the first one counts.
+  // If multiple nodes have the same key, the duplicates are added to exit.
   for (i = 0; i < groupLength; ++i) {
     if (node = group[i]) {
       keyValues[i] = keyValue = keyPrefix + key.call(node, node.__data__, i, group);
-      if (!nodeByKeyValue[keyValue]) {
+      if (keyValue in nodeByKeyValue) {
+        exit[i] = node;
+      } else {
         nodeByKeyValue[keyValue] = node;
       }
     }
   }
 
   // Compute the key for each datum.
-  // If multiple data have the same key, only the first one counts.
+  // If there a node associated with this key, join and add it to update.
+  // If there is not (or the key is a duplicate), add it to enter.
   for (i = 0; i < dataLength; ++i) {
     keyValue = keyPrefix + key.call(parent, data[i], i, data);
-
-    // Is there a node associated with this key?
-    // If not, this datum is added to the enter selection.
-    if (!(node = nodeByKeyValue[keyValue])) {
-      enter[i] = new EnterNode(parent, data[i]);
-    }
-
-    // Did we already bind a node using this key? (Or is a duplicate?)
-    // If unique, the node and datum are joined in the update selection.
-    // Otherwise, the datum is ignored, neither entering nor exiting.
-    else if (node !== true) {
+    if (node = nodeByKeyValue[keyValue]) {
       update[i] = node;
       node.__data__ = data[i];
+      nodeByKeyValue[keyValue] = null;
+    } else {
+      enter[i] = new EnterNode(parent, data[i]);
     }
-
-    // Record that we consumed this key, either to enter or update.
-    nodeByKeyValue[keyValue] = true;
   }
 
-  // Take any remaining nodes that were not bound to data,
-  // and place them in the exit selection.
+  // Add any remaining nodes that were not bound to data to exit.
   for (i = 0; i < groupLength; ++i) {
-    if ((node = group[i]) && (nodeByKeyValue[keyValues[i]] !== true)) {
+    if ((node = group[i]) && (nodeByKeyValue[keyValues[i]] === node)) {
       exit[i] = node;
     }
   }

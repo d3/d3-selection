@@ -138,6 +138,84 @@ tape("selection.data(values, function) joins data to element using the computed 
   test.end();
 });
 
+tape("selection.data(values, function) puts elements with duplicate keys into update or exit", function(test) {
+  var body = jsdom.jsdom("<node id='one' name='foo'></node><node id='two' name='foo'></node><node id='three' name='bar'></node>").body,
+      one = body.querySelector("#one"),
+      two = body.querySelector("#two"),
+      three = body.querySelector("#three"),
+      selection = d3.select(body).selectAll("node").data(["foo"], function(d) { return d || this.getAttribute("name"); });
+  test.deepEqual(selection, {
+    _groups: [[one]],
+    _parents: [body],
+    _enter: [[,]],
+    _exit: [[, two, three]]
+  });
+  test.end();
+});
+
+tape("selection.data(values, function) puts elements with duplicate keys into exit", function(test) {
+  var body = jsdom.jsdom("<node id='one' name='foo'></node><node id='two' name='foo'></node><node id='three' name='bar'></node>").body,
+      one = body.querySelector("#one"),
+      two = body.querySelector("#two"),
+      three = body.querySelector("#three"),
+      selection = d3.select(body).selectAll("node").data(["bar"], function(d) { return d || this.getAttribute("name"); });
+  test.deepEqual(selection, {
+    _groups: [[three]],
+    _parents: [body],
+    _enter: [[,]],
+    _exit: [[one, two,]]
+  });
+  test.end();
+});
+
+tape("selection.data(values, function) puts data with duplicate keys into update and enter", function(test) {
+  var body = jsdom.jsdom("<node id='one'></node><node id='two'></node><node id='three'></node>").body,
+      one = body.querySelector("#one"),
+      two = body.querySelector("#two"),
+      three = body.querySelector("#three"),
+      selection = d3.select(body).selectAll("node").data(["one", "one", "two"], function(d) { return d || this.id; });
+  test.deepEqual(selection, {
+    _groups: [[one,, two]],
+    _parents: [body],
+    _enter: [[, {
+      __data__: "one",
+      _next: two,
+      _parent: body,
+      namespaceURI: "http://www.w3.org/1999/xhtml",
+      ownerDocument: body.ownerDocument
+    },, ]],
+    _exit: [[,, three]]
+  });
+  test.end();
+});
+
+tape("selection.data(values, function) puts data with duplicate keys into enter", function(test) {
+  var body = jsdom.jsdom("<node id='one'></node><node id='two'></node><node id='three'></node>").body,
+      one = body.querySelector("#one"),
+      two = body.querySelector("#two"),
+      three = body.querySelector("#three"),
+      selection = d3.select(body).selectAll("node").data(["foo", "foo", "two"], function(d) { return d || this.id; });
+  test.deepEqual(selection, {
+    _groups: [[,, two]],
+    _parents: [body],
+    _enter: [[{
+      __data__: "foo",
+      _next: two,
+      _parent: body,
+      namespaceURI: "http://www.w3.org/1999/xhtml",
+      ownerDocument: body.ownerDocument
+    }, {
+      __data__: "foo",
+      _next: two,
+      _parent: body,
+      namespaceURI: "http://www.w3.org/1999/xhtml",
+      ownerDocument: body.ownerDocument
+    }, ]],
+    _exit: [[one,, three]]
+  });
+  test.end();
+});
+
 tape("selection.data(values, function) passes the key function datum, index and nodes or data", function(test) {
   var body = jsdom.jsdom("<node id='one'></node><node id='two'></node>").body,
       one = body.querySelector("#one"),
