@@ -647,7 +647,7 @@ Returns the total number of elements in this selection.
 
 ### Local Variables
 
-It’s often desirable when using D3 to define local behavior, that is, behavior that is specific to an individual element, rather than the same for all elements in a selection. D3 locals allow you to share local state acriss operations, such as to modify multiple attributes or elements. For instance, when rendering small multiples of time-series data, you might want the same *x*-scale for all charts but distinct *y*-scales to compare the relative performance of each metric. D3 locals are similar to standard `var`s, except the value of a local is scoped by a DOM element: on set, the value is stored on the given element; on get, the value is retrieved from given element or the nearest ancestor that defines it.
+D3 locals allow you to define local state independent of data. For instance, when rendering [small multiples](http://bl.ocks.org/mbostock/e1192fe405703d8321a5187350910e08) of time-series data, you might want the same *x*-scale for all charts but distinct *y*-scales to compare the relative performance of each metric. D3 locals are scoped by DOM elements: on set, the value is stored on the given element; on get, the value is retrieved from given element or the nearest ancestor that defines it.
 
 <a name="local" href="#local">#</a> d3.<b>local</b>()
 
