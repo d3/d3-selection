@@ -661,7 +661,7 @@ Like `var`, each local is a distinct symbolic reference; unlike `var`, the value
 
 <a name="local_set" href="#local_set">#</a> <i>local</i>.<b>set</b>(<i>node</i>, <i>value</i>)
 
-Sets the value of this local on the specified *node* to the specified *value*, and returns the specified *value*. This is often performed within a [*selection*.each](#selection_each):
+Sets the value of this local on the specified *node* to the *value*, and returns the specified *value*. This is often performed within a [*selection*.each](#selection_each):
 
 ```js
 selection.each(function(d) { foo.set(this, d.value); });
@@ -679,7 +679,7 @@ Returns the value of this local on the specified *node*. If the *node* does not 
 
 <a name="local_remove" href="#local_remove">#</a> <i>local</i>.<b>remove</b>(<i>node</i>)
 
-Deletes this local’s value from the specified *node*. If an ancestor also defines this local, that definition is unaffected, and thus [*local*.get](#local_get) will still return the inherited value.
+Deletes this local’s value from the specified *node* and returns its previous value. Returns true if the *node* defined this local prior to removal, and false otherwise. If ancestors also define this local, those definitions are unaffected, and thus [*local*.get](#local_get) will still return the inherited value.
 
 <a name="local_toString" href="#local_toString">#</a> <i>local</i>.<b>toString</b>()
 
