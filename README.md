@@ -661,13 +661,13 @@ Like `var`, each local is a distinct symbolic reference; unlike `var`, the value
 
 <a name="local_set" href="#local_set">#</a> <i>local</i>.<b>set</b>(<i>node</i>, <i>value</i>)
 
-Sets the value of this local on the specified *node* to the *value*, and returns the specified *value*. This is often performed within a [*selection*.each](#selection_each):
+Sets the value of this local on the specified *node* to the *value*, and returns the specified *value*. This is often performed using [*selection*.each](#selection_each):
 
 ```js
 selection.each(function(d) { foo.set(this, d.value); });
 ```
 
-If you are just setting a single variable, this is equivalent to using [*selection*.property](#selection_property):
+If you are just setting a single variable, consider using [*selection*.property](#selection_property):
 
 ```js
 selection.property(foo, function(d) { return d.value; });
