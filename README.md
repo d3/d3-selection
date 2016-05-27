@@ -657,7 +657,7 @@ Declares a new local variable. For example:
 var foo = d3.local();
 ```
 
-Like `var`, each local is a distinct symbolic reference. Unlike `var`, the value of each local is also scoped by a DOM element.
+Like `var`, each local is a distinct symbolic reference; unlike `var`, the value of each local is also scoped by the DOM.
 
 <a name="local_set" href="#local_set">#</a> <i>local</i>.<b>set</b>(<i>node</i>, <i>value</i>)
 
