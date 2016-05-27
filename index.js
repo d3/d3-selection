@@ -1,5 +1,6 @@
 export {version} from "./build/package";
 export {default as creator} from "./src/creator";
+export {default as local} from "./src/local";
 export {default as matcher} from "./src/matcher";
 export {default as mouse} from "./src/mouse";
 export {default as namespace} from "./src/namespace";

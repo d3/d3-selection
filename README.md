@@ -56,6 +56,7 @@ var div = d3_selection.selectAll("div");
 * [Joining Data](#joining-data)
 * [Handling Events](#handling-events)
 * [Control Flow](#control-flow)
+* [Local Variables](#local-variables)
 * [Namespaces](#namespaces)
 
 ### Selecting Elements
@@ -643,6 +644,44 @@ Returns the first (non-null) element in this selection. If the selection is empt
 <a name="selection_size" href="#selection_size">#</a> <i>selection</i>.<b>size</b>()
 
 Returns the total number of elements in this selection.
+
+### Local Variables
+
+It’s often desirable when using D3 to define local behavior, that is, behavior that is specific to an individual element, rather than the same for all elements in a selection. D3 locals allow you to share local state acriss operations, such as to modify multiple attributes or elements. For instance, when rendering small multiples of time-series data, you might want the same *x*-scale for all charts but distinct *y*-scales to compare the relative performance of each metric. D3 locals are similar to standard `var`s, except the value of a local is scoped by a DOM element: on set, the value is stored on the given element; on get, the value is retrieved from given element or the nearest ancestor that defines it.
+
+<a name="local" href="#local">#</a> d3.<b>local</b>()
+
+Declares a new local variable. For example:
+
+```js
+var foo = d3.local();
+```
+
+<a name="local_set" href="#local_set">#</a> <i>local</i>.<b>set</b>(<i>node</i>, <i>value</i>)
+
+Sets the value of this local on the specified *node* to the specified *value*, and returns the specified *value*. This is often performed within a [*selection*.each](#selection_each):
+
+```js
+selection.each(function(d) { foo.set(this, d.value); });
+```
+
+If you are just setting a single variable, this is equivalent to using [*selection*.property](#selection_property):
+
+```js
+selection.property(foo, function(d) { return d.value; });
+```
+
+<a name="local_get" href="#local_get">#</a> <i>local</i>.<b>get</b>(<i>node</i>)
+
+Returns the value of this local on the specified *node*. If the *node* does not define this local, returns the value from the nearest ancestor that defines it. Returns undefined if no ancestor defines this local.
+
+<a name="local_remove" href="#local_remove">#</a> <i>local</i>.<b>remove</b>(<i>node</i>)
+
+Deletes this local’s value from the specified *node*. If an ancestor also defines this local, that definition is unaffected, and thus [*local*.get](#local_get) will still return the inherited value.
+
+<a name="local_toString" href="#local_toString">#</a> <i>local</i>.<b>toString</b>()
+
+Returns the automatically-generated identifier for this local. This is the name of the property that is used to store the local’s value on elements, and thus you can also set or get the local’s value using *element*[*local*] or by using [*selection*.property](#selection_property).
 
 ### Namespaces
 
