@@ -657,6 +657,8 @@ Declares a new local variable. For example:
 var foo = d3.local();
 ```
 
+Like `var`, each local is a distinct symbolic reference.
+
 <a name="local_set" href="#local_set">#</a> <i>local</i>.<b>set</b>(<i>node</i>, <i>value</i>)
 
 Sets the value of this local on the specified *node* to the specified *value*, and returns the specified *value*. This is often performed within a [*selection*.each](#selection_each):
