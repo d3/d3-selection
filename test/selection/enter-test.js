@@ -105,26 +105,26 @@ tape("enter.append(…) inserts entering nodes before the next node in the updat
   test.end();
 });
 
-tape("enter.append(…, before) inserts entering nodes before the sibling matching the specified selector", function(test) {
+tape("enter.insert(…, before) inserts entering nodes before the sibling matching the specified selector", function(test) {
   var document = jsdom.jsdom("<hr>"),
       identity = function(d) { return d; },
       p = d3.select(document.body).selectAll("p");
   p = p.data([1, 3], identity);
-  p = p.enter().append("p", "hr").text(identity).merge(p);
+  p = p.enter().insert("p", "hr").text(identity).merge(p);
   p = p.data([0, 1, 2, 3, 4], identity);
-  p = p.enter().append("p", "hr").text(identity).merge(p);
+  p = p.enter().insert("p", "hr").text(identity).merge(p);
   test.equal(document.body.innerHTML, "<p>1</p><p>3</p><p>0</p><p>2</p><p>4</p><hr>");
   test.end();
 });
 
-tape("enter.append(…, null) inserts entering nodes after the last child", function(test) {
+tape("enter.insert(…, null) inserts entering nodes after the last child", function(test) {
   var document = jsdom.jsdom(),
       identity = function(d) { return d; },
       p = d3.select(document.body).selectAll("p");
   p = p.data([1, 3], identity);
-  p = p.enter().append("p", null).text(identity).merge(p);
+  p = p.enter().insert("p", null).text(identity).merge(p);
   p = p.data([0, 1, 2, 3, 4], identity);
-  p = p.enter().append("p", null).text(identity).merge(p);
+  p = p.enter().insert("p", null).text(identity).merge(p);
   test.equal(document.body.innerHTML, "<p>1</p><p>3</p><p>0</p><p>2</p><p>4</p>");
   test.end();
 });

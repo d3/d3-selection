@@ -312,11 +312,11 @@ If a *value* is specified, sets the [inner HTML](http://dev.w3.org/html5/spec-LC
 
 If a *value* is not specified, returns the inner HTML for the first (non-null) element in the selection. This is generally useful only if you know the selection contains exactly one element.
 
-Use [*selection*.append](#selection_append) instead to create data-driven content; this method is intended for when you want a little bit of HTML, say for rich formatting. Also, *selection*.html is only supported on HTML elements. SVG elements and other non-HTML elements do not support the innerHTML property, and thus are incompatible with *selection*.html. Consider using [XMLSerializer](https://developer.mozilla.org/en-US/docs/XMLSerializer) to convert a DOM subtree to text. See also the [innersvg polyfill](https://code.google.com/p/innersvg/), which provides a shim to support the innerHTML property on SVG elements.
+Use [*selection*.append](#selection_append) or [*selection*.insert](#selection_insert) instead to create data-driven content; this method is intended for when you want a little bit of HTML, say for rich formatting. Also, *selection*.html is only supported on HTML elements. SVG elements and other non-HTML elements do not support the innerHTML property, and thus are incompatible with *selection*.html. Consider using [XMLSerializer](https://developer.mozilla.org/en-US/docs/XMLSerializer) to convert a DOM subtree to text. See also the [innersvg polyfill](https://code.google.com/p/innersvg/), which provides a shim to support the innerHTML property on SVG elements.
 
-<a name="selection_append" href="#selection_append">#</a> <i>selection</i>.<b>append</b>(<i>type</i>[, <i>before</i>])
+<a name="selection_append" href="#selection_append">#</a> <i>selection</i>.<b>append</b>(<i>type</i>)
 
-If the specified *type* is a string, appends a new element of this type (tag name) as the last child of each element in this selection. Otherwise, the *type* may be a function which is evaluated for each selected element, in order, being passed the current datum *d* and index *i*, with the `this` context as the current DOM element. This function should return an element to be appended. Typically, the function creates a new element, but it may instead return an existing element. For example, to append a DIV element to each paragraph:
+If the specified *type* is a string, appends a new element of this type (tag name) as the last child of each selected element, or the next following sibling in the update selection if this is an [enter selection](#selection_enter). (The enter behavior allows you to insert elements into the DOM in an order consistent with bound data; however, the slower [*selection*.order](#selection_order) may still be required if updating elements change order.) Otherwise, the *type* may be a function which is evaluated for each selected element, in order, being passed the current datum *d* and index *i*, with the `this` context as the current DOM element. This function should return an element to be appended. (The function typically creates a new element, but it may instead return an existing element.) For example, to append a DIV element to each paragraph:
 
 ```js
 d3.selectAll("p").append("div");
@@ -330,15 +330,49 @@ d3.selectAll("p").append(function() {
 });
 ```
 
+Which is equivalent to:
+
+```js
+d3.selectAll("p").select(function() {
+  return this.appendChild(document.createElement("div"));
+});
+```
+
 In both cases, this method returns a new selection containing the appended elements. Each new element inherits the data of the current elements, if any, in the same manner as [*selection*.select](#selection_select).
 
-An optional *before* selector string or function may be specified. For instance, the selector `:first-child` will prepend nodes *before* the first child, rather than *after* the last child. If no *before* selector is specified on an [enter selection](#selection_enter), entering elements are inserted immediately before the next following sibling in the update selection, if any. This allows you to insert elements into the DOM in an order consistent with bound data. Note, however, the slower [*selection*.order](#selection_order) may still be required if updating elements change order. To append entering elements after the last child, explicitly specify a null *before* selector.
+The specified *name* may have a namespace prefix, such as `svg:text` to specify a `text` attribute in the SVG namespace. See [namespaces](#namespaces) for the map of supported namespaces; additional namespaces can be registered by adding to the map. If no namespace is specified, the namespace will be inherited from the parent element; or, if the name is one of the known prefixes, the corresponding namespace will be used (for example, `svg` implies `svg:svg`).
+
+<a name="selection_insert" href="#selection_insert">#</a> <i>selection</i>.<b>insert</b>(<i>type</i>, <i>before</i>)
+
+If the specified *type* is a string, inserts a new element of this type (tag name) before the element matching the specified *before* selector for each selected element. For example, a *before* selector `:first-child` will prepend nodes before the first child. Both *type* and *before* may instead be specified as functions which are evaluated for each selected element, in order, being passed the current datum *d* and index *i*, with the `this` context as the current DOM element. The *type* function should return an element to be inserted; the *before* function should return the child element before which the element should be inserted. For example, to insert a DIV element to each paragraph:
+
+```js
+d3.selectAll("p").insert("div");
+```
+
+This is equivalent to:
+
+```js
+d3.selectAll("p").insert(function() {
+  return document.createElement("div");
+});
+```
+
+Which is equivalent to:
+
+```js
+d3.selectAll("p").select(function() {
+  return this.insertBefore(document.createElement("div"), null);
+});
+```
+
+In both cases, this method returns a new selection containing the appended elements. Each new element inherits the data of the current elements, if any, in the same manner as [*selection*.select](#selection_select).
 
 The specified *name* may have a namespace prefix, such as `svg:text` to specify a `text` attribute in the SVG namespace. See [namespaces](#namespaces) for the map of supported namespaces; additional namespaces can be registered by adding to the map. If no namespace is specified, the namespace will be inherited from the parent element; or, if the name is one of the known prefixes, the corresponding namespace will be used (for example, `svg` implies `svg:svg`).
 
 <a name="selection_remove" href="#selection_remove">#</a> <i>selection</i>.<b>remove</b>()
 
-Removes the selected elements from the document. Returns this selection (the removed elements) which are now detached from the DOM. There is not currently a dedicated API to add removed elements back to the document; however, you can pass a function to [*selection*.append](#selection_append) to re-add elements.
+Removes the selected elements from the document. Returns this selection (the removed elements) which are now detached from the DOM. There is not currently a dedicated API to add removed elements back to the document; however, you can pass a function to [*selection*.append](#selection_append) or [*selection*.insert](#selection_insert) to re-add elements.
 
 <a name="selection_sort" href="#selection_sort">#</a> <i>selection</i>.<b>sort</b>(<i>compare</i>)
 
@@ -374,7 +408,7 @@ selection.each(function() {
 
 <a name="creator" href="#creator">#</a> d3.<b>creator</b>(<i>name</i>)
 
-Given the specified element *name*, returns a function which creates an element of the given name, assuming that `this` is the parent element. This method is used internally by [*selection*.append](#selection_append) to create new elements. For example, this:
+Given the specified element *name*, returns a function which creates an element of the given name, assuming that `this` is the parent element. This method is used internally by [*selection*.append](#selection_append) and [*selection*.insert](#selection_insert) to create new elements. For example, this:
 
 ```js
 selection.append("div");
