@@ -4,6 +4,7 @@
   "description": "Data-driven DOM manipulation: select elements and join them to data.",
   "keywords": [
     "d3",
+    "d3-module",
     "dom",
     "selection",
     "data-join"
