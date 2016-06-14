@@ -152,7 +152,7 @@ Unlike [*selection*.select](#selection_select), *selection*.selectAll does affec
 
 <a name="selection_filter" href="#selection_filter">#</a> <i>selection</i>.<b>filter</b>(<i>filter</i>)
 
-Filters the selection, returning a new selection that contains only the elements for which the specified *filter* is true. The returned filtered selection preserves the index and parents of this selection, using null to represent missing (filtered-out) elements. The *filter* may be specified either as a selector string or a function. If a function, it is evaluated for each selected element, in order, being passed the current datum (*d*), the current index (*i*), and the current group (*nodes*), with *this* as the current DOM element.
+Filters the selection, returning a new selection that contains only the elements for which the specified *filter* is true. The *filter* may be specified either as a selector string or a function. If a function, it is evaluated for each selected element, in order, being passed the current datum (*d*), the current index (*i*), and the current group (*nodes*), with *this* as the current DOM element.
 
 For example, to filter a selection of table rows to contain only even rows:
 
@@ -180,6 +180,8 @@ var even = d3.selectAll("tr").select(function(d, i) { return i & 1 ? this : null
 
 Note that the `:nth-child` pseudo-class is a one-based index rather than a zero-based index. Also, the above filter functions do not have precisely the same meaning as `:nth-child`; they rely on the selection index rather than the number of preceeding sibling elements in the DOM.
 
+The returned filtered selection preserves the parents of this selection, but like [*array*.filter](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter), it does not preserve indexes as some elements may be removed; use [*selection*.select](#selection_select) to preserve the index, if needed.
+
 <a name="selection_merge" href="#selection_merge">#</a> <i>selection</i>.<b>merge</b>(<i>other</i>)
 
 Returns a new selection merging this selection with the specified *other* selection. The returned selection has the same number of groups and the same parents as this selection. Any missing (null) elements in this selection are filled with the corresponding element, if present (not null), from the specified *selection*. (If the *other* selection has additional groups or parents, they are ignored.)
@@ -198,7 +200,7 @@ circle.enter().append("circle") // ENTER
     .style("stroke", "black");
 ```
 
-This method is also useful for merging [filtered](#selection_filter) selections because filtered selections retain the index structure of the originating selection. Note, however, that this method is not useful for concatenating arbitrary selections: if both this selection and the specified *other* selection have (non-null) elements at the same index, this selection’s element is returned in the merge and the *other* selection’s element is ignored.
+This method is not intended for concatenating arbitrary selections, however: if both this selection and the specified *other* selection have (non-null) elements at the same index, this selection’s element is returned in the merge and the *other* selection’s element is ignored.
 
 <a name="matcher" href="#matcher">#</a> d3.<b>matcher</b>(<i>selector</i>)
 
