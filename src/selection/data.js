@@ -1,4 +1,5 @@
 import {Selection} from "./index";
+import {EnterNode} from "./enter";
 import constant from "../constant";
 
 var keyPrefix = "$"; // Protect against keys like “__proto__”.
@@ -115,19 +116,3 @@ export default function(value, key) {
   update._exit = exit;
   return update;
 }
-
-function EnterNode(parent, datum) {
-  this.ownerDocument = parent.ownerDocument;
-  this.namespaceURI = parent.namespaceURI;
-  this._next = null;
-  this._parent = parent;
-  this.__data__ = datum;
-}
-
-EnterNode.prototype = {
-  constructor: EnterNode,
-  appendChild: function(child) { return this._parent.insertBefore(child, this._next); },
-  insertBefore: function(child, next) { return this._parent.insertBefore(child, next); },
-  querySelector: function(selector) { return this._parent.querySelector(selector); },
-  querySelectorAll: function(selector) { return this._parent.querySelectorAll(selector); }
-};
