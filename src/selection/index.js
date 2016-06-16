@@ -1,5 +1,6 @@
 import selection_select from "./select";
 import selection_selectAll from "./selectAll";
+import selection_selectData from "./selectData";
 import selection_filter from "./filter";
 import selection_data from "./data";
 import selection_enter from "./enter";
@@ -43,6 +44,7 @@ Selection.prototype = selection.prototype = {
   constructor: Selection,
   select: selection_select,
   selectAll: selection_selectAll,
+  selectData: selection_selectData,
   filter: selection_filter,
   data: selection_data,
   enter: selection_enter,
