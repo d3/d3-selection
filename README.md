@@ -557,6 +557,23 @@ Now the document body looks like this:
 
 The order of the DOM elements matches the order of the data because the old data’s order and the new data’s order were consistent. If the new data’s order is different, use [*selection*.order](#selection_order) to reorder the elements in the DOM. See the [General Update Pattern](http://bl.ocks.org/mbostock/3808218) example thread for more on data joins.
 
+<a name="selection_selectData" href="#selection_selectData">#</a> <i>selection</i>.<b>selectData</b>(<i>data</i>)
+
+A convenience method for constructing an [enter selection](#selection_enter) for the specified data. Equivalent to:
+
+```js
+selection.selectAll(function() { return []; }).data(data).enter();
+```
+
+For example, to append DIV elements for some new data:
+
+```js
+var div = d3.select("body")
+  .selectData([4, 8, 15, 16, 23, 42])
+  .append("div")
+    .text(function(d) { return d; });
+```
+
 <a name="selection_datum" href="#selection_datum">#</a> <i>selection</i>.<b>datum</b>([<i>value</i>])
 
 Gets or sets the bound data for each selected element. Unlike [*selection*.data](#selection_data), this method does not compute a join and does not affect indexes or the enter and exit selections.
