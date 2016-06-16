@@ -1,5 +1,7 @@
+function none() {}
+
 export default function(selector) {
-  return function() {
+  return selector == null ? none : function() {
     return this.querySelector(selector);
   };
 }

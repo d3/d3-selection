@@ -37,6 +37,22 @@ tape("d3.selectAll(array) can select an empty array", function(test) {
   test.end();
 });
 
+tape("d3.selectAll(null) selects an empty array", function(test) {
+  test.deepEqual(d3.selectAll(), {_groups: [[]], _parents: [null]});
+  test.deepEqual(d3.selectAll(null), {_groups: [[]], _parents: [null]});
+  test.deepEqual(d3.selectAll(undefined), {_groups: [[]], _parents: [null]});
+  test.end();
+});
+
+tape("d3.selectAll(null) selects a new empty array each time", function(test) {
+  var one = d3.selectAll()._groups[0],
+      two = d3.selectAll()._groups[0];
+  test.equal(one === two, false);
+  one.push("one");
+  test.deepEqual(d3.selectAll()._groups[0], []);
+  test.end();
+});
+
 tape("d3.selectAll(array) can select an array that contains null", function(test) {
   var document = jsdom.jsdom("<h1>hello</h1><h2>world</h2>"),
       h1 = document.querySelector("h1");

@@ -1,5 +1,9 @@
+function empty() {
+  return [];
+}
+
 export default function(selector) {
-  return function() {
+  return selector == null ? empty : function() {
     return this.querySelectorAll(selector);
   };
 }

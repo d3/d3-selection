@@ -38,7 +38,7 @@ tape("d3.select(document) selects the given document", function(test) {
 });
 
 tape("d3.select(null) selects null", function(test) {
-  var document = jsdom.jsdom("<h1>hello</h1>");
+  var document = jsdom.jsdom("<h1>hello</h1><null></null><undefined></undefined>");
   test.deepEqual(d3.select(null), {_groups: [[null]], _parents: [null]});
   test.deepEqual(d3.select(undefined), {_groups: [[undefined]], _parents: [null]});
   test.deepEqual(d3.select(), {_groups: [[undefined]], _parents: [null]});
