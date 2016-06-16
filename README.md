@@ -442,7 +442,8 @@ var matrix = [
   [ 1013,   990,  940, 6907]
 ];
 
-var tr = d3.select("body").append("table")
+var tr = d3.select("body")
+  .append("table")
   .selectAll("tr")
   .data(matrix)
   .enter().append("tr");
@@ -501,9 +502,11 @@ Returns the enter selection: placeholder nodes for each datum that had no corres
 The enter selection is typically used to create “missing” elements corresponding to new data. For example, to create DIV elements from an array of numbers:
 
 ```js
-var div = d3.select("body").selectAll("div")
+var div = d3.select("body")
+  .selectAll("div")
   .data([4, 8, 15, 16, 23, 42])
-  .enter().append("div").text(function(d) { return d; });
+  .enter().append("div")
+    .text(function(d) { return d; });
 ```
 
 If the body is initially empty, the above code will create six new DIV elements, append them to the body in-order, and assign their text content as the associated (string-coerced) number:
