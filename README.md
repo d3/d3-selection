@@ -650,7 +650,7 @@ See [Sized Donut Multiples](http://bl.ocks.org/mbostock/4c5fad723c87d2fd8273) fo
 
 Invokes the specified *function* exactly once, passing in this selection along with any optional *arguments*. Returns this selection. This is equivalent to invoking the function by hand but facilitates method chaining. For example, to set several styles in a reusable function:
 
-```javascript
+```js
 function name(selection, first, last) {
   selection
       .attr("first-name", first)
@@ -660,15 +660,17 @@ function name(selection, first, last) {
 
 Now say:
 
-```javascript
+```js
 d3.selectAll("div").call(name, "John", "Snow");
 ```
 
-This is equivalent to:
+This is roughly equivalent to:
 
-```javascript
+```js
 name(d3.selectAll("div"), "John", "Snow");
 ```
+
+The only difference is that *selection*.call always returns the *selection* and not the return value of the called *function*, `name`.
 
 <a name="selection_empty" href="#selection_empty">#</a> <i>selection</i>.<b>empty</b>()
 
