@@ -83,7 +83,7 @@ d3.selectAll("input[type=checkbox]").checked(true);
 
 <a name="select" href="#select">#</a> d3.<b>select</b>(<i>selector</i>)
 
-Selects the first element that matches the specified *selector* string. If no elements match the *selector*, returns an empty selection. If multiple elements match the *selector*, only the first matching element(in document order will be selected. For example, to select the first anchor element:
+Selects the first element that matches the specified *selector* string. If no elements match the *selector*, returns an empty selection. If multiple elements match the *selector*, only the first matching element (in document order) will be selected. For example, to select the first anchor element:
 
 ```js
 var anchor = d3.select("a");
