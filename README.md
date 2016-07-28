@@ -511,8 +511,8 @@ circle.enter().append("circle") // 5
 Breaking this down into discrete steps:
 
 1. Any existing circles (that are descendants of the `svg` selection) are [selected](#selection_selectAll).
-2. The existing circles are [joined to the new `data`](#selection_data), returning those circles that match new data: the *update* selection.
-3. The updating circles are given a blue fill.
+2. These circles are [joined to new `data`](#selection_data), returning the matching circles: the *update* selection.
+3. These updating circles are given a blue fill.
 4. Any existing circles that do *not* match new data—the *exit* selection—are removed.
 5. New circles are [appended](#selection_append) for any new data that did *not* match an existing circle: the *enter* selection.
 6. The entering circles are given a green fill.
