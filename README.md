@@ -200,6 +200,8 @@ circle.enter().append("circle") // ENTER
     .style("stroke", "black");
 ```
 
+See [*selection*.data](#selection_data) for a more complete explanation of this code, which is known as the general update pattern.
+
 This method is not intended for concatenating arbitrary selections, however: if both this selection and the specified *other* selection have (non-null) elements at the same index, this selection’s element is returned in the merge and the *other* selection’s element is ignored.
 
 <a name="matcher" href="#matcher">#</a> d3.<b>matcher</b>(<i>selector</i>)
@@ -490,6 +492,34 @@ d3.selectAll("div")
 This example key function uses the datum *d* if present, and otherwise falls back to the element’s id property. Since these elements were not previously bound to data, the datum *d* is null when the key function is evaluated on selected elements, and non-null when the key function is evaluated on the new data.
 
 The *update* and *enter* selections are returned in data order, while the *exit* selection preserves the selection order prior to the join. If a key function is specified, the order of elements in the selection may not match their order in the document; use [*selection*.order](#order) or [*selection*.sort](#sort) as needed. For more on how the key function affects the join, see [A Bar Chart, Part 2](http://bost.ocks.org/mike/bar/2/) and [Object Constancy](http://bost.ocks.org/mike/constancy/).
+
+Although the data-join can be used simply to create (to *enter*) a set of elements corresponding to data, more generally the data-join is designed to let you create, destroy or update elements as needed so that the resulting DOM corresponds to the new data. The data-join lets you do this efficiently by executing only the minimum necessary operations on each state of element (entering, updating, or exiting), and allows you to declare concise animated transitions between states as well. Here is a simple example of the [General Update Pattern](http://bl.ocks.org/mbostock/3808218):
+
+```js
+var circle = svg.selectAll("circle") // 1
+  .data(data) // 2
+    .style("fill", "blue"); // 3
+
+circle.exit().remove(); // 4
+
+circle.enter().append("circle") // 5
+    .style("fill", "green") // 6
+  .merge(circle) // 7
+    .style("stroke", "black"); // 8
+```
+
+Breaking this down into discrete steps:
+
+1. Any existing circles (that are descendants of the `svg` selection) are [selected](#selection_selectAll).
+2. The existing circles are [joined to the new `data`](#selection_data), returning those circles that match new data: the *update* selection.
+3. The updating circles are given a blue fill.
+4. Any existing circles that do *not* match new data—the *exit* selection—are removed.
+5. New circles are [appended](#selection_append) for any new data that did *not* match an existing circle: the *enter* selection.
+6. The entering circles are given a green fill.
+7. A new selection representing the [union](#selection_merge) of the entering and updating circles is created.
+8. The entering and updating circles are given a black stroke.
+
+As described in the preceding paragraphs, the “matching” logic is determined by the key function passed to *selection*.data; since no key function is used in the above code sample, the elements and data are joined by index.
 
 If *data* is not specified, this method returns the array of data for the selected elements.
 
