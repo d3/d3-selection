@@ -515,9 +515,9 @@ Breaking this down into discrete steps:
 3. These updating circles are given a blue fill.
 4. Any existing circles that do *not* match new data—the *exit* selection—are removed.
 5. New circles are [appended](#selection_append) for any new data that do *not* match any existing circle: the *enter* selection.
-6. The entering circles are given a green fill.
-7. A new selection representing the [union](#selection_merge) of the entering and updating circles is created.
-8. The entering and updating circles are given a black stroke.
+6. These entering circles are given a green fill.
+7. A new selection representing the [union](#selection_merge) of entering and updating circles is created.
+8. These entering and updating circles are given a black stroke.
 
 As described in the preceding paragraphs, the “matching” logic is determined by the key function passed to *selection*.data; since no key function is used in the above code sample, the elements and data are joined by index.
 
