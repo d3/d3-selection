@@ -514,7 +514,7 @@ Breaking this down into discrete steps:
 2. These circles are [joined to new `data`](#selection_data), returning the matching circles: the *update* selection.
 3. These updating circles are given a blue fill.
 4. Any existing circles that do *not* match new data—the *exit* selection—are removed.
-5. New circles are [appended](#selection_append) for any new data that did *not* match an existing circle: the *enter* selection.
+5. New circles are [appended](#selection_append) for any new data that do *not* match any existing circle: the *enter* selection.
 6. The entering circles are given a green fill.
 7. A new selection representing the [union](#selection_merge) of the entering and updating circles is created.
 8. The entering and updating circles are given a black stroke.
