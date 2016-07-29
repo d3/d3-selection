@@ -1,7 +1,7 @@
-export default function(map) {
-	if(map instanceof Object) {
-		for(var key in map) {
-			this.style(key, map[key]);
+export default function(settings) {
+	if(settings instanceof Object) {
+		for(var key in settings) {
+			this.style(key, settings[key]);
 		}
 	}
 	return this;

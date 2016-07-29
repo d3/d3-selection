@@ -2,7 +2,7 @@ var tape = require("tape"),
     jsdom = require("jsdom"),
     d3 = require("../../");
 
-tape("selection.styles(object) can set the values of style properties on the selected elements", function(test) {
+tape("selection.styles(settings) can set values of sthe tyle properties on selected elements", function(test) {
   var document = jsdom.jsdom("<h1 id='one'>hello</h1><h1 id='two'></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
@@ -19,7 +19,7 @@ tape("selection.styles(object) can set the values of style properties on the sel
   test.end();
 });
 
-tape("selection.styles(object) can remove the attributes of style properties on the selected elements", function(test) {
+tape("selection.styles(settings) can remove attributes of the style properties on selected elements", function(test) {
   var document = jsdom.jsdom("<h1 id='one' style='color:red;margin-top:8px;'>hello</h1><h1 id='two' style='color:red;margin-top:8px;'></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),

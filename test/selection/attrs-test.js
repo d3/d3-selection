@@ -2,7 +2,7 @@ var tape = require("tape"),
     jsdom = require("jsdom"),
     d3 = require("../../");
 
-tape("selection.attrs() can set the values of attributes on the selected elements", function(test) {
+tape("selection.attrs(settings) can set values of the attributes on selected elements", function(test) {
   var document = jsdom.jsdom("<h1 id='one'>hello</h1><h1 id='two'></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
@@ -19,7 +19,7 @@ tape("selection.attrs() can set the values of attributes on the selected element
   test.end();
 });
 
-tape("selection.attrs() can remove the attributes on the selected elements", function(test) {
+tape("selection.attrs(settings) can remove attributes on selected elements", function(test) {
   var document = jsdom.jsdom("<h1 id='one' width='8' height='8'>hello</h1><h1 id='two' width='8' height='8'></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
