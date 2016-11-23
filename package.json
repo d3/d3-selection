@@ -29,10 +29,10 @@
     "postpublish": "VERSION=`node -e 'console.log(require(\"./package.json\").version)'`; git push && git push --tags && cd ../d3.github.com && git pull && cp ../d3-selection/build/d3-selection.js d3-selection.v1.js && cp ../d3-selection/build/d3-selection.min.js d3-selection.v1.min.js && git add d3-selection.v1.js d3-selection.v1.min.js && git commit -m \"d3-selection ${VERSION}\" && git push && cd - && zip -j build/d3-selection.zip -- LICENSE README.md build/d3-selection.js build/d3-selection.min.js"
   },
   "devDependencies": {
-    "eslint": "2",
+    "eslint": "3",
     "jsdom": "9",
     "package-preamble": "0.0",
-    "rollup": "0.34",
+    "rollup": "0.36",
     "tape": "4",
     "uglify-js": "2"
   }
