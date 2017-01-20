@@ -2,7 +2,7 @@ import defaultView from "../window";
 
 function dispatchEvent(node, type, params) {
   var window = defaultView(node),
-      event = window.CustomEvent;
+    event = window.CustomEvent;
 
   if (event) {
     event = new event(type, params);
@@ -23,12 +23,16 @@ function dispatchConstant(type, params) {
 
 function dispatchFunction(type, params) {
   return function() {
-    return dispatchEvent(this, type, params.apply(this, arguments));
+    var args = new Array(arguments.length);
+    for (var i = 0, l = arguments.length; i < l; i++) {
+      args[i] = arguments[i];
+    }
+    return dispatchEvent(this, type, params.apply(this, args));
   };
 }
 
 export default function(type, params) {
-  return this.each((typeof params === "function"
-      ? dispatchFunction
-      : dispatchConstant)(type, params));
+  return this.each((typeof params === "function" ?
+    dispatchFunction :
+    dispatchConstant)(type, params));
 }

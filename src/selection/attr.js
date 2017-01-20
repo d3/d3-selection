@@ -26,7 +26,11 @@ function attrConstantNS(fullname, value) {
 
 function attrFunction(name, value) {
   return function() {
-    var v = value.apply(this, arguments);
+    var args = new Array(arguments.length);
+    for (var i = 0, l = arguments.length; i < l; i++) {
+      args[i] = arguments[i];
+    }
+    var v = value.apply(this, args);
     if (v == null) this.removeAttribute(name);
     else this.setAttribute(name, v);
   };
@@ -34,7 +38,11 @@ function attrFunction(name, value) {
 
 function attrFunctionNS(fullname, value) {
   return function() {
-    var v = value.apply(this, arguments);
+    var args = new Array(arguments.length);
+    for (var i = 0, l = arguments.length; i < l; i++) {
+      args[i] = arguments[i];
+    }
+    var v = value.apply(this, args);
     if (v == null) this.removeAttributeNS(fullname.space, fullname.local);
     else this.setAttributeNS(fullname.space, fullname.local, v);
   };
@@ -45,13 +53,13 @@ export default function(name, value) {
 
   if (arguments.length < 2) {
     var node = this.node();
-    return fullname.local
-        ? node.getAttributeNS(fullname.space, fullname.local)
-        : node.getAttribute(fullname);
+    return fullname.local ?
+      node.getAttributeNS(fullname.space, fullname.local) :
+      node.getAttribute(fullname);
   }
 
-  return this.each((value == null
-      ? (fullname.local ? attrRemoveNS : attrRemove) : (typeof value === "function"
-      ? (fullname.local ? attrFunctionNS : attrFunction)
-      : (fullname.local ? attrConstantNS : attrConstant)))(fullname, value));
+  return this.each((value == null ?
+    (fullname.local ? attrRemoveNS : attrRemove) : (typeof value === "function" ?
+      (fullname.local ? attrFunctionNS : attrFunction) :
+      (fullname.local ? attrConstantNS : attrConstant)))(fullname, value));
 }

@@ -7,8 +7,12 @@ function constantNull() {
 
 export default function(name, before) {
   var create = typeof name === "function" ? name : creator(name),
-      select = before == null ? constantNull : typeof before === "function" ? before : selector(before);
+    select = before == null ? constantNull : typeof before === "function" ? before : selector(before);
   return this.select(function() {
-    return this.insertBefore(create.apply(this, arguments), select.apply(this, arguments) || null);
+    var args = new Array(arguments.length);
+    for (var i = 0, l = arguments.length; i < l; i++) {
+      args[i] = arguments[i];
+    }
+    return this.insertBefore(create.apply(this, args), select.apply(this, args) || null);
   });
 }
