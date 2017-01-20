@@ -2,7 +2,7 @@ import defaultView from "../window";
 
 function dispatchEvent(node, type, params) {
   var window = defaultView(node),
-    event = window.CustomEvent;
+      event = window.CustomEvent;
 
   if (event) {
     event = new event(type, params);
@@ -32,7 +32,7 @@ function dispatchFunction(type, params) {
 }
 
 export default function(type, params) {
-  return this.each((typeof params === "function" ?
-    dispatchFunction :
-    dispatchConstant)(type, params));
+  return this.each((typeof params === "function"
+      ? dispatchFunction
+      : dispatchConstant)(type, params));
 }

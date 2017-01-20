@@ -32,16 +32,12 @@ ClassList.prototype = {
 };
 
 function classedAdd(node, names) {
-  var list = classList(node),
-    i = -1,
-    n = names.length;
+  var list = classList(node), i = -1, n = names.length;
   while (++i < n) list.add(names[i]);
 }
 
 function classedRemove(node, names) {
-  var list = classList(node),
-    i = -1,
-    n = names.length;
+  var list = classList(node), i = -1, n = names.length;
   while (++i < n) list.remove(names[i]);
 }
 
@@ -71,16 +67,13 @@ export default function(name, value) {
   var names = classArray(name + "");
 
   if (arguments.length < 2) {
-    var list = classList(this.node()),
-      i = -1,
-      n = names.length;
-    while (++i < n)
-      if (!list.contains(names[i])) return false;
+    var list = classList(this.node()), i = -1, n = names.length;
+    while (++i < n) if (!list.contains(names[i])) return false;
     return true;
   }
 
-  return this.each((typeof value === "function" ?
-    classedFunction : value ?
-    classedTrue :
-    classedFalse)(names, value));
+  return this.each((typeof value === "function"
+      ? classedFunction : value
+      ? classedTrue
+      : classedFalse)(names, value));
 }

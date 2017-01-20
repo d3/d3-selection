@@ -26,12 +26,12 @@ function styleFunction(name, value, priority) {
 
 export default function(name, value, priority) {
   var node;
-  return arguments.length > 1 ?
-    this.each((value == null ?
-      styleRemove : typeof value === "function" ?
-      styleFunction :
-      styleConstant)(name, value, priority == null ? "" : priority)) :
-    defaultView(node = this.node())
-    .getComputedStyle(node, null)
-    .getPropertyValue(name);
+  return arguments.length > 1
+      ? this.each((value == null
+            ? styleRemove : typeof value === "function"
+            ? styleFunction
+            : styleConstant)(name, value, priority == null ? "" : priority))
+      : defaultView(node = this.node())
+          .getComputedStyle(node, null)
+          .getPropertyValue(name);
 }

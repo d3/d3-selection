@@ -7,7 +7,7 @@ function constantNull() {
 
 export default function(name, before) {
   var create = typeof name === "function" ? name : creator(name),
-    select = before == null ? constantNull : typeof before === "function" ? before : selector(before);
+      select = before == null ? constantNull : typeof before === "function" ? before : selector(before);
   return this.select(function() {
     var args = new Array(arguments.length);
     for (var i = 0, l = arguments.length; i < l; i++) {

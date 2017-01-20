@@ -20,10 +20,10 @@ function htmlFunction(value) {
 }
 
 export default function(value) {
-  return arguments.length ?
-    this.each(value == null ?
-      htmlRemove : (typeof value === "function" ?
-        htmlFunction :
-        htmlConstant)(value)) :
-    this.node().innerHTML;
+  return arguments.length
+      ? this.each(value == null
+          ? htmlRemove : (typeof value === "function"
+          ? htmlFunction
+          : htmlConstant)(value))
+      : this.node().innerHTML;
 }

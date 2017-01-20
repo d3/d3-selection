@@ -53,13 +53,13 @@ export default function(name, value) {
 
   if (arguments.length < 2) {
     var node = this.node();
-    return fullname.local ?
-      node.getAttributeNS(fullname.space, fullname.local) :
-      node.getAttribute(fullname);
+    return fullname.local
+        ? node.getAttributeNS(fullname.space, fullname.local)
+        : node.getAttribute(fullname);
   }
 
-  return this.each((value == null ?
-    (fullname.local ? attrRemoveNS : attrRemove) : (typeof value === "function" ?
-      (fullname.local ? attrFunctionNS : attrFunction) :
-      (fullname.local ? attrConstantNS : attrConstant)))(fullname, value));
+  return this.each((value == null
+      ? (fullname.local ? attrRemoveNS : attrRemove) : (typeof value === "function"
+      ? (fullname.local ? attrFunctionNS : attrFunction)
+      : (fullname.local ? attrConstantNS : attrConstant)))(fullname, value));
 }

@@ -20,10 +20,10 @@ function textFunction(value) {
 }
 
 export default function(value) {
-  return arguments.length ?
-    this.each(value == null ?
-      textRemove : (typeof value === "function" ?
-        textFunction :
-        textConstant)(value)) :
-    this.node().textContent;
+  return arguments.length
+      ? this.each(value == null
+          ? textRemove : (typeof value === "function"
+          ? textFunction
+          : textConstant)(value))
+      : this.node().textContent;
 }

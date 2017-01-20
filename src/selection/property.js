@@ -23,10 +23,10 @@ function propertyFunction(name, value) {
 }
 
 export default function(name, value) {
-  return arguments.length > 1 ?
-    this.each((value == null ?
-      propertyRemove : typeof value === "function" ?
-      propertyFunction :
-      propertyConstant)(name, value)) :
-    this.node()[name];
+  return arguments.length > 1
+      ? this.each((value == null
+          ? propertyRemove : typeof value === "function"
+          ? propertyFunction
+          : propertyConstant)(name, value))
+      : this.node()[name];
 }
