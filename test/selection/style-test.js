@@ -2,9 +2,29 @@ var tape = require("tape"),
     jsdom = require("../jsdom"),
     d3 = require("../../");
 
-tape("selection.style(name) returns the computed value of the style property with the specified name on the first selected element", function(test) {
+tape("d3.style(node, name) returns the inline value of the style property with the specified name on the first selected element, if present", function(test) {
+  var node = {style: {getPropertyValue: function(name) { return name === "color" ? "red" : ""}}};
+  test.equal(d3.style(node, "color"), "red");
+  test.end();
+});
+
+tape("d3.style(node, name) returns the computed value of the style property with the specified name on the first selected element, if there is no inline style", function(test) {
   var style = {getPropertyValue: function(name) { return name === "color" ? "rgb(255, 0, 0)" : ""}},
-      node = {ownerDocument: {defaultView: {getComputedStyle: function(n) { return n === node ? style : null; }}}};
+      node = {style: {getPropertyValue: function() { return ""; }}, ownerDocument: {defaultView: {getComputedStyle: function(n) { return n === node ? style : null; }}}};
+  test.equal(d3.style(node, "color"), "rgb(255, 0, 0)");
+  test.end();
+});
+
+tape("selection.style(name) returns the inline value of the style property with the specified name on the first selected element, if present", function(test) {
+  var node = {style: {getPropertyValue: function(name) { return name === "color" ? "red" : ""}}};
+  test.equal(d3.select(node).style("color"), "red");
+  test.equal(d3.selectAll([null, node]).style("color"), "red");
+  test.end();
+});
+
+tape("selection.style(name) returns the computed value of the style property with the specified name on the first selected element, if there is no inline style", function(test) {
+  var style = {getPropertyValue: function(name) { return name === "color" ? "rgb(255, 0, 0)" : ""}},
+      node = {style: {getPropertyValue: function() { return ""; }}, ownerDocument: {defaultView: {getComputedStyle: function(n) { return n === node ? style : null; }}}};
   test.equal(d3.select(node).style("color"), "rgb(255, 0, 0)");
   test.equal(d3.selectAll([null, node]).style("color"), "rgb(255, 0, 0)");
   test.end();
