@@ -9,6 +9,7 @@ export {default as selectAll} from "./src/selectAll";
 export {default as selection} from "./src/selection/index";
 export {default as selector} from "./src/selector";
 export {default as selectorAll} from "./src/selectorAll";
+export {styleValue as style} from "./src/selection/style";
 export {default as touch} from "./src/touch";
 export {default as touches} from "./src/touches";
 export {default as window} from "./src/window";
