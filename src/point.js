@@ -1,4 +1,6 @@
 export default function(node, event) {
+  if (!event) return;
+
   var svg = node.ownerSVGElement || node;
 
   if (svg.createSVGPoint) {
