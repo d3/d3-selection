@@ -4,7 +4,7 @@ function dispatchEvent(node, type, params) {
   var window = defaultView(node),
       event = window.CustomEvent;
 
-  if (event) {
+  if (typeof event === 'function') {
     event = new event(type, params);
   } else {
     event = window.document.createEvent("Event");
