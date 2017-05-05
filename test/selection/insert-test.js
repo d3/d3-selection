@@ -1,9 +1,9 @@
 var tape = require("tape"),
-    jsdom = require("jsdom"),
+    jsdom = require("../jsdom"),
     d3 = require("../../");
 
 tape("selection.insert(name, before) inserts a new element of the specified name before the specified child of each selected element", function(test) {
-  var document = jsdom.jsdom("<div id='one'><span class='before'></span></div><div id='two'><span class='before'></span></div>"),
+  var document = jsdom("<div id='one'><span class='before'></span></div><div id='two'><span class='before'></span></div>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection = d3.selectAll([one, two]).insert("span", ".before"),
@@ -14,7 +14,7 @@ tape("selection.insert(name, before) inserts a new element of the specified name
 });
 
 tape("selection.insert(function, function) inserts the returned element before the specified child of each selected element", function(test) {
-  var document = jsdom.jsdom("<div id='one'><span class='before'></span></div><div id='two'><span class='before'></span></div>"),
+  var document = jsdom("<div id='one'><span class='before'></span></div><div id='two'><span class='before'></span></div>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection = d3.selectAll([one, two]).insert(function() { return document.createElement("SPAN"); }, function() { return this.firstChild; }),
@@ -25,7 +25,7 @@ tape("selection.insert(function, function) inserts the returned element before t
 });
 
 tape("selection.insert(function, function) inserts the returned element as the last child if the selector function returns null", function(test) {
-  var document = jsdom.jsdom("<div id='one'><span class='before'></span></div><div id='two'><span class='before'></span></div>"),
+  var document = jsdom("<div id='one'><span class='before'></span></div><div id='two'><span class='before'></span></div>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection = d3.selectAll([one, two]).insert(function() { return document.createElement("SPAN"); }, function() { return; }),
@@ -36,7 +36,7 @@ tape("selection.insert(function, function) inserts the returned element as the l
 });
 
 tape("selection.insert(name, function) passes the selector function data, index and group", function(test) {
-  var document = jsdom.jsdom("<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>"),
+  var document = jsdom("<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       three = document.querySelector("#three"),

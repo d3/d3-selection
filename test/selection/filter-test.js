@@ -1,15 +1,15 @@
 var tape = require("tape"),
-    jsdom = require("jsdom"),
+    jsdom = require("../jsdom"),
     d3 = require("../../");
 
 tape("selection.filter(…) returns a selection", function(test) {
-  var document = jsdom.jsdom("<h1>hello</h1>");
+  var document = jsdom("<h1>hello</h1>");
   test.ok(d3.select(document.body).filter("body") instanceof d3.selection);
   test.end();
 });
 
 tape("selection.filter(string) retains the selected elements that matches the selector string", function(test) {
-  var document = jsdom.jsdom("<h1><span id='one'></span><span id='two'></span></h1><h1><span id='three'></span><span id='four'></span></h1>"),
+  var document = jsdom("<h1><span id='one'></span><span id='two'></span></h1><h1><span id='three'></span><span id='four'></span></h1>"),
       one = document.querySelector("#one"),
       three = document.querySelector("#three");
   test.deepEqual(d3.select(document).selectAll("span").filter("#one,#three"), {_groups: [[one, three]], _parents: [document]});
@@ -17,7 +17,7 @@ tape("selection.filter(string) retains the selected elements that matches the se
 });
 
 tape("selection.filter(function) retains elements for which the given function returns true", function(test) {
-  var document = jsdom.jsdom("<h1><span id='one'></span><span id='two'></span></h1><h1><span id='three'></span><span id='four'></span></h1>"),
+  var document = jsdom("<h1><span id='one'></span><span id='two'></span></h1><h1><span id='three'></span><span id='four'></span></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       three = document.querySelector("#three"),
@@ -27,7 +27,7 @@ tape("selection.filter(function) retains elements for which the given function r
 });
 
 tape("selection.filter(function) passes the selector function data, index and group", function(test) {
-  var document = jsdom.jsdom("<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>"),
+  var document = jsdom("<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       three = document.querySelector("#three"),
@@ -50,7 +50,7 @@ tape("selection.filter(function) passes the selector function data, index and gr
 });
 
 tape("selection.filter(…) propagates parents from the originating selection", function(test) {
-  var document = jsdom.jsdom("<parent><child>1</child></parent><parent><child>2</child></parent>"),
+  var document = jsdom("<parent><child>1</child></parent><parent><child>2</child></parent>"),
       parents = d3.select(document).selectAll("parent"),
       parents2 = parents.filter(function() { return true; });
   test.deepEqual(parents, {_groups: [document.querySelectorAll("parent")], _parents: [document]});
@@ -60,7 +60,7 @@ tape("selection.filter(…) propagates parents from the originating selection", 
 });
 
 tape("selection.filter(…) can filter elements when the originating selection is nested", function(test) {
-  var document = jsdom.jsdom("<parent id='one'><child><span id='three'></span></child></parent><parent id='two'><child><span id='four'></span></child></parent>"),
+  var document = jsdom("<parent id='one'><child><span id='three'></span></child></parent><parent id='two'><child><span id='four'></span></child></parent>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       three = document.querySelector("#three"),
@@ -70,7 +70,7 @@ tape("selection.filter(…) can filter elements when the originating selection i
 });
 
 tape("selection.filter(…) skips missing originating elements and does not retain the original indexes", function(test) {
-  var document = jsdom.jsdom("<h1>hello</h1>"),
+  var document = jsdom("<h1>hello</h1>"),
       h1 = document.querySelector("h1");
   test.deepEqual(d3.selectAll([, h1]).filter("*"), {_groups: [[h1]], _parents: [null]});
   test.deepEqual(d3.selectAll([null, h1]).filter("*"), {_groups: [[h1]], _parents: [null]});
@@ -79,7 +79,7 @@ tape("selection.filter(…) skips missing originating elements and does not reta
 });
 
 tape("selection.filter(…) skips missing originating elements when the originating selection is nested", function(test) {
-  var document = jsdom.jsdom("<parent id='one'><child></child><child id='three'></child></parent><parent id='two'><child></child><child id='four'></child></parent>"),
+  var document = jsdom("<parent id='one'><child></child><child id='three'></child></parent><parent id='two'><child></child><child id='four'></child></parent>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       three = document.querySelector("#three"),

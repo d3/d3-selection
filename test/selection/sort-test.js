@@ -1,9 +1,9 @@
 var tape = require("tape"),
-    jsdom = require("jsdom"),
+    jsdom = require("../jsdom"),
     d3 = require("../../");
 
 tape("selection.sort(…) returns a new selection, sorting each group’s data, and then ordering the elements to match", function(test) {
-  var document = jsdom.jsdom("<h1 id='one' data-value='1'></h1><h1 id='two' data-value='0'></h1><h1 id='three' data-value='2'></h1>"),
+  var document = jsdom("<h1 id='one' data-value='1'></h1><h1 id='two' data-value='0'></h1><h1 id='three' data-value='2'></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       three = document.querySelector("#three"),
@@ -18,7 +18,7 @@ tape("selection.sort(…) returns a new selection, sorting each group’s data, 
 });
 
 tape("selection.sort(…) sorts each group separately", function(test) {
-  var document = jsdom.jsdom("<div id='one'><h1 id='three' data-value='1'></h1><h1 id='four' data-value='0'></h1></div><div id='two'><h1 id='five' data-value='3'></h1><h1 id='six' data-value='-1'></h1></div>"),
+  var document = jsdom("<div id='one'><h1 id='three' data-value='1'></h1><h1 id='four' data-value='0'></h1></div><div id='two'><h1 id='five' data-value='3'></h1><h1 id='six' data-value='-1'></h1></div>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       three = document.querySelector("#three"),
@@ -35,7 +35,7 @@ tape("selection.sort(…) sorts each group separately", function(test) {
 });
 
 tape("selection.sort() uses natural ascending order", function(test) {
-  var document = jsdom.jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
+  var document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection = d3.selectAll([two, one]).datum(function(d, i) { i; });
@@ -46,7 +46,7 @@ tape("selection.sort() uses natural ascending order", function(test) {
 });
 
 tape("selection.sort() puts missing elements at the end of each group", function(test) {
-  var document = jsdom.jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
+  var document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection = d3.selectAll([two, one]).datum(function(d, i) { return i; });
@@ -57,7 +57,7 @@ tape("selection.sort() puts missing elements at the end of each group", function
 });
 
 tape("selection.sort(function) puts missing elements at the end of each group", function(test) {
-  var document = jsdom.jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
+  var document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection = d3.selectAll([two, one]).datum(function(d, i) { return i; });
@@ -68,7 +68,7 @@ tape("selection.sort(function) puts missing elements at the end of each group", 
 });
 
 tape("selection.sort(function) uses the specified data comparator function", function(test) {
-  var document = jsdom.jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
+  var document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection = d3.selectAll([two, one]).datum(function(d, i) { return i; });
@@ -79,7 +79,7 @@ tape("selection.sort(function) uses the specified data comparator function", fun
 });
 
 tape("selection.sort(function) returns a new selection, and does not modify the groups array in-place", function(test) {
-  var document = jsdom.jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
+  var document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection0 = d3.selectAll([one, two]).datum(function(d, i) { return i; }),

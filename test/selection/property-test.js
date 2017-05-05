@@ -1,5 +1,5 @@
 var tape = require("tape"),
-    jsdom = require("jsdom"),
+    jsdom = require("../jsdom"),
     d3 = require("../../");
 
 tape("selection.property(name) returns the property with the specified name on the first selected element", function(test) {
@@ -40,7 +40,7 @@ tape("selection.property(name, function) sets the value of the property with the
 });
 
 tape("selection.property(name, function) passes the value function data, index and group", function(test) {
-  var document = jsdom.jsdom("<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>"),
+  var document = jsdom("<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       three = document.querySelector("#three"),

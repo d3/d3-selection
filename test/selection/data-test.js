@@ -1,9 +1,9 @@
 var tape = require("tape"),
-    jsdom = require("jsdom"),
+    jsdom = require("../jsdom"),
     d3 = require("../../");
 
 tape("selection.data(values) binds the specified values to the selected elements by index", function(test) {
-  var body = jsdom.jsdom("<div id='one'></div><div id='two'></div><div id='three'></div>").body,
+  var body = jsdom("<div id='one'></div><div id='two'></div><div id='three'></div>").body,
       one = body.querySelector("#one"),
       two = body.querySelector("#two"),
       three = body.querySelector("#three"),
@@ -21,7 +21,7 @@ tape("selection.data(values) binds the specified values to the selected elements
 });
 
 tape("selection.data(values) puts unbound data in the enter selection", function(test) {
-  var body = jsdom.jsdom("<div id='one'></div><div id='two'></div>").body,
+  var body = jsdom("<div id='one'></div><div id='two'></div>").body,
       one = body.querySelector("#one"),
       two = body.querySelector("#two"),
       selection = d3.select(body).selectAll("div").data(["foo", "bar", "baz"]);
@@ -43,7 +43,7 @@ tape("selection.data(values) puts unbound data in the enter selection", function
 });
 
 tape("selection.data(values) puts unbound elements in the exit selection", function(test) {
-  var body = jsdom.jsdom("<div id='one'></div><div id='two'></div><div id='three'></div>").body,
+  var body = jsdom("<div id='one'></div><div id='two'></div><div id='three'></div>").body,
       one = body.querySelector("#one"),
       two = body.querySelector("#two"),
       three = body.querySelector("#three"),
@@ -60,7 +60,7 @@ tape("selection.data(values) puts unbound elements in the exit selection", funct
 });
 
 tape("selection.data(values) binds the specified values to each group independently", function(test) {
-  var body = jsdom.jsdom("<div id='zero'><span id='one'></span><span id='two'></span></div><div id='three'><span id='four'></span><span id='five'></span></div>").body,
+  var body = jsdom("<div id='zero'><span id='one'></span><span id='two'></span></div><div id='three'><span id='four'></span><span id='five'></span></div>").body,
       zero = body.querySelector("#zero"),
       one = body.querySelector("#one"),
       two = body.querySelector("#two"),
@@ -82,7 +82,7 @@ tape("selection.data(values) binds the specified values to each group independen
 });
 
 tape("selection.data(function) binds the specified return values to the selected elements by index", function(test) {
-  var body = jsdom.jsdom("<div id='one'></div><div id='two'></div><div id='three'></div>").body,
+  var body = jsdom("<div id='one'></div><div id='two'></div><div id='three'></div>").body,
       one = body.querySelector("#one"),
       two = body.querySelector("#two"),
       three = body.querySelector("#three"),
@@ -100,7 +100,7 @@ tape("selection.data(function) binds the specified return values to the selected
 });
 
 tape("selection.data(function) passes the values function datum, index and parents", function(test) {
-  var document = jsdom.jsdom("<parent id='one'><child></child><child></child></parent><parent id='two'><child></child></parent>"),
+  var document = jsdom("<parent id='one'><child></child><child></child></parent><parent id='two'><child></child></parent>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       results = [];
@@ -118,7 +118,7 @@ tape("selection.data(function) passes the values function datum, index and paren
 });
 
 tape("selection.data(values, function) joins data to element using the computed keys", function(test) {
-  var body = jsdom.jsdom("<node id='one'></node><node id='two'></node><node id='three'></node>").body,
+  var body = jsdom("<node id='one'></node><node id='two'></node><node id='three'></node>").body,
       one = body.querySelector("#one"),
       two = body.querySelector("#two"),
       three = body.querySelector("#three"),
@@ -139,7 +139,7 @@ tape("selection.data(values, function) joins data to element using the computed 
 });
 
 tape("selection.data(values, function) puts elements with duplicate keys into update or exit", function(test) {
-  var body = jsdom.jsdom("<node id='one' name='foo'></node><node id='two' name='foo'></node><node id='three' name='bar'></node>").body,
+  var body = jsdom("<node id='one' name='foo'></node><node id='two' name='foo'></node><node id='three' name='bar'></node>").body,
       one = body.querySelector("#one"),
       two = body.querySelector("#two"),
       three = body.querySelector("#three"),
@@ -154,7 +154,7 @@ tape("selection.data(values, function) puts elements with duplicate keys into up
 });
 
 tape("selection.data(values, function) puts elements with duplicate keys into exit", function(test) {
-  var body = jsdom.jsdom("<node id='one' name='foo'></node><node id='two' name='foo'></node><node id='three' name='bar'></node>").body,
+  var body = jsdom("<node id='one' name='foo'></node><node id='two' name='foo'></node><node id='three' name='bar'></node>").body,
       one = body.querySelector("#one"),
       two = body.querySelector("#two"),
       three = body.querySelector("#three"),
@@ -169,7 +169,7 @@ tape("selection.data(values, function) puts elements with duplicate keys into ex
 });
 
 tape("selection.data(values, function) puts data with duplicate keys into update and enter", function(test) {
-  var body = jsdom.jsdom("<node id='one'></node><node id='two'></node><node id='three'></node>").body,
+  var body = jsdom("<node id='one'></node><node id='two'></node><node id='three'></node>").body,
       one = body.querySelector("#one"),
       two = body.querySelector("#two"),
       three = body.querySelector("#three"),
@@ -190,7 +190,7 @@ tape("selection.data(values, function) puts data with duplicate keys into update
 });
 
 tape("selection.data(values, function) puts data with duplicate keys into enter", function(test) {
-  var body = jsdom.jsdom("<node id='one'></node><node id='two'></node><node id='three'></node>").body,
+  var body = jsdom("<node id='one'></node><node id='two'></node><node id='three'></node>").body,
       one = body.querySelector("#one"),
       two = body.querySelector("#two"),
       three = body.querySelector("#three"),
@@ -217,7 +217,7 @@ tape("selection.data(values, function) puts data with duplicate keys into enter"
 });
 
 tape("selection.data(values, function) passes the key function datum, index and nodes or data", function(test) {
-  var body = jsdom.jsdom("<node id='one'></node><node id='two'></node>").body,
+  var body = jsdom("<node id='one'></node><node id='two'></node>").body,
       one = body.querySelector("#one"),
       two = body.querySelector("#two"),
       results = [];
@@ -238,7 +238,7 @@ tape("selection.data(values, function) passes the key function datum, index and 
 });
 
 tape("selection.data(values, function) applies the order of the data", function(test) {
-  var body = jsdom.jsdom("<div id='one'></div><div id='two'></div><div id='three'></div>").body,
+  var body = jsdom("<div id='one'></div><div id='two'></div><div id='three'></div>").body,
       one = body.querySelector("#one"),
       two = body.querySelector("#two"),
       three = body.querySelector("#three"),
@@ -265,7 +265,7 @@ tape("selection.data(values, function) applies the order of the data", function(
 });
 
 tape("selection.data(values) returns a new selection, and does not modify the original selection", function(test) {
-  var document = jsdom.jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
+  var document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
       root = document.documentElement,
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
@@ -292,7 +292,7 @@ tape("selection.data(values) returns a new selection, and does not modify the or
 });
 
 tape("selection.data(values, key) does not modify the groups array in-place", function(test) {
-  var document = jsdom.jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
+  var document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
       root = document.documentElement,
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),

@@ -1,5 +1,5 @@
 var tape = require("tape"),
-    jsdom = require("jsdom"),
+    jsdom = require("./jsdom"),
     d3 = require("../");
 
 tape("d3.namespaces is the expected map", function(test) {

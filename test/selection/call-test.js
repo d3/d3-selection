@@ -1,10 +1,10 @@
 var tape = require("tape"),
-    jsdom = require("jsdom"),
+    jsdom = require("../jsdom"),
     d3 = require("../../");
 
 tape("selection.call(function) calls the specified function, passing the selection", function(test) {
   var result,
-      document = jsdom.jsdom(),
+      document = jsdom(),
       selection = d3.select(document);
   test.equal(selection.call(function(selection) { result = selection; }), selection);
   test.equal(result, selection);
@@ -15,7 +15,7 @@ tape("selection.call(function, arguments…) calls the specified function, passi
   var result = [],
       foo = {},
       bar = {},
-      document = jsdom.jsdom(),
+      document = jsdom(),
       selection = d3.select(document);
   test.equal(selection.call(function(selection, a, b) { result.push(selection, a, b); }, foo, bar), selection);
   test.deepEqual(result, [selection, foo, bar]);

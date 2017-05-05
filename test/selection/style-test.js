@@ -1,5 +1,5 @@
 var tape = require("tape"),
-    jsdom = require("jsdom"),
+    jsdom = require("../jsdom"),
     d3 = require("../../");
 
 tape("selection.style(name) returns the computed value of the style property with the specified name on the first selected element", function(test) {
@@ -11,7 +11,7 @@ tape("selection.style(name) returns the computed value of the style property wit
 });
 
 tape("selection.style(name, value) sets the value of the style property with the specified name on the selected elements", function(test) {
-  var document = jsdom.jsdom("<h1 id='one' class='c1 c2'>hello</h1><h1 id='two' class='c3'></h1>"),
+  var document = jsdom("<h1 id='one' class='c1 c2'>hello</h1><h1 id='two' class='c3'></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection = d3.selectAll([one, two]);
@@ -24,7 +24,7 @@ tape("selection.style(name, value) sets the value of the style property with the
 });
 
 tape("selection.style(name, value, priority) sets the value and priority of the style property with the specified name on the selected elements", function(test) {
-  var document = jsdom.jsdom("<h1 id='one' class='c1 c2'>hello</h1><h1 id='two' class='c3'></h1>"),
+  var document = jsdom("<h1 id='one' class='c1 c2'>hello</h1><h1 id='two' class='c3'></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection = d3.selectAll([one, two]);
@@ -37,7 +37,7 @@ tape("selection.style(name, value, priority) sets the value and priority of the 
 });
 
 tape("selection.style(name, null) removes the attribute with the specified name on the selected elements", function(test) {
-  var document = jsdom.jsdom("<h1 id='one' style='color:red;' class='c1 c2'>hello</h1><h1 id='two' style='color:red;' class='c3'></h1>"),
+  var document = jsdom("<h1 id='one' style='color:red;' class='c1 c2'>hello</h1><h1 id='two' style='color:red;' class='c3'></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection = d3.selectAll([one, two]);
@@ -50,7 +50,7 @@ tape("selection.style(name, null) removes the attribute with the specified name 
 });
 
 tape("selection.style(name, function) sets the value of the style property with the specified name on the selected elements", function(test) {
-  var document = jsdom.jsdom("<h1 id='one' class='c1 c2'>hello</h1><h1 id='two' class='c3'></h1>"),
+  var document = jsdom("<h1 id='one' class='c1 c2'>hello</h1><h1 id='two' class='c3'></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection = d3.selectAll([one, two]);
@@ -63,7 +63,7 @@ tape("selection.style(name, function) sets the value of the style property with 
 });
 
 tape("selection.style(name, function, priority) sets the value and priority of the style property with the specified name on the selected elements", function(test) {
-  var document = jsdom.jsdom("<h1 id='one' class='c1 c2'>hello</h1><h1 id='two' class='c3'></h1>"),
+  var document = jsdom("<h1 id='one' class='c1 c2'>hello</h1><h1 id='two' class='c3'></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection = d3.selectAll([one, two]);
@@ -76,7 +76,7 @@ tape("selection.style(name, function, priority) sets the value and priority of t
 });
 
 tape("selection.style(name, function) passes the value function data, index and group", function(test) {
-  var document = jsdom.jsdom("<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>"),
+  var document = jsdom("<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       three = document.querySelector("#three"),

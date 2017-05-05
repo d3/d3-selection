@@ -1,15 +1,15 @@
 var tape = require("tape"),
-    jsdom = require("jsdom"),
+    jsdom = require("../jsdom"),
     d3 = require("../../");
 
 tape("selection.append(…) returns a selection", function(test) {
-  var document = jsdom.jsdom();
+  var document = jsdom();
   test.ok(d3.select(document.body).append("h1") instanceof d3.selection);
   test.end();
 });
 
 tape("selection.append(name) appends a new element of the specified name as the last child of each selected element", function(test) {
-  var document = jsdom.jsdom("<div id='one'><span class='before'></span></div><div id='two'><span class='before'></span></div>"),
+  var document = jsdom("<div id='one'><span class='before'></span></div><div id='two'><span class='before'></span></div>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection = d3.selectAll([one, two]).append("span"),
@@ -20,7 +20,7 @@ tape("selection.append(name) appends a new element of the specified name as the 
 });
 
 tape("selection.append(name) observes the specified namespace, if any", function(test) {
-  var document = jsdom.jsdom("<div id='one'></div><div id='two'></div>"),
+  var document = jsdom("<div id='one'></div><div id='two'></div>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection = d3.selectAll([one, two]).append("svg:g"),
@@ -34,7 +34,7 @@ tape("selection.append(name) observes the specified namespace, if any", function
 
 tape("selection.append(name) uses createElement, not createElementNS, if the implied namespace is the same as the document", function(test) {
   var pass = 0,
-      document = jsdom.jsdom("<div id='one'></div><div id='two'></div>"),
+      document = jsdom("<div id='one'></div><div id='two'></div>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       createElement = document.createElement;
@@ -53,7 +53,7 @@ tape("selection.append(name) uses createElement, not createElementNS, if the imp
 });
 
 tape("selection.append(name) observes the implicit namespace, if any", function(test) {
-  var document = jsdom.jsdom("<div id='one'></div><div id='two'></div>"),
+  var document = jsdom("<div id='one'></div><div id='two'></div>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection = d3.selectAll([one, two]).append("svg"),
@@ -66,7 +66,7 @@ tape("selection.append(name) observes the implicit namespace, if any", function(
 });
 
 tape("selection.append(name) observes the inherited namespace, if any", function(test) {
-  var document = jsdom.jsdom("<div id='one'></div><div id='two'></div>"),
+  var document = jsdom("<div id='one'></div><div id='two'></div>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection = d3.selectAll([one, two]).append("svg").append("g"),
@@ -81,7 +81,7 @@ tape("selection.append(name) observes the inherited namespace, if any", function
 tape("selection.append(name) observes a custom namespace, if any", function(test) {
   try {
     d3.namespaces.d3js = "https://d3js.org/2016/namespace";
-    var document = jsdom.jsdom("<div id='one'></div><div id='two'></div>"),
+    var document = jsdom("<div id='one'></div><div id='two'></div>"),
         one = document.querySelector("#one"),
         two = document.querySelector("#two"),
         selection = d3.selectAll([one, two]).append("d3js"),
@@ -97,7 +97,7 @@ tape("selection.append(name) observes a custom namespace, if any", function(test
 });
 
 tape("selection.append(function) appends the returned element as the last child of each selected element", function(test) {
-  var document = jsdom.jsdom("<div id='one'><span class='before'></span></div><div id='two'><span class='before'></span></div>"),
+  var document = jsdom("<div id='one'><span class='before'></span></div><div id='two'><span class='before'></span></div>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection = d3.selectAll([one, two]).append(function() { return document.createElement("SPAN"); }),
@@ -108,7 +108,7 @@ tape("selection.append(function) appends the returned element as the last child 
 });
 
 tape("selection.append(function) passes the creator function data, index and group", function(test) {
-  var document = jsdom.jsdom("<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>"),
+  var document = jsdom("<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       three = document.querySelector("#three"),
@@ -131,7 +131,7 @@ tape("selection.append(function) passes the creator function data, index and gro
 });
 
 tape("selection.append(…) propagates data if defined on the originating element", function(test) {
-  var document = jsdom.jsdom("<parent><child>hello</child></parent>"),
+  var document = jsdom("<parent><child>hello</child></parent>"),
       parent = document.querySelector("parent");
   parent.__data__ = 0; // still counts as data even though falsey
   test.equal(d3.select(parent).append("child").datum(), 0);
@@ -139,7 +139,7 @@ tape("selection.append(…) propagates data if defined on the originating elemen
 });
 
 tape("selection.append(…) will not propagate data if not defined on the originating element", function(test) {
-  var document = jsdom.jsdom("<parent><child>hello</child></parent>"),
+  var document = jsdom("<parent><child>hello</child></parent>"),
       parent = document.querySelector("parent"),
       child = document.querySelector("child");
   child.__data__ = 42;
@@ -149,7 +149,7 @@ tape("selection.append(…) will not propagate data if not defined on the origin
 });
 
 tape("selection.append(…) propagates parents from the originating selection", function(test) {
-  var document = jsdom.jsdom("<parent></parent><parent></parent>"),
+  var document = jsdom("<parent></parent><parent></parent>"),
       parents = d3.select(document).selectAll("parent"),
       childs = parents.append("child");
   test.deepEqual(parents, {_groups: [document.querySelectorAll("parent")], _parents: [document]});
@@ -159,7 +159,7 @@ tape("selection.append(…) propagates parents from the originating selection", 
 });
 
 tape("selection.append(…) can select elements when the originating selection is nested", function(test) {
-  var document = jsdom.jsdom("<parent id='one'><child></child></parent><parent id='two'><child></child></parent>"),
+  var document = jsdom("<parent id='one'><child></child></parent><parent id='two'><child></child></parent>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection = d3.selectAll([one, two]).selectAll("child").append("span"),
@@ -170,7 +170,7 @@ tape("selection.append(…) can select elements when the originating selection i
 });
 
 tape("selection.append(…) skips missing originating elements", function(test) {
-  var document = jsdom.jsdom("<h1></h1>"),
+  var document = jsdom("<h1></h1>"),
       h1 = document.querySelector("h1"),
       selection = d3.selectAll([, h1]).append("span"),
       span = h1.querySelector("span");

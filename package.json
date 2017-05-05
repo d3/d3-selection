@@ -13,7 +13,7 @@
   "license": "BSD-3-Clause",
   "author": {
     "name": "Mike Bostock",
-    "url": "http://bost.ocks.org/mike"
+    "url": "https://bost.ocks.org/mike"
   },
   "main": "build/d3-selection.js",
   "module": "index",
@@ -30,8 +30,8 @@
   },
   "devDependencies": {
     "eslint": "3",
-    "jsdom": "9",
-    "package-preamble": "0.0",
+    "jsdom": "10",
+    "package-preamble": "0.1",
     "rollup": "0.41",
     "tape": "4",
     "uglify-js": "^2.8.11"

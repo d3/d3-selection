@@ -1,10 +1,10 @@
 var tape = require("tape"),
-    jsdom = require("jsdom"),
+    jsdom = require("../jsdom"),
     d3 = require("../../");
 
 tape("selection.on(type, listener) registers a listeners for the specified event type on each selected element", function(test) {
   var clicks = 0,
-      document = jsdom.jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
+      document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection = d3.selectAll([one, two]);
@@ -19,7 +19,7 @@ tape("selection.on(type, listener) registers a listeners for the specified event
 tape("selection.on(type, listener) observes the specified name, if any", function(test) {
   var foo = 0,
       bar = 0,
-      document = jsdom.jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
+      document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection = d3.selectAll([one, two]).on("click.foo", function() { ++foo; }).on("click.bar", function() { ++bar; });
@@ -39,7 +39,7 @@ tape("selection.on(type, listener, capture) observes the specified capture flag,
 
 tape("selection.on(type) returns the listener for the specified event type, if any", function(test) {
   var clicked = function() {},
-      document = jsdom.jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
+      document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection = d3.selectAll([one, two]).on("click", clicked);
@@ -49,7 +49,7 @@ tape("selection.on(type) returns the listener for the specified event type, if a
 
 tape("selection.on(type) observes the specified name, if any", function(test) {
   var clicked = function() {},
-      document = jsdom.jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
+      document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection = d3.selectAll([one, two]).on("click.foo", clicked);
@@ -63,7 +63,7 @@ tape("selection.on(type) observes the specified name, if any", function(test) {
 
 tape("selection.on(type, null) removes the listener with the specified name, if any", function(test) {
   var clicks = 0,
-      document = jsdom.jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
+      document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection = d3.selectAll([one, two]).on("click", function() { ++clicks; });
@@ -79,7 +79,7 @@ tape("selection.on(type, null) observes the specified name, if any", function(te
       bar = 0,
       fooed = function() { ++foo; },
       barred = function() { ++bar; },
-      document = jsdom.jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
+      document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection = d3.selectAll([one, two]).on("click.foo", fooed).on("click.bar", barred);
@@ -95,7 +95,7 @@ tape("selection.on(type, null) observes the specified name, if any", function(te
 tape("selection.on(type, null, capture) ignores the specified capture flag, if any", function(test) {
   var clicks = 0,
       clicked = function() { ++clicks; },
-      document = jsdom.jsdom(),
+      document = jsdom(),
       selection = d3.select(document).on("click.foo", clicked, true);
   selection.dispatch("click");
   test.equal(clicks, 1);
@@ -110,7 +110,7 @@ tape("selection.on(name, null) removes all listeners with the specified name", f
       loads = 0,
       clicked = function() { ++clicks; },
       loaded = function() { ++loads; },
-      document = jsdom.jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
+      document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection = d3.selectAll([one, two]).on("click.foo", clicked).on("load.foo", loaded);
@@ -133,7 +133,7 @@ tape("selection.on(name, null) removes all listeners with the specified name", f
 tape("selection.on(name, null) can remove a listener with capture", function(test) {
   var clicks = 0,
       clicked = function() { ++clicks; },
-      document = jsdom.jsdom(),
+      document = jsdom(),
       selection = d3.select(document).on("click.foo", clicked, true);
   selection.dispatch("click");
   test.equal(clicks, 1);
@@ -146,7 +146,7 @@ tape("selection.on(name, null) can remove a listener with capture", function(tes
 tape("selection.on(name, listener) has no effect", function(test) {
   var clicks = 0,
       clicked = function() { ++clicks; },
-      document = jsdom.jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
+      document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection = d3.selectAll([one, two]).on("click.foo", clicked);
@@ -159,7 +159,7 @@ tape("selection.on(name, listener) has no effect", function(test) {
 
 tape("selection.on(type) skips missing elements", function(test) {
   var clicked = function() {},
-      document = jsdom.jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
+      document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection = d3.selectAll([one, two]).on("click.foo", clicked);
@@ -170,7 +170,7 @@ tape("selection.on(type) skips missing elements", function(test) {
 tape("selection.on(type, listener) skips missing elements", function(test) {
   var clicks = 0,
       clicked = function() { ++clicks; },
-      document = jsdom.jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
+      document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection = d3.selectAll([, two]).on("click.foo", clicked);
@@ -180,7 +180,7 @@ tape("selection.on(type, listener) skips missing elements", function(test) {
 });
 
 tape("selection.on(type, listener) passes the listener data, index and group", function(test) {
-  var document = jsdom.jsdom("<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>"),
+  var document = jsdom("<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       three = document.querySelector("#three"),
@@ -206,7 +206,7 @@ tape("selection.on(type, listener) passes the listener data, index and group", f
 
 tape("selection.on(type, listener) passes the listener the index as of registration time", function(test) {
   var result,
-      document = jsdom.jsdom("<parent id='one'></parent>"),
+      document = jsdom("<parent id='one'></parent>"),
       one = document.querySelector("#one"),
       selection = d3.selectAll([, one]).on("click", function(d, i) { result = i; });
   selection.dispatch("click");

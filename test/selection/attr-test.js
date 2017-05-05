@@ -1,16 +1,16 @@
 var tape = require("tape"),
-    jsdom = require("jsdom"),
+    jsdom = require("../jsdom"),
     d3 = require("../../");
 
 tape("selection.attr(name) returns the value of the attribute with the specified name on the first selected element", function(test) {
-  var document = jsdom.jsdom("<h1 class='c1 c2'>hello</h1><h1 class='c3'></h1>");
+  var document = jsdom("<h1 class='c1 c2'>hello</h1><h1 class='c3'></h1>");
   test.equal(d3.select(document).select("h1").attr("class"), "c1 c2");
   test.equal(d3.selectAll([null, document]).select("h1").attr("class"), "c1 c2");
   test.end();
 });
 
 tape("selection.attr(name) coerces the specified name to a string", function(test) {
-  var document = jsdom.jsdom("<h1 class='c1 c2'>hello</h1><h1 class='c3'></h1>");
+  var document = jsdom("<h1 class='c1 c2'>hello</h1><h1 class='c3'></h1>");
   test.equal(d3.select(document).select("h1").attr({toString: function() { return "class"; }}), "c1 c2");
   test.end();
 });
@@ -63,7 +63,7 @@ tape("selection.attr(name, null) observes the namespace prefix, if any", functio
 });
 
 tape("selection.attr(name, value) sets the value of the attribute with the specified name on the selected elements", function(test) {
-  var document = jsdom.jsdom("<h1 id='one' class='c1 c2'>hello</h1><h1 id='two' class='c3'></h1>"),
+  var document = jsdom("<h1 id='one' class='c1 c2'>hello</h1><h1 id='two' class='c3'></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection = d3.selectAll([one, two]);
@@ -74,7 +74,7 @@ tape("selection.attr(name, value) sets the value of the attribute with the speci
 });
 
 tape("selection.attr(name, null) removes the attribute with the specified name on the selected elements", function(test) {
-  var document = jsdom.jsdom("<h1 id='one' foo='bar' class='c1 c2'>hello</h1><h1 id='two' foo='bar' class='c3'></h1>"),
+  var document = jsdom("<h1 id='one' foo='bar' class='c1 c2'>hello</h1><h1 id='two' foo='bar' class='c3'></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection = d3.selectAll([one, two]);
@@ -85,7 +85,7 @@ tape("selection.attr(name, null) removes the attribute with the specified name o
 });
 
 tape("selection.attr(name, function) sets the value of the attribute with the specified name on the selected elements", function(test) {
-  var document = jsdom.jsdom("<h1 id='one' class='c1 c2'>hello</h1><h1 id='two' class='c3'></h1>"),
+  var document = jsdom("<h1 id='one' class='c1 c2'>hello</h1><h1 id='two' class='c3'></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection = d3.selectAll([one, two]);
@@ -96,7 +96,7 @@ tape("selection.attr(name, function) sets the value of the attribute with the sp
 });
 
 tape("selection.attr(name, function) passes the value function data, index and group", function(test) {
-  var document = jsdom.jsdom("<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>"),
+  var document = jsdom("<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       three = document.querySelector("#three"),

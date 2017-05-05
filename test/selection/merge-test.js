@@ -1,9 +1,9 @@
 var tape = require("tape"),
-    jsdom = require("jsdom"),
+    jsdom = require("../jsdom"),
     d3 = require("../../");
 
 tape("selection.merge(selection) returns a new selection, merging the two selections", function(test) {
-  var document = jsdom.jsdom("<h1 id='one'>one</h1><h1 id='two'>two</h1>"),
+  var document = jsdom("<h1 id='one'>one</h1><h1 id='two'>two</h1>"),
       body = document.body,
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
@@ -17,8 +17,8 @@ tape("selection.merge(selection) returns a new selection, merging the two select
 });
 
 tape("selection.merge(selection) returns a selection with the same size and parents as this selection", function(test) {
-  var document0 = jsdom.jsdom("<h1 id='one'>one</h1><h1 id='two'>two</h1>"),
-      document1 = jsdom.jsdom("<h1 id='one'>one</h1><h1 id='two'>two</h1><h1 id='three'>three</h1>"),
+  var document0 = jsdom("<h1 id='one'>one</h1><h1 id='two'>two</h1>"),
+      document1 = jsdom("<h1 id='one'>one</h1><h1 id='two'>two</h1><h1 id='three'>three</h1>"),
       body0 = document0.body,
       body1 = document1.body,
       one0 = document0.querySelector("#one"),
@@ -32,7 +32,7 @@ tape("selection.merge(selection) returns a selection with the same size and pare
 });
 
 tape("selection.merge(selection) reuses groups from this selection if the other selection has fewer groups", function(test) {
-  var document = jsdom.jsdom("<parent><child></child><child></child></parent><parent><child></child><child></child></parent>"),
+  var document = jsdom("<parent><child></child><child></child></parent><parent><child></child><child></child></parent>"),
       body = document.body,
       selection0 = d3.select(body).selectAll("parent").selectAll("child"),
       selection1 = d3.select(body).selectAll("parent:first-child").selectAll("child"),
@@ -45,7 +45,7 @@ tape("selection.merge(selection) reuses groups from this selection if the other 
 });
 
 tape("selection.merge(selection) reuses this selection’s parents", function(test) {
-  var document = jsdom.jsdom("<parent><child></child><child></child></parent><parent><child></child><child></child></parent>"),
+  var document = jsdom("<parent><child></child><child></child></parent><parent><child></child><child></child></parent>"),
       body = document.body,
       selection0 = d3.select(body).selectAll("parent").selectAll("child"),
       selection1 = d3.select(body).selectAll("parent:first-child").selectAll("child"),

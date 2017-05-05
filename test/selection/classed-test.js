@@ -1,9 +1,9 @@
 var tape = require("tape"),
-    jsdom = require("jsdom"),
+    jsdom = require("../jsdom"),
     d3 = require("../../");
 
 tape("selection.classed(classes) returns true if and only if the first element has the specified classes", function(test) {
-  var document = jsdom.jsdom("<h1 class='c1 c2'>hello</h1><h1 class='c3'></h1>");
+  var document = jsdom("<h1 class='c1 c2'>hello</h1><h1 class='c3'></h1>");
   test.equal(d3.select(document).select("h1").classed(""), true);
   test.equal(d3.select(document).select("h1").classed("c1"), true);
   test.equal(d3.select(document).select("h1").classed("c2"), true);
@@ -18,7 +18,7 @@ tape("selection.classed(classes) returns true if and only if the first element h
 });
 
 tape("selection.classed(classes) coerces the specified classes to a string", function(test) {
-  var document = jsdom.jsdom("<h1 class='c1 c2'>hello</h1><h1 class='c3'></h1>");
+  var document = jsdom("<h1 class='c1 c2'>hello</h1><h1 class='c3'></h1>");
   test.equal(d3.select(document).select("h1").classed({toString: function() { return "c1 c2"; }}), true);
   test.end();
 });
@@ -36,7 +36,7 @@ tape("selection.classed(classes) gets the class attribute if classList is not su
 });
 
 tape("selection.classed(classes, value) sets whether the selected elements have the specified classes", function(test) {
-  var document = jsdom.jsdom(""),
+  var document = jsdom(""),
       selection = d3.select(document.body);
   test.equal(selection.classed("c1"), false);
   test.equal(selection.attr("class"), null);
@@ -61,7 +61,7 @@ tape("selection.classed(classes, value) sets whether the selected elements have 
 });
 
 tape("selection.classed(classes, function) sets whether the selected elements have the specified classes", function(test) {
-  var document = jsdom.jsdom(""),
+  var document = jsdom(""),
       selection = d3.select(document.body);
   test.equal(selection.classed("c1 c2", function() { return true; }), selection);
   test.equal(selection.attr("class"), "c1 c2");
@@ -71,7 +71,7 @@ tape("selection.classed(classes, function) sets whether the selected elements ha
 });
 
 tape("selection.classed(classes, function) passes the value function data, index and group", function(test) {
-  var document = jsdom.jsdom("<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>"),
+  var document = jsdom("<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       three = document.querySelector("#three"),
@@ -119,7 +119,7 @@ tape("selection.classed(classes, value) sets the class attribute if classList is
 });
 
 tape("selection.classed(classes, value) coerces the specified classes to a string", function(test) {
-  var document = jsdom.jsdom("<h1>hello</h1>"),
+  var document = jsdom("<h1>hello</h1>"),
       selection = d3.select(document).select("h1");
   test.equal(selection.classed("c1 c2"), false);
   test.equal(selection.classed({toString: function() { return "c1 c2"; }}, true), selection);

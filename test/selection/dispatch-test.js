@@ -1,11 +1,11 @@
 var tape = require("tape"),
-    jsdom = require("jsdom"),
+    jsdom = require("../jsdom"),
     d3 = require("../../");
 
 tape("selection.dispatch(type) dispatches a custom event of the specified type to each selected element in order", function(test) {
   var result = [],
       event,
-      document = jsdom.jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
+      document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection = d3.selectAll([one, two]).datum(function(d, i) { return "node-" + i; }).on("bang", function(d, i, nodes) { event = d3.event; result.push(this, d, i, nodes); });
@@ -21,7 +21,7 @@ tape("selection.dispatch(type) dispatches a custom event of the specified type t
 tape("selection.dispatch(type, params) dispatches a custom event with the specified constant parameters", function(test) {
   var result = [],
       event,
-      document = jsdom.jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
+      document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection = d3.selectAll([one, two]).datum(function(d, i) { return "node-" + i; }).on("bang", function(d, i, nodes) { event = d3.event; result.push(this, d, i, nodes); });
@@ -37,7 +37,7 @@ tape("selection.dispatch(type, params) dispatches a custom event with the specif
 tape("selection.dispatch(type, function) dispatches a custom event with the specified parameter function", function(test) {
   var result = [],
       events = [],
-      document = jsdom.jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
+      document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection = d3.selectAll([one, two]).datum(function(d, i) { return "node-" + i; }).on("bang", function(d, i, nodes) { events.push(d3.event); result.push(this, d, i, nodes); });
@@ -57,7 +57,7 @@ tape("selection.dispatch(type, function) dispatches a custom event with the spec
 tape("selection.dispatch(type) skips missing elements", function(test) {
   var result = [],
       event,
-      document = jsdom.jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
+      document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection = d3.selectAll([, one,, two]).datum(function(d, i) { return "node-" + i; }).on("bang", function(d, i, nodes) { event = d3.event; result.push(this, d, i, nodes); });
