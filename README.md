@@ -350,7 +350,13 @@ d3.selectAll("p").select(function() {
 
 In both cases, this method returns a new selection containing the appended elements. Each new element inherits the data of the current elements, if any, in the same manner as [*selection*.select](#selection_select).
 
-The specified *name* may have a namespace prefix, such as `svg:text` to specify a `text` attribute in the SVG namespace. See [namespaces](#namespaces) for the map of supported namespaces; additional namespaces can be registered by adding to the map. If no namespace is specified, the namespace will be inherited from the parent element; or, if the name is one of the known prefixes, the corresponding namespace will be used (for example, `svg` implies `svg:svg`).
+The specified *name* may have a namespace prefix, such as `svg:text` to specify a `text` attribute in the SVG namespace. See [namespaces](#namespaces) for the map of supported namespaces; additional namespaces can be registered by adding to the map. If no namespace is specified, the namespace will be inherited from the parent element; or, if the name is one of the known prefixes, the corresponding namespace will be used (for example, `svg` implies `svg:svg`). Note, however, that if you are creating and appending SVG shapes with either one of the last two methods above you will have to [explicitly set the appropriate namespace](https://github.com/d3/d3/issues/638#issuecomment-231812182) and use something like:
+
+```js
+d3.selectAll("g").append(function() {
+  return document.createElementNS("http://www.w3.org/2000/svg", "circle");
+});
+```
 
 <a name="selection_insert" href="#selection_insert">#</a> <i>selection</i>.<b>insert</b>(<i>type</i>[, <i>before</i>]) [<>](https://github.com/d3/d3-selection/blob/master/src/selection/insert.js "Source")
 
