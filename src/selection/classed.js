@@ -60,6 +60,16 @@ function classedFunction(names, value) {
 }
 
 export default function(name, value) {
+  
+  var _name = "";
+  if (typeof name === "function") {
+    _name = name();
+    _name = Array.isArray(_name) ? _name.join(" ") : _name.toString();
+  }
+  else {
+    _name = name;
+  }
+
   var names = classArray(name + "");
 
   if (arguments.length < 2) {
