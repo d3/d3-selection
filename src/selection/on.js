@@ -105,3 +105,7 @@ export function customEvent(event1, listener, that, args) {
     event = event0;
   }
 }
+
+export function currentEvent() {
+  return event;
+}
