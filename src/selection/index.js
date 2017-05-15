@@ -14,7 +14,9 @@ import selection_size from "./size";
 import selection_empty from "./empty";
 import selection_each from "./each";
 import selection_attr from "./attr";
+import selection_attrs from "./attrs";
 import selection_style from "./style";
+import selection_styles from "./styles";
 import selection_property from "./property";
 import selection_classed from "./classed";
 import selection_text from "./text";
@@ -57,7 +59,9 @@ Selection.prototype = selection.prototype = {
   empty: selection_empty,
   each: selection_each,
   attr: selection_attr,
+  attrs: selection_attrs,
   style: selection_style,
+  styles: selection_styles,
   property: selection_property,
   classed: selection_classed,
   text: selection_text,
