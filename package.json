@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "eslint": "3",
-    "jsdom": "10",
+    "jsdom": "11",
     "package-preamble": "0.1",
     "rollup": "0.41",
     "tape": "4",
