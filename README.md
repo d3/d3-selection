@@ -535,7 +535,7 @@ This method cannot be used to clear bound data; use [*selection*.datum](#selecti
 
 <a name="selection_enter" href="#selection_enter">#</a> <i>selection</i>.<b>enter</b>() [<>](https://github.com/d3/d3-selection/blob/master/src/selection/enter.js "Source")
 
-Returns the enter selection: placeholder nodes for each datum that had no corresponding DOM element in the selection. The enter selection is determined by [*selection*.data](#selection_data), and is empty on a selection that is not joined to data.
+Returns the enter selection: placeholder nodes for each datum that had no corresponding DOM element in the selection. (The enter selection is empty for selections not returned by [*selection*.data](#selection_data).)
 
 The enter selection is typically used to create “missing” elements corresponding to new data. For example, to create DIV elements from an array of numbers:
 
@@ -562,7 +562,7 @@ Conceptually, the enter selection’s placeholders are pointers to the parent el
 
 <a name="selection_exit" href="#selection_exit">#</a> <i>selection</i>.<b>exit</b>() [<>](https://github.com/d3/d3-selection/blob/master/src/selection/exit.js "Source")
 
-Returns the exit selection: existing DOM elements in the selection for which no new datum was found. The exit selection is determined by the previous [*selection*.data](#selection_data), and is thus empty until the selection is joined to data. If the exit selection is retrieved more than once after a data join, subsequent calls return the empty selection.
+Returns the exit selection: existing DOM elements in the selection for which no new datum was found. (The exit selection is empty for selections not returned by [*selection*.data](#selection_data).)
 
 The exit selection is typically used to remove “superfluous” elements corresponding to old data. For example, to update the DIV elements created previously with a new array of numbers:
 
