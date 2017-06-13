@@ -1,6 +1,6 @@
 var tape = require("tape"),
-    jsdom = require("../jsdom"),
-    d3 = require("../../");
+    jsdom = require("./jsdom"),
+    d3 = require("../");
 
 tape("d3.window(node) returns node.ownerDocument.defaultView", function(test) {
   var document = jsdom();
