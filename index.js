@@ -7,6 +7,7 @@ export {default as namespaces} from "./src/namespaces";
 export {default as select} from "./src/select";
 export {default as selectAll} from "./src/selectAll";
 export {default as selection} from "./src/selection/index";
+export {Selection as Selection} from "./src/selection/index";
 export {default as selector} from "./src/selector";
 export {default as selectorAll} from "./src/selectorAll";
 export {styleValue as style} from "./src/selection/style";
