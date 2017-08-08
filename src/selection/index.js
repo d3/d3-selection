@@ -23,6 +23,7 @@ import selection_raise from "./raise";
 import selection_lower from "./lower";
 import selection_append from "./append";
 import selection_insert from "./insert";
+import selection_invert from "./invert";
 import selection_remove from "./remove";
 import selection_datum from "./datum";
 import selection_on from "./on";
@@ -66,6 +67,7 @@ Selection.prototype = selection.prototype = {
   lower: selection_lower,
   append: selection_append,
   insert: selection_insert,
+  invert: selection_invert,
   remove: selection_remove,
   datum: selection_datum,
   on: selection_on,
