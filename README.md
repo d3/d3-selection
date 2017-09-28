@@ -37,7 +37,7 @@ Selection是不可變動的。所有影響被選擇元件（或其順序）的se
 
 ## 安裝
 
-如果你使用NPM， `npm install d3-selection`. 否則，下載[最新release](https://github.com/d3/d3-selection/releases/latest). You can also load directly from [d3js.org](https://d3js.org), either as a [standalone library](https://d3js.org/d3-selection.v1.min.js) or as part of [D3 4.0](https://github.com/d3/d3). AMD, CommonJS, and vanilla environments are supported. In vanilla, a `d3` global is exported:
+如果你使用NPM，輸入`npm install d3-selection`。否則，下載[最新release](https://github.com/d3/d3-selection/releases/latest). 你也可以直接從[d3js.org](https://d3js.org)載入， either as a [standalone library](https://d3js.org/d3-selection.v1.min.js) or as part of [D3 4.0](https://github.com/d3/d3). AMD、CommonJS、以及vanilla環境皆有支援。 In vanilla, a `d3` global is exported:
 
 ```html
 <script src="https://d3js.org/d3-selection.v1.min.js"></script>
@@ -62,7 +62,7 @@ var div = d3.selectAll("div");
 
 ### Selecting Elements
 
-Selection函數接受[W3C selector strings](http://www.w3.org/TR/selectors-api/) 像是 `.fancy` 來選擇有著class *fancy*的元素們， or `div` to select DIV elements. Selection methods come in two forms: select and selectAll: the former selects only the first matching element, while the latter selects all matching elements in document order. The top-level selection methods, [d3.select](#select) and [d3.selectAll](#selectAll), query the entire document; the subselection methods, [*selection*.select](#selection_select) and [*selection*.selectAll](#selection_selectAll), restrict selection to descendants of the selected elements.
+Selection函數接受[W3C selector strings](http://www.w3.org/TR/selectors-api/) 像是 `.fancy` 來選擇有著class="fancy"的元素們，或是 `div` 來選擇DIV元素們。 Selection函數有兩種形式：select 和 selectAll。前者只選擇第一個相配的元件；後著按照順序，選擇文件裡所有相配的元素們。The top-level selection methods, [d3.select](#select) and [d3.selectAll](#selectAll), query the entire document; the subselection methods, [*selection*.select](#selection_select) and [*selection*.selectAll](#selection_selectAll), restrict selection to descendants of the selected elements.
 
 <a name="selection" href="#selection">#</a> d3.<b>selection</b>() [<>](https://github.com/d3/d3-selection/blob/master/src/selection/index.js#L38 "Source")
 
