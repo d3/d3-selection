@@ -1,8 +1,9 @@
 # d3-selection
 
-Selections allow powerful data-driven transformation of the document object model (DOM): set [attributes](#selection_attr), [styles](#selection_style), [properties](#selection_property), [HTML](#selection_html) or [text](#selection_text) content, and more. Using the [data join](#joining-data)’s [enter](#selection_enter) and [exit](#selection_enter) selections, you can also [add](#selection_append) or [remove](#selection_remove) elements to correspond to data.
+Selection 能提供強大的，以資料驅動的DOM轉換: 藉由設定 [attributes](#selection_attr), [styles](#selection_style), [properties](#selection_property), [HTML](#selection_html) 或 [text](#selection_text) 的內容......等。 利用 [data join](#joining-data)’s [enter](#selection_enter) 和 [exit](#selection_enter) selections, 你也可以 [新增](#selection_append) 或 [刪除](#selection_remove) 相對應資料的元件.
 
-Selection methods typically return the current selection, or a new selection, allowing the concise application of multiple operations on a given selection via method chaining. For example, to set the class and color style of all paragraph elements in the current document:
+Selection的函數一般會回傳當下的selection，或是一個新的selection，並允許透過函數鏈(method chain)的形式，在給定的selection上，簡潔地進行多個操作。 
+舉例來說，我們如果想設定文件中所有段落p元件，class的值以及style裡的color的值：
 
 ```js
 d3.selectAll("p")
@@ -10,7 +11,7 @@ d3.selectAll("p")
     .style("color", "red");
 ```
 
-This is equivalent to:
+上面的寫法等同於：
 
 ```js
 var p = d3.selectAll("p");
@@ -18,25 +19,25 @@ p.attr("class", "graf");
 p.style("color", "red");
 ```
 
-By convention, selection methods that return the current selection use *four* spaces of indent, while methods that return a new selection use only *two*. This helps reveal changes of context by making them stick out of the chain:
+按照慣例，回傳當下selection的seletion函數會使用**4**個空白的縮排。當函數回傳新的selection時，只有**2**個空白的縮排。這能讓內容透過脫離函數鏈的方式，表達內容的改變：
 
 ```js
 d3.select("body")
-  .append("svg")
-    .attr("width", 960)
-    .attr("height", 500)
-  .append("g")
-    .attr("transform", "translate(20,20)")
-  .append("rect")
-    .attr("width", 920)
+  .append("svg")//2個空白的縮排=>回傳新的selection
+    .attr("width", 960)//4個空白的縮排=>回傳當下的selection，("svg")
+    .attr("height", 500)
+  .append("g")//=>回傳新的selection
+    .attr("transform", "translate(20,20)")//回傳當下的selection，("g")
+  .append("rect")//=>回傳新的selection
+    .attr("width", 920)//回傳當下的selection，("rect")
     .attr("height", 460);
 ```
 
-Selections are immutable. All selection methods that affect which elements are selected (or their order) return a new selection rather than modifying the current selection. However, note that elements are necessarily mutable, as selections drive transformations of the document!
+Selection是不可變動的。所有影響被選擇元件（或其順序）的selection函數，是回傳一個新的selection，而不是修改當下的selection。然而要注意，元件(elements)必然是可變動的，因為selection驅動文件的轉換！
 
-## Installing
+## 安裝
 
-If you use NPM, `npm install d3-selection`. Otherwise, download the [latest release](https://github.com/d3/d3-selection/releases/latest). You can also load directly from [d3js.org](https://d3js.org), either as a [standalone library](https://d3js.org/d3-selection.v1.min.js) or as part of [D3 4.0](https://github.com/d3/d3). AMD, CommonJS, and vanilla environments are supported. In vanilla, a `d3` global is exported:
+如果你使用NPM，輸入`npm install d3-selection`。否則，下載[最新release](https://github.com/d3/d3-selection/releases/latest). 你也可以直接從[d3js.org](https://d3js.org)載入， either as a [standalone library](https://d3js.org/d3-selection.v1.min.js) or as part of [D3 4.0](https://github.com/d3/d3). AMD、CommonJS、以及vanilla環境皆有支援。 In vanilla, a `d3` global is exported:
 
 ```html
 <script src="https://d3js.org/d3-selection.v1.min.js"></script>
@@ -61,7 +62,7 @@ var div = d3.selectAll("div");
 
 ### Selecting Elements
 
-Selection methods accept [W3C selector strings](http://www.w3.org/TR/selectors-api/) such as `.fancy` to select elements with the class *fancy*, or `div` to select DIV elements. Selection methods come in two forms: select and selectAll: the former selects only the first matching element, while the latter selects all matching elements in document order. The top-level selection methods, [d3.select](#select) and [d3.selectAll](#selectAll), query the entire document; the subselection methods, [*selection*.select](#selection_select) and [*selection*.selectAll](#selection_selectAll), restrict selection to descendants of the selected elements.
+Selection函數接受[W3C selector strings](http://www.w3.org/TR/selectors-api/) 像是 `.fancy` 來選擇有著class="fancy"的元素們，或是 `div` 來選擇DIV元素們。 Selection函數有兩種形式：select 和 selectAll。前者只選擇第一個相配的元件；後著按照順序，選擇文件裡所有相配的元素們。The top-level selection methods, [d3.select](#select) and [d3.selectAll](#selectAll), query the entire document; the subselection methods, [*selection*.select](#selection_select) and [*selection*.selectAll](#selection_selectAll), restrict selection to descendants of the selected elements.
 
 <a name="selection" href="#selection">#</a> d3.<b>selection</b>() [<>](https://github.com/d3/d3-selection/blob/master/src/selection/index.js#L38 "Source")
 
