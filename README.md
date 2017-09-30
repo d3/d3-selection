@@ -194,7 +194,7 @@ var circle = svg.selectAll("circle").data(data) // UPDATE
 
 circle.exit().remove(); // EXIT
 
-circle.enter().append("circle") // ENTER
+circle = circle.enter().append("circle") // ENTER
     .style("fill", "green")
   .merge(circle) // ENTER + UPDATE
     .style("stroke", "black");
@@ -510,7 +510,7 @@ var circle = svg.selectAll("circle") // 1
 
 circle.exit().remove(); // 4
 
-circle.enter().append("circle") // 5
+circle = circle.enter().append("circle") // 5, 9
     .style("fill", "green") // 6
   .merge(circle) // 7
     .style("stroke", "black"); // 8
@@ -526,6 +526,7 @@ Breaking this down into discrete steps:
 6. These entering circles are given a green fill.
 7. A new selection representing the [union](#selection_merge) of entering and updating circles is created.
 8. These entering and updating circles are given a black stroke.
+9. These circles are stored in the variable `circle`.
 
 As described in the preceding paragraphs, the “matching” logic is determined by the key function passed to *selection*.data; since no key function is used in the above code sample, the elements and data are joined by index.
 
