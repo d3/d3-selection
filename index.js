@@ -4,6 +4,7 @@ export {default as matcher} from "./src/matcher";
 export {default as mouse} from "./src/mouse";
 export {default as namespace} from "./src/namespace";
 export {default as namespaces} from "./src/namespaces";
+export {default as clientPoint} from "./src/point";
 export {default as select} from "./src/select";
 export {default as selectAll} from "./src/selectAll";
 export {default as selection} from "./src/selection/index";
