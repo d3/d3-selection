@@ -1,3 +1,4 @@
+export {default as clientPoint} from "./src/point";
 export {default as creator} from "./src/creator";
 export {default as local} from "./src/local";
 export {default as matcher} from "./src/matcher";

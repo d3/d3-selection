@@ -30,3 +30,16 @@ tape("d3.event is restored to its previous value during reentrant events", funct
   test.equal(event3, event1);
   test.end();
 });
+
+tape("d3.mouse will use the passed in event parameter", function(test) {
+    var event = {clientX : 2, clientY: 2},
+        svg = jsdom("<svg width='20' height='20'><rect width='10' height='10'/></svg>");
+        svg.clientLeft = 0;
+        svg.clientTop = 0;
+    svg.getBoundingClientRect = function() { return { left:0, top:0 }; }
+
+    var point = d3.mouse(svg, event);
+
+    test.deepEqual(point, [2, 2]);
+    test.end();
+});
