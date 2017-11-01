@@ -89,7 +89,15 @@ Selects the first element that matches the specified *selector* string. If no el
 var anchor = d3.select("a");
 ```
 
-If the *selector* is not a string, instead selects the specified node; this is useful if you already have a reference to a node, such as `this` within an event listener or a global such as `document.body`. For example, to make a clicked paragraph red:
+If the *selector* is a function, it is evaluated, with *this* as the `document`.
+
+```js
+var focus = d3.select(function() {
+  return this.activeElement;
+});
+```
+
+If the *selector* is not a string or function, instead selects the specified node; this is useful if you already have a reference to a node, such as `this` within an event listener or a global such as `document.body`. For example, to make a clicked paragraph red:
 
 ```js
 d3.selectAll("p").on("click", function() {
@@ -105,7 +113,15 @@ Selects all elements that match the specified *selector* string. The elements wi
 var paragraph = d3.selectAll("p");
 ```
 
-If the *selector* is not a string, instead selects the specified array of nodes; this is useful if you already have a reference to nodes, such as `this.childNodes` within an event listener or a global such as `document.links`. The nodes may instead be a pseudo-array such as a `NodeList` or `arguments`. For example, to color all links red:
+If the *selector* is a function, it is evaluated, with *this* as the `document`.
+
+```js
+var links = d3.selectAll(function() {
+  return this.links;
+});
+```
+
+If the *selector* is not a string or function, instead selects the specified array of nodes; this is useful if you already have a reference to nodes, such as `this.childNodes` within an event listener or a global such as `document.links`. The nodes may instead be a pseudo-array such as a `NodeList` or `arguments`. For example, to color all links red:
 
 ```js
 d3.selectAll(document.links).style("color", "red");
