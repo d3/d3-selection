@@ -65,3 +65,10 @@ tape("d3.selectAll(array) can select an array that contains arbitrary objects", 
   test.deepEqual(d3.selectAll([object]), {_groups: [[object]], _parents: [null]});
   test.end();
 });
+
+tape("d3.selectAll(function) selects the return values of the given function for the document", function(test) {
+  var document = global.document = jsdom("<span id='one'></span>"),
+      one = document.querySelector("#one");
+  test.deepEqual(d3.selectAll(function() { return [one]; }), {_groups: [[one]], _parents: [document]});
+  test.end();
+});

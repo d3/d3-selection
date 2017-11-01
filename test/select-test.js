@@ -50,3 +50,10 @@ tape("d3.select(object) selects an arbitrary object", function(test) {
   test.deepEqual(d3.select(object), {_groups: [[object]], _parents: [null]});
   test.end();
 });
+
+tape("d3.select(function) selects the return value of the given function for the document", function(test) {
+  var document = global.document = jsdom("<span id='one'></span>"),
+      one = document.querySelector("#one");
+  test.deepEqual(d3.select(function() { return one; }), {_groups: [[one]], _parents: [null]});
+  test.end();
+});
