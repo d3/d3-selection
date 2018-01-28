@@ -15,7 +15,7 @@
     "name": "Mike Bostock",
     "url": "https://bost.ocks.org/mike"
   },
-  "main": "build/d3-selection.js",
+  "main": "dist/d3-selection.js",
   "module": "index",
   "jsnext:main": "index",
   "repository": {
@@ -23,17 +23,17 @@
     "url": "https://github.com/d3/d3-selection.git"
   },
   "scripts": {
-    "pretest": "rm -rf build && mkdir build && rollup --banner \"$(preamble)\" -f umd -n d3 -o build/d3-selection.js -- index.js",
+    "pretest": "rm -rf dist && mkdir dist && rollup -c --banner \"$(preamble)\"",
     "test": "tape 'test/**/*-test.js' && eslint index.js src",
-    "prepublish": "npm run test && uglifyjs --preamble \"$(preamble)\" build/d3-selection.js -c -m -o build/d3-selection.min.js",
-    "postpublish": "git push && git push --tags && cd ../d3.github.com && git pull && cp ../d3-selection/build/d3-selection.js d3-selection.v1.js && cp ../d3-selection/build/d3-selection.min.js d3-selection.v1.min.js && git add d3-selection.v1.js d3-selection.v1.min.js && git commit -m \"d3-selection ${npm_package_version}\" && git push && cd - && zip -j build/d3-selection.zip -- LICENSE README.md build/d3-selection.js build/d3-selection.min.js"
+    "prepublishOnly": "npm run test && uglifyjs -b beautify=false,preamble=\"'$(preamble)'\" dist/d3-selection.js -c -m -o dist/d3-selection.min.js",
+    "postpublish": "git push && git push --tags && cd ../d3.github.com && git pull && cp ../d3-selection/dist/d3-selection.js d3-selection.v1.js && cp ../d3-selection/dist/d3-selection.min.js d3-selection.v1.min.js && git add d3-selection.v1.js d3-selection.v1.min.js && git commit -m \"d3-selection ${npm_package_version}\" && git push && cd - && zip -j dist/d3-selection.zip -- LICENSE README.md dist/d3-selection.js dist/d3-selection.min.js"
   },
   "devDependencies": {
-    "eslint": "3",
+    "eslint": "4",
     "jsdom": "11",
     "package-preamble": "0.1",
-    "rollup": "0.41",
+    "rollup": "0.52",
     "tape": "4",
-    "uglify-js": "^2.8.11"
+    "uglify-js": "3.2"
   }
 }
