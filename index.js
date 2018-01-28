@@ -1,3 +1,4 @@
+export {default as create} from "./src/create";
 export {default as creator} from "./src/creator";
 export {default as local} from "./src/local";
 export {default as matcher} from "./src/matcher";

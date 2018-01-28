@@ -428,6 +428,10 @@ selection.each(function() {
 });
 ```
 
+<a name="create" href="#create">#</a> d3.<b>create</b>(<i>name</i>) [<>](https://github.com/d3/d3-selection/blob/master/src/create.js "Source")
+
+Given the specified element *name*, returns a single-element selection containing a detached element of the given name in the current document.
+
 <a name="creator" href="#creator">#</a> d3.<b>creator</b>(<i>name</i>) [<>](https://github.com/d3/d3-selection/blob/master/src/creator.js "Source")
 
 Given the specified element *name*, returns a function which creates an element of the given name, assuming that `this` is the parent element. This method is used internally by [*selection*.append](#selection_append) and [*selection*.insert](#selection_insert) to create new elements. For example, this:
