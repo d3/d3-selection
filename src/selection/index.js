@@ -24,6 +24,7 @@ import selection_lower from "./lower";
 import selection_append from "./append";
 import selection_insert from "./insert";
 import selection_remove from "./remove";
+import selection_clone from "./clone";
 import selection_datum from "./datum";
 import selection_on from "./on";
 import selection_dispatch from "./dispatch";
@@ -67,6 +68,7 @@ Selection.prototype = selection.prototype = {
   append: selection_append,
   insert: selection_insert,
   remove: selection_remove,
+  clone: selection_clone,
   datum: selection_datum,
   on: selection_on,
   dispatch: selection_dispatch

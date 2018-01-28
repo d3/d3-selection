@@ -386,6 +386,16 @@ The specified *name* may have a namespace prefix, such as `svg:text` to specify 
 
 Removes the selected elements from the document. Returns this selection (the removed elements) which are now detached from the DOM. There is not currently a dedicated API to add removed elements back to the document; however, you can pass a function to [*selection*.append](#selection_append) or [*selection*.insert](#selection_insert) to re-add elements.
 
+<a name="selection_clone" href="#selection_clone">#</a> <i>selection</i>.<b>clone</b>([<i>deep</i>]) [<>](https://github.com/d3/d3-selection/blob/master/src/selection/clone.js "Source")
+
+Inserts clones the selected elements immediately following the selected elements. Equivalent to:
+
+```js
+selection.select(function() {
+  return this.parentNode.insertBefore(this.cloneNode(deep), this.nextSibling);
+});
+```
+
 <a name="selection_sort" href="#selection_sort">#</a> <i>selection</i>.<b>sort</b>(<i>compare</i>) [<>](https://github.com/d3/d3-selection/blob/master/src/selection/sort.js "Source")
 
 Returns a new selection that contains a copy of each group in this selection sorted according to the *compare* function. After sorting, re-inserts elements to match the resulting order (per [*selection*.order](#selection_order)).
