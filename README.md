@@ -388,7 +388,8 @@ Removes the selected elements from the document. Returns this selection (the rem
 
 <a name="selection_clone" href="#selection_clone">#</a> <i>selection</i>.<b>clone</b>([<i>deep</i>]) [<>](https://github.com/d3/d3-selection/blob/master/src/selection/clone.js "Source")
 
-Inserts clones the selected elements immediately following the selected elements. Equivalent to:
+Inserts clones of the selected elements immediately following the selected elements and returns a selection of the newly added clones. 
+If *deep* evaluates to `true`, the child nodes of the selected elements will be cloned as well. Otherwise, only the elements themselves will be cloned. Equivalent to:
 
 ```js
 selection.select(function() {
