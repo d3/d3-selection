@@ -731,7 +731,7 @@ The only difference is that *selection*.call always returns the *selection* and 
 
 <a name="selection_apply" href="#selection_apply">#</a> <i>selection</i>.<b>apply</b>(<i>function</i>[, <i>arguments…</i>]) [<>](https://github.com/d3/d3-selection/blob/master/src/selection/apply.js "Source")
 
-Apply works identically to call, however instead of returning the original selection, it returns the value from the function. This allows for greater flexibility in chaining function calls that return a modified version of the selection, or a new selection entirely. For example, here is a simple transition factory:
+Works identically to `call`, however instead of returning the original selection, it returns the return value from the function. This allows for greater flexibility in chaining function calls that return a modified version of the selection, or a new selection entirely. For example, here is a simple transition factory:
 
 ```js
 function addTransitions (selection) {
@@ -745,7 +745,7 @@ function addTransitions (selection) {
 }
 ```
 
-Using apply, you can call the function on the selection and continue to work on the modified selection like so:
+You can call the function on the selection and continue to work on the modified selection like so:
 
 ```js
 selectAll('.circles')
@@ -754,7 +754,7 @@ selectAll('.circles')
   .attr('r', 50)
 ```
 
-This is equivalent to:
+This is exactly equivalent to:
 
 ```js
 addTransitions(
