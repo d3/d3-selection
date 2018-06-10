@@ -633,6 +633,23 @@ You can expose the custom data attributes by setting each element’s data as th
 selection.datum(function() { return this.dataset; })
 ```
 
+<a name="dataAppend" href="#dataAppend">#</a> selection.<b>dataAppend</b>(<i>array</i>, <i>selector</i>) [<>](https://github.com/d3/d3-selection/blob/master/src/selection/dataAppend.js "Source")
+
+Syntactic sugar for making an empty selection, binding data to it, taking the enter selection and appending elements. 
+
+```js
+selection.dataAppend(myArray, 'div');
+```
+
+is equivalent to this: 
+
+```js
+selection.selectAll(null)
+  .data(myArray)
+  .enter()
+  .append('div');
+```
+
 ### Handling Events
 
 For interaction, selections allow listening for and dispatching of events.
