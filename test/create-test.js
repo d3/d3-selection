@@ -3,7 +3,7 @@ var tape = require("tape"),
     d3 = require("../");
 
 tape("d3.create(name) returns a new HTML element with the given name", function(test) {
-  var document = global.document = jsdom("");
+  global.document = jsdom("");
   try {
     var h1 = d3.create("h1");
     test.equal(h1._groups[0][0].namespaceURI, "http://www.w3.org/1999/xhtml");
@@ -16,7 +16,7 @@ tape("d3.create(name) returns a new HTML element with the given name", function(
 });
 
 tape("d3.create(name) returns a new SVG element with the given name", function(test) {
-  var document = global.document = jsdom("");
+  global.document = jsdom("");
   try {
     var svg = d3.create("svg");
     test.equal(svg._groups[0][0].namespaceURI, "http://www.w3.org/2000/svg");

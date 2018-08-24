@@ -1,5 +1,4 @@
 var tape = require("tape"),
-    jsdom = require("./jsdom"),
     d3 = require("../");
 
 tape("d3.namespace(name) returns name if there is no namespace prefix", function(test) {

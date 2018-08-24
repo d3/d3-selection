@@ -12,7 +12,7 @@ tape("selection.enter() returns an empty selection before a data-join", function
 tape("selection.enter() contains EnterNodes", function(test) {
   var body = jsdom().body,
       selection = d3.select(body).selectAll("div").data([1, 2, 3]);
-  test.equal(selection.enter().node().constructor.name, "EnterNode");
+  test.equal(selection.enter().node()._parent, body);
   test.end();
 });
 
