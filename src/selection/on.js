@@ -1,4 +1,5 @@
 var filterEvents = {};
+var listenerMap = new WeakMap;
 
 export var event = null;
 
@@ -41,7 +42,7 @@ function parseTypenames(typenames) {
 
 function onRemove(typename) {
   return function() {
-    var on = this.__on;
+    var on = listenerMap.get(this);
     if (!on) return;
     for (var j = 0, i = -1, m = on.length, o; j < m; ++j) {
       if (o = on[j], (!typename.type || o.type === typename.type) && o.name === typename.name) {
@@ -51,14 +52,14 @@ function onRemove(typename) {
       }
     }
     if (++i) on.length = i;
-    else delete this.__on;
+    else listenerMap.delete(this);
   };
 }
 
 function onAdd(typename, value, capture) {
   var wrap = filterEvents.hasOwnProperty(typename.type) ? filterContextListener : contextListener;
   return function(d, i, group) {
-    var on = this.__on, o, listener = wrap(value, i, group);
+    var on = listenerMap.get(this), o, listener = wrap(value, i, group);
     if (on) for (var j = 0, m = on.length; j < m; ++j) {
       if ((o = on[j]).type === typename.type && o.name === typename.name) {
         this.removeEventListener(o.type, o.listener, o.capture);
@@ -69,7 +70,7 @@ function onAdd(typename, value, capture) {
     }
     this.addEventListener(typename.type, listener, capture);
     o = {type: typename.type, name: typename.name, value: value, listener: listener, capture: capture};
-    if (!on) this.__on = [o];
+    if (!on) listenerMap.set(this, [o]);
     else on.push(o);
   };
 }
@@ -78,7 +79,7 @@ export default function(typename, value, capture) {
   var typenames = parseTypenames(typename + ""), i, n = typenames.length, t;
 
   if (arguments.length < 2) {
-    var on = this.node().__on;
+    var on = listenerMap.get(this.node());
     if (on) for (var j = 0, m = on.length, o; j < m; ++j) {
       for (i = 0, o = on[j]; i < n; ++i) {
         if ((t = typenames[i]).type === o.type && t.name === o.name) {
