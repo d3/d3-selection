@@ -3,8 +3,10 @@ export default function(node, event) {
 
   if (svg.createSVGPoint) {
     var point = svg.createSVGPoint();
-    point.x = event.clientX, point.y = event.clientY;
-    point = point.matrixTransform(node.getScreenCTM().inverse());
+    if (event) {
+      point.x = event.clientX, point.y = event.clientY;
+      point = point.matrixTransform(node.getScreenCTM().inverse());
+    }
     return [point.x, point.y];
   }
 
