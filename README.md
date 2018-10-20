@@ -502,8 +502,8 @@ var data = [
   {name: "Reyes", number: 8},
   {name: "Ford", number: 15},
   {name: "Jarrah", number: 16},
-  {name: "Shephard", number: 31},
-  {name: "Kwon", number: 34}
+  {name: "Shephard", number: 23},
+  {name: "Kwon", number: 42}
 ];
 
 d3.selectAll("div")
