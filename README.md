@@ -523,7 +523,7 @@ This method cannot be used to clear bound data; use [*selection*.datum](#selecti
 
 <a name="selection_join" href="#selection_join">#</a> <i>selection</i>.<b>join</b>(<i>enter</i>[, <i>update</i>][, <i>exit</i>])
 
-Appends and removes elements as necessarily to match the data that was previously bound by [*selection*.data](#selection_data), returning the [merged](#selection_merge) and [ordered](#selection_order) enter and update selection. This method is a convenient alternative to the more explicit [*selection*.enter](#selection_enter), [*selection*.exit](#selection_exit), [*selection*.append](#selection_append) and [*selection*.remove](#selection_remove)). For example:
+Appends, removes and reorders elements as necessary to match the data that was previously bound by [*selection*.data](#selection_data), returning the [merged](#selection_merge) and [ordered](#selection_order) enter and update selection. This method is a convenient alternative to the more explicit [*selection*.enter](#selection_enter), [*selection*.exit](#selection_exit), [*selection*.append](#selection_append) and [*selection*.remove](#selection_remove)). For example:
 
 ```js
 svg.selectAll("circle")
