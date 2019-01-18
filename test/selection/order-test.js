@@ -23,13 +23,3 @@ tape("selection.order() only orders within each group", function(test) {
   test.equal(two.nextSibling, null);
   test.end();
 });
-
-tape("selection.order() does not re-append nodes that are already in order", function(test) {
-  var two = {nextSibling: null},
-      one = {nextSibling: two},
-      selection = d3.selectAll([one, two]);
-  test.equal(selection.order(), selection);
-  test.equal(one.nextSibling, two);
-  test.equal(two.nextSibling, null);
-  test.end();
-});

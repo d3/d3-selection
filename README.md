@@ -186,7 +186,7 @@ The returned filtered selection preserves the parents of this selection, but lik
 
 Returns a new selection merging this selection with the specified *other* selection. The returned selection has the same number of groups and the same parents as this selection. Any missing (null) elements in this selection are filled with the corresponding element, if present (not null), from the specified *selection*. (If the *other* selection has additional groups or parents, they are ignored.)
 
-This method is commonly used to merge the [enter](#selection_enter) and [update](#selection_data) selections after a [data-join](#joining-data). After modifying the entering and updating elements separately, you can merge the two selections and perform operations on both without duplicate code. For example:
+This method is by [*selection*.join](#selection_join) to merge the [enter](#selection_enter) and [update](#selection_data) selections after [binding data](#joining-data). After modifying the entering and updating elements separately, you can merge the two selections and perform operations on both without duplicate code. For example:
 
 ```js
 var circle = svg.selectAll("circle").data(data) // UPDATE
@@ -454,9 +454,11 @@ For an introduction to D3’s data joins, see [Thinking With Joins](http://bost.
 
 <a name="selection_data" href="#selection_data">#</a> <i>selection</i>.<b>data</b>([<i>data</i>[, <i>key</i>]]) [<>](https://github.com/d3/d3-selection/blob/master/src/selection/data.js "Source")
 
-Joins the specified array of *data* with the selected elements, returning a new selection that represents the *update* selection: the elements successfully bound to data. Also defines the [enter](#selection_enter) and [exit](#selection_exit) selections on the returned selection, which can be used to add or remove elements to correspond to the new data. The specified *data* is an array of arbitrary values (*e.g.*, numbers or objects), or a function that returns an array of values for each group. When data is assigned to an element, it is stored in the property `__data__`, thus making the data “sticky” and available on re-selection.
+Binds the specified array of *data* with the selected elements, returning a new selection that represents the *update* selection: the elements successfully bound to data. Also defines the [enter](#selection_enter) and [exit](#selection_exit) selections on the returned selection, which can be used to add or remove elements to correspond to the new data. The specified *data* is an array of arbitrary values (*e.g.*, numbers or objects), or a function that returns an array of values for each group. When data is assigned to an element, it is stored in the property `__data__`, thus making the data “sticky” and available on re-selection.
 
-The *data* is specified **for each group** in the selection. If the selection has multiple groups (such as [d3.selectAll](#selectAll) followed by [*selection*.selectAll](#selection_selectAll)), then *data* should typically be specified as a function. This function will be evaluated for each group in order, being passed the group’s parent datum (*d*, which may be undefined), the group index (*i*), and the selection’s parent nodes (*nodes*), with *this* as the group’s parent element. For example, to create an HTML table from a matrix of numbers:
+The *data* is specified **for each group** in the selection. If the selection has multiple groups (such as [d3.selectAll](#selectAll) followed by [*selection*.selectAll](#selection_selectAll)), then *data* should typically be specified as a function. This function will be evaluated for each group in order, being passed the group’s parent datum (*d*, which may be undefined), the group index (*i*), and the selection’s parent nodes (*nodes*), with *this* as the group’s parent element.
+
+In conjunction with [*selection*.join](#selection_join) (or more explicitly with [*selection*.enter](#selection_enter), [*selection*.exit](#selection_exit), [*selection*.append](#selection_append) and [*selection*.remove](#selection_remove)), *selection*.data can be used to enter, update and exit elements to match data. For example, to create an HTML table from a matrix of numbers:
 
 ```js
 var matrix = [
@@ -470,11 +472,11 @@ var tr = d3.select("body")
   .append("table")
   .selectAll("tr")
   .data(matrix)
-  .enter().append("tr");
+  .join("tr");
 
 var td = tr.selectAll("td")
   .data(function(d) { return d; })
-  .enter().append("td")
+  .join("td")
     .text(function(d) { return d; });
 ```
 
@@ -515,19 +517,40 @@ This example key function uses the datum *d* if present, and otherwise falls bac
 
 The *update* and *enter* selections are returned in data order, while the *exit* selection preserves the selection order prior to the join. If a key function is specified, the order of elements in the selection may not match their order in the document; use [*selection*.order](#order) or [*selection*.sort](#sort) as needed. For more on how the key function affects the join, see [A Bar Chart, Part 2](http://bost.ocks.org/mike/bar/2/) and [Object Constancy](http://bost.ocks.org/mike/constancy/).
 
-Although the data-join can be used simply to create (to *enter*) a set of elements corresponding to data, more generally the data-join is designed to let you create, destroy or update elements as needed so that the resulting DOM corresponds to the new data. The data-join lets you do this efficiently by executing only the minimum necessary operations on each state of element (entering, updating, or exiting), and allows you to declare concise animated transitions between states as well. Here is a simple example of the [General Update Pattern](http://bl.ocks.org/mbostock/3808218):
+If *data* is not specified, this method returns the array of data for the selected elements.
+
+This method cannot be used to clear bound data; use [*selection*.datum](#selection_datum) instead.
+
+<a name="selection_join" href="#selection_join">#</a> <i>selection</i>.<b>join</b>(<i>enter</i>[, <i>update</i>][, <i>exit</i>])
+
+Appends and removes elements as necessarily to match the data that was previously bound by [*selection*.data](#selection_data), returning the [merged](#selection_merge) and [ordered](#selection_order) enter and update selection. This method is a convenient alternative to the more explicit [*selection*.enter](#selection_enter), [*selection*.exit](#selection_exit), [*selection*.append](#selection_append) and [*selection*.remove](#selection_remove)). For example:
+
+```js
+svg.selectAll("circle")
+  .data(data)
+  .join(
+    enter => enter.append("circle").attr("fill", "green"),
+    update => update.attr("fill", "blue")
+  )
+    .attr("stroke", "black");
+```
+
+See the [*selection*.join Observable notebook](https://beta.observablehq.com/d/6c522dda5dd9daa3) for more examples.
+
+This is equivalent to the [General Update Pattern](http://bl.ocks.org/mbostock/3808218):
 
 ```js
 var circle = svg.selectAll("circle") // 1
   .data(data) // 2
-    .style("fill", "blue"); // 3
+    .attr("fill", "blue"); // 3
 
 circle.exit().remove(); // 4
 
 circle = circle.enter().append("circle") // 5, 9
-    .style("fill", "green") // 6
+    .attr("fill", "green") // 6
   .merge(circle) // 7
-    .style("stroke", "black"); // 8
+    .order() // 8
+    .attr("stroke", "black"); // 9
 ```
 
 Breaking this down into discrete steps:
@@ -539,14 +562,11 @@ Breaking this down into discrete steps:
 5. New circles are [appended](#selection_append) for any new data that do *not* match any existing circle: the *enter* selection.
 6. These entering circles are given a green fill.
 7. A new selection representing the [union](#selection_merge) of entering and updating circles is created.
-8. These entering and updating circles are given a black stroke.
-9. These circles are stored in the variable `circle`.
+8. These entering and updating circles are reordered to match the data (if necessary).
+9. The circles are given a black stroke.
+10. The circles are stored in the variable `circle`.
 
 As described in the preceding paragraphs, the “matching” logic is determined by the key function passed to *selection*.data; since no key function is used in the above code sample, the elements and data are joined by index.
-
-If *data* is not specified, this method returns the array of data for the selected elements.
-
-This method cannot be used to clear bound data; use [*selection*.datum](#selection_datum) instead.
 
 <a name="selection_enter" href="#selection_enter">#</a> <i>selection</i>.<b>enter</b>() [<>](https://github.com/d3/d3-selection/blob/master/src/selection/enter.js "Source")
 
