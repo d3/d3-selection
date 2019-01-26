@@ -546,7 +546,7 @@ var circle = svg.selectAll("circle") // 1
 
 circle.exit().remove(); // 4
 
-circle = circle.enter().append("circle") // 5, 9
+circle = circle.enter().append("circle") // 5, 10
     .attr("fill", "green") // 6
   .merge(circle) // 7
     .order() // 8
