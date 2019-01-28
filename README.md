@@ -528,6 +528,16 @@ Appends, removes and reorders elements as necessary to match the data that was p
 ```js
 svg.selectAll("circle")
   .data(data)
+  .join("circle")
+    .attr("fill", "none")
+    .attr("stroke", "black");
+```
+
+To control what happens on enter, update and exit, pass functions:
+
+```js
+svg.selectAll("circle")
+  .data(data)
   .join(
     enter => enter.append("circle").attr("fill", "green"),
     update => update.attr("fill", "blue")
