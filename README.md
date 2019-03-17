@@ -13,7 +13,7 @@ d3.selectAll("p")
 This is equivalent to:
 
 ```js
-var p = d3.selectAll("p");
+const p = d3.selectAll("p");
 p.attr("class", "graf");
 p.style("color", "red");
 ```
@@ -42,7 +42,7 @@ If you use NPM, `npm install d3-selection`. Otherwise, download the [latest rele
 <script src="https://d3js.org/d3-selection.v1.min.js"></script>
 <script>
 
-var div = d3.selectAll("div");
+const div = d3.selectAll("div");
 
 </script>
 ```
@@ -86,7 +86,7 @@ d3.selectAll("input[type=checkbox]").checked(true);
 Selects the first element that matches the specified *selector* string. If no elements match the *selector*, returns an empty selection. If multiple elements match the *selector*, only the first matching element (in document order) will be selected. For example, to select the first anchor element:
 
 ```js
-var anchor = d3.select("a");
+const anchor = d3.select("a");
 ```
 
 If the *selector* is not a string, instead selects the specified node; this is useful if you already have a reference to a node, such as `this` within an event listener or a global such as `document.body`. For example, to make a clicked paragraph red:
@@ -102,7 +102,7 @@ d3.selectAll("p").on("click", function() {
 Selects all elements that match the specified *selector* string. The elements will be selected in document order (top-to-bottom). If no elements in the document match the *selector*, or if the *selector* is null or undefined, returns an empty selection. For example, to select all paragraphs:
 
 ```js
-var paragraph = d3.selectAll("p");
+const paragraph = d3.selectAll("p");
 ```
 
 If the *selector* is not a string, instead selects the specified array of nodes; this is useful if you already have a reference to nodes, such as `this.childNodes` within an event listener or a global such as `document.links`. The nodes may instead be a pseudo-array such as a `NodeList` or `arguments`. For example, to color all links red:
@@ -116,13 +116,13 @@ d3.selectAll(document.links).style("color", "red");
 For each selected element, selects the first descendant element that matches the specified *selector* string. If no element matches the specified selector for the current element, the element at the current index will be null in the returned selection. (If the *selector* is null, every element in the returned selection will be null, resulting in an empty selection.) If the current element has associated data, this data is propagated to the corresponding selected element. If multiple elements match the selector, only the first matching element in document order is selected. For example, to select the first bold element in every paragraph:
 
 ```js
-var b = d3.selectAll("p").select("b");
+const b = d3.selectAll("p").select("b");
 ```
 
 If the *selector* is a function, it is evaluated for each selected element, in order, being passed the current datum (*d*), the current index (*i*), and the current group (*nodes*), with *this* as the current DOM element (*nodes*[*i*]). It must return an element, or null if there is no matching element. For example, to select the previous sibling of each paragraph:
 
 ```js
-var previous = d3.selectAll("p").select(function() {
+const previous = d3.selectAll("p").select(function() {
   return this.previousElementSibling;
 });
 ```
@@ -134,13 +134,13 @@ Unlike [*selection*.selectAll](#selection_selectAll), *selection*.select does no
 For each selected element, selects the descendant elements that match the specified *selector* string. The elements in the returned selection are grouped by their corresponding parent node in this selection. If no element matches the specified selector for the current element, or if the *selector* is null, the group at the current index will be empty. The selected elements do not inherit data from this selection; use [*selection*.data](#selection_data) to propagate data to children. For example, to select the bold elements in every paragraph:
 
 ```js
-var b = d3.selectAll("p").selectAll("b");
+const b = d3.selectAll("p").selectAll("b");
 ```
 
 If the *selector* is a function, it is evaluated for each selected element, in order, being passed the current datum (*d*), the current index (*i*), and the current group (*nodes*), with *this* as the current DOM element (*nodes*[*i*]). It must return an array of elements (or a pseudo-array, such as a NodeList), or the empty array if there are no matching elements. For example, to select the previous and next siblings of each paragraph:
 
 ```js
-var sibling = d3.selectAll("p").selectAll(function() {
+const sibling = d3.selectAll("p").selectAll(function() {
   return [
     this.previousElementSibling,
     this.nextElementSibling
@@ -157,25 +157,25 @@ Filters the selection, returning a new selection that contains only the elements
 For example, to filter a selection of table rows to contain only even rows:
 
 ```js
-var even = d3.selectAll("tr").filter(":nth-child(even)");
+const even = d3.selectAll("tr").filter(":nth-child(even)");
 ```
 
 This is approximately equivalent to using [d3.selectAll](#selectAll) directly, although the indexes may be different:
 
 ```js
-var even = d3.selectAll("tr:nth-child(even)");
+const even = d3.selectAll("tr:nth-child(even)");
 ```
 
 Similarly, using a function:
 
 ```js
-var even = d3.selectAll("tr").filter(function(d, i) { return i & 1; });
+const even = d3.selectAll("tr").filter((d, i) => i & 1);
 ```
 
-Or using [*selection*.select](#selection_select):
+Or using [*selection*.select](#selection_select) (and avoiding an arrow function, since *this* is needed to refer to the current element):
 
 ```js
-var even = d3.selectAll("tr").select(function(d, i) { return i & 1 ? this : null; });
+const even = d3.selectAll("tr").select(function(d, i) { return i & 1 ? this : null; });
 ```
 
 Note that the `:nth-child` pseudo-class is a one-based index rather than a zero-based index. Also, the above filter functions do not have precisely the same meaning as `:nth-child`; they rely on the selection index rather than the number of preceding sibling elements in the DOM.
@@ -203,13 +203,13 @@ This method is not intended for concatenating arbitrary selections, however: if 
 Given the specified *selector*, returns a function which returns true if `this` element [matches](https://developer.mozilla.org/en-US/docs/Web/API/Element/matches) the specified selector. This method is used internally by [*selection*.filter](#selection_filter). For example, this:
 
 ```js
-var div = selection.filter("div");
+const div = selection.filter("div");
 ```
 
 Is equivalent to:
 
 ```js
-var div = selection.filter(d3.matcher("div"));
+const div = selection.filter(d3.matcher("div"));
 ```
 
 (Although D3 is not a compatibility layer, this implementation does support vendor-prefixed implementations due to the recent standardization of *element*.matches.)
@@ -219,13 +219,13 @@ var div = selection.filter(d3.matcher("div"));
 Given the specified *selector*, returns a function which returns the first descendant of `this` element that matches the specified selector. This method is used internally by [*selection*.select](#selection_select). For example, this:
 
 ```js
-var div = selection.select("div");
+const div = selection.select("div");
 ```
 
 Is equivalent to:
 
 ```js
-var div = selection.select(d3.selector("div"));
+const div = selection.select(d3.selector("div"));
 ```
 
 <a name="selectorAll" href="#selectorAll">#</a> d3.<b>selectorAll</b>(<i>selector</i>) [<>](https://github.com/d3/d3-selection/blob/master/src/selectAll.js "Source")
@@ -233,13 +233,13 @@ var div = selection.select(d3.selector("div"));
 Given the specified *selector*, returns a function which returns all descendants of `this` element that match the specified selector. This method is used internally by [*selection*.selectAll](#selection_selectAll). For example, this:
 
 ```js
-var div = selection.selectAll("div");
+const div = selection.selectAll("div");
 ```
 
 Is equivalent to:
 
 ```js
-var div = selection.selectAll(d3.selectorAll("div"));
+const div = selection.selectAll(d3.selectorAll("div"));
 ```
 
 <a name="window" href="#window">#</a> d3.<b>window</b>(<i>node</i>) [<>](https://github.com/d3/d3-selection/blob/master/src/window.js "Source")
@@ -281,7 +281,7 @@ selection.classed("foo bar", true);
 If the *value* is truthy, then all elements are assigned the specified classes; otherwise, the classes are unassigned. If the *value* is a function, it is evaluated for each selected element, in order, being passed the current datum (*d*), the current index (*i*), and the current group (*nodes*), with *this* as the current DOM element (*nodes*[*i*]). The function’s return value is then used to assign or unassign classes on each element. For example, to randomly associate the class *foo* with on average half the selected elements:
 
 ```js
-selection.classed("foo", function() { return Math.random() > 0.5; });
+selection.classed("foo", () => Math.random() > 0.5);
 ```
 
 If a *value* is not specified, returns true if and only if the first (non-null) selected element has the specified *classes*. This is generally useful only if you know the selection contains exactly one element.
@@ -329,9 +329,7 @@ d3.selectAll("p").append("div");
 This is equivalent to:
 
 ```js
-d3.selectAll("p").append(function() {
-  return document.createElement("div");
-});
+d3.selectAll("p").append(() => document.createElement("div"));
 ```
 
 Which is equivalent to:
@@ -359,9 +357,7 @@ d3.selectAll("p").insert("div");
 This is equivalent to:
 
 ```js
-d3.selectAll("p").insert(function() {
-  return document.createElement("div");
-});
+d3.selectAll("p").insert(() => document.createElement("div"));
 ```
 
 Which is equivalent to:
@@ -455,23 +451,23 @@ The *data* is specified **for each group** in the selection. If the selection ha
 In conjunction with [*selection*.join](#selection_join) (or more explicitly with [*selection*.enter](#selection_enter), [*selection*.exit](#selection_exit), [*selection*.append](#selection_append) and [*selection*.remove](#selection_remove)), *selection*.data can be used to enter, update and exit elements to match data. For example, to create an HTML table from a matrix of numbers:
 
 ```js
-var matrix = [
+const matrix = [
   [11975,  5871, 8916, 2868],
   [ 1951, 10048, 2060, 6171],
   [ 8010, 16145, 8090, 8045],
   [ 1013,   990,  940, 6907]
 ];
 
-var tr = d3.select("body")
+const tr = d3.select("body")
   .append("table")
   .selectAll("tr")
   .data(matrix)
   .join("tr");
 
-var td = tr.selectAll("td")
-  .data(function(d) { return d; })
+const td = tr.selectAll("td")
+  .data(d => d)
   .join("td")
-    .text(function(d) { return d; });
+    .text(d => d);
 ```
 
 In this example the *data* function is the identity function: for each table row, it returns the corresponding row from the data matrix.
@@ -493,7 +489,7 @@ You could join data by key as follows:
 
 
 ```js
-var data = [
+const data = [
   {name: "Locke", number: 4},
   {name: "Reyes", number: 8},
   {name: "Ford", number: 15},
@@ -504,7 +500,7 @@ var data = [
 
 d3.selectAll("div")
   .data(data, function(d) { return d ? d.name : this.id; })
-    .text(function(d) { return d.number; });
+    .text(d => d.number);
 ```
 
 This example key function uses the datum *d* if present, and otherwise falls back to the element’s id property. Since these elements were not previously bound to data, the datum *d* is null when the key function is evaluated on selected elements, and non-null when the key function is evaluated on the new data.
@@ -544,7 +540,7 @@ See the [*selection*.join Observable notebook](https://beta.observablehq.com/d/6
 This is equivalent to the [General Update Pattern](http://bl.ocks.org/mbostock/3808218):
 
 ```js
-var circle = svg.selectAll("circle") // 1
+const circle = svg.selectAll("circle") // 1
   .data(data) // 2
     .attr("fill", "blue"); // 3
 
@@ -579,11 +575,11 @@ Returns the enter selection: placeholder nodes for each datum that had no corres
 The enter selection is typically used to create “missing” elements corresponding to new data. For example, to create DIV elements from an array of numbers:
 
 ```js
-var div = d3.select("body")
+const div = d3.select("body")
   .selectAll("div")
   .data([4, 8, 15, 16, 23, 42])
   .enter().append("div")
-    .text(function(d) { return d; });
+    .text(d => d);
 ```
 
 If the body is initially empty, the above code will create six new DIV elements, append them to the body in-order, and assign their text content as the associated (string-coerced) number:
@@ -606,13 +602,13 @@ Returns the exit selection: existing DOM elements in the selection for which no 
 The exit selection is typically used to remove “superfluous” elements corresponding to old data. For example, to update the DIV elements created previously with a new array of numbers:
 
 ```js
-div = div.data([1, 2, 4, 8, 16, 32], function(d) { return d; });
+div = div.data([1, 2, 4, 8, 16, 32], d => d);
 ```
 
 Since a key function was specified (as the identity function), and the new data contains the numbers [4, 8, 16] which match existing elements in the document, the update selection contains three DIV elements. Leaving those elements as-is, we can append new elements for [1, 2, 32] using the enter selection:
 
 ```js
-div.enter().append("div").text(function(d) { return d; });
+div.enter().append("div").text(d => d);
 ```
 
 Likewise, to remove the exiting elements [15, 23, 42]:
@@ -721,7 +717,7 @@ Invokes the specified *function* for each selected element, in order, being pass
 parent.each(function(p, j) {
   d3.select(this)
     .selectAll(".child")
-      .text(function(d, i) { return "child " + d.name + " of " + p.name; });
+      .text(d => `child ${d.name} of ${p.name}`);
 });
 ```
 
@@ -778,7 +774,7 @@ D3 locals allow you to define local state independent of data. For instance, whe
 Declares a new local variable. For example:
 
 ```js
-var foo = d3.local();
+const foo = d3.local();
 ```
 
 Like `var`, each local is a distinct symbolic reference; unlike `var`, the value of each local is also scoped by the DOM.
@@ -794,7 +790,7 @@ selection.each(function(d) { foo.set(this, d.value); });
 If you are just setting a single variable, consider using [*selection*.property](#selection_property):
 
 ```js
-selection.property(foo, function(d) { return d.value; });
+selection.property(foo, d => d.value);
 ```
 
 <a name="local_get" href="#local_get">#</a> <i>local</i>.<b>get</b>(<i>node</i>) [<>](https://github.com/d3/d3-selection/blob/master/src/local.js#L13 "Source")
