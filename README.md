@@ -512,7 +512,7 @@ This method cannot be used to clear bound data; use [*selection*.datum](#selecti
 
 <a name="selection_join" href="#selection_join">#</a> <i>selection</i>.<b>join</b>(<i>enter</i>[, <i>update</i>][, <i>exit</i>]) [<>](https://github.com/d3/d3-selection/blob/master/src/selection/join.js "Source")
 
-Appends, removes and reorders elements as necessary to match the data that was previously bound by [*selection*.data](#selection_data), returning the [merged](#selection_merge) enter and update selection. This method is a convenient alternative to the explicit general update pattern using [*selection*.enter](#selection_enter), [*selection*.exit](#selection_exit), [*selection*.append](#selection_append), [*selection*.remove](#selection_remove), and [*selection*.order](#selection_order). For example:
+Appends, removes and reorders elements as necessary to match the data that was previously bound by [*selection*.data](#selection_data), returning the [merged](#selection_merge) enter and update selection. This method is a convenient alternative to the explicit [general update pattern](https://bl.ocks.org/mbostock/3808218) using [*selection*.enter](#selection_enter), [*selection*.exit](#selection_exit), [*selection*.append](#selection_append), [*selection*.remove](#selection_remove), and [*selection*.order](#selection_order). For example:
 
 ```js
 svg.selectAll("circle")
