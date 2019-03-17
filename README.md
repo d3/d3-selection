@@ -440,7 +440,7 @@ See [namespace](#namespace) for details on supported namespace prefixes, such as
 
 ### Joining Data
 
-For an introduction to D3’s data joins, see [Thinking With Joins](http://bost.ocks.org/mike/join/). Also see the [General Update Pattern](http://bl.ocks.org/mbostock/3808218) examples.
+For an introduction to D3’s data joins, see the [*selection*.join notebook](https://observablehq.com/@d3/selection-join). Also see [Thinking With Joins](http://bost.ocks.org/mike/join/).
 
 <a name="selection_data" href="#selection_data">#</a> <i>selection</i>.<b>data</b>([<i>data</i>[, <i>key</i>]]) [<>](https://github.com/d3/d3-selection/blob/master/src/selection/data.js "Source")
 
@@ -458,13 +458,12 @@ const matrix = [
   [ 1013,   990,  940, 6907]
 ];
 
-const tr = d3.select("body")
+d3.select("body")
   .append("table")
   .selectAll("tr")
   .data(matrix)
-  .join("tr");
-
-const td = tr.selectAll("td")
+  .join("tr")
+  .selectAll("td")
   .data(d => d)
   .join("td")
     .text(d => d);
@@ -513,7 +512,7 @@ This method cannot be used to clear bound data; use [*selection*.datum](#selecti
 
 <a name="selection_join" href="#selection_join">#</a> <i>selection</i>.<b>join</b>(<i>enter</i>[, <i>update</i>][, <i>exit</i>]) [<>](https://github.com/d3/d3-selection/blob/master/src/selection/join.js "Source")
 
-Appends, removes and reorders elements as necessary to match the data that was previously bound by [*selection*.data](#selection_data), returning the [merged](#selection_merge) enter and update selection. This method is a convenient alternative to the more explicit [*selection*.enter](#selection_enter), [*selection*.exit](#selection_exit), [*selection*.append](#selection_append) and [*selection*.remove](#selection_remove). For example:
+Appends, removes and reorders elements as necessary to match the data that was previously bound by [*selection*.data](#selection_data), returning the [merged](#selection_merge) enter and update selection. This method is a convenient alternative to the explicit general update pattern using [*selection*.enter](#selection_enter), [*selection*.exit](#selection_exit), [*selection*.append](#selection_append), [*selection*.remove](#selection_remove), and [*selection*.order](#selection_order). For example:
 
 ```js
 svg.selectAll("circle")
@@ -523,7 +522,7 @@ svg.selectAll("circle")
     .attr("stroke", "black");
 ```
 
-To control what happens on enter, update and exit, pass functions:
+To control what happens on enter, update and exit, pass separate functions instead of a string:
 
 ```js
 svg.selectAll("circle")
@@ -535,38 +534,11 @@ svg.selectAll("circle")
     .attr("stroke", "black");
 ```
 
-See the [*selection*.join Observable notebook](https://beta.observablehq.com/d/6c522dda5dd9daa3) for more examples.
+(You can pass a third function for exit, as shown below.) The returned enter and update selections are again merged and returned by *selection*.join. Handling enter and update separately, and by specifying a key function to [*selection*.data](#selection_data), you can make minimize changes to the DOM.
 
-This is equivalent to the [General Update Pattern](http://bl.ocks.org/mbostock/3808218):
+You also animate enter, update and exit by creating transitions inside the *enter*, *update* and *exit* functions. However, be careful: the return value of the *enter* and *update* functions is important, as it specifies the two selections to merge and return by *selection*.join. To avoid breaking the method chain, use *selection*.call to create transitions. Or, return an undefined enter or update selection to prevent merging.
 
-```js
-const circle = svg.selectAll("circle") // 1
-  .data(data) // 2
-    .attr("fill", "blue"); // 3
-
-circle.exit().remove(); // 4
-
-circle = circle.enter().append("circle") // 5, 10
-    .attr("fill", "green") // 6
-  .merge(circle) // 7
-    .order() // 8
-    .attr("stroke", "black"); // 9
-```
-
-Breaking this down into discrete steps:
-
-1. Any existing circles (that are descendants of the `svg` selection) are [selected](#selection_selectAll).
-2. These circles are [joined to new `data`](#selection_data), returning the matching circles: the *update* selection.
-3. These updating circles are given a blue fill.
-4. Any existing circles that do *not* match new data—the *exit* selection—are removed.
-5. New circles are [appended](#selection_append) for any new data that do *not* match any existing circle: the *enter* selection.
-6. These entering circles are given a green fill.
-7. A new selection representing the [union](#selection_merge) of entering and updating circles is created.
-8. These entering and updating circles are reordered to match the data (if necessary).
-9. The circles are given a black stroke.
-10. The circles are stored in the variable `circle`.
-
-As described in the preceding paragraphs, the “matching” logic is determined by the key function passed to *selection*.data; since no key function is used in the above code sample, the elements and data are joined by index.
+For more, see the [*selection*.join notebook](https://observablehq.com/@d3/selection-join).
 
 <a name="selection_enter" href="#selection_enter">#</a> <i>selection</i>.<b>enter</b>() [<>](https://github.com/d3/d3-selection/blob/master/src/selection/enter.js "Source")
 
