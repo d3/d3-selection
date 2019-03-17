@@ -534,7 +534,7 @@ svg.selectAll("circle")
     .attr("stroke", "black");
 ```
 
-You can pass a third function for exit, too. The returned enter and update selections are again merged and returned by *selection*.join. Handling enter and update separately, and by specifying a key function to [*selection*.data](#selection_data), you can make minimize changes to the DOM.
+You can pass a third function for exit, too. The returned enter and update selections are again merged and returned by *selection*.join. By separating enter and update, and by specifying a key function to [*selection*.data](#selection_data), you can make minimize changes to the DOM.
 
 You also animate enter, update and exit by creating transitions inside the *enter*, *update* and *exit* functions. However, be careful: the return value of the *enter* and *update* functions is important, as it specifies the two selections to merge and return by *selection*.join. To avoid breaking the method chain, use *selection*.call to create transitions. Or, return an undefined enter or update selection to prevent merging.
 
