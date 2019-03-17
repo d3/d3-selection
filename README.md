@@ -186,18 +186,12 @@ The returned filtered selection preserves the parents of this selection, but lik
 
 Returns a new selection merging this selection with the specified *other* selection. The returned selection has the same number of groups and the same parents as this selection. Any missing (null) elements in this selection are filled with the corresponding element, if present (not null), from the specified *selection*. (If the *other* selection has additional groups or parents, they are ignored.)
 
-This method is used internally by [*selection*.join](#selection_join) to merge the [enter](#selection_enter) and [update](#selection_data) selections after [binding data](#joining-data). You can also merge explicitly. For example:
+This method is used internally by [*selection*.join](#selection_join) to merge the [enter](#selection_enter) and [update](#selection_data) selections after [binding data](#joining-data). You can also merge explicitly, although note that since merging is based on element index, you should use operations that preserve index, such as [*selection*.select](#selection_select) instead of [*selection*.filter](#selection_filter). For example:
 
 ```js
-var circle = svg.selectAll("circle").data(data) // UPDATE
-    .style("fill", "blue");
-
-circle.exit().remove(); // EXIT
-
-circle = circle.enter().append("circle") // ENTER
-    .style("fill", "green")
-  .merge(circle) // ENTER + UPDATE
-    .style("stroke", "black");
+const odd = selection.select(function(d, i) { return i & 1 ? this : null; ));
+const even = selection.select(function(d, i) { return i & 1 ? null : this; ));
+const merged = odd.merge(even);
 ```
 
 See [*selection*.data](#selection_data) for more.
