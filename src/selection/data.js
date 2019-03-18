@@ -74,12 +74,12 @@ function bindKey(parent, group, enter, update, exit, data, key) {
   }
 }
 
+function datum(node) {
+  return node.__data__;
+}
+
 export default function(value, key) {
-  if (!value) {
-    data = new Array(this.size()), j = -1;
-    this.each(function(d) { data[++j] = d; });
-    return data;
-  }
+  if (!value) return Array.from(this, datum);
 
   var bind = key ? bindKey : bindIndex,
       parents = this._parents,

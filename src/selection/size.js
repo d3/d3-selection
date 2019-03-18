@@ -1,5 +1,5 @@
 export default function() {
-  var size = 0;
-  this.each(function() { ++size; });
+  let size = 0;
+  for (const node of this) ++size; // eslint-disable-line no-unused-vars
   return size;
 }
