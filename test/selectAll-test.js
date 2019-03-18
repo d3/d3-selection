@@ -8,6 +8,16 @@ tape("d3.selectAll(…) returns an instanceof d3.selection", function(test) {
   test.end();
 });
 
+tape("d3.selectAll(…) accepts an iterable", function(test) {
+  var document = global.document = jsdom("<h1>hello</h1>");
+  try {
+    test.deepEqual(d3.selectAll(new Set([document])).nodes(), [document]);
+    test.end();
+  } finally {
+    delete global.document;
+  }
+});
+
 tape("d3.selectAll(string) selects all elements that match the selector string, in order", function(test) {
   var document = global.document = jsdom("<h1 id='one'>foo</h1><h1 id='two'>bar</h1>");
   try {

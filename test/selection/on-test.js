@@ -210,7 +210,7 @@ tape("selection.on(type, listener) passes the listener the index as of registrat
       one = document.querySelector("#one"),
       selection = d3.selectAll([, one]).on("click", function(d, i) { result = i; });
   selection.dispatch("click");
-  test.deepEqual(selection, {_groups: [[, one]], _parents: [null]});
+  test.deepEqual(selection, {_groups: [[undefined, one]], _parents: [null]});
   test.equal(result, 1);
   selection = selection.sort().dispatch("click");
   test.deepEqual(selection, {_groups: [[one, ]], _parents: [null]});

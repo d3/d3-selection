@@ -20,6 +20,6 @@ tape("selection.each(function) skips missing elements", function(test) {
       two = document.querySelector("#two"),
       selection = d3.selectAll([, one,, two]).datum(function(d, i) { return "node-" + i; });
   test.equal(selection.each(function(d, i, nodes) { result.push(this, d, i, nodes); }), selection);
-  test.deepEqual(result, [one, "node-1", 1, [, one,, two], two, "node-3", 3, [, one,, two]]);
+  test.deepEqual(result, [one, "node-1", 1, [undefined, one, undefined, two], two, "node-3", 3, [undefined, one, undefined, two]]);
   test.end();
 });
