@@ -29,6 +29,7 @@ import selection_clone from "./clone";
 import selection_datum from "./datum";
 import selection_on from "./on";
 import selection_dispatch from "./dispatch";
+import selection_iterator from "./iterator";
 
 export var root = [null];
 
@@ -73,7 +74,8 @@ Selection.prototype = selection.prototype = {
   clone: selection_clone,
   datum: selection_datum,
   on: selection_on,
-  dispatch: selection_dispatch
+  dispatch: selection_dispatch,
+  [Symbol.iterator]: selection_iterator
 };
 
 export default selection;
