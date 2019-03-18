@@ -20,6 +20,13 @@ tape("selection.data(values) binds the specified values to the selected elements
   test.end();
 });
 
+tape("selection.data(values) accepts an iterable", function(test) {
+  var body = jsdom("<div id='one'></div><div id='two'></div><div id='three'></div>").body,
+      selection = d3.select(body).selectAll("div").data(new Set(["foo", "bar", "baz"]));
+  test.deepEqual(selection.data(), ["foo", "bar", "baz"]);
+  test.end();
+});
+
 tape("selection.data() returns the bound data", function(test) {
   var body = jsdom("<div id='one'></div><div id='two'></div><div id='three'></div>").body,
       selection = d3.select(body).selectAll("div").data(["foo", "bar", "baz"]);

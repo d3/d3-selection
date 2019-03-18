@@ -78,6 +78,10 @@ function datum(node) {
   return node.__data__;
 }
 
+function arrayify(data) {
+  return Array.isArray(data) ? data : Array.from(data);
+}
+
 export default function(value, key) {
   if (!value) return Array.from(this, datum);
 
@@ -91,7 +95,7 @@ export default function(value, key) {
     var parent = parents[j],
         group = groups[j],
         groupLength = group.length,
-        data = value.call(parent, parent && parent.__data__, j, parents),
+        data = arrayify(value.call(parent, parent && parent.__data__, j, parents)),
         dataLength = data.length,
         enterGroup = enter[j] = new Array(dataLength),
         updateGroup = update[j] = new Array(dataLength),
