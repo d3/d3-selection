@@ -512,7 +512,28 @@ This method cannot be used to clear bound data; use [*selection*.datum](#selecti
 
 <a name="selection_join" href="#selection_join">#</a> <i>selection</i>.<b>join</b>(<i>enter</i>[, <i>update</i>][, <i>exit</i>]) [<>](https://github.com/d3/d3-selection/blob/master/src/selection/join.js "Source")
 
-Appends, removes and reorders elements as necessary to match the data that was previously bound by [*selection*.data](#selection_data), returning the [merged](#selection_merge) enter and update selection. This method is a convenient alternative to the explicit [general update pattern](https://bl.ocks.org/mbostock/3808218), replacing [*selection*.enter](#selection_enter), [*selection*.exit](#selection_exit), [*selection*.append](#selection_append), [*selection*.remove](#selection_remove), and [*selection*.order](#selection_order). For example:
+Appends, removes and reorders elements as necessary to match the data that was previously bound by [*selection*.data](#selection_data), returning the [merged](#selection_merge) enter and update selection. This method is a convenient alternative to the explicit [general update pattern](https://bl.ocks.org/mbostock/3808218), replacing [*selection*.enter](#selection_enter), [*selection*.exit](#selection_exit), [*selection*.append](#selection_append), [*selection*.remove](#selection_remove), and [*selection*.order](#selection_order).
+
+Typically, the three parameters *enter*, *update*, and *exit* will be functions. For example:
+
+```js
+svg.selectAll("circle")
+  .data(data)
+  .join(
+    enter => enter.append("circle").attr("fill", "green"),
+    update => update.attr("fill", "blue"),
+    exit => exit.remove()
+  )
+    .attr("stroke", "black");
+```
+
+Notably, both *update* and *exit* are optional parameters. The default for *update* is the identity function and the default for *exit* is to simply call `.remove()` on the selection.
+
+The returned enter and update selections are again merged and returned by *selection*.join. By separating enter and update, and by specifying a key function to [*selection*.data](#selection_data), you can minimize changes to the DOM to optimize performance.
+
+You also animate enter, update and exit by creating transitions inside the *enter*, *update*, and *exit* functions. To avoid breaking the method chain, use *selection*.call to create transitions, or return an undefined enter or update selection to prevent merging: the return value of the *enter* and *update* functions specifies the two selections to merge and return by *selection*.join.
+
+Finally, as a shorthand, one can pass a single string parameter to *selection*.join:
 
 ```js
 svg.selectAll("circle")
@@ -522,21 +543,19 @@ svg.selectAll("circle")
     .attr("stroke", "black");
 ```
 
-To control what happens on enter, update and exit, pass separate functions instead of a string:
+Which is equivalent to:
 
 ```js
 svg.selectAll("circle")
   .data(data)
   .join(
-    enter => enter.append("circle").attr("fill", "green"),
-    update => update.attr("fill", "blue")
+    enter => enter.append("circle"),
+    update => update,
+    exit => exit.remove()
   )
+    .attr("fill", "none")
     .attr("stroke", "black");
 ```
-
-You can pass a third function for exit, too. The returned enter and update selections are again merged and returned by *selection*.join. By separating enter and update, and by specifying a key function to [*selection*.data](#selection_data), you can minimize changes to the DOM to optimize performance.
-
-You also animate enter, update and exit by creating transitions inside the *enter*, *update* and *exit* functions. To avoid breaking the method chain, use *selection*.call to create transitions, or return an undefined enter or update selection to prevent merging: the return value of the *enter* and *update* functions specifies the two selections to merge and return by *selection*.join.
 
 For more, see the [*selection*.join notebook](https://observablehq.com/@d3/selection-join).
 
