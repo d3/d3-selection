@@ -1,9 +1,11 @@
 function selection_cloneShallow() {
-  return this.parentNode.insertBefore(this.cloneNode(false), this.nextSibling);
+  var clone = this.cloneNode(false), parent = this.parentNode;
+  return parent ? parent.insertBefore(clone, this.nextSibling) : clone;
 }
 
 function selection_cloneDeep() {
-  return this.parentNode.insertBefore(this.cloneNode(true), this.nextSibling);
+  var clone = this.cloneNode(true), parent = this.parentNode;
+  return parent ? parent.insertBefore(clone, this.nextSibling) : clone;
 }
 
 export default function(deep) {
