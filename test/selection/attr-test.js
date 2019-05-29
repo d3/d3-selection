@@ -117,3 +117,21 @@ tape("selection.attr(name, function) passes the value function data, index and g
   ]);
   test.end();
 });
+
+tape("selection.attr(name, async value) observes the namespace prefix, if any", async function(test) {
+  test.plan(2);
+  var result, selection = d3.select({
+    setAttribute: function(name, value) { result = name === "foo" ? value : null; },
+    setAttributeNS: function(url, name, value) { result = url === "http://www.w3.org/2000/svg" && name === "foo" ? value : null; }
+  });
+  result = undefined;
+  await selection.attr("foo", async ()=> "bar");
+  test.equal(result, "bar");
+
+  result = undefined;
+  await selection.attr("svg:foo", async ()=> "svg:bar");
+  test.equal(result, "svg:bar");
+
+  test.end();
+});
+

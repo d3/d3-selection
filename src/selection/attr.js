@@ -27,16 +27,32 @@ function attrConstantNS(fullname, value) {
 function attrFunction(name, value) {
   return function() {
     var v = value.apply(this, arguments);
-    if (v == null) this.removeAttribute(name);
-    else this.setAttribute(name, v);
+    if (v && typeof v.then === 'function') {
+      var that = this;
+      return v.then(function(result){
+        if (result == null) that.removeAttribute(name);
+        else that.setAttribute(name, result);
+      });
+    } else {
+      if (v == null) this.removeAttribute(name);
+      else this.setAttribute(name, v);
+    }
   };
 }
 
 function attrFunctionNS(fullname, value) {
   return function() {
     var v = value.apply(this, arguments);
-    if (v == null) this.removeAttributeNS(fullname.space, fullname.local);
-    else this.setAttributeNS(fullname.space, fullname.local, v);
+    if (v && typeof v.then === 'function') {
+      var that = this;
+      return v.then(function(result){
+        if (result == null) that.removeAttributeNS(fullname.space, fullname.local);
+        else that.setAttributeNS(fullname.space, fullname.local, result);
+      });
+    } else {
+      if (v == null) this.removeAttributeNS(fullname.space, fullname.local);
+      else this.setAttributeNS(fullname.space, fullname.local, v);
+    }
   };
 }
 
