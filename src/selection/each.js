@@ -9,6 +9,5 @@ export default function(callback) {
   }
 
   var hasAsync = result.filter(item => item && typeof item.then === 'function').length;
-  console.log('each',hasAsync ? Promise.all(result) : this)
   return hasAsync ? Promise.all(result) : this;
 }
