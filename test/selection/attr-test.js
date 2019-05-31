@@ -125,7 +125,11 @@ tape("selection.attr(name, async value) observes the namespace prefix, if any", 
     setAttributeNS: function(url, name, value) { result = url === "http://www.w3.org/2000/svg" && name === "foo" ? value : null; }
   });
   result = undefined;
-  await selection.attr("foo", async ()=> "bar");
+  await selection.attr("foo", async ()=>{
+    return new Promise(function(resolve, reject){
+      setImmediate(()=>resolve("bar"))
+    });
+  });
   test.equal(result, "bar");
 
   result = undefined;
@@ -149,7 +153,15 @@ tape("selection.attr(name, async function) passes the value function data, index
       .datum(function(d, i) { return "parent-" + i; })
     .selectAll("child")
       .data(function(d, i) { return [0, 1].map(function(j) { return "child-" + i + "-" + j; }); })
-      .attr("foo", async function(d, i, nodes) { results.push([this, d, i, nodes]); });
+      .attr("foo", async function(d, i, nodes) {
+        var that = this;
+        return new Promise(function(resolve, reject){
+          setImmediate(()=> {
+            results.push([that, d, i, nodes]);
+            resolve();
+          })
+        });
+      });
 
   test.deepEqual(results, [
     [three, "child-0-0", 0, [three, four]],
