@@ -79,7 +79,7 @@ function onAdd(typename, value, options) {
   };
 }
 
-export default function(typename, value, capture) {
+export default function(typename, value, options) {
   var typenames = parseTypenames(typename + ""), i, n = typenames.length, t;
 
   if (arguments.length < 2) {
@@ -96,7 +96,7 @@ export default function(typename, value, capture) {
 
   on = value ? onAdd : onRemove;
   if (capture == null) capture = false;
-  for (i = 0; i < n; ++i) this.each(on(typenames[i], value, capture));
+  for (i = 0; i < n; ++i) this.each(on(typenames[i], value, options));
   return this;
 }
 

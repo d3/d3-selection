@@ -31,9 +31,9 @@ tape("selection.on(type, listener) observes the specified name, if any", functio
 
 tape("selection.on(type, listener, capture) observes the specified capture flag, if any", function(test) {
   var result,
-      selection = d3.select({addEventListener: function(type, listener, capture) { result = capture; }});
+      selection = d3.select({addEventListener: function(type, listener, options) { result = options; }});
   test.equal(selection.on("click.foo", function() {}, true), selection);
-  test.deepEqual(result, true);
+  test.deepEqual(result.capture, true);
   test.end();
 });
 
