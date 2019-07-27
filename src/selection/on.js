@@ -45,7 +45,7 @@ function onRemove(typename) {
     if (!on) return;
     for (var j = 0, i = -1, m = on.length, o; j < m; ++j) {
       if (o = on[j], (!typename.type || o.type === typename.type) && o.name === typename.name) {
-        this.removeEventListener(o.type, o.listener, o.capture);
+        this.removeEventListener(o.type, o.listener, o.options);
       } else {
         on[++i] = o;
       }
@@ -55,22 +55,27 @@ function onRemove(typename) {
   };
 }
 
-function onAdd(typename, value, capture) {
-  var wrap = filterEvents.hasOwnProperty(typename.type) ? filterContextListener : contextListener;
+function onAdd(typename, value, options) {
+  if (typeof options === "undefined") options = false;
+  if (typeof options === "boolean"  ) options = { capture: options };
+  if (typeof options === "object"   ) options = Object.assign({ passive: false, capture: false }, options);
+  const { type, name } = typename;
+
+  var wrap = filterEvents.hasOwnProperty(type) ? filterContextListener : contextListener;
+
   return function(d, i, group) {
-    var on = this.__on, o, listener = wrap(value, i, group);
-    if (on) for (var j = 0, m = on.length; j < m; ++j) {
-      if ((o = on[j]).type === typename.type && o.name === typename.name) {
-        this.removeEventListener(o.type, o.listener, o.capture);
-        this.addEventListener(o.type, o.listener = listener, o.capture = capture);
-        o.value = value;
-        return;
-      }
+    var on = this.__on = this.__on || [];
+    var listener = wrap(value, i, group);
+
+    var item = on.find(o => o.type === type && o.name === name)
+    if (item) {
+      this.removeEventListener(item.type, item.listener, item.options);
+      Object.assign(item, { value, listener, options })
+    } else {
+      on.push({ type, name, value, listener, options });
     }
-    this.addEventListener(typename.type, listener, capture);
-    o = {type: typename.type, name: typename.name, value: value, listener: listener, capture: capture};
-    if (!on) this.__on = [o];
-    else on.push(o);
+
+    this.addEventListener(type, listener, options);
   };
 }
 
