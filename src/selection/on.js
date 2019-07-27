@@ -62,12 +62,12 @@ function onAdd(typename, value, capture) {
     if (on) for (var j = 0, m = on.length; j < m; ++j) {
       if ((o = on[j]).type === typename.type && o.name === typename.name) {
         this.removeEventListener(o.type, o.listener, o.capture);
-        this.addEventListener(o.type, o.listener = listener, o.capture = capture);
-        o.value = value;
+        Object.assign(o, { listener, capture, value })
+        this.addEventListener(o.type, listener, { passive: false, capture: capture });
         return;
       }
     }
-    this.addEventListener(typename.type, listener, capture);
+    this.addEventListener(typename.type, listener, { passive: false, capture: capture });
     o = {type: typename.type, name: typename.name, value: value, listener: listener, capture: capture};
     if (!on) this.__on = [o];
     else on.push(o);
