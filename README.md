@@ -674,9 +674,9 @@ Dispatches a [custom event](http://www.w3.org/TR/dom/#interface-customevent) of 
 
 If *parameters* is a function, it is evaluated for each selected element, in order, being passed the current datum (*d*), the current index (*i*), and the current group (*nodes*), with *this* as the current DOM element (*nodes*[*i*]). It must return the parameters map for the current element.
 
-<a name="clientPoint" href="#clientPoint">#</a> d3.<b>clientPoint</b>(<i>element</i>, <i>event</i>) [<>](https://github.com/d3/d3-selection/blob/master/src/point.js "Source")
+<a name="clientPoint" href="#clientPoint">#</a> d3.<b>clientPoint</b>([<i>element</i>, ]<i>event</i>) [<>](https://github.com/d3/d3-selection/blob/master/src/point.js "Source")
 
-Returns the *x* and *y* coordinates of the specified *event* relative to the specified *element*. (The *event* may also be a [touch](https://www.w3.org/TR/touch-events/#touch-interface).) The element may be an HTML or SVG element, such as a [G element](http://www.w3.org/TR/SVG/struct.html#Groups). The coordinates are returned as a two-element array of numbers [*x*, *y*].
+Returns the *x* and *y* coordinates of the specified *event* relative to the specified *element*. (The *event* may also be a [touch](https://www.w3.org/TR/touch-events/#touch-interface).) The element may be an HTML or SVG element, such as a [G element](http://www.w3.org/TR/SVG/struct.html#Groups). If *element* is not specified, it defaults to *event*.currentTarget. The coordinates are returned as a two-element array of numbers [*x*, *y*].
 
 ### Control Flow
 
