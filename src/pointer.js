@@ -1,5 +1,4 @@
-export default function(node, event) {
-  if (arguments.length < 2) event = node, node = event.currentTarget;
+export default function(event, node = event.currentTarget) {
   var svg = node.ownerSVGElement || node;
 
   if (svg.createSVGPoint) {

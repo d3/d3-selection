@@ -654,7 +654,7 @@ For interaction, selections allow listening for and dispatching of events.
 
 Adds or removes a *listener* to each selected element for the specified event *typenames*. The *typenames* is a string event type, such as `click`, `mouseover`, or `submit`; any [DOM event type](https://developer.mozilla.org/en-US/docs/Web/Events#Standard_events) supported by your browser may be used. The type may be optionally followed by a period (`.`) and a name; the optional name allows multiple callbacks to be registered to receive events of the same type, such as `click.foo` and `click.bar`. To specify multiple typenames, separate typenames with spaces, such as `input change` or `click.foo click.bar`.
 
-When a specified event is dispatched on a selected element, the specified *listener* will be evaluated for the element, being passed the current event (*event*) and the current datum (*d*), with *this* as the current DOM element (*event*.currentTarget). Listeners always see the latest datum for their element. Note: while you can use [*event*.pageX](https://developer.mozilla.org/en/DOM/event.pageX) and [*event*.pageY](https://developer.mozilla.org/en/DOM/event.pageY) directly, it is often convenient to transform the event position to the local coordinate system of the element that received the event using [d3.clientPoint](#clientPoint).
+When a specified event is dispatched on a selected element, the specified *listener* will be evaluated for the element, being passed the current event (*event*) and the current datum (*d*), with *this* as the current DOM element (*event*.currentTarget). Listeners always see the latest datum for their element. Note: while you can use [*event*.pageX](https://developer.mozilla.org/en/DOM/event.pageX) and [*event*.pageY](https://developer.mozilla.org/en/DOM/event.pageY) directly, it is often convenient to transform the event position to the local coordinate system of the element that received the event using [d3.pointer](#pointer).
 
 If an event listener was previously registered for the same *typename* on a selected element, the old listener is removed before the new listener is added. To remove a listener, pass null as the *listener*. To remove all listeners for a given name, pass null as the *listener* and `.foo` as the *typename*, where `foo` is the name; to remove all listeners with no name, specify `.` as the *typename*.
 
@@ -672,9 +672,9 @@ Dispatches a [custom event](http://www.w3.org/TR/dom/#interface-customevent) of 
 
 If *parameters* is a function, it is evaluated for each selected element, in order, being passed the current datum (*d*), the current index (*i*), and the current group (*nodes*), with *this* as the current DOM element (*nodes*[*i*]). It must return the parameters map for the current element.
 
-<a name="clientPoint" href="#clientPoint">#</a> d3.<b>clientPoint</b>([<i>target</i>, ]<i>event</i>) [<>](https://github.com/d3/d3-selection/blob/master/src/point.js "Source")
+<a name="pointer" href="#pointer">#</a> d3.<b>pointer</b>(<i>event</i>[, <i>target</i>]) [<>](https://github.com/d3/d3-selection/blob/master/src/pointer.js "Source")
 
-Returns the *x* and *y* coordinates of the specified *event* relative to the specified *target*. (The *event* may also be a [touch](https://www.w3.org/TR/touch-events/#touch-interface).) The target may be an HTML or SVG element, such as a [G element](http://www.w3.org/TR/SVG/struct.html#Groups). If *target* is not specified, it defaults to *event*.currentTarget. The coordinates are returned as a two-element array of numbers [*x*, *y*].
+Returns a two-element array of numbers [*x*, *y*] representing the coordinates of the specified *event* relative to the specified *target*. (The *event* may also be a [touch](https://www.w3.org/TR/touch-events/#touch-interface).) The target may be an HTML or SVG element, such as a [G element](http://www.w3.org/TR/SVG/struct.html#Groups). If *target* is not specified, it defaults to *event*.currentTarget.
 
 ### Control Flow
 
