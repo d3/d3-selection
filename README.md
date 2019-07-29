@@ -420,7 +420,14 @@ selection.each(function() {
 
 <a name="create" href="#create">#</a> d3.<b>create</b>(<i>name</i>) [<>](https://github.com/d3/d3-selection/blob/master/src/create.js "Source")
 
-Given the specified element *name*, returns a single-element selection containing a detached element of the given name in the current document.
+Given the specified element *name*, returns a single-element selection containing a detached element of the given name in the current document. This method assumes the HTML namespace, so you must specify a namespace explicitly when creating SVG or other non-HTML elements; see [namespace](#namespace) for details on supported namespace prefixes.
+
+```js
+d3.create("svg") // equivalent to svg:svg
+d3.create("svg:svg") // more explicitly
+d3.create("svg:g") // an SVG G element
+d3.create("g") // an HTML G (unknown) element
+```
 
 <a name="creator" href="#creator">#</a> d3.<b>creator</b>(<i>name</i>) [<>](https://github.com/d3/d3-selection/blob/master/src/creator.js "Source")
 
