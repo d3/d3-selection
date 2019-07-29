@@ -92,7 +92,7 @@ const anchor = d3.select("a");
 If the *selector* is not a string, instead selects the specified node; this is useful if you already have a reference to a node, such as `this` within an event listener or a global such as `document.body`. For example, to make a clicked paragraph red:
 
 ```js
-d3.selectAll("p").on("click", function() {
+d3.selectAll("p").on("click", function(event) {
   d3.select(this).style("color", "red");
 });
 ```
@@ -654,15 +654,13 @@ For interaction, selections allow listening for and dispatching of events.
 
 Adds or removes a *listener* to each selected element for the specified event *typenames*. The *typenames* is a string event type, such as `click`, `mouseover`, or `submit`; any [DOM event type](https://developer.mozilla.org/en-US/docs/Web/Events#Standard_events) supported by your browser may be used. The type may be optionally followed by a period (`.`) and a name; the optional name allows multiple callbacks to be registered to receive events of the same type, such as `click.foo` and `click.bar`. To specify multiple typenames, separate typenames with spaces, such as `input change` or `click.foo click.bar`.
 
-When a specified event is dispatched on a selected element, the specified *listener* will be evaluated for the element, being passed the current datum (*d*), the current index (*i*), and the current group (*nodes*), with *this* as the current DOM element (*nodes*[*i*]). Listeners always see the latest datum for their element, but the index is a property of the selection and is fixed when the listener is assigned; to update the index, re-assign the listener. To access the current event within a listener, use [d3.event](#event).
+When a specified event is dispatched on a selected element, the specified *listener* will be evaluated for the element, being passed the current event (*event*) and the current datum (*d*), with *this* as the current DOM element (*event*.currentTarget). Listeners always see the latest datum for their element. Note: while you can use [*event*.pageX](https://developer.mozilla.org/en/DOM/event.pageX) and [*event*.pageY](https://developer.mozilla.org/en/DOM/event.pageY) directly, it is often convenient to transform the event position to the local coordinate system of the element that received the event using [d3.clientPoint](#clientPoint).
 
 If an event listener was previously registered for the same *typename* on a selected element, the old listener is removed before the new listener is added. To remove a listener, pass null as the *listener*. To remove all listeners for a given name, pass null as the *listener* and `.foo` as the *typename*, where `foo` is the name; to remove all listeners with no name, specify `.` as the *typename*.
 
 An optional *options* object may specify characteristics about the event listener, such as whether it is capturing or passive; see [*element*.addEventListener](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener).
 
 If a *listener* is not specified, returns the currently-assigned listener for the specified event *typename* on the first (non-null) selected element, if any. If multiple typenames are specified, the first matching listener is returned.
-
-Note: while you can use [*event*.pageX](https://developer.mozilla.org/en/DOM/event.pageX) and [*event*.pageY](https://developer.mozilla.org/en/DOM/event.pageY) directly, it is often more convenient to transform the event position to the local coordinate system of the element that received the event using [d3.clientPoint](#clientPoint).
 
 <a name="selection_dispatch" href="#selection_dispatch">#</a> <i>selection</i>.<b>dispatch</b>(<i>type</i>[, <i>parameters</i>]) [<>](https://github.com/d3/d3-selection/blob/master/src/selection/dispatch.js "Source")
 
