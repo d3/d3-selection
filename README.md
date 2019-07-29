@@ -529,7 +529,21 @@ svg.selectAll("circle")
     .attr("stroke", "black");
 ```
 
-To control what happens on enter, update and exit, pass separate functions instead of a string:
+The *enter* function may be specified as a string shorthand, as above, which is equivalent to [*selection*.append](#selection_append) with the given element name. Likewise, an optional *update* and *exit* function may be specified, which default to the identity function and calling [*selection*.remove](#selection_remove), respectively. Thus, the shorthand above is equivalent to:
+
+```js
+svg.selectAll("circle")
+  .data(data)
+  .join(
+    enter => enter.append("circle"),
+    update => update,
+    exit => exit.remove()
+  )
+    .attr("fill", "none")
+    .attr("stroke", "black");
+````
+
+By passing separate functions on enter, update and exit, you have greater control over what happens. And by specifying a key function to [*selection*.data](#selection_data), you can minimize changes to the DOM to optimize performance. For example, to set different fill colors for enter and update:
 
 ```js
 svg.selectAll("circle")
@@ -541,7 +555,7 @@ svg.selectAll("circle")
     .attr("stroke", "black");
 ```
 
-You can pass a third function for exit, too. The returned enter and update selections are again merged and returned by *selection*.join. By separating enter and update, and by specifying a key function to [*selection*.data](#selection_data), you can minimize changes to the DOM to optimize performance.
+The selections returned by the enter and update functions are merged and then returned by *selection*.join.
 
 You also animate enter, update and exit by creating transitions inside the *enter*, *update* and *exit* functions. To avoid breaking the method chain, use *selection*.call to create transitions, or return an undefined enter or update selection to prevent merging: the return value of the *enter* and *update* functions specifies the two selections to merge and return by *selection*.join.
 
