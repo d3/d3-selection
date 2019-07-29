@@ -529,7 +529,7 @@ svg.selectAll("circle")
     .attr("stroke", "black");
 ```
 
-The *enter* function may be specified as a string shorthand, as above, which is equivalent to [*selection*.append](#selection_append) with the given element name. Likewise, an optional *update* and *exit* function may be specified, which default to the identity function and calling [*selection*.remove](#selection_remove), respectively. Thus, the shorthand above is equivalent to:
+The *enter* function may be specified as a string shorthand, as above, which is equivalent to [*selection*.append](#selection_append) with the given element name. Likewise, optional *update* and *exit* functions may be specified, which default to the identity function and calling [*selection*.remove](#selection_remove), respectively. The shorthand above is thus equivalent to:
 
 ```js
 svg.selectAll("circle")
@@ -555,7 +555,7 @@ svg.selectAll("circle")
     .attr("stroke", "black");
 ```
 
-The selections returned by the enter and update functions are merged and then returned by *selection*.join.
+The selections returned by the *enter* and *update* functions are merged and then returned by *selection*.join.
 
 You also animate enter, update and exit by creating transitions inside the *enter*, *update* and *exit* functions. To avoid breaking the method chain, use *selection*.call to create transitions, or return an undefined enter or update selection to prevent merging: the return value of the *enter* and *update* functions specifies the two selections to merge and return by *selection*.join.
 
