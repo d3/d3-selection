@@ -1,4 +1,4 @@
-import namespaces from "./namespaces";
+import namespaces from "./namespaces.js";
 
 export default function(name) {
   var prefix = name += "", i = prefix.indexOf(":");

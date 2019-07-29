@@ -1,5 +1,5 @@
-import {Selection} from "./index";
-import selectorAll from "../selectorAll";
+import {Selection} from "./index.js";
+import selectorAll from "../selectorAll.js";
 
 export default function(select) {
   if (typeof select !== "function") select = selectorAll(select);

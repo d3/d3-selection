@@ -1,5 +1,5 @@
-import namespace from "./namespace";
-import {xhtml} from "./namespaces";
+import namespace from "./namespace.js";
+import {xhtml} from "./namespaces.js";
 
 function creatorInherit(name) {
   return function() {

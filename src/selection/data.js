@@ -1,6 +1,6 @@
-import {Selection} from "./index";
-import {EnterNode} from "./enter";
-import constant from "../constant";
+import {Selection} from "./index.js";
+import {EnterNode} from "./enter.js";
+import constant from "../constant.js";
 
 var keyPrefix = "$"; // Protect against keys like “__proto__”.
 

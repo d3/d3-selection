@@ -1,4 +1,4 @@
-import {Selection, root} from "./selection/index";
+import {Selection, root} from "./selection/index.js";
 
 export default function(selector) {
   return typeof selector === "string"

@@ -1,4 +1,4 @@
-import {Selection} from "./index";
+import {Selection} from "./index.js";
 
 export default function(selection) {
   if (!(selection instanceof Selection)) throw new Error("invalid merge");

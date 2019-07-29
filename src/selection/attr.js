@@ -1,4 +1,4 @@
-import namespace from "../namespace";
+import namespace from "../namespace.js";
 
 function attrRemove(name) {
   return function() {
