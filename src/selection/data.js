@@ -1,5 +1,6 @@
 import {Selection} from "./index.js";
 import {EnterNode} from "./enter.js";
+import array from "../array.js";
 import constant from "../constant.js";
 
 var keyPrefix = "$"; // Protect against keys like “__proto__”.
@@ -78,10 +79,6 @@ function datum(node) {
   return node.__data__;
 }
 
-function arrayify(data) {
-  return Array.isArray(data) ? data : Array.from(data);
-}
-
 export default function(value, key) {
   if (!value) return Array.from(this, datum);
 
@@ -95,7 +92,7 @@ export default function(value, key) {
     var parent = parents[j],
         group = groups[j],
         groupLength = group.length,
-        data = arrayify(value.call(parent, parent && parent.__data__, j, parents)),
+        data = array(value.call(parent, parent && parent.__data__, j, parents)),
         dataLength = data.length,
         enterGroup = enter[j] = new Array(dataLength),
         updateGroup = update[j] = new Array(dataLength),
