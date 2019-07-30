@@ -34,20 +34,20 @@ d3.select("body")
 
 Selections are immutable. All selection methods that affect which elements are selected (or their order) return a new selection rather than modifying the current selection. However, note that elements are necessarily mutable, as selections drive transformations of the document!
 
+For more, see [the d3-selection collection on Observable](https://observablehq.com/collection/@d3/d3-selection).
+
 ## Installing
 
-If you use NPM, `npm install d3-selection`. Otherwise, download the [latest release](https://github.com/d3/d3-selection/releases/latest). You can also load directly from [d3js.org](https://d3js.org), either as a [standalone library](https://d3js.org/d3-selection.v1.min.js) or as part of [D3 4.0](https://github.com/d3/d3). AMD, CommonJS, and vanilla environments are supported. In vanilla, a `d3` global is exported:
+If you use NPM, `npm install d3-selection`. Otherwise, download the [latest release](https://github.com/d3/d3-selection/releases/latest). You can also load d3-selection as a standalone library or as part of [D3](https://github.com/d3/d3). ES modules, AMD, CommonJS, and vanilla environments are supported. In vanilla, a `d3` global is exported:
 
 ```html
-<script src="https://d3js.org/d3-selection.v1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3-selection@2"></script>
 <script>
 
 const div = d3.selectAll("div");
 
 </script>
 ```
-
-[Try d3-selection in your browser.](https://tonicdev.com/npm/d3-selection)
 
 ## API Reference
 
@@ -63,7 +63,7 @@ const div = d3.selectAll("div");
 
 Selection methods accept [W3C selector strings](http://www.w3.org/TR/selectors-api/) such as `.fancy` to select elements with the class *fancy*, or `div` to select DIV elements. Selection methods come in two forms: select and selectAll: the former selects only the first matching element, while the latter selects all matching elements in document order. The top-level selection methods, [d3.select](#select) and [d3.selectAll](#selectAll), query the entire document; the subselection methods, [*selection*.select](#selection_select) and [*selection*.selectAll](#selection_selectAll), restrict selection to descendants of the selected elements.
 
-<a name="selection" href="#selection">#</a> d3.<b>selection</b>() [<>](https://github.com/d3/d3-selection/blob/master/src/selection/index.js#L38 "Source")
+<a name="selection" href="#selection">#</a> d3.<b>selection</b>() [<>](https://github.com/d3/d3-selection/blob/master/src/selection/index.js "Source")
 
 [Selects](#select) the root element, `document.documentElement`. This function can also be used to test for selections (`instanceof d3.selection`) or to extend the selection prototype. For example, to add a method to check checkboxes:
 
@@ -81,7 +81,7 @@ And then to use:
 d3.selectAll("input[type=checkbox]").checked(true);
 ```
 
-<a name="select" href="#select">#</a> d3.<b>select</b>(<i>selector</i>) [<>](https://github.com/d3/d3-selection/blob/master/src/select.js#L3 "Source")
+<a name="select" href="#select">#</a> d3.<b>select</b>(<i>selector</i>) [<>](https://github.com/d3/d3-selection/blob/master/src/select.js "Source")
 
 Selects the first element that matches the specified *selector* string. If no elements match the *selector*, returns an empty selection. If multiple elements match the *selector*, only the first matching element (in document order) will be selected. For example, to select the first anchor element:
 
@@ -97,7 +97,7 @@ d3.selectAll("p").on("click", function(event) {
 });
 ```
 
-<a name="selectAll" href="#selectAll">#</a> d3.<b>selectAll</b>(<i>selector</i>) [<>](https://github.com/d3/d3-selection/blob/master/src/selectAll.js#L3 "Source")
+<a name="selectAll" href="#selectAll">#</a> d3.<b>selectAll</b>(<i>selector</i>) [<>](https://github.com/d3/d3-selection/blob/master/src/selectAll.js "Source")
 
 Selects all elements that match the specified *selector* string. The elements will be selected in document order (top-to-bottom). If no elements in the document match the *selector*, or if the *selector* is null or undefined, returns an empty selection. For example, to select all paragraphs:
 
@@ -246,7 +246,7 @@ const div = selection.selectAll(d3.selectorAll("div"));
 
 Returns the owner window for the specified *node*. If *node* is a node, returns the owner document’s default view; if *node* is a document, returns its default view; otherwise returns the *node*.
 
-<a name="style" href="#style">#</a> d3.<b>style</b>(<i>node</i>, <i>name</i>) [<>](https://github.com/d3/d3-selection/blob/master/src/selection/style.js#L32 "Source")
+<a name="style" href="#style">#</a> d3.<b>style</b>(<i>node</i>, <i>name</i>) [<>](https://github.com/d3/d3-selection/blob/master/src/selection/style.js "Source")
 
 Returns the value of the style property with the specified *name* for the specified *node*. If the *node* has an inline style with the specified *name*, its value is returned; otherwise, the [computed property value](https://developer.mozilla.org/en-US/docs/Web/CSS/computed_value) is returned. See also [*selection*.style](#selection_style).
 
@@ -778,7 +778,7 @@ const foo = d3.local();
 
 Like `var`, each local is a distinct symbolic reference; unlike `var`, the value of each local is also scoped by the DOM.
 
-<a name="local_set" href="#local_set">#</a> <i>local</i>.<b>set</b>(<i>node</i>, <i>value</i>) [<>](https://github.com/d3/d3-selection/blob/master/src/local.js#L18 "Source")
+<a name="local_set" href="#local_set">#</a> <i>local</i>.<b>set</b>(<i>node</i>, <i>value</i>) [<>](https://github.com/d3/d3-selection/blob/master/src/local.js "Source")
 
 Sets the value of this local on the specified *node* to the *value*, and returns the specified *value*. This is often performed using [*selection*.each](#selection_each):
 
@@ -792,15 +792,15 @@ If you are just setting a single variable, consider using [*selection*.property]
 selection.property(foo, d => d.value);
 ```
 
-<a name="local_get" href="#local_get">#</a> <i>local</i>.<b>get</b>(<i>node</i>) [<>](https://github.com/d3/d3-selection/blob/master/src/local.js#L13 "Source")
+<a name="local_get" href="#local_get">#</a> <i>local</i>.<b>get</b>(<i>node</i>) [<>](https://github.com/d3/d3-selection/blob/master/src/local.js "Source")
 
 Returns the value of this local on the specified *node*. If the *node* does not define this local, returns the value from the nearest ancestor that defines it. Returns undefined if no ancestor defines this local.
 
-<a name="local_remove" href="#local_remove">#</a> <i>local</i>.<b>remove</b>(<i>node</i>) [<>](https://github.com/d3/d3-selection/blob/master/src/local.js#L21 "Source")
+<a name="local_remove" href="#local_remove">#</a> <i>local</i>.<b>remove</b>(<i>node</i>) [<>](https://github.com/d3/d3-selection/blob/master/src/local.js "Source")
 
 Deletes this local’s value from the specified *node*. Returns true if the *node* defined this local prior to removal, and false otherwise. If ancestors also define this local, those definitions are unaffected, and thus [*local*.get](#local_get) will still return the inherited value.
 
-<a name="local_toString" href="#local_toString">#</a> <i>local</i>.<b>toString</b>() [<>](https://github.com/d3/d3-selection/blob/master/src/local.js#L24 "Source")
+<a name="local_toString" href="#local_toString">#</a> <i>local</i>.<b>toString</b>() [<>](https://github.com/d3/d3-selection/blob/master/src/local.js "Source")
 
 Returns the automatically-generated identifier for this local. This is the name of the property that is used to store the local’s value on elements, and thus you can also set or get the local’s value using *element*[*local*] or by using [*selection*.property](#selection_property).
 
