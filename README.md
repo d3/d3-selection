@@ -674,7 +674,13 @@ If *parameters* is a function, it is evaluated for each selected element, in ord
 
 <a name="pointer" href="#pointer">#</a> d3.<b>pointer</b>(<i>event</i>[, <i>target</i>]) [<>](https://github.com/d3/d3-selection/blob/master/src/pointer.js "Source")
 
-Returns a two-element array of numbers [*x*, *y*] representing the coordinates of the specified *event* relative to the specified *target*. (The *event* may also be a [touch](https://www.w3.org/TR/touch-events/#touch-interface).) The target may be an HTML or SVG element, such as a [G element](http://www.w3.org/TR/SVG/struct.html#Groups). If *target* is not specified, it defaults to *event*.currentTarget.
+Returns a two-element array of numbers [*x*, *y*] representing the coordinates of the specified *event* relative to the specified *target*. If *target* is not specified, it defaults to *event*.currentTarget. (The *event* may also be a [touch](https://www.w3.org/TR/touch-events/#touch-interface).)
+
+If the *target* is an SVG element, the event’s coordinates are transformed using the [inverse](https://www.w3.org/TR/geometry-1/#dom-dommatrixreadonly-inverse) of the [screen coordinate transformation matrix](https://www.w3.org/TR/SVG/types.html#__svg__SVGGraphicsElement__getScreenCTM).
+
+If the *target* is an HTML element, the event’s coordinates are translated relative to the top-left corner of the *target*’s [bounding client rectangle](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect). (As such, the coordinate system can only be translated relative to the client coordinates. See also [GeometryUtils](https://www.w3.org/TR/cssom-view-1/#the-geometryutils-interface).)
+
+Otherwise, [*event*.pageX, *event*.pageY] is returned.
 
 ### Control Flow
 

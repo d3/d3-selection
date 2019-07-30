@@ -8,6 +8,10 @@ export default function(event, node = event.currentTarget) {
     return [point.x, point.y];
   }
 
-  var rect = node.getBoundingClientRect();
-  return [event.clientX - rect.left - node.clientLeft, event.clientY - rect.top - node.clientTop];
+  if (node.getBoundingClientRect) {
+    var rect = node.getBoundingClientRect();
+    return [event.clientX - rect.left - node.clientLeft, event.clientY - rect.top - node.clientTop];
+  }
+
+  return [event.pageX, event.pageY];
 }
