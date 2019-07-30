@@ -732,7 +732,13 @@ Returns true if this selection contains no (non-null) elements.
 
 <a name="selection_nodes" href="#selection_nodes">#</a> <i>selection</i>.<b>nodes</b>() [<>](https://github.com/d3/d3-selection/blob/master/src/selection/nodes.js "Source")
 
-Returns an array of all (non-null) elements in this selection.
+Returns an array of all (non-null) elements in this selection. Equivalent to:
+
+```js
+const elements = Array.from(selection);
+````
+
+See also [*selection*[Symbol.iterator]](#selection_iterator).
 
 <a name="selection_node" href="#selection_node">#</a> <i>selection</i>.<b>node</b>() [<>](https://github.com/d3/d3-selection/blob/master/src/selection/node.js "Source")
 
@@ -740,7 +746,23 @@ Returns the first (non-null) element in this selection. If the selection is empt
 
 <a name="selection_size" href="#selection_size">#</a> <i>selection</i>.<b>size</b>() [<>](https://github.com/d3/d3-selection/blob/master/src/selection/size.js "Source")
 
-Returns the total number of elements in this selection.
+Returns the total number of (non-null) elements in this selection.
+
+<a name="selection_iterator" href="#selection_iterator">#</a> <i>selection</i>[<b>Symbol.iterator</b>]() [<>](https://github.com/d3/d3-selection/blob/master/src/selection/iterator.js "Source")
+
+Returns an iterator over the selected (non-null) elements. For example, to iterate over the selected elements:
+
+```js
+for (const element of selection) {
+  console.log(element);
+}
+```
+
+To flatten the selection to an array:
+
+```js
+const elements = [...selection];
+````
 
 ### Local Variables
 
