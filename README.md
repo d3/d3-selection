@@ -105,7 +105,7 @@ Selects all elements that match the specified *selector* string. The elements wi
 const paragraph = d3.selectAll("p");
 ```
 
-If the *selector* is not a string, instead selects the specified array of nodes; this is useful if you already have a reference to nodes, such as `this.childNodes` within an event listener or a global such as `document.links`. The nodes may instead be a pseudo-array such as a `NodeList` or `arguments`. For example, to color all links red:
+If the *selector* is not a string, instead selects the specified array of nodes; this is useful if you already have a reference to nodes, such as `this.childNodes` within an event listener or a global such as `document.links`. The nodes may instead be an iterable, or a pseudo-array such as a NodeList. For example, to color all links red:
 
 ```js
 d3.selectAll(document.links).style("color", "red");
@@ -137,7 +137,7 @@ For each selected element, selects the descendant elements that match the specif
 const b = d3.selectAll("p").selectAll("b");
 ```
 
-If the *selector* is a function, it is evaluated for each selected element, in order, being passed the current datum (*d*), the current index (*i*), and the current group (*nodes*), with *this* as the current DOM element (*nodes*[*i*]). It must return an array of elements (or a pseudo-array, such as a NodeList), or the empty array if there are no matching elements. For example, to select the previous and next siblings of each paragraph:
+If the *selector* is a function, it is evaluated for each selected element, in order, being passed the current datum (*d*), the current index (*i*), and the current group (*nodes*), with *this* as the current DOM element (*nodes*[*i*]). It must return an array of elements (or an iterable, or a pseudo-array such as a NodeList), or the empty array if there are no matching elements. For example, to select the previous and next siblings of each paragraph:
 
 ```js
 const sibling = d3.selectAll("p").selectAll(function() {

@@ -1,3 +1,3 @@
 export default function(x) {
-  return Array.isArray(x) ? x : Array.from(x);
+  return x == null ? [] : "length" in x ? x : Array.from(x);
 }
