@@ -1,5 +1,5 @@
-import {Selection} from "./index";
-import selector from "../selector";
+import {Selection} from "./index.js";
+import selector from "../selector.js";
 
 export default function(select) {
   if (typeof select !== "function") select = selector(select);

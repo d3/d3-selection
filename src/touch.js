@@ -1,5 +1,5 @@
-import sourceEvent from "./sourceEvent";
-import point from "./point";
+import sourceEvent from "./sourceEvent.js";
+import point from "./point.js";
 
 export default function(node, touches, identifier) {
   if (arguments.length < 3) identifier = touches, touches = sourceEvent().changedTouches;
