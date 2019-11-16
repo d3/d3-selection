@@ -27,6 +27,12 @@ tape("selection.data(values) accepts an iterable", function(test) {
   test.end();
 });
 
+tape("selection.data(null) is not allowed", function(test) {
+  var body = jsdom("<div id='one'></div><div id='two'></div><div id='three'></div>").body;
+  try { d3.select(body).selectAll("div").data(null); test.fail(); } catch (ignore) {}
+  test.end();
+});
+
 tape("selection.data() returns the bound data", function(test) {
   var body = jsdom("<div id='one'></div><div id='two'></div><div id='three'></div>").body,
       selection = d3.select(body).selectAll("div").data(["foo", "bar", "baz"]);

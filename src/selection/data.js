@@ -78,7 +78,7 @@ function datum(node) {
 }
 
 export default function(value, key) {
-  if (!value) return Array.from(this, datum);
+  if (!arguments.length) return Array.from(this, datum);
 
   var bind = key ? bindKey : bindIndex,
       parents = this._parents,
