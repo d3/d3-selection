@@ -49,6 +49,8 @@ const div = d3.selectAll("div");
 </script>
 ```
 
+[Try d3-selection in your browser.](https://observablehq.com/collection/@d3/d3-selection)
+
 ## API Reference
 
 * [Selecting Elements](#selecting-elements)
@@ -511,7 +513,7 @@ d3.selectAll("div")
 
 This example key function uses the datum *d* if present, and otherwise falls back to the element’s id property. Since these elements were not previously bound to data, the datum *d* is null when the key function is evaluated on selected elements, and non-null when the key function is evaluated on the new data.
 
-The *update* and *enter* selections are returned in data order, while the *exit* selection preserves the selection order prior to the join. If a key function is specified, the order of elements in the selection may not match their order in the document; use [*selection*.order](#order) or [*selection*.sort](#sort) as needed. For more on how the key function affects the join, see [A Bar Chart, Part 2](http://bost.ocks.org/mike/bar/2/) and [Object Constancy](http://bost.ocks.org/mike/constancy/).
+The *update* and *enter* selections are returned in data order, while the *exit* selection preserves the selection order prior to the join. If a key function is specified, the order of elements in the selection may not match their order in the document; use [*selection*.order](#selection_order) or [*selection*.sort](#selection_sort) as needed. For more on how the key function affects the join, see [A Bar Chart, Part 2](http://bost.ocks.org/mike/bar/2/) and [Object Constancy](http://bost.ocks.org/mike/constancy/).
 
 If *data* is not specified, this method returns the array of data for the selected elements.
 
