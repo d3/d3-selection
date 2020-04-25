@@ -1,5 +1,7 @@
 import selection_select from "./select.js";
 import selection_selectAll from "./selectAll.js";
+import selection_selectChild from "./selectChild.js";
+import selection_selectChildren from "./selectChildren.js";
 import selection_filter from "./filter.js";
 import selection_data from "./data.js";
 import selection_enter from "./enter.js";
@@ -50,6 +52,8 @@ Selection.prototype = selection.prototype = {
   constructor: Selection,
   select: selection_select,
   selectAll: selection_selectAll,
+  selectChild: selection_selectChild,
+  selectChildren: selection_selectChildren,
   filter: selection_filter,
   data: selection_data,
   enter: selection_enter,

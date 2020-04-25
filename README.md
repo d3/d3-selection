@@ -200,6 +200,14 @@ See [*selection*.data](#selection_data) for more.
 
 This method is not intended for concatenating arbitrary selections, however: if both this selection and the specified *other* selection have (non-null) elements at the same index, this selection’s element is returned in the merge and the *other* selection’s element is ignored.
 
+<a name="selection_selectChild" href="#selection_selectChild">#</a> <i>selection</i>.<b>selectChild</b>([<i>selector</i>]) · [Source](https://github.com/d3/d3-selection/blob/master/src/selection/selectChild.js)
+
+Returns a new selection with the (first) child of each element of the current selection matching the *selector*. If no *selector* is specified, selects the first child (if any). If the *selector* is specified as a string, selects the first child that matches (if any). If the *selector* is a function, it is evaluated for each of the children nodes, in order, being passed the child (*child*), the child’s index (*i*), and the list of children (*children*); the method selects the first child for which the selector return truthy, if any.
+
+<a name="selection_selectChildren" href="#selection_selectChildren">#</a> <i>selection</i>.<b>selectChildren</b>([<i>selector</i>]) · [Source](https://github.com/d3/d3-selection/blob/master/src/selection/selectChildren.js)
+
+Returns a new selection with the children of each element of the current selection matching the *selector*. If no *selector* is specified, selects all the children. If the *selector* is specified as a string, selects the children that match (if any). If the *selector* is a function, it is evaluated for each of the children nodes, in order, being passed the child (*child*), the child’s index (*i*), and the list of children (*children*); the method selects all children for which the selector return truthy.
+
 <a name="selection_selection" href="#selection_selection">#</a> <i>selection</i>.<b>selection</b>() · [Source](https://github.com/d3/d3-selection/blob/master/src/selection/index.js)
 
 Returns the selection (for symmetry with [<i>transition</i>.selection](https://github.com/d3/d3-transition/blob/master/README.md#transition_selection)).
