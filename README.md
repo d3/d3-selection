@@ -684,6 +684,10 @@ If the *target* is an HTML element, the event’s coordinates are translated rel
 
 Otherwise, [*event*.pageX, *event*.pageY] is returned.
 
+<a name="pointers" href="#pointers">#</a> d3.<b>pointers</b>(<i>event</i>[, <i>target</i>]) [<>](https://github.com/d3/d3-selection/blob/master/src/pointer.js "Source")
+
+A generalization of [pointer](#pointer) for multitouch events. Returns the *x* and *y* coordinates of the specified *event*’s touches relative to the specified *target*, as an array of two-element arrays of numbers [[*x1, y1*], [*x2, y2*], …]. If *target* is not specified, it defaults to *event*.currentTarget.
+
 ### Control Flow
 
 For advanced usage, selections provide methods for custom control flow.

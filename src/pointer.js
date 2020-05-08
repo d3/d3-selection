@@ -1,4 +1,5 @@
-export default function(event, node = event.currentTarget) {
+export default function pointer(event, node = event.currentTarget) {
+  if (event instanceof TouchEvent) event = event.touches[0];
   if (node) {
     var svg = node.ownerSVGElement || node;
     if (svg.createSVGPoint) {
@@ -13,4 +14,8 @@ export default function(event, node = event.currentTarget) {
     }
   }
   return [event.pageX, event.pageY];
+}
+
+export function pointers(event, node = event.currentTarget) {
+  return Array.from(event.touches || [event]).map(e => pointer(e, node));
 }
