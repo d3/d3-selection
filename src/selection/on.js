@@ -32,7 +32,7 @@ function contextListener(listener, index, group) {
 }
 
 function parseTypenames(typenames) {
-  return typenames.trim().split(/^|\s+/).map(function(t) {
+  return typenames.trim().split(/\s+/).filter(function(t) { return t; }).map(function(t) {
     var name = "", i = t.indexOf(".");
     if (i >= 0) name = t.slice(i + 1), t = t.slice(0, i);
     return {type: t, name: name};
