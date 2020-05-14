@@ -1,5 +1,5 @@
 export default function pointer(event, node = event.currentTarget) {
-  if (event instanceof TouchEvent) event = event.touches[0];
+  if (event instanceof TouchEvent) event = event.touches[0] || event.changedTouches[0];
   if (node) {
     var svg = node.ownerSVGElement || node;
     if (svg.createSVGPoint) {
