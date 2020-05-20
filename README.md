@@ -320,23 +320,23 @@ Use [*selection*.append](#selection_append) or [*selection*.insert](#selection_i
 
 If the specified *type* is a string, appends a new element of this type (tag name) as the last child of each selected element, or before the next following sibling in the update selection if this is an [enter selection](#selection_enter). The latter behavior for enter selections allows you to insert elements into the DOM in an order consistent with the new bound data; however, note that [*selection*.order](#selection_order) may still be required if updating elements change order (*i.e.*, if the order of new data is inconsistent with old data).
 
-If the specified *type* is a function, it is evaluated for each selected element, in order, being passed the current datum (*d*), the current index (*i*), and the current group (*nodes*), with *this* as the current DOM element (*nodes*[*i*]). This function should return an element to be appended. (The function typically creates a new element, but it may instead return an existing element.) For example, to append a DIV element to each paragraph:
+If the specified *type* is a function, it is evaluated for each selected element, in order, being passed the current datum (*d*), the current index (*i*), and the current group (*nodes*), with *this* as the current DOM element (*nodes*[*i*]). This function should return an element to be appended. (The function typically creates a new element, but it may instead return an existing element.) For example, to append a paragraph to each DIV element:
 
 ```js
-d3.selectAll("p").append("div");
+d3.selectAll("div").append("p");
 ```
 
 This is equivalent to:
 
 ```js
-d3.selectAll("p").append(() => document.createElement("div"));
+d3.selectAll("div").append(() => document.createElement("p"));
 ```
 
 Which is equivalent to:
 
 ```js
-d3.selectAll("p").select(function() {
-  return this.appendChild(document.createElement("div"));
+d3.selectAll("div").select(function() {
+  return this.appendChild(document.createElement("p"));
 });
 ```
 
@@ -348,23 +348,23 @@ The specified *name* may have a namespace prefix, such as `svg:text` to specify 
 
 If the specified *type* is a string, inserts a new element of this type (tag name) before the first element matching the specified *before* selector for each selected element. For example, a *before* selector `:first-child` will prepend nodes before the first child. If *before* is not specified, it defaults to null. (To append elements in an order consistent with [bound data](#joining-data), use [*selection*.append](#selection_append).)
 
-Both *type* and *before* may instead be specified as functions which are evaluated for each selected element, in order, being passed the current datum (*d*), the current index (*i*), and the current group (*nodes*), with *this* as the current DOM element (*nodes*[*i*]). The *type* function should return an element to be inserted; the *before* function should return the child element before which the element should be inserted. For example, to append a DIV element to each paragraph:
+Both *type* and *before* may instead be specified as functions which are evaluated for each selected element, in order, being passed the current datum (*d*), the current index (*i*), and the current group (*nodes*), with *this* as the current DOM element (*nodes*[*i*]). The *type* function should return an element to be inserted; the *before* function should return the child element before which the element should be inserted. For example, to append a paragraph to each DIV element:
 
 ```js
-d3.selectAll("p").insert("div");
+d3.selectAll("div").insert("p");
 ```
 
 This is equivalent to:
 
 ```js
-d3.selectAll("p").insert(() => document.createElement("div"));
+d3.selectAll("div").insert(() => document.createElement("p"));
 ```
 
 Which is equivalent to:
 
 ```js
-d3.selectAll("p").select(function() {
-  return this.insertBefore(document.createElement("div"), null);
+d3.selectAll("div").select(function() {
+  return this.insertBefore(document.createElement("p"), null);
 });
 ```
 
