@@ -198,6 +198,10 @@ See [*selection*.data](#selection_data) for more.
 
 This method is not intended for concatenating arbitrary selections, however: if both this selection and the specified *other* selection have (non-null) elements at the same index, this selection’s element is returned in the merge and the *other* selection’s element is ignored.
 
+<a name="selection_selection" href="#selection_selection">#</a> <i>selection</i>.<b>selection</b>() [<>](https://github.com/d3/d3-selection/blob/master/src/selection/index.js "Source")
+
+Returns the selection (for symmetry with [<i>transition</i>.selection](https://github.com/d3/d3-transition/blob/master/README.md#transition_selection)).
+
 <a name="matcher" href="#matcher">#</a> d3.<b>matcher</b>(<i>selector</i>) [<>](https://github.com/d3/d3-selection/blob/master/src/matcher.js "Source")
 
 Given the specified *selector*, returns a function which returns true if `this` element [matches](https://developer.mozilla.org/en-US/docs/Web/API/Element/matches) the specified selector. This method is used internally by [*selection*.filter](#selection_filter). For example, this:
