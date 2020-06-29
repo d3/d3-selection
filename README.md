@@ -200,6 +200,14 @@ See [*selection*.data](#selection_data) for more.
 
 This method is not intended for concatenating arbitrary selections, however: if both this selection and the specified *other* selection have (non-null) elements at the same index, this selection’s element is returned in the merge and the *other* selection’s element is ignored.
 
+<a name="selection_selectChild" href="#selection_selectChild">#</a> <i>selection</i>.<b>selectChild</b>([<i>selector</i>]) [<>](https://github.com/d3/d3-selection/blob/master/src/selection/selectChild.js "Source")
+
+Returns a new selection with the (first) child of each element of the current selection matching the *selector* (if specified).
+
+<a name="selection_selectChildren" href="#selection_selectChildren">#</a> <i>selection</i>.<b>selectChildren</b>([<i>selector</i>]) [<>](https://github.com/d3/d3-selection/blob/master/src/selection/selectChildren.js "Source")
+
+Returns a new selection with the children of each element of the current selection matching the *selector* (if specified).
+
 <a name="matcher" href="#matcher">#</a> d3.<b>matcher</b>(<i>selector</i>) [<>](https://github.com/d3/d3-selection/blob/master/src/matcher.js "Source")
 
 Given the specified *selector*, returns a function which returns true if `this` element [matches](https://developer.mozilla.org/en-US/docs/Web/API/Element/matches) the specified selector. This method is used internally by [*selection*.filter](#selection_filter). For example, this:

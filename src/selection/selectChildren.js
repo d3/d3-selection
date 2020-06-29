@@ -7,8 +7,9 @@ function children() {
 }
 
 function childrenFilter(match) {
+  match = typeof match === "function" ? match : matcher(match);
   return function() {
-    return filter.call(this.children, match);
+    return filter.call(this.children, function(e) { return match.call(e); });
   };
 }
 
