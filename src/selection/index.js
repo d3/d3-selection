@@ -42,6 +42,10 @@ function selection() {
   return new Selection([[document.documentElement]], root);
 }
 
+function selection_selection() {
+  return this;
+}
+
 Selection.prototype = selection.prototype = {
   constructor: Selection,
   select: selection_select,
@@ -52,6 +56,7 @@ Selection.prototype = selection.prototype = {
   exit: selection_exit,
   join: selection_join,
   merge: selection_merge,
+  selection: selection_selection,
   order: selection_order,
   sort: selection_sort,
   call: selection_call,
