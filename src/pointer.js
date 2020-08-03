@@ -1,8 +1,8 @@
 import sourceEvent from "./sourceEvent.js";
 
-export default function(event, node = event.currentTarget) {
+export default function(event, node) {
   event = sourceEvent(event);
-  if (node) {
+  if (node || (node = event.currentTarget)) {
     var svg = node.ownerSVGElement || node;
     if (svg.createSVGPoint) {
       var point = svg.createSVGPoint();
