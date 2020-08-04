@@ -680,13 +680,23 @@ If *parameters* is a function, it is evaluated for each selected element, in ord
 
 <a name="pointer" href="#pointer">#</a> d3.<b>pointer</b>(<i>event</i>[, <i>target</i>]) · [Source](https://github.com/d3/d3-selection/blob/master/src/pointer.js)
 
-Returns a two-element array of numbers [*x*, *y*] representing the coordinates of the specified *event* relative to the specified *target*. If *target* is not specified, it defaults to *event*.currentTarget. (The *event* may also be a [touch](https://www.w3.org/TR/touch-events/#touch-interface).)
+Returns a two-element array of numbers [*x*, *y*] representing the coordinates of the specified *event* relative to the specified *target*. *event* can be a [UIEvent](https://developer.mozilla.org/en-US/docs/Web/API/UIEvent) (MouseEvent or TouchEvent), a [PointerEvent](https://developer.mozilla.org/en-US/docs/Web/API/PointerEvent), a custom event holding a UIEvent as *event*.sourceEvent, or a [touch](https://www.w3.org/TR/touch-events/#touch-interface).
+
+If *target* is not specified, it defaults to the source event’s currentTarget property, if available.
 
 If the *target* is an SVG element, the event’s coordinates are transformed using the [inverse](https://www.w3.org/TR/geometry-1/#dom-dommatrixreadonly-inverse) of the [screen coordinate transformation matrix](https://www.w3.org/TR/SVG/types.html#__svg__SVGGraphicsElement__getScreenCTM).
 
 If the *target* is an HTML element, the event’s coordinates are translated relative to the top-left corner of the *target*’s [bounding client rectangle](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect). (As such, the coordinate system can only be translated relative to the client coordinates. See also [GeometryUtils](https://www.w3.org/TR/cssom-view-1/#the-geometryutils-interface).)
 
 Otherwise, [*event*.pageX, *event*.pageY] is returned.
+
+In the case of touch events, the coordinates of the first touch are returned. To handle multitouch interactions, see [pointers](#pointers) instead.
+
+<a name="pointers" href="#pointers">#</a> d3.<b>pointers</b>(<i>event</i>[, <i>target</i>]) · [Source](https://github.com/d3/d3-selection/blob/master/src/pointers.js)
+
+Returns an array [[*x0*, *y0*], [*x1*, *y1*]…] of coordinates of the specified *event*’s pointer locations relative to the specified *target*. For mouse, stylus or single touch events, [*x0*, *y0*] is equivalent to d3.pointer(event, target). In the case of multi-touch events, the returned array contains a pair of coordinates for each of the touches.
+
+If *target* is not specified, it defaults to the source event’s currentTarget property, if available.
 
 ### Control Flow
 
