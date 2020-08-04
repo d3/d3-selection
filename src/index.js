@@ -5,6 +5,7 @@ export {default as matcher} from "./matcher.js";
 export {default as namespace} from "./namespace.js";
 export {default as namespaces} from "./namespaces.js";
 export {default as pointer} from "./pointer.js";
+export {default as pointers} from "./pointers.js";
 export {default as select} from "./select.js";
 export {default as selectAll} from "./selectAll.js";
 export {default as selection} from "./selection/index.js";
