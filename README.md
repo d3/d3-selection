@@ -694,7 +694,9 @@ In the case of touch events, the coordinates of the first touch are returned. To
 
 <a name="pointers" href="#pointers">#</a> d3.<b>pointers</b>(<i>event</i>[, <i>target</i>]) · [Source](https://github.com/d3/d3-selection/blob/master/src/pointers.js)
 
-Returns a list [[*x0*, *y0*], [*x1*, *y1*]…] of coordinates of the specified *event*’s pointer locations relative to the specified *target*. For mouse, stylus or single touch events, [*x0*, *y0*] is equivalent to d3.pointer(event, target). In the case of multi-touch events, the returned array contains a pair of coordinates for each of the touches.
+Returns an array [[*x0*, *y0*], [*x1*, *y1*]…] of coordinates of the specified *event*’s pointer locations relative to the specified *target*. For mouse, stylus or single touch events, [*x0*, *y0*] is equivalent to d3.pointer(event, target). In the case of multi-touch events, the returned array contains a pair of coordinates for each of the touches.
+
+If *target* is not specified, it defaults to the source event’s currentTarget property, if available.
 
 ### Control Flow
 
