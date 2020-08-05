@@ -7,5 +7,6 @@ export default function(events, node) {
     if (node === undefined) node = events.currentTarget;
     events = events.touches || [events];
   }
+console.warn({events, node})
   return Array.from(events, event => pointer(event, node));
 }
