@@ -1,4 +1,4 @@
-import {Selection} from "./index";
+import {Selection} from "./index.js";
 
 export default function(compare) {
   if (!compare) compare = ascending;

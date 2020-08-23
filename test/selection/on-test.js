@@ -179,7 +179,7 @@ tape("selection.on(type, listener) skips missing elements", function(test) {
   test.end();
 });
 
-tape("selection.on(type, listener) passes the listener data, index and group", function(test) {
+tape("selection.on(type, listener) passes the event and listener data", function(test) {
   var document = jsdom("<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
@@ -192,28 +192,25 @@ tape("selection.on(type, listener) passes the listener data, index and group", f
       .datum(function(d, i) { return "parent-" + i; })
     .selectAll("child")
       .data(function(d, i) { return [0, 1].map(function(j) { return "child-" + i + "-" + j; }); })
-      .on("foo", function(d, i, nodes) { results.push([this, d, i, nodes]); });
+      .on("foo", function(e, d) { results.push([this, e.type, d]); });
 
   test.deepEqual(results, []);
   selection.dispatch("foo");
   test.deepEqual(results, [
-    [three, "child-0-0", 0, [three, four]],
-    [four, "child-0-1", 1, [three, four]],
-    [five, "child-1-0", 0, [five, ]]
+    [three, "foo", "child-0-0"],
+    [four, "foo", "child-0-1"],
+    [five, "foo", "child-1-0"]
   ]);
   test.end();
 });
 
-tape("selection.on(type, listener) passes the listener the index as of registration time", function(test) {
-  var result,
-      document = jsdom("<parent id='one'></parent>"),
-      one = document.querySelector("#one"),
-      selection = d3.selectAll([, one]).on("click", function(d, i) { result = i; });
-  selection.dispatch("click");
-  test.deepEqual(selection, {_groups: [[, one]], _parents: [null]});
-  test.equal(result, 1);
-  selection = selection.sort().dispatch("click");
-  test.deepEqual(selection, {_groups: [[one, ]], _parents: [null]});
-  test.equal(result, 1);
+tape("selection.on(type, listener) passes the current listener data", function(test) {
+  var document = jsdom("<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>"),
+      results = [],
+      selection = d3.select(document).on("foo", function(e, d) { results.push(d); });
+  selection.dispatch("foo");
+  document.__data__ = 42;
+  selection.dispatch("foo");
+  test.deepEqual(results, [undefined, 42]);
   test.end();
 });

@@ -1,5 +1,5 @@
-import {Selection} from "./index";
-import matcher from "../matcher";
+import {Selection} from "./index.js";
+import matcher from "../matcher.js";
 
 export default function(match) {
   if (typeof match !== "function") match = matcher(match);

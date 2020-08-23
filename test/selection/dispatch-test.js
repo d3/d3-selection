@@ -8,9 +8,9 @@ tape("selection.dispatch(type) dispatches a custom event of the specified type t
       document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
-      selection = d3.selectAll([one, two]).datum(function(d, i) { return "node-" + i; }).on("bang", function(d, i, nodes) { event = d3.event; result.push(this, d, i, nodes); });
+      selection = d3.selectAll([one, two]).datum(function(d, i) { return "node-" + i; }).on("bang", function(e, d) { event = e; result.push(this, d); });
   test.equal(selection.dispatch("bang"), selection);
-  test.deepEqual(result, [one, "node-0", 0, [one, two], two, "node-1", 1, [one, two]]);
+  test.deepEqual(result, [one, "node-0", two, "node-1"]);
   test.equal(event.type, "bang");
   test.equal(event.bubbles, false);
   test.equal(event.cancelable, false);
@@ -24,9 +24,9 @@ tape("selection.dispatch(type, params) dispatches a custom event with the specif
       document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
-      selection = d3.selectAll([one, two]).datum(function(d, i) { return "node-" + i; }).on("bang", function(d, i, nodes) { event = d3.event; result.push(this, d, i, nodes); });
+      selection = d3.selectAll([one, two]).datum(function(d, i) { return "node-" + i; }).on("bang", function(e, d) { event = e; result.push(this, d); });
   test.equal(selection.dispatch("bang", {bubbles: true, cancelable: true, detail: "loud"}), selection);
-  test.deepEqual(result, [one, "node-0", 0, [one, two], two, "node-1", 1, [one, two]]);
+  test.deepEqual(result, [one, "node-0", two, "node-1"]);
   test.equal(event.type, "bang");
   test.equal(event.bubbles, true);
   test.equal(event.cancelable, true);
@@ -40,9 +40,9 @@ tape("selection.dispatch(type, function) dispatches a custom event with the spec
       document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
-      selection = d3.selectAll([one, two]).datum(function(d, i) { return "node-" + i; }).on("bang", function(d, i, nodes) { events.push(d3.event); result.push(this, d, i, nodes); });
+      selection = d3.selectAll([one, two]).datum(function(d, i) { return "node-" + i; }).on("bang", function(e, d) { events.push(e); result.push(this, d); });
   test.equal(selection.dispatch("bang", function(d, i) { return {bubbles: true, cancelable: true, detail: "loud-" + i}; }), selection);
-  test.deepEqual(result, [one, "node-0", 0, [one, two], two, "node-1", 1, [one, two]]);
+  test.deepEqual(result, [one, "node-0", two, "node-1"]);
   test.equal(events[0].type, "bang");
   test.equal(events[0].bubbles, true);
   test.equal(events[0].cancelable, true);
@@ -60,9 +60,9 @@ tape("selection.dispatch(type) skips missing elements", function(test) {
       document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
-      selection = d3.selectAll([, one,, two]).datum(function(d, i) { return "node-" + i; }).on("bang", function(d, i, nodes) { event = d3.event; result.push(this, d, i, nodes); });
+      selection = d3.selectAll([, one,, two]).datum(function(d, i) { return "node-" + i; }).on("bang", function(e, d) { event = e; result.push(this, d); });
   test.equal(selection.dispatch("bang"), selection);
-  test.deepEqual(result, [one, "node-1", 1, [, one,, two], two, "node-3", 3, [, one,, two]]);
+  test.deepEqual(result, [one, "node-1", two, "node-3"]);
   test.equal(event.type, "bang");
   test.equal(event.detail, null);
   test.end();

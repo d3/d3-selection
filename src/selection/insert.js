@@ -1,5 +1,5 @@
-import creator from "../creator";
-import selector from "../selector";
+import creator from "../creator.js";
+import selector from "../selector.js";
 
 function constantNull() {
   return null;

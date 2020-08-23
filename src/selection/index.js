@@ -1,34 +1,37 @@
-import selection_select from "./select";
-import selection_selectAll from "./selectAll";
-import selection_filter from "./filter";
-import selection_data from "./data";
-import selection_enter from "./enter";
-import selection_exit from "./exit";
-import selection_join from "./join";
-import selection_merge from "./merge";
-import selection_order from "./order";
-import selection_sort from "./sort";
-import selection_call from "./call";
-import selection_nodes from "./nodes";
-import selection_node from "./node";
-import selection_size from "./size";
-import selection_empty from "./empty";
-import selection_each from "./each";
-import selection_attr from "./attr";
-import selection_style from "./style";
-import selection_property from "./property";
-import selection_classed from "./classed";
-import selection_text from "./text";
-import selection_html from "./html";
-import selection_raise from "./raise";
-import selection_lower from "./lower";
-import selection_append from "./append";
-import selection_insert from "./insert";
-import selection_remove from "./remove";
-import selection_clone from "./clone";
-import selection_datum from "./datum";
-import selection_on from "./on";
-import selection_dispatch from "./dispatch";
+import selection_select from "./select.js";
+import selection_selectAll from "./selectAll.js";
+import selection_selectChild from "./selectChild.js";
+import selection_selectChildren from "./selectChildren.js";
+import selection_filter from "./filter.js";
+import selection_data from "./data.js";
+import selection_enter from "./enter.js";
+import selection_exit from "./exit.js";
+import selection_join from "./join.js";
+import selection_merge from "./merge.js";
+import selection_order from "./order.js";
+import selection_sort from "./sort.js";
+import selection_call from "./call.js";
+import selection_nodes from "./nodes.js";
+import selection_node from "./node.js";
+import selection_size from "./size.js";
+import selection_empty from "./empty.js";
+import selection_each from "./each.js";
+import selection_attr from "./attr.js";
+import selection_style from "./style.js";
+import selection_property from "./property.js";
+import selection_classed from "./classed.js";
+import selection_text from "./text.js";
+import selection_html from "./html.js";
+import selection_raise from "./raise.js";
+import selection_lower from "./lower.js";
+import selection_append from "./append.js";
+import selection_insert from "./insert.js";
+import selection_remove from "./remove.js";
+import selection_clone from "./clone.js";
+import selection_datum from "./datum.js";
+import selection_on from "./on.js";
+import selection_dispatch from "./dispatch.js";
+import selection_iterator from "./iterator.js";
 
 export var root = [null];
 
@@ -41,16 +44,23 @@ function selection() {
   return new Selection([[document.documentElement]], root);
 }
 
+function selection_selection() {
+  return this;
+}
+
 Selection.prototype = selection.prototype = {
   constructor: Selection,
   select: selection_select,
   selectAll: selection_selectAll,
+  selectChild: selection_selectChild,
+  selectChildren: selection_selectChildren,
   filter: selection_filter,
   data: selection_data,
   enter: selection_enter,
   exit: selection_exit,
   join: selection_join,
   merge: selection_merge,
+  selection: selection_selection,
   order: selection_order,
   sort: selection_sort,
   call: selection_call,
@@ -73,7 +83,8 @@ Selection.prototype = selection.prototype = {
   clone: selection_clone,
   datum: selection_datum,
   on: selection_on,
-  dispatch: selection_dispatch
+  dispatch: selection_dispatch,
+  [Symbol.iterator]: selection_iterator
 };
 
 export default selection;

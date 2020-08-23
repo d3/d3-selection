@@ -106,3 +106,11 @@ tape("selection.select(…) skips missing originating elements when the originat
   test.deepEqual(d3.selectAll([one, two]).selectAll("child").select(function(d, i) { return i & 1 ? this : null; }).select("span"), {_groups: [[, three], [, four]], _parents: [one, two]});
   test.end();
 });
+
+tape("selection.selection() returns itself", function(test) {
+  var document = jsdom("<h1>hello</h1>");
+  var sel = d3.select(document).select("h1");
+  test.ok(sel === sel.selection());
+  test.ok(sel === sel.selection().selection());
+  test.end();
+});

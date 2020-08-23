@@ -1,7 +1,5 @@
-import {event} from "./selection/on";
-
-export default function() {
-  var current = event, source;
-  while (source = current.sourceEvent) current = source;
-  return current;
+export default function(event) {
+  let sourceEvent;
+  while (sourceEvent = event.sourceEvent) event = sourceEvent;
+  return event;
 }

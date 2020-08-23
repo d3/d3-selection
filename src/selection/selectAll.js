@@ -1,8 +1,17 @@
-import {Selection} from "./index";
-import selectorAll from "../selectorAll";
+import {Selection} from "./index.js";
+import array from "../array.js";
+import selectorAll from "../selectorAll.js";
+
+function arrayAll(select) {
+  return function() {
+    var group = select.apply(this, arguments);
+    return group == null ? [] : array(group);
+  };
+}
 
 export default function(select) {
-  if (typeof select !== "function") select = selectorAll(select);
+  if (typeof select === "function") select = arrayAll(select);
+  else select = selectorAll(select);
 
   for (var groups = this._groups, m = groups.length, subgroups = [], parents = [], j = 0; j < m; ++j) {
     for (var group = groups[j], n = group.length, node, i = 0; i < n; ++i) {

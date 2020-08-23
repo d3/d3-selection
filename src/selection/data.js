@@ -1,8 +1,7 @@
-import {Selection} from "./index";
-import {EnterNode} from "./enter";
-import constant from "../constant";
-
-var keyPrefix = "$"; // Protect against keys like “__proto__”.
+import {Selection} from "./index.js";
+import {EnterNode} from "./enter.js";
+import array from "../array.js";
+import constant from "../constant.js";
 
 function bindIndex(parent, group, enter, update, exit, data) {
   var i = 0,
@@ -33,7 +32,7 @@ function bindIndex(parent, group, enter, update, exit, data) {
 function bindKey(parent, group, enter, update, exit, data, key) {
   var i,
       node,
-      nodeByKeyValue = {},
+      nodeByKeyValue = new Map,
       groupLength = group.length,
       dataLength = data.length,
       keyValues = new Array(groupLength),
@@ -43,11 +42,11 @@ function bindKey(parent, group, enter, update, exit, data, key) {
   // If multiple nodes have the same key, the duplicates are added to exit.
   for (i = 0; i < groupLength; ++i) {
     if (node = group[i]) {
-      keyValues[i] = keyValue = keyPrefix + key.call(node, node.__data__, i, group);
-      if (keyValue in nodeByKeyValue) {
+      keyValues[i] = keyValue = key.call(node, node.__data__, i, group) + "";
+      if (nodeByKeyValue.has(keyValue)) {
         exit[i] = node;
       } else {
-        nodeByKeyValue[keyValue] = node;
+        nodeByKeyValue.set(keyValue, node);
       }
     }
   }
@@ -56,11 +55,11 @@ function bindKey(parent, group, enter, update, exit, data, key) {
   // If there a node associated with this key, join and add it to update.
   // If there is not (or the key is a duplicate), add it to enter.
   for (i = 0; i < dataLength; ++i) {
-    keyValue = keyPrefix + key.call(parent, data[i], i, data);
-    if (node = nodeByKeyValue[keyValue]) {
+    keyValue = key.call(parent, data[i], i, data) + "";
+    if (node = nodeByKeyValue.get(keyValue)) {
       update[i] = node;
       node.__data__ = data[i];
-      nodeByKeyValue[keyValue] = null;
+      nodeByKeyValue.delete(keyValue);
     } else {
       enter[i] = new EnterNode(parent, data[i]);
     }
@@ -68,18 +67,18 @@ function bindKey(parent, group, enter, update, exit, data, key) {
 
   // Add any remaining nodes that were not bound to data to exit.
   for (i = 0; i < groupLength; ++i) {
-    if ((node = group[i]) && (nodeByKeyValue[keyValues[i]] === node)) {
+    if ((node = group[i]) && (nodeByKeyValue.get(keyValues[i]) === node)) {
       exit[i] = node;
     }
   }
 }
 
+function datum(node) {
+  return node.__data__;
+}
+
 export default function(value, key) {
-  if (!value) {
-    data = new Array(this.size()), j = -1;
-    this.each(function(d) { data[++j] = d; });
-    return data;
-  }
+  if (!arguments.length) return Array.from(this, datum);
 
   var bind = key ? bindKey : bindIndex,
       parents = this._parents,
@@ -91,7 +90,7 @@ export default function(value, key) {
     var parent = parents[j],
         group = groups[j],
         groupLength = group.length,
-        data = value.call(parent, parent && parent.__data__, j, parents),
+        data = array(value.call(parent, parent && parent.__data__, j, parents)),
         dataLength = data.length,
         enterGroup = enter[j] = new Array(dataLength),
         updateGroup = update[j] = new Array(dataLength),
