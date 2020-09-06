@@ -764,7 +764,7 @@ Returns the first (non-null) element in this selection. If the selection is empt
 
 Returns the total number of (non-null) elements in this selection.
 
-<a name="selection_iterator" href="#selection_iterator">#</a> <i>selection</i>[<b>Symbol.iterator</b>]() · [Source](https://github.com/d3/d3-selection/blob/master/src/selection/iterator.js)
+<a name="selection_iterator" href="#selection_iterator">#</a> <i>selection</i>\[<b>Symbol.iterator</b>\]() · [Source](https://github.com/d3/d3-selection/blob/master/src/selection/iterator.js)
 
 Returns an iterator over the selected (non-null) elements. For example, to iterate over the selected elements:
 
