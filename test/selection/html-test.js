@@ -20,21 +20,21 @@ tape("selection.html(value) sets inner HTML on the selected elements", function(
 });
 
 tape("selection.html(null) clears the inner HTML on the selected elements", function(test) {
-  var one = {innerHTML: "bar"},
-      two = {innerHTML: "bar"},
+  var one = {textContent: "bar"},
+      two = {textContent: "bar"},
       selection = d3.selectAll([one, two]);
   test.equal(selection.html(null), selection);
-  test.equal(one.innerHTML, "");
-  test.equal(two.innerHTML, "");
+  test.equal(one.textContent, "");
+  test.equal(two.textContent, "");
   test.end();
 });
 
 tape("selection.html(function) sets the value of the inner HTML on the selected elements", function(test) {
-  var one = {innerHTML: "bar"},
+  var one = {textContent: "bar"},
       two = {innerHTML: "bar"},
       selection = d3.selectAll([one, two]);
   test.equal(selection.html(function(d, i) { return i ? "baz" : null; }), selection);
-  test.equal(one.innerHTML, "");
+  test.equal(one.textContent, "");
   test.equal(two.innerHTML, "baz");
   test.end();
 });

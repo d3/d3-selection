@@ -1,5 +1,5 @@
 function htmlRemove() {
-  this.innerHTML = "";
+  this.textContent = "";
 }
 
 function htmlConstant(value) {
@@ -11,7 +11,11 @@ function htmlConstant(value) {
 function htmlFunction(value) {
   return function() {
     var v = value.apply(this, arguments);
-    this.innerHTML = v == null ? "" : v;
+    if (v == null) {
+      this.textContent = "";
+    } else {
+      this.innerHTML = v;
+    }
   };
 }
 
