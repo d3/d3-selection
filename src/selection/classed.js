@@ -1,5 +1,5 @@
 function classArray(string) {
-  return string.trim().split(/^|\s+/);
+  return string.trim().split(/\s+/);
 }
 
 function classList(node) {
