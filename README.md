@@ -485,7 +485,7 @@ d3.select("body")
   .data(matrix)
   .join("tr")
   .selectAll("td")
-  .data(d => d)
+  .data(d => [d])
   .join("td")
     .text(d => d);
 ```
