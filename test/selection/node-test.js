@@ -1,34 +1,29 @@
-var tape = require("tape"),
-    jsdom = require("../jsdom"),
-    d3 = require("../../");
-
-tape("selection.node() returns the first element in a selection", function(test) {
-  var document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
+import assert from "assert";
+import * as d3 from "../../src/index.js";
+import jsdom from "../jsdom.js";
+it("selection.node() returns the first element in a selection", () => {
+  const document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two");
-  test.equal(d3.selectAll([one, two]).node(), one);
-  test.end();
+  assert.strictEqual(d3.selectAll([one, two]).node(), one);
 });
 
-tape("selection.node() skips missing elements", function(test) {
-  var document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
+it("selection.node() skips missing elements", () => {
+  const document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two");
-  test.equal(d3.selectAll([, one,, two]).node(), one);
-  test.end();
+  assert.strictEqual(d3.selectAll([, one,, two]).node(), one);
 });
 
-tape("selection.node() skips empty groups", function(test) {
-  var document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
+it("selection.node() skips empty groups", () => {
+  const document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two");
-  test.equal(d3.selectAll([one, two]).selectAll(function(d, i) { return i ? [this] : []; }).node(), two);
-  test.end();
+  assert.strictEqual(d3.selectAll([one, two]).selectAll(function(d, i) { return i ? [this] : []; }).node(), two);
 });
 
-tape("selection.node() returns null for an empty selection", function(test) {
-  test.equal(d3.select(null).node(), null);
-  test.equal(d3.selectAll([]).node(), null);
-  test.equal(d3.selectAll([,,]).node(), null);
-  test.end();
+it("selection.node() returns null for an empty selection", () => {
+  assert.strictEqual(d3.select(null).node(), null);
+  assert.strictEqual(d3.selectAll([]).node(), null);
+  assert.strictEqual(d3.selectAll([,,]).node(), null);
 });

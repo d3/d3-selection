@@ -1,46 +1,41 @@
-var tape = require("tape"),
-    jsdom = require("../jsdom"),
-    d3 = require("../../");
-
-tape("selection.property(name) returns the property with the specified name on the first selected element", function(test) {
-  var node = {foo: 42};
-  test.equal(d3.select(node).property("foo"), 42);
-  test.equal(d3.selectAll([null, node]).property("foo"), 42);
-  test.end();
+import assert from "assert";
+import * as d3 from "../../src/index.js";
+import jsdom from "../jsdom.js";
+it("selection.property(name) returns the property with the specified name on the first selected element", () => {
+  const node = {foo: 42};
+  assert.strictEqual(d3.select(node).property("foo"), 42);
+  assert.strictEqual(d3.selectAll([null, node]).property("foo"), 42);
 });
 
-tape("selection.property(name, value) sets property with the specified name on the selected elements", function(test) {
-  var one = {},
+it("selection.property(name, value) sets property with the specified name on the selected elements", () => {
+  const one = {},
       two = {},
       selection = d3.selectAll([one, two]);
-  test.equal(selection.property("foo", "bar"), selection);
-  test.equal(one.foo, "bar");
-  test.equal(two.foo, "bar");
-  test.end();
+  assert.strictEqual(selection.property("foo", "bar"), selection);
+  assert.strictEqual(one.foo, "bar");
+  assert.strictEqual(two.foo, "bar");
 });
 
-tape("selection.property(name, null) removes the property with the specified name on the selected elements", function(test) {
-  var one = {foo: "bar"},
+it("selection.property(name, null) removes the property with the specified name on the selected elements", () => {
+  const one = {foo: "bar"},
       two = {foo: "bar"},
       selection = d3.selectAll([one, two]);
-  test.equal(selection.property("foo", null), selection);
-  test.equal("foo" in one, false);
-  test.equal("foo" in two, false);
-  test.end();
+  assert.strictEqual(selection.property("foo", null), selection);
+  assert.strictEqual("foo" in one, false);
+  assert.strictEqual("foo" in two, false);
 });
 
-tape("selection.property(name, function) sets the value of the property with the specified name on the selected elements", function(test) {
-  var one = {foo: "bar"},
+it("selection.property(name, function) sets the value of the property with the specified name on the selected elements", () => {
+  const one = {foo: "bar"},
       two = {foo: "bar"},
       selection = d3.selectAll([one, two]);
-  test.equal(selection.property("foo", function(d, i) { return i ? "baz" : null; }), selection);
-  test.equal("foo" in one, false);
-  test.equal(two.foo, "baz");
-  test.end();
+  assert.strictEqual(selection.property("foo", function(d, i) { return i ? "baz" : null; }), selection);
+  assert.strictEqual("foo" in one, false);
+  assert.strictEqual(two.foo, "baz");
 });
 
-tape("selection.property(name, function) passes the value function data, index and group", function(test) {
-  var document = jsdom("<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>"),
+it("selection.property(name, function) passes the value function data, index and group", () => {
+  const document = jsdom("<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>"),
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       three = document.querySelector("#three"),
@@ -54,10 +49,9 @@ tape("selection.property(name, function) passes the value function data, index a
       .data(function(d, i) { return [0, 1].map(function(j) { return "child-" + i + "-" + j; }); })
       .property("color", function(d, i, nodes) { results.push([this, d, i, nodes]); });
 
-  test.deepEqual(results, [
+  assert.deepStrictEqual(results, [
     [three, "child-0-0", 0, [three, four]],
     [four, "child-0-1", 1, [three, four]],
     [five, "child-1-0", 0, [five, ]]
   ]);
-  test.end();
 });
