@@ -10,7 +10,7 @@ it("d3.select(…) returns an instanceof d3.selection", () => {
 it("d3.select(string) selects the first element that matches the selector string", () => {
   jsdom("<h1 id='one'>foo</h1><h1 id='two'>bar</h1>");
   try {
-    assert.deepStrictEqual(d3.select("h1"), {_groups: [[document.querySelector("h1")]], _parents: [document.documentElement]});
+    assert.deepStrictEqual(d3.select("h1"), new Selection([[document.querySelector("h1")]], [document.documentElement]));
   } finally {
     delete global.document;
   }
