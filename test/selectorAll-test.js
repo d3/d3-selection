@@ -6,20 +6,20 @@ it("d3.selectorAll(selector).call(element) returns all elements that match the s
   const document = jsdom("<body class='foo'><div class='foo'>"),
       body = document.body,
       div = document.querySelector("div");
-  assert.deepStrictEqual(d3.selectorAll("body").call(document.documentElement), [body]);
-  assert.deepStrictEqual(d3.selectorAll(".foo").call(document.documentElement), [body, div]);
-  assert.deepStrictEqual(d3.selectorAll("div.foo").call(document.documentElement), [div]);
-  assert.deepStrictEqual(d3.selectorAll("div").call(document.documentElement), [div]);
-  assert.deepStrictEqual(d3.selectorAll("div,body").call(document.documentElement), [body,div]);
-  assert.deepStrictEqual(d3.selectorAll("h1").call(document.documentElement), []);
-  assert.deepStrictEqual(d3.selectorAll("body.bar").call(document.documentElement), []);
+  assert.deepEqual(d3.selectorAll("body").call(document.documentElement), [body]);
+  assert.deepEqual(d3.selectorAll(".foo").call(document.documentElement), [body, div]);
+  assert.deepEqual(d3.selectorAll("div.foo").call(document.documentElement), [div]);
+  assert.deepEqual(d3.selectorAll("div").call(document.documentElement), [div]);
+  assert.deepEqual(d3.selectorAll("div,body").call(document.documentElement), [body,div]);
+  assert.deepEqual(d3.selectorAll("h1").call(document.documentElement), []);
+  assert.deepEqual(d3.selectorAll("body.bar").call(document.documentElement), []);
 });
 
 it("d3.selectorAll(null).call(element) always returns the empty array", () => {
   const document = jsdom("<body class='foo'><undefined></undefined><null></null>");
-  assert.deepStrictEqual(d3.selectorAll().call(document.documentElement), []);
-  assert.deepStrictEqual(d3.selectorAll(null).call(document.documentElement), []);
-  assert.deepStrictEqual(d3.selectorAll(undefined).call(document.documentElement), []);
+  assert.deepEqual(d3.selectorAll().call(document.documentElement), []);
+  assert.deepEqual(d3.selectorAll(null).call(document.documentElement), []);
+  assert.deepEqual(d3.selectorAll(undefined).call(document.documentElement), []);
 });
 
 it("d3.selectorAll(null).call(element) returns a new empty array each time", () => {
@@ -27,5 +27,5 @@ it("d3.selectorAll(null).call(element) returns a new empty array each time", () 
       two = d3.selectorAll()();
   assert.strictEqual(one === two, false);
   one.push("one");
-  assert.deepStrictEqual(d3.selectorAll()(), []);
+  assert.deepEqual(d3.selectorAll()(), []);
 });

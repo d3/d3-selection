@@ -10,7 +10,7 @@ it("selection.data(values) binds the specified values to the selected elements b
   assert.strictEqual(one.__data__, "foo");
   assert.strictEqual(two.__data__, "bar");
   assert.strictEqual(three.__data__, "baz");
-  assert.deepStrictEqual(selection, {
+  assert.deepEqual(selection, {
     _groups: [[one, two, three]],
     _parents: [body],
     _enter: [[,, ]],
@@ -21,7 +21,7 @@ it("selection.data(values) binds the specified values to the selected elements b
 it("selection.data(values) accepts an iterable", () => {
   const body = jsdom("<div id='one'></div><div id='two'></div><div id='three'></div>").body,
       selection = d3.select(body).selectAll("div").data(new Set(["foo", "bar", "baz"]));
-  assert.deepStrictEqual(selection.data(), ["foo", "bar", "baz"]);
+  assert.deepEqual(selection.data(), ["foo", "bar", "baz"]);
 });
 
 it("selection.data(null) is not allowed", () => {
@@ -32,7 +32,7 @@ it("selection.data(null) is not allowed", () => {
 it("selection.data() returns the bound data", () => {
   const body = jsdom("<div id='one'></div><div id='two'></div><div id='three'></div>").body,
       selection = d3.select(body).selectAll("div").data(["foo", "bar", "baz"]);
-  assert.deepStrictEqual(selection.data(), ["foo", "bar", "baz"]);
+  assert.deepEqual(selection.data(), ["foo", "bar", "baz"]);
 });
 
 it("selection.data(values) puts unbound data in the enter selection", () => {
@@ -42,7 +42,7 @@ it("selection.data(values) puts unbound data in the enter selection", () => {
       selection = d3.select(body).selectAll("div").data(["foo", "bar", "baz"]);
   assert.strictEqual(one.__data__, "foo");
   assert.strictEqual(two.__data__, "bar");
-  assert.deepStrictEqual(selection, {
+  assert.deepEqual(selection, {
     _groups: [[one, two, ]],
     _parents: [body],
     _enter: [[,, {
@@ -64,7 +64,7 @@ it("selection.data(values) puts unbound elements in the exit selection", () => {
       selection = d3.select(body).selectAll("div").data(["foo", "bar"]);
   assert.strictEqual(one.__data__, "foo");
   assert.strictEqual(two.__data__, "bar");
-  assert.deepStrictEqual(selection, {
+  assert.deepEqual(selection, {
     _groups: [[one, two, ]],
     _parents: [body],
     _enter: [[,,, ]],
@@ -85,7 +85,7 @@ it("selection.data(values) binds the specified values to each group independentl
   assert.strictEqual(two.__data__, "bar");
   assert.strictEqual(four.__data__, "foo");
   assert.strictEqual(five.__data__, "bar");
-  assert.deepStrictEqual(selection, {
+  assert.deepEqual(selection, {
     _groups: [[one, two], [four, five]],
     _parents: [zero, three],
     _enter: [[, ], [, ]],
@@ -102,7 +102,7 @@ it("selection.data(function) binds the specified return values to the selected e
   assert.strictEqual(one.__data__, "foo");
   assert.strictEqual(two.__data__, "bar");
   assert.strictEqual(three.__data__, "baz");
-  assert.deepStrictEqual(selection, {
+  assert.deepEqual(selection, {
     _groups: [[one, two, three]],
     _parents: [body],
     _enter: [[,, ]],
@@ -121,7 +121,7 @@ it("selection.data(function) passes the values function datum, index and parents
     .selectAll("child")
       .data(function(d, i, nodes) { results.push([this, d, i, nodes]); return ["foo", "bar"]; });
 
-  assert.deepStrictEqual(results, [
+  assert.deepEqual(results, [
     [one, "parent-0", 0, [one, two]],
     [two, "parent-1", 1, [one, two]]
   ]);
@@ -133,7 +133,7 @@ it("selection.data(values, function) joins data to element using the computed ke
       two = body.querySelector("#two"),
       three = body.querySelector("#three"),
       selection = d3.select(body).selectAll("node").data(["one", "four", "three"], function(d) { return d || this.id; });
-  assert.deepStrictEqual(selection, {
+  assert.deepEqual(selection, {
     _groups: [[one,, three]],
     _parents: [body],
     _enter: [[, {
@@ -153,7 +153,7 @@ it("selection.data(values, function) puts elements with duplicate keys into upda
       two = body.querySelector("#two"),
       three = body.querySelector("#three"),
       selection = d3.select(body).selectAll("node").data(["foo"], function(d) { return d || this.getAttribute("name"); });
-  assert.deepStrictEqual(selection, {
+  assert.deepEqual(selection, {
     _groups: [[one]],
     _parents: [body],
     _enter: [[,]],
@@ -167,7 +167,7 @@ it("selection.data(values, function) puts elements with duplicate keys into exit
       two = body.querySelector("#two"),
       three = body.querySelector("#three"),
       selection = d3.select(body).selectAll("node").data(["bar"], function(d) { return d || this.getAttribute("name"); });
-  assert.deepStrictEqual(selection, {
+  assert.deepEqual(selection, {
     _groups: [[three]],
     _parents: [body],
     _enter: [[,]],
@@ -181,7 +181,7 @@ it("selection.data(values, function) puts data with duplicate keys into update a
       two = body.querySelector("#two"),
       three = body.querySelector("#three"),
       selection = d3.select(body).selectAll("node").data(["one", "one", "two"], function(d) { return d || this.id; });
-  assert.deepStrictEqual(selection, {
+  assert.deepEqual(selection, {
     _groups: [[one,, two]],
     _parents: [body],
     _enter: [[, {
@@ -201,7 +201,7 @@ it("selection.data(values, function) puts data with duplicate keys into enter", 
       two = body.querySelector("#two"),
       three = body.querySelector("#three"),
       selection = d3.select(body).selectAll("node").data(["foo", "foo", "two"], function(d) { return d || this.id; });
-  assert.deepStrictEqual(selection, {
+  assert.deepEqual(selection, {
     _groups: [[,, two]],
     _parents: [body],
     _enter: [[{
@@ -233,7 +233,7 @@ it("selection.data(values, function) passes the key function datum, index and no
   d3.select(body).selectAll("node")
       .data(["foo", "bar"], function(d, i, nodes) { results.push([this, d, i, nodes]); return d || this.id; });
 
-  assert.deepStrictEqual(results, [
+  assert.deepEqual(results, [
     [one, "foo", 0, [one, two]],
     [two, undefined, 1, [one, two]],
     [body, "foo", 0, ["foo", "bar"]],
@@ -247,7 +247,7 @@ it("selection.data(values, function) applies the order of the data", () => {
       two = body.querySelector("#two"),
       three = body.querySelector("#three"),
       selection = d3.select(body).selectAll("div").data(["four", "three", "one", "five", "two"], function(d) { return d || this.id; });
-  assert.deepStrictEqual(selection, {
+  assert.deepEqual(selection, {
     _groups: [[, three, one,, two]],
     _parents: [body],
     _enter: [[{
@@ -275,17 +275,17 @@ it("selection.data(values) returns a new selection, and does not modify the orig
       selection0 = d3.select(root).selectAll("h1"),
       selection1 = selection0.data([1, 2, 3]),
       selection2 = selection1.data([1]);
-  assert.deepStrictEqual(selection0, {
+  assert.deepEqual(selection0, {
     _groups: [[one, two]],
     _parents: [root]
   });
-  assert.deepStrictEqual(selection1, {
+  assert.deepEqual(selection1, {
     _groups: [[one, two, ]],
     _parents: [root],
     _enter: [[,, {__data__: 3, _next: null, _parent: root, namespaceURI: "http://www.w3.org/1999/xhtml", ownerDocument: document}]],
     _exit: [[,]]
   });
-  assert.deepStrictEqual(selection2, {
+  assert.deepEqual(selection2, {
     _groups: [[one]],
     _parents: [root],
     _enter: [[,]],
@@ -302,17 +302,17 @@ it("selection.data(values, key) does not modify the groups array in-place", () =
       selection0 = d3.select(root).selectAll("h1"),
       selection1 = selection0.data([1, 2, 3], key),
       selection2 = selection1.data([1], key);
-  assert.deepStrictEqual(selection0, {
+  assert.deepEqual(selection0, {
     _groups: [[one, two]],
     _parents: [root]
   });
-  assert.deepStrictEqual(selection1, {
+  assert.deepEqual(selection1, {
     _groups: [[one, two, ]],
     _parents: [root],
     _enter: [[,, {__data__: 3, _next: null, _parent: root, namespaceURI: "http://www.w3.org/1999/xhtml", ownerDocument: document}]],
     _exit: [[,]]
   });
-  assert.deepStrictEqual(selection2, {
+  assert.deepEqual(selection2, {
     _groups: [[one]],
     _parents: [root],
     _enter: [[,]],

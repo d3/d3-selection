@@ -13,7 +13,7 @@ it("selection.append(name) appends a new element of the specified name as the la
       selection = d3.selectAll([one, two]).append("span"),
       three = one.querySelector("span:last-child"),
       four = two.querySelector("span:last-child");
-  assert.deepStrictEqual(selection, {_groups: [[three, four]], _parents: [null]});
+  assert.deepEqual(selection, {_groups: [[three, four]], _parents: [null]});
 });
 
 it("selection.append(name) observes the specified namespace, if any", () => {
@@ -25,7 +25,7 @@ it("selection.append(name) observes the specified namespace, if any", () => {
       four = two.querySelector("g");
   assert.strictEqual(three.namespaceURI, "http://www.w3.org/2000/svg");
   assert.strictEqual(four.namespaceURI, "http://www.w3.org/2000/svg");
-  assert.deepStrictEqual(selection, {_groups: [[three, four]], _parents: [null]});
+  assert.deepEqual(selection, {_groups: [[three, four]], _parents: [null]});
 });
 
 it("selection.append(name) uses createElement, not createElementNS, if the implied namespace is the same as the document", () => {
@@ -44,7 +44,7 @@ it("selection.append(name) uses createElement, not createElementNS, if the impli
       three = one.querySelector("p"),
       four = two.querySelector("p");
   assert.strictEqual(pass, 2);
-  assert.deepStrictEqual(selection, {_groups: [[three, four]], _parents: [null]});
+  assert.deepEqual(selection, {_groups: [[three, four]], _parents: [null]});
 });
 
 it("selection.append(name) observes the implicit namespace, if any", () => {
@@ -56,7 +56,7 @@ it("selection.append(name) observes the implicit namespace, if any", () => {
       four = two.querySelector("svg");
   assert.strictEqual(three.namespaceURI, "http://www.w3.org/2000/svg");
   assert.strictEqual(four.namespaceURI, "http://www.w3.org/2000/svg");
-  assert.deepStrictEqual(selection, {_groups: [[three, four]], _parents: [null]});
+  assert.deepEqual(selection, {_groups: [[three, four]], _parents: [null]});
 });
 
 it("selection.append(name) observes the inherited namespace, if any", () => {
@@ -68,7 +68,7 @@ it("selection.append(name) observes the inherited namespace, if any", () => {
       four = two.querySelector("g");
   assert.strictEqual(three.namespaceURI, "http://www.w3.org/2000/svg");
   assert.strictEqual(four.namespaceURI, "http://www.w3.org/2000/svg");
-  assert.deepStrictEqual(selection, {_groups: [[three, four]], _parents: [null]});
+  assert.deepEqual(selection, {_groups: [[three, four]], _parents: [null]});
 });
 
 it("selection.append(name) observes a custom namespace, if any", () => {
@@ -82,7 +82,7 @@ it("selection.append(name) observes a custom namespace, if any", () => {
         four = two.querySelector("d3js");
     assert.strictEqual(three.namespaceURI, "https://d3js.org/2016/namespace");
     assert.strictEqual(four.namespaceURI, "https://d3js.org/2016/namespace");
-    assert.deepStrictEqual(selection, {_groups: [[three, four]], _parents: [null]});
+    assert.deepEqual(selection, {_groups: [[three, four]], _parents: [null]});
 } finally {
     delete d3.namespaces.d3js;
   }
@@ -95,7 +95,7 @@ it("selection.append(function) appends the returned element as the last child of
       selection = d3.selectAll([one, two]).append(function() { return document.createElement("SPAN"); }),
       three = one.querySelector("span:last-child"),
       four = two.querySelector("span:last-child");
-  assert.deepStrictEqual(selection, {_groups: [[three, four]], _parents: [null]});
+  assert.deepEqual(selection, {_groups: [[three, four]], _parents: [null]});
 });
 
 it("selection.append(function) passes the creator function data, index and group", () => {
@@ -113,7 +113,7 @@ it("selection.append(function) passes the creator function data, index and group
       .data(function(d, i) { return [0, 1].map(function(j) { return "child-" + i + "-" + j; }); })
       .append(function(d, i, nodes) { results.push([this, d, i, nodes]); return document.createElement("SPAN"); });
 
-  assert.deepStrictEqual(results, [
+  assert.deepEqual(results, [
     [three, "child-0-0", 0, [three, four]],
     [four, "child-0-1", 1, [three, four]],
     [five, "child-1-0", 0, [five, ]]
@@ -140,8 +140,8 @@ it("selection.append(…) propagates parents from the originating selection", ()
   const document = jsdom("<parent></parent><parent></parent>"),
       parents = d3.select(document).selectAll("parent"),
       childs = parents.append("child");
-  assert.deepStrictEqual(parents, {_groups: [document.querySelectorAll("parent")], _parents: [document]});
-  assert.deepStrictEqual(childs, {_groups: [document.querySelectorAll("child")], _parents: [document]});
+  assert.deepEqual(parents, {_groups: [document.querySelectorAll("parent")], _parents: [document]});
+  assert.deepEqual(childs, {_groups: [document.querySelectorAll("child")], _parents: [document]});
   assert(parents._parents === childs._parents); // Not copied!
 });
 
@@ -152,7 +152,7 @@ it("selection.append(…) can select elements when the originating selection is 
       selection = d3.selectAll([one, two]).selectAll("child").append("span"),
       three = one.querySelector("span"),
       four = two.querySelector("span");
-  assert.deepStrictEqual(selection, {_groups: [[three], [four]], _parents: [one, two]});
+  assert.deepEqual(selection, {_groups: [[three], [four]], _parents: [one, two]});
 });
 
 it("selection.append(…) skips missing originating elements", () => {
@@ -160,5 +160,5 @@ it("selection.append(…) skips missing originating elements", () => {
       h1 = document.querySelector("h1"),
       selection = d3.selectAll([, h1]).append("span"),
       span = h1.querySelector("span");
-  assert.deepStrictEqual(selection, {_groups: [[, span]], _parents: [null]});
+  assert.deepEqual(selection, {_groups: [[, span]], _parents: [null]});
 });

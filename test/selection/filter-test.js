@@ -10,7 +10,7 @@ it("selection.filter(string) retains the selected elements that matches the sele
   const document = jsdom("<h1><span id='one'></span><span id='two'></span></h1><h1><span id='three'></span><span id='four'></span></h1>"),
       one = document.querySelector("#one"),
       three = document.querySelector("#three");
-  assert.deepStrictEqual(d3.select(document).selectAll("span").filter("#one,#three"), {_groups: [[one, three]], _parents: [document]});
+  assert.deepEqual(d3.select(document).selectAll("span").filter("#one,#three"), {_groups: [[one, three]], _parents: [document]});
 });
 
 it("selection.filter(function) retains elements for which the given function returns true", () => {
@@ -19,7 +19,7 @@ it("selection.filter(function) retains elements for which the given function ret
       two = document.querySelector("#two"),
       three = document.querySelector("#three"),
       four = document.querySelector("#four");
-  assert.deepStrictEqual(d3.selectAll([one, two, three, four]).filter(function(d, i) { return i & 1; }), {_groups: [[two, four]], _parents: [null]});
+  assert.deepEqual(d3.selectAll([one, two, three, four]).filter(function(d, i) { return i & 1; }), {_groups: [[two, four]], _parents: [null]});
 });
 
 it("selection.filter(function) passes the selector function data, index and group", () => {
@@ -37,7 +37,7 @@ it("selection.filter(function) passes the selector function data, index and grou
       .data(function(d, i) { return [0, 1].map(function(j) { return "child-" + i + "-" + j; }); })
       .filter(function(d, i, nodes) { results.push([this, d, i, nodes]); });
 
-  assert.deepStrictEqual(results, [
+  assert.deepEqual(results, [
     [three, "child-0-0", 0, [three, four]],
     [four, "child-0-1", 1, [three, four]],
     [five, "child-1-0", 0, [five, ]]
@@ -48,8 +48,8 @@ it("selection.filter(…) propagates parents from the originating selection", ()
   const document = jsdom("<parent><child>1</child></parent><parent><child>2</child></parent>"),
       parents = d3.select(document).selectAll("parent"),
       parents2 = parents.filter(function() { return true; });
-  assert.deepStrictEqual(parents, {_groups: [document.querySelectorAll("parent")], _parents: [document]});
-  assert.deepStrictEqual(parents2, {_groups: [document.querySelectorAll("parent")], _parents: [document]});
+  assert.deepEqual(parents, {_groups: [document.querySelectorAll("parent")], _parents: [document]});
+  assert.deepEqual(parents2, {_groups: [document.querySelectorAll("parent")], _parents: [document]});
   assert(parents._parents === parents2._parents); // Not copied!
 });
 
@@ -59,15 +59,15 @@ it("selection.filter(…) can filter elements when the originating selection is 
       two = document.querySelector("#two"),
       three = document.querySelector("#three"),
       four = document.querySelector("#four");
-  assert.deepStrictEqual(d3.selectAll([one, two]).selectAll("span").filter("*"), {_groups: [[three], [four]], _parents: [one, two]});
+  assert.deepEqual(d3.selectAll([one, two]).selectAll("span").filter("*"), {_groups: [[three], [four]], _parents: [one, two]});
 });
 
 it("selection.filter(…) skips missing originating elements and does not retain the original indexes", () => {
   const document = jsdom("<h1>hello</h1>"),
       h1 = document.querySelector("h1");
-  assert.deepStrictEqual(d3.selectAll([, h1]).filter("*"), {_groups: [[h1]], _parents: [null]});
-  assert.deepStrictEqual(d3.selectAll([null, h1]).filter("*"), {_groups: [[h1]], _parents: [null]});
-  assert.deepStrictEqual(d3.selectAll([undefined, h1]).filter("*"), {_groups: [[h1]], _parents: [null]});
+  assert.deepEqual(d3.selectAll([, h1]).filter("*"), {_groups: [[h1]], _parents: [null]});
+  assert.deepEqual(d3.selectAll([null, h1]).filter("*"), {_groups: [[h1]], _parents: [null]});
+  assert.deepEqual(d3.selectAll([undefined, h1]).filter("*"), {_groups: [[h1]], _parents: [null]});
 });
 
 it("selection.filter(…) skips missing originating elements when the originating selection is nested", () => {
@@ -76,5 +76,5 @@ it("selection.filter(…) skips missing originating elements when the originatin
       two = document.querySelector("#two"),
       three = document.querySelector("#three"),
       four = document.querySelector("#four");
-  assert.deepStrictEqual(d3.selectAll([one, two]).selectAll("child").select(function(d, i) { return i & 1 ? this : null; }).filter("*"), {_groups: [[three], [four]], _parents: [one, two]});
+  assert.deepEqual(d3.selectAll([one, two]).selectAll("child").select(function(d, i) { return i & 1 ? this : null; }).filter("*"), {_groups: [[three], [four]], _parents: [one, two]});
 });

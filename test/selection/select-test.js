@@ -10,13 +10,13 @@ it("selection.select(string) selects the first descendant that matches the selec
   const document = jsdom("<h1><span id='one'></span><span id='two'></span></h1><h1><span id='three'></span><span id='four'></span></h1>"),
       one = document.querySelector("#one"),
       three = document.querySelector("#three");
-  assert.deepStrictEqual(d3.select(document).selectAll("h1").select("span"), {_groups: [[one, three]], _parents: [document]});
+  assert.deepEqual(d3.select(document).selectAll("h1").select("span"), {_groups: [[one, three]], _parents: [document]});
 });
 
 it("selection.select(function) selects the return value of the given function for each selected element", () => {
   const document = jsdom("<span id='one'></span>"),
       one = document.querySelector("#one");
-  assert.deepStrictEqual(d3.select(document).select(function() { return one; }), {_groups: [[one]], _parents: [null]});
+  assert.deepEqual(d3.select(document).select(function() { return one; }), {_groups: [[one]], _parents: [null]});
 });
 
 it("selection.select(function) passes the selector function data, index and group", () => {
@@ -34,7 +34,7 @@ it("selection.select(function) passes the selector function data, index and grou
       .data(function(d, i) { return [0, 1].map(function(j) { return "child-" + i + "-" + j; }); })
       .select(function(d, i, nodes) { results.push([this, d, i, nodes]); });
 
-  assert.deepStrictEqual(results, [
+  assert.deepEqual(results, [
     [three, "child-0-0", 0, [three, four]],
     [four, "child-0-1", 1, [three, four]],
     [five, "child-1-0", 0, [five, ]]
@@ -64,8 +64,8 @@ it("selection.select(…) propagates parents from the originating selection", ()
   const document = jsdom("<parent><child>1</child></parent><parent><child>2</child></parent>"),
       parents = d3.select(document).selectAll("parent"),
       childs = parents.select("child");
-  assert.deepStrictEqual(parents, {_groups: [document.querySelectorAll("parent")], _parents: [document]});
-  assert.deepStrictEqual(childs, {_groups: [document.querySelectorAll("child")], _parents: [document]});
+  assert.deepEqual(parents, {_groups: [document.querySelectorAll("parent")], _parents: [document]});
+  assert.deepEqual(childs, {_groups: [document.querySelectorAll("child")], _parents: [document]});
   assert(parents._parents === childs._parents); // Not copied!
 });
 
@@ -75,16 +75,16 @@ it("selection.select(…) can select elements when the originating selection is 
       two = document.querySelector("#two"),
       three = document.querySelector("#three"),
       four = document.querySelector("#four");
-  assert.deepStrictEqual(d3.selectAll([one, two]).selectAll("child").select("span"), {_groups: [[three], [four]], _parents: [one, two]});
+  assert.deepEqual(d3.selectAll([one, two]).selectAll("child").select("span"), {_groups: [[three], [four]], _parents: [one, two]});
 });
 
 it("selection.select(…) skips missing originating elements", () => {
   const document = jsdom("<h1><span>hello</span></h1>"),
       h1 = document.querySelector("h1"),
       span = document.querySelector("span");
-  assert.deepStrictEqual(d3.selectAll([, h1]).select("span"), {_groups: [[, span]], _parents: [null]});
-  assert.deepStrictEqual(d3.selectAll([null, h1]).select("span"), {_groups: [[, span]], _parents: [null]});
-  assert.deepStrictEqual(d3.selectAll([undefined, h1]).select("span"), {_groups: [[, span]], _parents: [null]});
+  assert.deepEqual(d3.selectAll([, h1]).select("span"), {_groups: [[, span]], _parents: [null]});
+  assert.deepEqual(d3.selectAll([null, h1]).select("span"), {_groups: [[, span]], _parents: [null]});
+  assert.deepEqual(d3.selectAll([undefined, h1]).select("span"), {_groups: [[, span]], _parents: [null]});
 });
 
 it("selection.select(…) skips missing originating elements when the originating selection is nested", () => {
@@ -93,7 +93,7 @@ it("selection.select(…) skips missing originating elements when the originatin
       two = document.querySelector("#two"),
       three = document.querySelector("#three"),
       four = document.querySelector("#four");
-  assert.deepStrictEqual(d3.selectAll([one, two]).selectAll("child").select(function(d, i) { return i & 1 ? this : null; }).select("span"), {_groups: [[, three], [, four]], _parents: [one, two]});
+  assert.deepEqual(d3.selectAll([one, two]).selectAll("child").select(function(d, i) { return i & 1 ? this : null; }).select("span"), {_groups: [[, three], [, four]], _parents: [one, two]});
 });
 
 it("selection.selection() returns itself", () => {

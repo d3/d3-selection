@@ -8,8 +8,8 @@ it("selection.sort(…) returns a new selection, sorting each group’s data, an
       three = document.querySelector("#three"),
       selection0 = d3.selectAll([two, three, one]).datum(function() { return +this.getAttribute("data-value"); }),
       selection1 = selection0.sort(function(a, b) { return a - b; });
-  assert.deepStrictEqual(selection0, {_groups: [[two, three, one]], _parents: [null]});
-  assert.deepStrictEqual(selection1, {_groups: [[two, one, three]], _parents: [null]});
+  assert.deepEqual(selection0, {_groups: [[two, three, one]], _parents: [null]});
+  assert.deepEqual(selection1, {_groups: [[two, one, three]], _parents: [null]});
   assert.strictEqual(two.nextSibling, one);
   assert.strictEqual(one.nextSibling, three);
   assert.strictEqual(three.nextSibling, null);
@@ -24,7 +24,7 @@ it("selection.sort(…) sorts each group separately", () => {
       five = document.querySelector("#five"),
       six = document.querySelector("#six"),
       selection = d3.selectAll([one, two]).selectAll("h1").datum(function() { return +this.getAttribute("data-value"); });
-  assert.deepStrictEqual(selection.sort(function(a, b) { return a - b; }), {_groups: [[four, three], [six, five]], _parents: [one, two]});
+  assert.deepEqual(selection.sort(function(a, b) { return a - b; }), {_groups: [[four, three], [six, five]], _parents: [one, two]});
   assert.strictEqual(four.nextSibling, three);
   assert.strictEqual(three.nextSibling, null);
   assert.strictEqual(six.nextSibling, five);
@@ -36,7 +36,7 @@ it("selection.sort() uses natural ascending order", () => {
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection = d3.selectAll([two, one]).datum(function(d, i) { i; });
-  assert.deepStrictEqual(selection.sort(), {_groups: [[two, one]], _parents: [null]});
+  assert.deepEqual(selection.sort(), {_groups: [[two, one]], _parents: [null]});
   assert.strictEqual(one.nextSibling, null);
   assert.strictEqual(two.nextSibling, one);
 });
@@ -46,7 +46,7 @@ it("selection.sort() puts missing elements at the end of each group", () => {
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection = d3.selectAll([two, one]).datum(function(d, i) { return i; });
-  assert.deepStrictEqual(d3.selectAll([, one,, two]).sort(), {_groups: [[two, one,,]], _parents: [null]});
+  assert.deepEqual(d3.selectAll([, one,, two]).sort(), {_groups: [[two, one,,]], _parents: [null]});
   assert.strictEqual(two.nextSibling, one);
   assert.strictEqual(one.nextSibling, null);
 });
@@ -56,7 +56,7 @@ it("selection.sort(function) puts missing elements at the end of each group", ()
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection = d3.selectAll([two, one]).datum(function(d, i) { return i; });
-  assert.deepStrictEqual(d3.selectAll([, one,, two]).sort(function(a, b) { return b - a; }), {_groups: [[one, two,,]], _parents: [null]});
+  assert.deepEqual(d3.selectAll([, one,, two]).sort(function(a, b) { return b - a; }), {_groups: [[one, two,,]], _parents: [null]});
   assert.strictEqual(one.nextSibling, two);
   assert.strictEqual(two.nextSibling, null);
 });
@@ -66,7 +66,7 @@ it("selection.sort(function) uses the specified data comparator function", () =>
       one = document.querySelector("#one"),
       two = document.querySelector("#two"),
       selection = d3.selectAll([two, one]).datum(function(d, i) { return i; });
-  assert.deepStrictEqual(selection.sort(function(a, b) { return b - a; }), {_groups: [[one, two]], _parents: [null]});
+  assert.deepEqual(selection.sort(function(a, b) { return b - a; }), {_groups: [[one, two]], _parents: [null]});
   assert.strictEqual(one.nextSibling, two);
   assert.strictEqual(two.nextSibling, null);
 });
@@ -78,7 +78,7 @@ it("selection.sort(function) returns a new selection, and does not modify the gr
       selection0 = d3.selectAll([one, two]).datum(function(d, i) { return i; }),
       selection1 = selection0.sort(function(a, b) { return b - a; }),
       selection2 = selection1.sort();
-  assert.deepStrictEqual(selection0, {_groups: [[one, two]], _parents: [null]});
-  assert.deepStrictEqual(selection1, {_groups: [[two, one]], _parents: [null]});
-  assert.deepStrictEqual(selection2, {_groups: [[one, two]], _parents: [null]});
+  assert.deepEqual(selection0, {_groups: [[one, two]], _parents: [null]});
+  assert.deepEqual(selection1, {_groups: [[two, one]], _parents: [null]});
+  assert.deepEqual(selection2, {_groups: [[one, two]], _parents: [null]});
 });

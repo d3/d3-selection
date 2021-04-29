@@ -17,5 +17,5 @@ it("selection.call(function, arguments…) calls the specified function, passing
       document = jsdom(),
       selection = d3.select(document);
   assert.strictEqual(selection.call(function(selection, a, b) { result.push(selection, a, b); }, foo, bar), selection);
-  assert.deepStrictEqual(result, [selection, foo, bar]);
+  assert.deepEqual(result, [selection, foo, bar]);
 });
