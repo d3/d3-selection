@@ -571,9 +571,34 @@ svg.selectAll("circle")
 
 The selections returned by the *enter* and *update* functions are merged and then returned by *selection*.join.
 
-You also animate enter, update and exit by creating transitions inside the *enter*, *update* and *exit* functions. To avoid breaking the method chain, use *selection*.call to create transitions, or return an undefined enter or update selection to prevent merging: the return value of the *enter* and *update* functions specifies the two selections to merge and return by *selection*.join.
+You also animate enter, update and exit by creating transitions inside the *enter*, *update* and *exit* functions. To avoid breaking the method chain, use *selection*.call to create transitions, or return an undefined enter or update selection to prevent merging: the return value of the *enter* and *update* functions specifies the two selections to merge and return by *selection*.join. For example, here is the complete pattern for animating random letters, excerpted from the [*selection*.join notebook](https://observablehq.com/@d3/selection-join):
 
-For more, see the [*selection*.join notebook](https://observablehq.com/@d3/selection-join).
+```js
+const t = svg.transition()
+    .duration(750);
+
+svg.selectAll("text")
+  .data(randomLetters(), d => d)
+  .join(
+    enter => enter.append("text")
+        .attr("fill", "green")
+        .attr("x", (d, i) => i * 16)
+        .attr("y", -30)
+        .text(d => d)
+      .call(enter => enter.transition(t)
+        .attr("y", 0)),
+    update => update
+        .attr("fill", "black")
+        .attr("y", 0)
+      .call(update => update.transition(t)
+        .attr("x", (d, i) => i * 16)),
+    exit => exit
+        .attr("fill", "brown")
+      .call(exit => exit.transition(t)
+        .attr("y", 30)
+        .remove())
+  );
+```
 
 <a name="selection_enter" href="#selection_enter">#</a> <i>selection</i>.<b>enter</b>() · [Source](https://github.com/d3/d3-selection/blob/master/src/selection/enter.js)
 
