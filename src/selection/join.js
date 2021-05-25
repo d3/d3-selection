@@ -6,10 +6,7 @@ function(onenter, onupdate, onexit) {
   } else {
     enter = enter.append(onenter + "");
   }
-  if (onupdate != null) {
-    update = onupdate(update);
-    if (update) update = update.selection();
-  }
+  if (onupdate != null) update = onupdate(update);
   if (onexit == null) exit.remove(); else onexit(exit);
   return enter && update ? enter.merge(update).order() : update;
 }
