@@ -39,3 +39,21 @@ tape("selection.join(…) reorders nodes to match the data", function(test) {
   test.equal(document.body.innerHTML, "<p>0</p><p>3</p><p>1</p><p>2</p><p>4</p>");
   test.end();
 });
+
+function mockTransition(selection){
+  return {
+    selection: function() { return selection; }
+  }
+}
+
+tape("selection.join(enter, update, exit) allows callbacks to return a transition", function(test) {
+  var document = jsdom("<p>1</p><p>2</p>"),
+      p = d3.select(document.body).selectAll("p").datum(function() { return this.textContent; });
+  p = p.data([1, 3], d => d).join(
+    enter => mockTransition(enter.append("p").attr("class", "enter").text(d => d)),
+    update => mockTransition(update.attr("class", "update")),
+    exit => mockTransition(exit.attr("class", "exit"))
+  );
+  test.equal(document.body.innerHTML, "<p class=\"update\">1</p><p class=\"exit\">2</p><p class=\"enter\">3</p>");
+  test.end();
+});
