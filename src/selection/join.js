@@ -1,4 +1,4 @@
-function(onenter, onupdate, onexit) {
+export default function(onenter, onupdate, onexit) {
   var enter = this.enter(), update = this, exit = this.exit();
   if (typeof onenter === "function") {
     enter = onenter(enter);
