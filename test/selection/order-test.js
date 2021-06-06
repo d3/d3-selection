@@ -1,6 +1,6 @@
 import assert from "assert";
 import * as d3 from "../../src/index.js";
-import jsdom from "../jsdom.js";
+import it from "../jsdom.js";
 it("selection.order() moves selected elements so that they are before their next sibling", () => {
   const document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
       one = document.querySelector("#one"),

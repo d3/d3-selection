@@ -1,6 +1,6 @@
 import assert from "assert";
 import * as d3 from "../../src/index.js";
-import jsdom from "../jsdom.js";
+import it from "../jsdom.js";
 
 it("selection.call(function) calls the specified function, passing the selection", () => {
   let result;

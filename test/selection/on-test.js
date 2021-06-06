@@ -1,6 +1,6 @@
 import assert from "assert";
 import * as d3 from "../../src/index.js";
-import jsdom from "../jsdom.js";
+import it from "../jsdom.js";
 
 it("selection.on(type, listener) registers a listeners for the specified event type on each selected element", () => {
   const clicks = 0,

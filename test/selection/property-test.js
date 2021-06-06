@@ -1,6 +1,6 @@
 import assert from "assert";
 import * as d3 from "../../src/index.js";
-import jsdom from "../jsdom.js";
+import it from "../jsdom.js";
 it("selection.property(name) returns the property with the specified name on the first selected element", () => {
   const node = {foo: 42};
   assert.strictEqual(d3.select(node).property("foo"), 42);

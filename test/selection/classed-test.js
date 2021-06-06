@@ -1,6 +1,6 @@
 import assert from "assert";
 import * as d3 from "../../src/index.js";
-import jsdom from "../jsdom.js";
+import it from "../jsdom.js";
 it("selection.classed(classes) returns true if and only if the first element has the specified classes", () => {
   const document = jsdom("<h1 class='c1 c2'>hello</h1><h1 class='c3'></h1>");
   assert.strictEqual(d3.select(document).select("h1").classed(""), true);

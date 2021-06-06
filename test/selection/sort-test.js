@@ -1,6 +1,6 @@
 import assert from "assert";
 import * as d3 from "../../src/index.js";
-import jsdom from "../jsdom.js";
+import it from "../jsdom.js";
 it("selection.sort(…) returns a new selection, sorting each group’s data, and then ordering the elements to match", () => {
   const document = jsdom("<h1 id='one' data-value='1'></h1><h1 id='two' data-value='0'></h1><h1 id='three' data-value='2'></h1>"),
       one = document.querySelector("#one"),

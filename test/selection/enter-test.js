@@ -1,6 +1,6 @@
 import assert from "assert";
 import * as d3 from "../../src/index.js";
-import jsdom from "../jsdom.js";
+import it from "../jsdom.js";
 it("selection.enter() returns an empty selection before a data-join", () => {
   const body = jsdom("<h1>hello</h1>").body,
       selection = d3.select(body);

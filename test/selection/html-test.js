@@ -1,6 +1,6 @@
 import assert from "assert";
 import * as d3 from "../../src/index.js";
-import jsdom from "../jsdom.js";
+import it from "../jsdom.js";
 it("selection.html() returns the inner HTML on the first selected element", () => {
   const node = {innerHTML: "hello"};
   assert.strictEqual(d3.select(node).html(), "hello");

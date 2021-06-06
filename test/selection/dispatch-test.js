@@ -1,8 +1,8 @@
 import assert from "assert";
 import {selectAll} from "../../src/index.js";
-import jsdom from "../jsdom.js";
+import it from "../jsdom.js";
 
-it("selection.dispatch(type) dispatches a custom event of the specified type to each selected element in order", jsdom("<h1 id='one'></h1><h1 id='two'></h1>", () => {
+it("selection.dispatch(type) dispatches a custom event of the specified type to each selected element in order", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
   let event;
   const result = [];
   const one = document.querySelector("#one");
@@ -14,9 +14,9 @@ it("selection.dispatch(type) dispatches a custom event of the specified type to 
   assert.strictEqual(event.bubbles, false);
   assert.strictEqual(event.cancelable, false);
   assert.strictEqual(event.detail, null);
-}));
+});
 
-it("selection.dispatch(type, params) dispatches a custom event with the specified constant parameters", jsdom("<h1 id='one'></h1><h1 id='two'></h1>", () => {
+it("selection.dispatch(type, params) dispatches a custom event with the specified constant parameters", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
   let event;
   const result = [];
   const one = document.querySelector("#one");
@@ -28,9 +28,9 @@ it("selection.dispatch(type, params) dispatches a custom event with the specifie
   assert.strictEqual(event.bubbles, true);
   assert.strictEqual(event.cancelable, true);
   assert.strictEqual(event.detail, "loud");
-}));
+});
 
-it("selection.dispatch(type, function) dispatches a custom event with the specified parameter function", jsdom("<h1 id='one'></h1><h1 id='two'></h1>", () => {
+it("selection.dispatch(type, function) dispatches a custom event with the specified parameter function", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
   const result = [];
   const events = [];
   const one = document.querySelector("#one");
@@ -46,9 +46,9 @@ it("selection.dispatch(type, function) dispatches a custom event with the specif
   assert.strictEqual(events[1].bubbles, true);
   assert.strictEqual(events[1].cancelable, true);
   assert.strictEqual(events[1].detail, "loud-1");
-}));
+});
 
-it("selection.dispatch(type) skips missing elements", jsdom("<h1 id='one'></h1><h1 id='two'></h1>", () => {
+it("selection.dispatch(type) skips missing elements", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
   let event;
   const result = [];
   const one = document.querySelector("#one");
@@ -58,4 +58,4 @@ it("selection.dispatch(type) skips missing elements", jsdom("<h1 id='one'></h1><
   assert.deepStrictEqual(result, [one, "node-1", two, "node-3"]);
   assert.strictEqual(event.type, "bang");
   assert.strictEqual(event.detail, null);
-}));
+});

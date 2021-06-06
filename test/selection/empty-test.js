@@ -1,6 +1,6 @@
 import assert from "assert";
 import * as d3 from "../../src/index.js";
-import jsdom from "../jsdom.js";
+import it from "../jsdom.js";
 it("selection.empty() return false if the selection is not empty", () => {
   const document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>");
   assert.strictEqual(d3.select(document).empty(), false);

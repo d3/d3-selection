@@ -1,6 +1,6 @@
 import assert from "assert";
 import * as d3 from "../../src/index.js";
-import jsdom from "../jsdom.js";
+import it from "../jsdom.js";
 it("d3.style(node, name) returns the inline value of the style property with the specified name on the first selected element, if present", () => {
   const node = {style: {getPropertyValue: function(name) { return name === "color" ? "red" : ""}}};
   assert.strictEqual(d3.style(node, "color"), "red");

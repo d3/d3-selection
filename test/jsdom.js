@@ -1,7 +1,8 @@
 import {JSDOM} from "jsdom";
 
-export default function jsdom(html, run) {
-  return async () => {
+export default function jsdomit(message, html, run) {
+  if (arguments.length < 3) run = html, html = "";
+  return it(message, async () => {
     try {
       const dom = new JSDOM(html);
       global.window = dom.window;
@@ -11,5 +12,5 @@ export default function jsdom(html, run) {
       delete global.window;
       delete global.document;
     }
-  };
+  });
 }

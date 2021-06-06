@@ -1,9 +1,9 @@
 import assert from "assert";
 import {select, selectAll} from "../../src/index.js";
 import {assertSelection} from "../asserts.js";
-import jsdom from "../jsdom.js";
+import it from "../jsdom.js";
 
-it("selection.data(values) binds the specified values to the selected elements by index", jsdom("<div id='one'></div><div id='two'></div><div id='three'></div>", () => {
+it("selection.data(values) binds the specified values to the selected elements by index", "<div id='one'></div><div id='two'></div><div id='three'></div>", () => {
   const one = document.body.querySelector("#one");
   const two = document.body.querySelector("#two");
   const three = document.body.querySelector("#three");
@@ -17,23 +17,23 @@ it("selection.data(values) binds the specified values to the selected elements b
     enter: [[,,, ]],
     exit: [[,,, ]]
   });
-}));
+});
 
-it("selection.data(values) accepts an iterable", jsdom("<div id='one'></div><div id='two'></div><div id='three'></div>", () => {
+it("selection.data(values) accepts an iterable", "<div id='one'></div><div id='two'></div><div id='three'></div>", () => {
   const selection = select(document.body).selectAll("div").data(new Set(["foo", "bar", "baz"]));
   assert.deepStrictEqual(selection.data(), ["foo", "bar", "baz"]);
-}));
+});
 
-it("selection.data(null) is not allowed", jsdom("<div id='one'></div><div id='two'></div><div id='three'></div>", () => {
+it("selection.data(null) is not allowed", "<div id='one'></div><div id='two'></div><div id='three'></div>", () => {
   assert.throws(() => { select(document.body).selectAll("div").data(null); }, /null/);
-}));
+});
 
-it("selection.data() returns the bound data", jsdom("<div id='one'></div><div id='two'></div><div id='three'></div>", () => {
+it("selection.data() returns the bound data", "<div id='one'></div><div id='two'></div><div id='three'></div>", () => {
   const selection = select(document.body).selectAll("div").data(["foo", "bar", "baz"]);
   assert.deepStrictEqual(selection.data(), ["foo", "bar", "baz"]);
-}));
+});
 
-it("selection.data(values) puts unbound data in the enter selection", jsdom("<div id='one'></div><div id='two'></div>", () => {
+it("selection.data(values) puts unbound data in the enter selection", "<div id='one'></div><div id='two'></div>", () => {
   const one = document.body.querySelector("#one");
   const two = document.body.querySelector("#two");
   const selection = select(document.body).selectAll("div").data(["foo", "bar", "baz"]);
@@ -51,9 +51,9 @@ it("selection.data(values) puts unbound data in the enter selection", jsdom("<di
     }]],
     exit: [[,, ]]
   });
-}));
+});
 
-it("selection.data(values) puts unbound elements in the exit selection", jsdom("<div id='one'></div><div id='two'></div><div id='three'></div>", () => {
+it("selection.data(values) puts unbound elements in the exit selection", "<div id='one'></div><div id='two'></div><div id='three'></div>", () => {
   const one = document.body.querySelector("#one");
   const two = document.body.querySelector("#two");
   const three = document.body.querySelector("#three");
@@ -66,9 +66,9 @@ it("selection.data(values) puts unbound elements in the exit selection", jsdom("
     enter: [[,, ]],
     exit: [[,, three]]
   });
-}));
+});
 
-it("selection.data(values) binds the specified values to each group independently", jsdom("<div id='zero'><span id='one'></span><span id='two'></span></div><div id='three'><span id='four'></span><span id='five'></span></div>", () => {
+it("selection.data(values) binds the specified values to each group independently", "<div id='zero'><span id='one'></span><span id='two'></span></div><div id='three'><span id='four'></span><span id='five'></span></div>", () => {
   const zero = document.body.querySelector("#zero");
   const one = document.body.querySelector("#one");
   const two = document.body.querySelector("#two");
@@ -86,9 +86,9 @@ it("selection.data(values) binds the specified values to each group independentl
     enter: [[,, ], [,, ]],
     exit: [[,, ], [,, ]]
   });
-}));
+});
 
-it("selection.data(function) binds the specified return values to the selected elements by index", jsdom("<div id='one'></div><div id='two'></div><div id='three'></div>", () => {
+it("selection.data(function) binds the specified return values to the selected elements by index", "<div id='one'></div><div id='two'></div><div id='three'></div>", () => {
   const one = document.body.querySelector("#one");
   const two = document.body.querySelector("#two");
   const three = document.body.querySelector("#three");
@@ -102,9 +102,9 @@ it("selection.data(function) binds the specified return values to the selected e
     enter: [[,,, ]],
     exit: [[,,, ]]
   });
-}));
+});
 
-it("selection.data(function) passes the values function datum, index and parents", jsdom("<parent id='one'><child></child><child></child></parent><parent id='two'><child></child></parent>", () => {
+it("selection.data(function) passes the values function datum, index and parents", "<parent id='one'><child></child><child></child></parent><parent id='two'><child></child></parent>", () => {
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   const results = [];
@@ -118,9 +118,9 @@ it("selection.data(function) passes the values function datum, index and parents
     [one, "parent-0", 0, [one, two]],
     [two, "parent-1", 1, [one, two]]
   ]);
-}));
+});
 
-it("selection.data(values, function) joins data to element using the computed keys", jsdom("<node id='one'></node><node id='two'></node><node id='three'></node>", () => {
+it("selection.data(values, function) joins data to element using the computed keys", "<node id='one'></node><node id='two'></node><node id='three'></node>", () => {
   const one = document.body.querySelector("#one");
   const two = document.body.querySelector("#two");
   const three = document.body.querySelector("#three");
@@ -137,9 +137,9 @@ it("selection.data(values, function) joins data to element using the computed ke
     },, ]],
     exit: [[, two,, ]]
   });
-}));
+});
 
-it("selection.data(values, function) puts elements with duplicate keys into update or exit", jsdom("<node id='one' name='foo'></node><node id='two' name='foo'></node><node id='three' name='bar'></node>", () => {
+it("selection.data(values, function) puts elements with duplicate keys into update or exit", "<node id='one' name='foo'></node><node id='two' name='foo'></node><node id='three' name='bar'></node>", () => {
   const one = document.body.querySelector("#one");
   const two = document.body.querySelector("#two");
   const three = document.body.querySelector("#three");
@@ -150,9 +150,9 @@ it("selection.data(values, function) puts elements with duplicate keys into upda
     enter: [[,]],
     exit: [[, two, three]]
   });
-}));
+});
 
-it("selection.data(values, function) puts elements with duplicate keys into exit", jsdom("<node id='one' name='foo'></node><node id='two' name='foo'></node><node id='three' name='bar'></node>", () => {
+it("selection.data(values, function) puts elements with duplicate keys into exit", "<node id='one' name='foo'></node><node id='two' name='foo'></node><node id='three' name='bar'></node>", () => {
   const one = document.body.querySelector("#one");
   const two = document.body.querySelector("#two");
   const three = document.body.querySelector("#three");
@@ -163,9 +163,9 @@ it("selection.data(values, function) puts elements with duplicate keys into exit
     enter: [[,]],
     exit: [[one, two,, ]]
   });
-}));
+});
 
-it("selection.data(values, function) puts data with duplicate keys into update and enter", jsdom("<node id='one'></node><node id='two'></node><node id='three'></node>", () => {
+it("selection.data(values, function) puts data with duplicate keys into update and enter", "<node id='one'></node><node id='two'></node><node id='three'></node>", () => {
   const one = document.body.querySelector("#one");
   const two = document.body.querySelector("#two");
   const three = document.body.querySelector("#three");
@@ -182,9 +182,9 @@ it("selection.data(values, function) puts data with duplicate keys into update a
     },, ]],
     exit: [[,, three]]
   });
-}));
+});
 
-it("selection.data(values, function) puts data with duplicate keys into enter", jsdom("<node id='one'></node><node id='two'></node><node id='three'></node>", () => {
+it("selection.data(values, function) puts data with duplicate keys into enter", "<node id='one'></node><node id='two'></node><node id='three'></node>", () => {
   const one = document.body.querySelector("#one");
   const two = document.body.querySelector("#two");
   const three = document.body.querySelector("#three");
@@ -207,9 +207,9 @@ it("selection.data(values, function) puts data with duplicate keys into enter", 
     },, ]],
     exit: [[one,, three]]
   });
-}));
+});
 
-it("selection.data(values, function) passes the key function datum, index and nodes or data", jsdom("<node id='one'></node><node id='two'></node>", () => {
+it("selection.data(values, function) passes the key function datum, index and nodes or data", "<node id='one'></node><node id='two'></node>", () => {
   const one = document.body.querySelector("#one");
   const two = document.body.querySelector("#two");
   const results = [];
@@ -226,9 +226,9 @@ it("selection.data(values, function) passes the key function datum, index and no
     [document.body, "foo", 0, ["foo", "bar"]],
     [document.body, "bar", 1, ["foo", "bar"]]
   ]);
-}));
+});
 
-it("selection.data(values, function) applies the order of the data", jsdom("<div id='one'></div><div id='two'></div><div id='three'></div>", () => {
+it("selection.data(values, function) applies the order of the data", "<div id='one'></div><div id='two'></div><div id='three'></div>", () => {
   const one = document.body.querySelector("#one");
   const two = document.body.querySelector("#two");
   const three = document.body.querySelector("#three");
@@ -251,9 +251,9 @@ it("selection.data(values, function) applies the order of the data", jsdom("<div
     },, ]],
     exit: [[,,,]]
   });
-}));
+});
 
-it("selection.data(values) returns a new selection, and does not modify the original selection", jsdom("<h1 id='one'></h1><h1 id='two'></h1>", () => {
+it("selection.data(values) returns a new selection, and does not modify the original selection", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
   const root = document.documentElement;
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
@@ -276,9 +276,9 @@ it("selection.data(values) returns a new selection, and does not modify the orig
     enter: [[, ]],
     exit: [[, two,, ]]
   });
-}));
+});
 
-it("selection.data(values, key) does not modify the groups array in-place", jsdom("<h1 id='one'></h1><h1 id='two'></h1>", () => {
+it("selection.data(values, key) does not modify the groups array in-place", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
   const root = document.documentElement;
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
@@ -302,4 +302,4 @@ it("selection.data(values, key) does not modify the groups array in-place", jsdo
     enter: [[, ]],
     exit: [[, two,, ]]
   });
-}));
+});

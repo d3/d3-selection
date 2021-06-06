@@ -1,12 +1,12 @@
 import assert from "assert";
 import {select, selection} from "../../src/index.js";
-import jsdom from "../jsdom.js";
+import it from "../jsdom.js";
 
-it("selection() returns a selection of the document element", jsdom("", () => {
+it("selection() returns a selection of the document element", "", () => {
   assert.strictEqual(selection().node(), document.documentElement);
-}));
+});
 
-it("selection.prototype can be extended", jsdom("<input type='checkbox'>", () => {
+it("selection.prototype can be extended", "<input type='checkbox'>", () => {
   const s = select(document.querySelector("[type=checkbox]"));
   try {
     selection.prototype.checked = function(value) {
@@ -20,8 +20,8 @@ it("selection.prototype can be extended", jsdom("<input type='checkbox'>", () =>
   } finally {
     delete selection.prototype.checked;
   }
-}));
+});
 
-it("selection() returns an instanceof selection", jsdom("", () => {
+it("selection() returns an instanceof selection", "", () => {
   assert(selection() instanceof selection);
-}));
+});

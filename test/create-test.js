@@ -1,6 +1,6 @@
 import assert from "assert";
 import {create} from "../src/index.js";
-import jsdom from "./jsdom.js";
+import it from "./jsdom.js";
 
 describe("create", () => {
   beforeEach(() => void (global.document = jsdom("")));

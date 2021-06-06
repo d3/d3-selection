@@ -1,6 +1,6 @@
 import assert from "assert";
 import * as d3 from "../../src/index.js";
-import jsdom from "../jsdom.js";
+import it from "../jsdom.js";
 it("selection.append(…) returns a selection", () => {
   const document = jsdom();
   assert(d3.select(document.body).append("h1") instanceof d3.selection);
