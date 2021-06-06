@@ -4,7 +4,7 @@ import jsdom from "../jsdom.js";
 it("selection.enter() returns an empty selection before a data-join", () => {
   const body = jsdom("<h1>hello</h1>").body,
       selection = d3.select(body);
-  assert.deepEqual(selection.enter(), {_groups: [[]], _parents: [null]});
+  assert.deepStrictEqual(selection.enter(), {_groups: [[]], _parents: [null]});
 });
 
 it("selection.enter() contains EnterNodes", () => {
@@ -22,7 +22,7 @@ it("selection.enter() shares the update selection’s parents", () => {
 it("selection.enter() returns the same selection each time", () => {
   const body = jsdom("<h1>hello</h1>").body,
       selection = d3.select(body);
-  assert.deepEqual(selection.enter(), selection.enter());
+  assert.deepStrictEqual(selection.enter(), selection.enter());
 });
 
 it("selection.enter() contains unbound data after a data-join", () => {
@@ -30,7 +30,7 @@ it("selection.enter() contains unbound data after a data-join", () => {
       one = body.querySelector("#one"),
       two = body.querySelector("#two"),
       selection = d3.select(body).selectAll("div").data(["foo", "bar", "baz"]);
-  assert.deepEqual(selection.enter(), {
+  assert.deepStrictEqual(selection.enter(), {
     _groups: [[,, {
       __data__: "baz",
       _next: null,
@@ -48,7 +48,7 @@ it("selection.enter() uses the order of the data", () => {
       two = body.querySelector("#two"),
       three = body.querySelector("#three"),
       selection = d3.select(body).selectAll("div").data(["one", "four", "three", "five"], function(d) { return d || this.id; });
-  assert.deepEqual(selection.enter(), {
+  assert.deepStrictEqual(selection.enter(), {
     _groups: [[, {
       __data__: "four",
       _next: three,

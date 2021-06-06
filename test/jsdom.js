@@ -1,6 +1,13 @@
-import * as jsdom from "jsdom";
+import {JSDOM} from "jsdom";
 
-export default function(html) {
-  const dom = new jsdom.JSDOM(html);
-  return global.document = dom.window.document
+export default function jsdom(html, run) {
+  return async () => {
+    try {
+      const dom = new JSDOM(html);
+      global.document = dom.window.document
+      await run();
+    } finally {
+      delete global.document;
+    }
+  };
 }

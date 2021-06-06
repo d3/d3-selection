@@ -49,7 +49,7 @@ it("selection.html(function) passes the value function data, index and group", (
       .data(function(d, i) { return [0, 1].map(function(j) { return "child-" + i + "-" + j; }); })
       .html(function(d, i, nodes) { results.push([this, d, i, nodes]); });
 
-  assert.deepEqual(results, [
+  assert.deepStrictEqual(results, [
     [three, "child-0-0", 0, [three, four]],
     [four, "child-0-1", 1, [three, four]],
     [five, "child-1-0", 0, [five, ]]

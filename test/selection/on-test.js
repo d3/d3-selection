@@ -31,7 +31,7 @@ it("selection.on(type, listener, capture) observes the specified capture flag, i
   let result;
   const selection = d3.select({addEventListener: function(type, listener, capture) { result = capture; }});
   assert.strictEqual(selection.on("click.foo", function() {}, true), selection);
-  assert.deepEqual(result, true);
+  assert.deepStrictEqual(result, true);
 });
 
 it("selection.on(type) returns the listener for the specified event type, if any", () => {
@@ -181,9 +181,9 @@ it("selection.on(type, listener) passes the event and listener data", () => {
       .data(function(d, i) { return [0, 1].map(function(j) { return "child-" + i + "-" + j; }); })
       .on("foo", function(e, d) { results.push([this, e.type, d]); });
 
-  assert.deepEqual(results, []);
+  assert.deepStrictEqual(results, []);
   selection.dispatch("foo");
-  assert.deepEqual(results, [
+  assert.deepStrictEqual(results, [
     [three, "foo", "child-0-0"],
     [four, "foo", "child-0-1"],
     [five, "foo", "child-1-0"]
@@ -197,5 +197,5 @@ it("selection.on(type, listener) passes the current listener data", () => {
   selection.dispatch("foo");
   document.__data__ = 42;
   selection.dispatch("foo");
-  assert.deepEqual(results, [undefined, 42]);
+  assert.deepStrictEqual(results, [undefined, 42]);
 });

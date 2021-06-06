@@ -1,6 +1,7 @@
 import assert from "assert";
 import * as d3 from "../../src/index.js";
 import jsdom from "../jsdom.js";
+
 it("selection.text() returns the text content on the first selected element", () => {
   const node = {textContent: "hello"};
   assert.strictEqual(d3.select(node).text(), "hello");
@@ -49,9 +50,9 @@ it("selection.text(function) passes the value function data, index and group", (
       .data(function(d, i) { return [0, 1].map(function(j) { return "child-" + i + "-" + j; }); })
       .text(function(d, i, nodes) { results.push([this, d, i, nodes]); });
 
-  assert.deepEqual(results, [
+  assert.deepStrictEqual(results, [
     [three, "child-0-0", 0, [three, four]],
     [four, "child-0-1", 1, [three, four]],
-    [five, "child-1-0", 0, [five, ]]
+    [five, "child-1-0", 0, [five,, ]]
   ]);
 });

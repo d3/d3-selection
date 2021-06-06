@@ -11,7 +11,7 @@ it("selection.insert(name, before) inserts a new element of the specified name b
       selection = d3.selectAll([one, two]).insert("span", ".before"),
       three = one.querySelector("span:first-child"),
       four = two.querySelector("span:first-child");
-  assert.deepEqual(selection, {_groups: [[three, four]], _parents: [null]});
+  assert.deepStrictEqual(selection, {_groups: [[three, four]], _parents: [null]});
 });
 
 it("selection.insert(function, function) inserts the returned element before the specified child of each selected element", () => {
@@ -21,7 +21,7 @@ it("selection.insert(function, function) inserts the returned element before the
       selection = d3.selectAll([one, two]).insert(function() { return document.createElement("SPAN"); }, function() { return this.firstChild; }),
       three = one.querySelector("span:first-child"),
       four = two.querySelector("span:first-child");
-  assert.deepEqual(selection, {_groups: [[three, four]], _parents: [null]});
+  assert.deepStrictEqual(selection, {_groups: [[three, four]], _parents: [null]});
 });
 
 it("selection.insert(function, function) inserts the returned element as the last child if the selector function returns null", () => {
@@ -31,7 +31,7 @@ it("selection.insert(function, function) inserts the returned element as the las
       selection = d3.selectAll([one, two]).insert(function() { return document.createElement("SPAN"); }, function() { return; }),
       three = one.querySelector("span:last-child"),
       four = two.querySelector("span:last-child");
-  assert.deepEqual(selection, {_groups: [[three, four]], _parents: [null]});
+  assert.deepStrictEqual(selection, {_groups: [[three, four]], _parents: [null]});
 });
 
 it("selection.insert(name, function) passes the selector function data, index and group", () => {
@@ -49,7 +49,7 @@ it("selection.insert(name, function) passes the selector function data, index an
       .data(function(d, i) { return [0, 1].map(function(j) { return "child-" + i + "-" + j; }); })
       .insert("span", function(d, i, nodes) { results.push([this, d, i, nodes]); });
 
-  assert.deepEqual(results, [
+  assert.deepStrictEqual(results, [
     [three, "child-0-0", 0, [three, four]],
     [four, "child-0-1", 1, [three, four]],
     [five, "child-1-0", 0, [five, ]]

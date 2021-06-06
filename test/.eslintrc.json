@@ -5,6 +5,12 @@
     "ecmaVersion": 8
   },
   "env": {
+    "es6": true,
+    "browser": true,
+    "node": true,
     "mocha": true
+  },
+  "rules": {
+    "no-sparse-arrays": 0
   }
 }

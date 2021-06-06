@@ -1,39 +1,60 @@
 import assert from "assert";
-import * as d3 from "../src/index.js";
+import {pointer, pointers} from "../src/index.js";
 import jsdom from "./jsdom.js";
 
-const document = jsdom("");
+it("pointer(mousemove) returns an array of coordinates", jsdom("<div>", () => {
+  const target = document.querySelector("div");
+  assert.deepStrictEqual(pointer(mousemove(10, 20)), [10, 20]);
+  assert.deepStrictEqual(pointer(mousemove(10, 20, target), target), [10, 20]);
+}));
 
-const node = d3.create("div").node();
+it("pointer(touch, target) returns an array of coordinates", jsdom("<div>", () => {
+  const target = document.querySelector("div");
+  assert.deepStrictEqual(pointer(touch(10, 20), target), [10, 20]);
+}));
 
-const mouse = { pageX: 10, pageY: 20, clientX: 10, clientY: 20, type: "mousemove", target: node, currentTarget: node };
+it("pointers(mousemove) returns an array of arrays of coordinates", jsdom("<div>", () => {
+  const target = document.querySelector("div");
+  assert.deepStrictEqual(pointers(mousemove(10, 20)), [[10, 20]]);
+  assert.deepStrictEqual(pointers(mousemove(10, 20, target)), [[10, 20]]);
+}));
 
-const touch = { type: "touchmove", target: node, currentTarget: node,
-  touches: [ { pageX: 10, pageY: 20, clientX: 10, clientY: 20 } ]
-};
+it("pointers(touchmove) returns an array of arrays of coordinates", jsdom("<div>", () => {
+  const target = document.querySelector("div");
+  assert.deepStrictEqual(pointers(touchmove(10, 20)), [[10, 20]]);
+  assert.deepStrictEqual(pointers(touchmove(10, 20, target)), [[10, 20]]);
+}));
 
-const multitouch = { type: "touchmove", target: node, currentTarget: node,
-  touches: [
-    { pageX: 10, pageY: 20, clientX: 10, clientY: 20 },
-    { pageX: 11, pageY: 21, clientX: 11, clientY: 21 }
-  ]
-};
+it("pointers(touches) returns an array of arrays of coordinates", jsdom("<div>", () => {
+  assert.deepStrictEqual(pointers([touch(10, 20)]), [[10, 20]]);
+}));
 
-it("d3.pointer(event) returns an array of coordinates", () => {
-  assert.deepEqual(d3.pointer(mouse), [10, 20]);
-  assert.deepEqual(d3.pointer(touch.touches[0]), [10, 20]);
-  assert.deepEqual(d3.pointer(multitouch.touches[0]), [10, 20]);
-  assert.deepEqual(d3.pointer(mouse, node), [10, 20]);
-  assert.deepEqual(d3.pointer(touch.touches[0], node), [10, 20]);
-  assert.deepEqual(d3.pointer(multitouch.touches[0], node), [10, 20]);
-});
+function mousemove(x, y, target = document.body) {
+  return {
+    pageX: x,
+    pageY: y,
+    clientX: x,
+    clientY: y,
+    type: "mousemove",
+    target: target,
+    currentTarget: target
+  };
+}
 
-it("d3.pointers(event) returns an array of arrays of coordinates", () => {
-  assert.deepEqual(d3.pointers(mouse), [[10, 20]]);
-  assert.deepEqual(d3.pointers(touch), [[10, 20]]);
-  assert.deepEqual(d3.pointers(multitouch), [[10, 20], [11, 21]]);
-  assert.deepEqual(d3.pointers(mouse, node), [[10, 20]]);
-  assert.deepEqual(d3.pointers(touch, node), [[10, 20]]);
-  assert.deepEqual(d3.pointers(multitouch, node), [[10, 20], [11, 21]]);
-});
+function touchmove(x, y, target = document.body) {
+  return {
+    type: "touchmove",
+    target: target,
+    currentTarget: target,
+    touches: [touch(x, y)]
+  };
+}
 
+function touch(x, y) {
+  return {
+    pageX: x,
+    pageY: y,
+    clientX: x,
+    clientY: y
+  };
+}
