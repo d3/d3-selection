@@ -1,21 +1,19 @@
 import assert from "assert";
-import * as d3 from "../src/index.js";
+import {creator} from "../src/index.js";
 import jsdom from "./jsdom.js";
 
-it("d3.creator(name).call(element) returns a new element with the given name", () => {
-  const document = jsdom("<body class='foo'>");
-  assert.deepStrictEqual(type(d3.creator("h1").call(document.body)), {namespace: "http://www.w3.org/1999/xhtml", name: "H1"});
-  assert.deepStrictEqual(type(d3.creator("xhtml:h1").call(document.body)), {namespace: "http://www.w3.org/1999/xhtml", name: "H1"});
-  assert.deepStrictEqual(type(d3.creator("svg").call(document.body)), {namespace: "http://www.w3.org/2000/svg", name: "svg"});
-  assert.deepStrictEqual(type(d3.creator("g").call(document.body)), {namespace: "http://www.w3.org/1999/xhtml", name: "G"});
-});
+it("creator(name).call(element) returns a new element with the given name", jsdom("<body class='foo'>", () => {
+  assert.deepStrictEqual(type(creator("h1").call(document.body)), {namespace: "http://www.w3.org/1999/xhtml", name: "H1"});
+  assert.deepStrictEqual(type(creator("xhtml:h1").call(document.body)), {namespace: "http://www.w3.org/1999/xhtml", name: "H1"});
+  assert.deepStrictEqual(type(creator("svg").call(document.body)), {namespace: "http://www.w3.org/2000/svg", name: "svg"});
+  assert.deepStrictEqual(type(creator("g").call(document.body)), {namespace: "http://www.w3.org/1999/xhtml", name: "G"});
+}));
 
-it("d3.creator(name).call(element) can inherit the namespace from the given element", () => {
-  const document = jsdom("<body class='foo'><svg></svg>"),
-      svg = document.querySelector("svg");
-  assert.deepStrictEqual(type(d3.creator("g").call(document.body)), {namespace: "http://www.w3.org/1999/xhtml", name: "G"});
-  assert.deepStrictEqual(type(d3.creator("g").call(svg)), {namespace: "http://www.w3.org/2000/svg", name: "g"});
-});
+it("creator(name).call(element) can inherit the namespace from the given element", jsdom("<body class='foo'><svg></svg>", () => {
+  const svg = document.querySelector("svg");
+  assert.deepStrictEqual(type(creator("g").call(document.body)), {namespace: "http://www.w3.org/1999/xhtml", name: "G"});
+  assert.deepStrictEqual(type(creator("g").call(svg)), {namespace: "http://www.w3.org/2000/svg", name: "g"});
+}));
 
 function type(element) {
   return {namespace: element.namespaceURI, name: element.tagName};

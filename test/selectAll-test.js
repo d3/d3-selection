@@ -1,67 +1,54 @@
 import assert from "assert";
-import * as d3 from "../src/index.js";
+import {selectAll, selection} from "../src/index.js";
+import {assertSelection} from "./asserts.js";
 import jsdom from "./jsdom.js";
 
-it("d3.selectAll(…) returns an instanceof d3.selection", () => {
-  const document = jsdom("<h1>hello</h1>");
-  assert(d3.selectAll([document]) instanceof d3.selection);
+it("selectAll(…) returns an instanceof selection", jsdom("<h1>hello</h1>", () => {
+  assert(selectAll([document]) instanceof selection);
+}));
+
+it("selectAll(…) accepts an iterable", jsdom("<h1>hello</h1>", () => {
+  assert.deepStrictEqual(selectAll(new Set([document])).nodes(), [document]);
+}));
+
+it("selectAll(string) selects all elements that match the selector string, in order", jsdom("<h1 id='one'>foo</h1><h1 id='two'>bar</h1>", () => {
+  assertSelection(selectAll("h1"), [document.querySelectorAll("h1")], [document.documentElement]);
+}));
+
+it("selectAll(nodeList) selects a NodeList of elements", jsdom("<h1>hello</h1><h2>world</h2>", () => {
+  assertSelection(selectAll(document.querySelectorAll("h1,h2")), [document.querySelectorAll("h1,h2")], [null]);
+}));
+
+it("selectAll(array) selects an array of elements", jsdom("<h1>hello</h1><h2>world</h2>", () => {
+  const h1 = document.querySelector("h1");
+  const h2 = document.querySelector("h2");
+  assertSelection(selectAll([h1, h2]), [[h1, h2]], [null]);
+}));
+
+it("selectAll(array) can select an empty array", () => {
+  assertSelection(selectAll([]), [[]], [null]);
 });
 
-it("d3.selectAll(…) accepts an iterable", () => {
-  const document = global.document = jsdom("<h1>hello</h1>");
-  try {
-    assert.deepStrictEqual(d3.selectAll(new Set([document])).nodes(), [document]);
-} finally {
-    delete global.document;
-  }
+it("selectAll(null) selects an empty array", () => {
+  assertSelection(selectAll(), [[]], [null]);
+  assertSelection(selectAll(null), [[]], [null]);
+  assertSelection(selectAll(undefined), [[]], [null]);
 });
 
-it("d3.selectAll(string) selects all elements that match the selector string, in order", () => {
-  const document = global.document = jsdom("<h1 id='one'>foo</h1><h1 id='two'>bar</h1>");
-  try {
-    assert.deepStrictEqual(d3.selectAll("h1"), {_groups: [document.querySelectorAll("h1")], _parents: [document.documentElement]});
-} finally {
-    delete global.document;
-  }
-});
-
-it("d3.selectAll(nodeList) selects a NodeList of elements", () => {
-  const document = jsdom("<h1>hello</h1><h2>world</h2>");
-  assert.deepStrictEqual(d3.selectAll(document.querySelectorAll("h1,h2")), {_groups: [document.querySelectorAll("h1,h2")], _parents: [null]});
-});
-
-it("d3.selectAll(array) selects an array of elements", () => {
-  const document = jsdom("<h1>hello</h1><h2>world</h2>"),
-      h1 = document.querySelector("h1"),
-      h2 = document.querySelector("h2");
-  assert.deepStrictEqual(d3.selectAll([h1, h2]), {_groups: [[h1, h2]], _parents: [null]});
-});
-
-it("d3.selectAll(array) can select an empty array", () => {
-  assert.deepStrictEqual(d3.selectAll([]), {_groups: [[]], _parents: [null]});
-});
-
-it("d3.selectAll(null) selects an empty array", () => {
-  assert.deepStrictEqual(d3.selectAll(), {_groups: [[]], _parents: [null]});
-  assert.deepStrictEqual(d3.selectAll(null), {_groups: [[]], _parents: [null]});
-  assert.deepStrictEqual(d3.selectAll(undefined), {_groups: [[]], _parents: [null]});
-});
-
-it("d3.selectAll(null) selects a new empty array each time", () => {
-  const one = d3.selectAll()._groups[0],
-      two = d3.selectAll()._groups[0];
+it("selectAll(null) selects a new empty array each time", () => {
+  const one = selectAll()._groups[0];
+  const two = selectAll()._groups[0];
   assert.strictEqual(one === two, false);
   one.push("one");
-  assert.deepStrictEqual(d3.selectAll()._groups[0], []);
+  assert.deepStrictEqual(selectAll()._groups[0], []);
 });
 
-it("d3.selectAll(array) can select an array that contains null", () => {
-  const document = jsdom("<h1>hello</h1><h2>world</h2>"),
-      h1 = document.querySelector("h1");
-  assert.deepStrictEqual(d3.selectAll([null, h1, null]), {_groups: [[null, h1, null]], _parents: [null]});
-});
+it("selectAll(array) can select an array that contains null", jsdom("<h1>hello</h1><h2>world</h2>", () => {
+  const h1 = document.querySelector("h1");
+  assertSelection(selectAll([null, h1, null]), [[null, h1, null]], [null]);
+}));
 
-it("d3.selectAll(array) can select an array that contains arbitrary objects", () => {
+it("selectAll(array) can select an array that contains arbitrary objects", () => {
   const object = {};
-  assert.deepStrictEqual(d3.selectAll([object]), {_groups: [[object]], _parents: [null]});
+  assertSelection(selectAll([object]), [[object]], [null]);
 });
