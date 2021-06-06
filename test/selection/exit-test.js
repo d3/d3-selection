@@ -1,11 +1,11 @@
 import assert from "assert";
-import {assertSelection} from "../asserts.js";
 import {select} from "../../src/index.js";
+import {assertSelection} from "../asserts.js";
 import jsdom from "../jsdom.js";
 
 it("selection.exit() returns an empty selection before a data-join", jsdom("<h1>hello</h1>", () => {
   const selection = select(document.body);
-  assertSelection(selection.exit(), [[,]], [null]);
+  assertSelection(selection.exit(), {groups: [[,]]});
 }));
 
 it("selection.exit() shares the update selection’s parents", jsdom("<h1>hello</h1>", () => {
@@ -20,10 +20,10 @@ it("selection.exit() returns the same selection each time", jsdom("<h1>hello</h1
 
 it("selection.exit() contains unbound elements after a data-join", jsdom("<div id='one'></div><div id='two'></div>", () => {
   const selection = select(document.body).selectAll("div").data(["foo"]);
-  assertSelection(selection.exit(), [[, document.body.querySelector("#two")]], [document.body]);
+  assertSelection(selection.exit(), {groups: [[, document.body.querySelector("#two")]], parents: [document.body]});
 }));
 
 it("selection.exit() uses the order of the originating selection", jsdom("<div id='one'></div><div id='two'></div><div id='three'></div>", () => {
   const selection = select(document.body).selectAll("div").data(["three", "one"], function(d) { return d || this.id; });
-  assertSelection(selection.exit(), [[, document.body.querySelector("#two"),, ]], [document.body]);
+  assertSelection(selection.exit(), {groups: [[, document.body.querySelector("#two"),, ]], parents: [document.body]});
 }));

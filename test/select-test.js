@@ -8,29 +8,29 @@ it("select(…) returns an instanceof selection", jsdom("<h1>hello</h1>", () => 
 }));
 
 it("select(string) selects the first element that matches the selector string", jsdom("<h1 id='one'>foo</h1><h1 id='two'>bar</h1>", () => {
-  assertSelection(select("h1"), [[document.querySelector("h1")]], [document.documentElement]);
+  assertSelection(select("h1"), {groups: [[document.querySelector("h1")]], parents: [document.documentElement]});
 }));
 
 it("select(element) selects the given element", jsdom("<h1>hello</h1>", () => {
-  assertSelection(select(document.body), [[document.body]], [null]);
-  assertSelection(select(document.documentElement), [[document.documentElement]], [null]);
+  assertSelection(select(document.body), {groups: [[document.body]]});
+  assertSelection(select(document.documentElement), {groups: [[document.documentElement]]});
 }));
 
 it("select(window) selects the given window", jsdom("<h1>hello</h1>", () => {
-  assertSelection(select(document.defaultView), [[document.defaultView]], [null]);
+  assertSelection(select(document.defaultView), {groups: [[document.defaultView]]});
 }));
 
 it("select(document) selects the given document", jsdom("<h1>hello</h1>", () => {
-  assertSelection(select(document), [[document]], [null]);
+  assertSelection(select(document), {groups: [[document]]});
 }));
 
 it("select(null) selects null", jsdom("<h1>hello</h1><null></null><undefined></undefined>", () => {
-  assertSelection(select(null), [[null]], [null]);
-  assertSelection(select(undefined), [[undefined]], [null]);
-  assertSelection(select(), [[undefined]], [null]);
+  assertSelection(select(null), {groups: [[null]]});
+  assertSelection(select(undefined), {groups: [[undefined]]});
+  assertSelection(select(), {groups: [[undefined]]});
 }));
 
 it("select(object) selects an arbitrary object", () => {
   const object = {};
-  assertSelection(select(object), [[object]], [null]);
+  assertSelection(select(object), {groups: [[object]]});
 });

@@ -12,27 +12,27 @@ it("selectAll(…) accepts an iterable", jsdom("<h1>hello</h1>", () => {
 }));
 
 it("selectAll(string) selects all elements that match the selector string, in order", jsdom("<h1 id='one'>foo</h1><h1 id='two'>bar</h1>", () => {
-  assertSelection(selectAll("h1"), [document.querySelectorAll("h1")], [document.documentElement]);
+  assertSelection(selectAll("h1"), {groups: [document.querySelectorAll("h1")], parents: [document.documentElement]});
 }));
 
 it("selectAll(nodeList) selects a NodeList of elements", jsdom("<h1>hello</h1><h2>world</h2>", () => {
-  assertSelection(selectAll(document.querySelectorAll("h1,h2")), [document.querySelectorAll("h1,h2")], [null]);
+  assertSelection(selectAll(document.querySelectorAll("h1,h2")), {groups: [document.querySelectorAll("h1,h2")]});
 }));
 
 it("selectAll(array) selects an array of elements", jsdom("<h1>hello</h1><h2>world</h2>", () => {
   const h1 = document.querySelector("h1");
   const h2 = document.querySelector("h2");
-  assertSelection(selectAll([h1, h2]), [[h1, h2]], [null]);
+  assertSelection(selectAll([h1, h2]), {groups: [[h1, h2]]});
 }));
 
 it("selectAll(array) can select an empty array", () => {
-  assertSelection(selectAll([]), [[]], [null]);
+  assertSelection(selectAll([]), {groups: [[]]});
 });
 
 it("selectAll(null) selects an empty array", () => {
-  assertSelection(selectAll(), [[]], [null]);
-  assertSelection(selectAll(null), [[]], [null]);
-  assertSelection(selectAll(undefined), [[]], [null]);
+  assertSelection(selectAll(), {groups: [[]]});
+  assertSelection(selectAll(null), {groups: [[]]});
+  assertSelection(selectAll(undefined), {groups: [[]]});
 });
 
 it("selectAll(null) selects a new empty array each time", () => {
@@ -45,10 +45,10 @@ it("selectAll(null) selects a new empty array each time", () => {
 
 it("selectAll(array) can select an array that contains null", jsdom("<h1>hello</h1><h2>world</h2>", () => {
   const h1 = document.querySelector("h1");
-  assertSelection(selectAll([null, h1, null]), [[null, h1, null]], [null]);
+  assertSelection(selectAll([null, h1, null]), {groups: [[null, h1, null]]});
 }));
 
 it("selectAll(array) can select an array that contains arbitrary objects", () => {
   const object = {};
-  assertSelection(selectAll([object]), [[object]], [null]);
+  assertSelection(selectAll([object]), {groups: [[object]]});
 });
