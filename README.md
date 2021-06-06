@@ -42,9 +42,11 @@ If you use npm, `npm install d3-selection`. You can also download the [latest re
 
 ```html
 <script type="module">
+
 import {selectAll} from "https://cdn.skypack.dev/d3-selection@3";
 
 const div = selectAll("div");
+
 </script>
 ```
 
