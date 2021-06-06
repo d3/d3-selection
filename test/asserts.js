@@ -1,13 +1,25 @@
 import assert from "assert";
 import {selection} from "../src/index.js";
 
-export function assertSelection(actual, {
-  groups: expectedGroups,
-  parents: expectedParents = Array.from(expectedGroups, () => null),
-  enter: expectedEnter,
-  exit: expectedExit,
-  ...expectedRest
-} = {}) {
+export function assertSelection(actual, expected) {
+  let expectedGroups, expectedParents, expectedEnter, expectedExit, expectedRest;
+  if (expected instanceof selection) {
+    ({
+      _groups: expectedGroups,
+      _parents: expectedParents,
+      _enter: expectedEnter,
+      _exit: expectedExit,
+      ...expectedRest
+    } = expected);
+  } else {
+    ({
+      groups: expectedGroups,
+      parents: expectedParents = Array.from(expectedGroups, () => null),
+      enter: expectedEnter,
+      exit: expectedExit,
+      ...expectedRest
+    } = expected);
+  }
   assert(actual instanceof selection);
   const {
     _groups: actualGroups,

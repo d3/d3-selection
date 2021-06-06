@@ -1,52 +1,46 @@
 import assert from "assert";
-import * as d3 from "../../src/index.js";
+import {select, selectAll} from "../../src/index.js";
+import {assertSelection} from "../asserts.js";
 import jsdom from "../jsdom.js";
-it("selection.merge(selection) returns a new selection, merging the two selections", () => {
-  const document = jsdom("<h1 id='one'>one</h1><h1 id='two'>two</h1>"),
-      body = document.body,
-      one = document.querySelector("#one"),
-      two = document.querySelector("#two"),
-      selection0 = d3.select(body).selectAll("h1"),
-      selection1 = selection0.select(function(d, i) { return i & 1 ? this : null; }),
-      selection2 = selection0.select(function(d, i) { return i & 1 ? null : this; });
-  assert.deepStrictEqual(selection1.merge(selection2), {_groups: [[one, two]], _parents: [body]});
-  assert.deepStrictEqual(selection1, {_groups: [[, two]], _parents: [body]});
-  assert.deepStrictEqual(selection2, {_groups: [[one, ]], _parents: [body]});
-});
 
-it("selection.merge(selection) returns a selection with the same size and parents as this selection", () => {
-  const document0 = jsdom("<h1 id='one'>one</h1><h1 id='two'>two</h1>"),
-      document1 = jsdom("<h1 id='one'>one</h1><h1 id='two'>two</h1><h1 id='three'>three</h1>"),
-      body0 = document0.body,
-      body1 = document1.body,
-      one0 = document0.querySelector("#one"),
-      one1 = document1.querySelector("#one"),
-      two0 = document0.querySelector("#two"),
-      two1 = document1.querySelector("#two"),
-      three1 = document1.querySelector("#three");
-  assert.deepStrictEqual(d3.select(body0).selectAll("h1").merge(d3.select(body1).selectAll("h1")), {_groups: [[one0, two0]], _parents: [body0]});
-  assert.deepStrictEqual(d3.select(body1).selectAll("h1").merge(d3.select(body0).selectAll("h1")), {_groups: [[one1, two1, three1]], _parents: [body1]});
-});
+it("selection.merge(selection) returns a new selection, merging the two selections", jsdom("<h1 id='one'>one</h1><h1 id='two'>two</h1>", () => {
+  const one = document.querySelector("#one");
+  const two = document.querySelector("#two");
+  const selection0 = select(document.body).selectAll("h1");
+  const selection1 = selection0.select(function(d, i) { return i & 1 ? this : null; });
+  const selection2 = selection0.select(function(d, i) { return i & 1 ? null : this; });
+  assertSelection(selection1.merge(selection2), {groups: [[one, two]], parents: [document.body]});
+  assertSelection(selection1, {groups: [[, two]], parents: [document.body]});
+  assertSelection(selection2, {groups: [[one,, ]], parents: [document.body]});
+}));
 
-it("selection.merge(selection) reuses groups from this selection if the other selection has fewer groups", () => {
-  const document = jsdom("<parent><child></child><child></child></parent><parent><child></child><child></child></parent>"),
-      body = document.body,
-      selection0 = d3.select(body).selectAll("parent").selectAll("child"),
-      selection1 = d3.select(body).selectAll("parent:first-child").selectAll("child"),
-      selection01 = selection0.merge(selection1),
-      selection10 = selection1.merge(selection0);
-  assert.deepStrictEqual(selection01, selection0);
-  assert.deepStrictEqual(selection10, selection1);
+it("selection.merge(selection) returns a selection with the same size and parents as this selection", jsdom("<div id='body0'><h1 name='one'>one</h1><h1 name='two'>two</h1></div><div id='body1'><h1 name='one'>one</h1><h1 name='two'>two</h1><h1 name='three'>three</h1></div>", () => {
+  const body0 = document.querySelector("#body0");
+  const body1 = document.querySelector("#body1");
+  const one0 = body0.querySelector("[name='one']");
+  const one1 = body1.querySelector("[name='one']");
+  const two0 = body0.querySelector("[name='two']");
+  const two1 = body1.querySelector("[name='two']");
+  const three1 = body1.querySelector("[name='three']");
+  assertSelection(select(body0).selectAll("h1").merge(select(body1).selectAll("h1")), {groups: [[one0, two0]], parents: [body0]});
+  assertSelection(select(body1).selectAll("h1").merge(select(body0).selectAll("h1")), {groups: [[one1, two1, three1]], parents: [body1]});
+}));
+
+it("selection.merge(selection) reuses groups from this selection if the other selection has fewer groups", jsdom("<parent><child></child><child></child></parent><parent><child></child><child></child></parent>", () => {
+  const selection0 = selectAll("parent").selectAll("child");
+  const selection1 = selectAll("parent:first-child").selectAll("child");
+  const selection01 = selection0.merge(selection1);
+  const selection10 = selection1.merge(selection0);
+  assertSelection(selection01, selection0);
+  assertSelection(selection10, selection1);
   assert.strictEqual(selection01._groups[1], selection0._groups[1]);
-});
+}));
 
-it("selection.merge(selection) reuses this selection’s parents", () => {
-  const document = jsdom("<parent><child></child><child></child></parent><parent><child></child><child></child></parent>"),
-      body = document.body,
-      selection0 = d3.select(body).selectAll("parent").selectAll("child"),
-      selection1 = d3.select(body).selectAll("parent:first-child").selectAll("child"),
-      selection01 = selection0.merge(selection1),
-      selection10 = selection1.merge(selection0);
+it("selection.merge(selection) reuses this selection’s parents", jsdom("<parent><child></child><child></child></parent><parent><child></child><child></child></parent>", () => {
+  const selection0 = selectAll("parent").selectAll("child");
+  const selection1 = selectAll("parent:first-child").selectAll("child");
+  const selection01 = selection0.merge(selection1);
+  const selection10 = selection1.merge(selection0);
   assert.strictEqual(selection01._parents, selection0._parents);
   assert.strictEqual(selection10._parents, selection1._parents);
-});
+}));
