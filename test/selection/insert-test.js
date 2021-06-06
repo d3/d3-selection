@@ -1,49 +1,44 @@
 import assert from "assert";
-import * as d3 from "../../src/index.js";
+import {selectAll} from "../../src/index.js";
+import {assertSelection} from "../asserts.js";
 import it from "../jsdom.js";
 
-const document = jsdom("");
-
-it("selection.insert(name, before) inserts a new element of the specified name before the specified child of each selected element", () => {
-  const document = jsdom("<div id='one'><span class='before'></span></div><div id='two'><span class='before'></span></div>"),
-      one = document.querySelector("#one"),
-      two = document.querySelector("#two"),
-      selection = d3.selectAll([one, two]).insert("span", ".before"),
-      three = one.querySelector("span:first-child"),
-      four = two.querySelector("span:first-child");
-  assert.deepStrictEqual(selection, {_groups: [[three, four]], _parents: [null]});
+it("selection.insert(name, before) inserts a new element of the specified name before the specified child of each selected element", "<div id='one'><span class='before'></span></div><div id='two'><span class='before'></span></div>", () => {
+  const one = document.querySelector("#one");
+  const two = document.querySelector("#two");
+  const selection = selectAll([one, two]).insert("span", ".before");
+  const three = one.querySelector("span:first-child");
+  const four = two.querySelector("span:first-child");
+  assertSelection(selection, {groups: [[three, four]], parents: [null]});
 });
 
-it("selection.insert(function, function) inserts the returned element before the specified child of each selected element", () => {
-  const document = jsdom("<div id='one'><span class='before'></span></div><div id='two'><span class='before'></span></div>"),
-      one = document.querySelector("#one"),
-      two = document.querySelector("#two"),
-      selection = d3.selectAll([one, two]).insert(function() { return document.createElement("SPAN"); }, function() { return this.firstChild; }),
-      three = one.querySelector("span:first-child"),
-      four = two.querySelector("span:first-child");
-  assert.deepStrictEqual(selection, {_groups: [[three, four]], _parents: [null]});
+it("selection.insert(function, function) inserts the returned element before the specified child of each selected element", "<div id='one'><span class='before'></span></div><div id='two'><span class='before'></span></div>", () => {
+  const one = document.querySelector("#one");
+  const two = document.querySelector("#two");
+  const selection = selectAll([one, two]).insert(function() { return document.createElement("SPAN"); }, function() { return this.firstChild; });
+  const three = one.querySelector("span:first-child");
+  const four = two.querySelector("span:first-child");
+  assertSelection(selection, {groups: [[three, four]], parents: [null]});
 });
 
-it("selection.insert(function, function) inserts the returned element as the last child if the selector function returns null", () => {
-  const document = jsdom("<div id='one'><span class='before'></span></div><div id='two'><span class='before'></span></div>"),
-      one = document.querySelector("#one"),
-      two = document.querySelector("#two"),
-      selection = d3.selectAll([one, two]).insert(function() { return document.createElement("SPAN"); }, function() { return; }),
-      three = one.querySelector("span:last-child"),
-      four = two.querySelector("span:last-child");
-  assert.deepStrictEqual(selection, {_groups: [[three, four]], _parents: [null]});
+it("selection.insert(function, function) inserts the returned element as the last child if the selector function returns null", "<div id='one'><span class='before'></span></div><div id='two'><span class='before'></span></div>", () => {
+  const one = document.querySelector("#one");
+  const two = document.querySelector("#two");
+  const selection = selectAll([one, two]).insert(function() { return document.createElement("SPAN"); }, function() { return; });
+  const three = one.querySelector("span:last-child");
+  const four = two.querySelector("span:last-child");
+  assertSelection(selection, {groups: [[three, four]], parents: [null]});
 });
 
-it("selection.insert(name, function) passes the selector function data, index and group", () => {
-  const document = jsdom("<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>"),
-      one = document.querySelector("#one"),
-      two = document.querySelector("#two"),
-      three = document.querySelector("#three"),
-      four = document.querySelector("#four"),
-      five = document.querySelector("#five"),
-      results = [];
+it("selection.insert(name, function) passes the selector function data, index and group", "<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>", () => {
+  const one = document.querySelector("#one");
+  const two = document.querySelector("#two");
+  const three = document.querySelector("#three");
+  const four = document.querySelector("#four");
+  const five = document.querySelector("#five");
+  const results = [];
 
-  d3.selectAll([one, two])
+  selectAll([one, two])
       .datum(function(d, i) { return "parent-" + i; })
     .selectAll("child")
       .data(function(d, i) { return [0, 1].map(function(j) { return "child-" + i + "-" + j; }); })
@@ -52,6 +47,6 @@ it("selection.insert(name, function) passes the selector function data, index an
   assert.deepStrictEqual(results, [
     [three, "child-0-0", 0, [three, four]],
     [four, "child-0-1", 1, [three, four]],
-    [five, "child-1-0", 0, [five, ]]
+    [five, "child-1-0", 0, [five,, ]]
   ]);
 });
