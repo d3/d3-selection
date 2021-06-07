@@ -1,6 +1,6 @@
 {
   "name": "d3-selection",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Data-driven DOM manipulation: select elements and join them to data.",
   "homepage": "https://d3js.org/d3-selection/",
   "repository": {
