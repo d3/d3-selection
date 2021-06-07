@@ -583,7 +583,7 @@ svg.selectAll("circle")
 
 The selections returned by the *enter* and *update* functions are merged and then returned by *selection*.join.
 
-You also animate enter, update and exit by creating transitions inside the *enter*, *update* and *exit* functions. To avoid breaking the method chain, use *selection*.call to create transitions, or return an undefined enter or update selection to prevent merging: the return value of the *enter* and *update* functions specifies the two selections to merge and return by *selection*.join.
+You can animate enter, update and exit by creating transitions inside the *enter*, *update* and *exit* functions. If the *enter* and *update* functions return transitions, their underlying selections are merged and then returned by *selection*.join. The return value of the *exit* function is not used.
 
 For more, see the [*selection*.join notebook](https://observablehq.com/@d3/selection-join).
 
