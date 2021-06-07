@@ -2,13 +2,15 @@
   "extends": "eslint:recommended",
   "parserOptions": {
     "sourceType": "module",
-    "ecmaVersion": 8
+    "ecmaVersion": 9
   },
   "env": {
     "es6": true,
-    "browser": true
+    "browser": true,
+    "node": true,
+    "mocha": true
   },
   "rules": {
-    "no-cond-assign": 0
+    "no-sparse-arrays": 0
   }
 }

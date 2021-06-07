@@ -38,10 +38,22 @@ For more, see [the d3-selection collection on Observable](https://observablehq.c
 
 ## Installing
 
-If you use NPM, `npm install d3-selection`. Otherwise, download the [latest release](https://github.com/d3/d3-selection/releases/latest). You can also load d3-selection as a standalone library or as part of [D3](https://github.com/d3/d3). ES modules, AMD, CommonJS, and vanilla environments are supported. In vanilla, a `d3` global is exported:
+If you use npm, `npm install d3-selection`. You can also download the [latest release on GitHub](https://github.com/d3/d3-selection/releases/latest). For vanilla HTML in modern browsers, import d3-selection from Skypack:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/d3-selection@2"></script>
+<script type="module">
+
+import {selectAll} from "https://cdn.skypack.dev/d3-selection@3";
+
+const div = selectAll("div");
+
+</script>
+```
+
+For legacy environments, you can load d3-selection’s UMD bundle from an npm-based CDN such as jsDelivr; a `d3` global is exported:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/d3-selection@3"></script>
 <script>
 
 const div = d3.selectAll("div");

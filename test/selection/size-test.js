@@ -1,21 +1,17 @@
-var tape = require("tape"),
-    jsdom = require("../jsdom"),
-    d3 = require("../../");
+import assert from "assert";
+import {selectAll} from "../../src/index.js";
+import it from "../jsdom.js";
 
-tape("selection.size() returns the number of selected elements", function(test) {
-  var document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
-      one = document.querySelector("#one"),
-      two = document.querySelector("#two");
-  test.deepEqual(d3.selectAll([]).size(), 0);
-  test.deepEqual(d3.selectAll([one]).size(), 1);
-  test.deepEqual(d3.selectAll([one, two]).size(), 2);
-  test.end();
+it("selection.size() returns the number of selected elements", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+  const one = document.querySelector("#one");
+  const two = document.querySelector("#two");
+  assert.deepStrictEqual(selectAll([]).size(), 0);
+  assert.deepStrictEqual(selectAll([one]).size(), 1);
+  assert.deepStrictEqual(selectAll([one, two]).size(), 2);
 });
 
-tape("selection.size() skips missing elements", function(test) {
-  var document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
-      one = document.querySelector("#one"),
-      two = document.querySelector("#two");
-  test.deepEqual(d3.selectAll([, one,, two]).size(), 2);
-  test.end();
+it("selection.size() skips missing elements", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+  const one = document.querySelector("#one");
+  const two = document.querySelector("#two");
+  assert.deepStrictEqual(selectAll([, one,, two]).size(), 2);
 });

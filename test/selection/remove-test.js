@@ -1,37 +1,31 @@
-var tape = require("tape"),
-    jsdom = require("../jsdom"),
-    d3 = require("../../");
+import assert from "assert";
+import {selectAll} from "../../src/index.js";
+import it from "../jsdom.js";
 
-tape("selection.remove() removes selected elements from their parent", function(test) {
-  var document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
-      one = document.querySelector("#one"),
-      two = document.querySelector("#two"),
-      selection = d3.selectAll([two, one]);
-  test.equal(selection.remove(), selection);
-  test.equal(one.parentNode, null);
-  test.equal(two.parentNode, null);
-  test.end();
+it("selection.remove() removes selected elements from their parent", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+  const one = document.querySelector("#one");
+  const two = document.querySelector("#two");
+  const s = selectAll([two, one]);
+  assert.strictEqual(s.remove(), s);
+  assert.strictEqual(one.parentNode, null);
+  assert.strictEqual(two.parentNode, null);
 });
 
-tape("selection.remove() skips elements that have already been detached", function(test) {
-  var document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
-      one = document.querySelector("#one"),
-      two = document.querySelector("#two"),
-      selection = d3.selectAll([two, one]);
+it("selection.remove() skips elements that have already been detached", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+  const one = document.querySelector("#one");
+  const two = document.querySelector("#two");
+  const s = selectAll([two, one]);
   one.parentNode.removeChild(one);
-  test.equal(selection.remove(), selection);
-  test.equal(one.parentNode, null);
-  test.equal(two.parentNode, null);
-  test.end();
+  assert.strictEqual(s.remove(), s);
+  assert.strictEqual(one.parentNode, null);
+  assert.strictEqual(two.parentNode, null);
 });
 
-tape("selection.remove() skips missing elements", function(test) {
-  var document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
-      one = document.querySelector("#one"),
-      two = document.querySelector("#two"),
-      selection = d3.selectAll([, one]);
-  test.equal(selection.remove(), selection);
-  test.equal(one.parentNode, null);
-  test.equal(two.parentNode, document.body);
-  test.end();
+it("selection.remove() skips missing elements", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+  const one = document.querySelector("#one");
+  const two = document.querySelector("#two");
+  const s = selectAll([, one]);
+  assert.strictEqual(s.remove(), s);
+  assert.strictEqual(one.parentNode, null);
+  assert.strictEqual(two.parentNode, document.body);
 });

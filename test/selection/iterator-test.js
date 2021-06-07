@@ -1,27 +1,21 @@
-var tape = require("tape"),
-    jsdom = require("../jsdom"),
-    d3 = require("../../");
+import assert from "assert";
+import {selectAll} from "../../src/index.js";
+import it from "../jsdom.js";
 
-tape("selection are iterable over the selected nodes", function(test) {
-  var document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
-      one = document.querySelector("#one"),
-      two = document.querySelector("#two");
-  test.deepEqual([...d3.selectAll([one, two])], [one, two]);
-  test.end();
+it("selection are iterable over the selected nodes", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+  const one = document.querySelector("#one");
+  const two = document.querySelector("#two");
+  assert.deepStrictEqual([...selectAll([one, two])], [one, two]);
 });
 
-tape("selection iteration merges nodes from all groups into a single array", function(test) {
-  var document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
-      one = document.querySelector("#one"),
-      two = document.querySelector("#two");
-  test.deepEqual([...d3.selectAll([one, two]).selectAll(function() { return [this]; })], [one, two]);
-  test.end();
+it("selection iteration merges nodes from all groups into a single array", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+  const one = document.querySelector("#one");
+  const two = document.querySelector("#two");
+  assert.deepStrictEqual([...selectAll([one, two]).selectAll(function() { return [this]; })], [one, two]);
 });
 
-tape("selection iteration skips missing elements", function(test) {
-  var document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
-      one = document.querySelector("#one"),
-      two = document.querySelector("#two");
-  test.deepEqual([...d3.selectAll([, one,, two])], [one, two]);
-  test.end();
+it("selection iteration skips missing elements", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+  const one = document.querySelector("#one");
+  const two = document.querySelector("#two");
+  assert.deepStrictEqual([...selectAll([, one,, two])], [one, two]);
 });
