@@ -1,6 +1,6 @@
 import assert from "assert";
 import {select, selectAll} from "../../src/index.js";
-import {assertSelection} from "../asserts.js";
+import {assertSelection, enterNode} from "../asserts.js";
 import it from "../jsdom.js";
 
 it("selection.data(values) binds the specified values to the selected elements by index", "<div id='one'></div><div id='two'></div><div id='three'></div>", () => {
@@ -42,13 +42,7 @@ it("selection.data(values) puts unbound data in the enter selection", "<div id='
   assertSelection(selection, {
     groups: [[one, two,, ]],
     parents: [document.body],
-    enter: [[,, {
-      __data__: "baz",
-      _next: null,
-      _parent: document.body,
-      namespaceURI: "http://www.w3.org/1999/xhtml",
-      ownerDocument: document.body.ownerDocument
-    }]],
+    enter: [[,, enterNode(document.body, "baz")]],
     exit: [[,, ]]
   });
 });
@@ -128,13 +122,7 @@ it("selection.data(values, function) joins data to element using the computed ke
   assertSelection(selection, {
     groups: [[one,, three]],
     parents: [document.body],
-    enter: [[, {
-      __data__: "four",
-      _next: three,
-      _parent: document.body,
-      namespaceURI: "http://www.w3.org/1999/xhtml",
-      ownerDocument: document.body.ownerDocument
-    },, ]],
+    enter: [[, enterNode(document.body, "four", "#three"),, ]],
     exit: [[, two,, ]]
   });
 });
@@ -173,13 +161,7 @@ it("selection.data(values, function) puts data with duplicate keys into update a
   assertSelection(selection, {
     groups: [[one,, two]],
     parents: [document.body],
-    enter: [[, {
-      __data__: "one",
-      _next: two,
-      _parent: document.body,
-      namespaceURI: "http://www.w3.org/1999/xhtml",
-      ownerDocument: document.body.ownerDocument
-    },, ]],
+    enter: [[, enterNode(document.body, "one", two),, ]],
     exit: [[,, three]]
   });
 });
@@ -192,19 +174,7 @@ it("selection.data(values, function) puts data with duplicate keys into enter", 
   assertSelection(selection, {
     groups: [[,, two]],
     parents: [document.body],
-    enter: [[{
-      __data__: "foo",
-      _next: two,
-      _parent: document.body,
-      namespaceURI: "http://www.w3.org/1999/xhtml",
-      ownerDocument: document.body.ownerDocument
-    }, {
-      __data__: "foo",
-      _next: two,
-      _parent: document.body,
-      namespaceURI: "http://www.w3.org/1999/xhtml",
-      ownerDocument: document.body.ownerDocument
-    },, ]],
+    enter: [[enterNode(document.body, "foo", two), enterNode(document.body, "foo", two),, ]],
     exit: [[one,, three]]
   });
 });
@@ -236,19 +206,7 @@ it("selection.data(values, function) applies the order of the data", "<div id='o
   assertSelection(selection, {
     groups: [[, three, one,, two]],
     parents: [document.body],
-    enter: [[{
-      __data__: "four",
-      _next: three,
-      _parent: document.body,
-      namespaceURI: "http://www.w3.org/1999/xhtml",
-      ownerDocument: document.body.ownerDocument
-    },,, {
-      __data__: "five",
-      _next: two,
-      _parent: document.body,
-      namespaceURI: "http://www.w3.org/1999/xhtml",
-      ownerDocument: document.body.ownerDocument
-    },, ]],
+    enter: [[enterNode(document.body, "four", three),,, enterNode(document.body, "five", two),, ]],
     exit: [[,,,]]
   });
 });
@@ -267,7 +225,7 @@ it("selection.data(values) returns a new selection, and does not modify the orig
   assertSelection(selection1, {
     groups: [[one, two,, ]],
     parents: [root],
-    enter: [[,, {__data__: 3, _next: null, _parent: root, namespaceURI: "http://www.w3.org/1999/xhtml", ownerDocument: document}, ]],
+    enter: [[,, enterNode(root, 3), ]],
     exit: [[,, ]]
   });
   assertSelection(selection2, {
@@ -293,7 +251,7 @@ it("selection.data(values, key) does not modify the groups array in-place", "<h1
   assertSelection(selection1, {
     groups: [[one, two,, ]],
     parents: [root],
-    enter: [[,, {__data__: 3, _next: null, _parent: root, namespaceURI: "http://www.w3.org/1999/xhtml", ownerDocument: document}, ]],
+    enter: [[,, enterNode(root, 3), ]],
     exit: [[,, ]]
   });
   assertSelection(selection2, {

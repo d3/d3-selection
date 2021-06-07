@@ -1,5 +1,6 @@
 import assert from "assert";
 import {selection} from "../src/index.js";
+import {EnterNode} from "../src/selection/enter.js";
 
 export function assertSelection(actual, expected) {
   let expectedGroups, expectedParents, expectedEnter, expectedExit, expectedRest;
@@ -31,7 +32,7 @@ export function assertSelection(actual, expected) {
   assert.deepStrictEqual({
     groups: Array.from(actualGroups, group => Array.from(group)),
     parents: Array.from(actualParents),
-    enter: actualEnter && actualEnter.map(group => group.map(node => ({...node}))), // ignore EnterNode
+    enter: actualEnter,
     exit: actualExit,
     ...actualRest
   }, {
@@ -41,4 +42,12 @@ export function assertSelection(actual, expected) {
     exit: expectedExit,
     ...expectedRest
   });
+}
+
+export function enterNode(parent, data, next = null) {
+  if (typeof parent === "string") parent = document.querySelector(parent);
+  if (typeof next === "string") next = document.querySelector(next);
+  const node = new EnterNode(parent, data);
+  node._next = next;
+  return node;
 }
