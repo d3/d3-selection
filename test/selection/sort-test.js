@@ -43,7 +43,7 @@ it("selection.sort() uses natural ascending order", "<h1 id='one'></h1><h1 id='t
 it("selection.sort() puts missing elements at the end of each group", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
-  const selection = selectAll([two, one]).datum(function(d, i) { return i; });
+  selectAll([two, one]).datum(function(d, i) { return i; });
   assertSelection(selectAll([, one,, two]).sort(), {groups: [[two, one,,, ]], parents: [null]});
   assert.strictEqual(two.nextSibling, one);
   assert.strictEqual(one.nextSibling, null);
@@ -52,7 +52,7 @@ it("selection.sort() puts missing elements at the end of each group", "<h1 id='o
 it("selection.sort(function) puts missing elements at the end of each group", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
-  const selection = selectAll([two, one]).datum(function(d, i) { return i; });
+  selectAll([two, one]).datum(function(d, i) { return i; });
   assertSelection(selectAll([, one,, two]).sort(function(a, b) { return b - a; }), {groups: [[one, two,,, ]], parents: [null]});
   assert.strictEqual(one.nextSibling, two);
   assert.strictEqual(two.nextSibling, null);

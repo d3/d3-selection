@@ -64,6 +64,7 @@ it("enter.append(…) inserts entering nodes before the next node in the update 
   p = p.enter().append("p").text(identity).merge(p);
   p = p.data([0, 1, 2, 3, 4], identity);
   p = p.enter().append("p").text(identity).merge(p);
+  p;
   assert.strictEqual(document.body.innerHTML, "<p>0</p><p>1</p><p>2</p><p>3</p><p>4</p>");
 });
 
@@ -74,6 +75,7 @@ it("enter.insert(…, before) inserts entering nodes before the sibling matching
   p = p.enter().insert("p", "hr").text(identity).merge(p);
   p = p.data([0, 1, 2, 3, 4], identity);
   p = p.enter().insert("p", "hr").text(identity).merge(p);
+  p;
   assert.strictEqual(document.body.innerHTML, "<p>1</p><p>3</p><p>0</p><p>2</p><p>4</p><hr>");
 });
 
@@ -84,5 +86,6 @@ it("enter.insert(…, null) inserts entering nodes after the last child", () => 
   p = p.enter().insert("p", null).text(identity).merge(p);
   p = p.data([0, 1, 2, 3, 4], identity);
   p = p.enter().insert("p", null).text(identity).merge(p);
+  p;
   assert.strictEqual(document.body.innerHTML, "<p>1</p><p>3</p><p>0</p><p>2</p><p>4</p>");
 });
