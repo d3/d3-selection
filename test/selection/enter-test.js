@@ -20,7 +20,7 @@ it("selection.enter() shares the update selection’s parents", "<h1>hello</h1>"
 
 it("selection.enter() returns the same selection each time", "<h1>hello</h1>", () => {
   const s = select(document.body);
-  assertSelection(s.enter(), s.enter());
+  assert.deepStrictEqual(s.enter(), s.enter());
 });
 
 it("selection.enter() contains unbound data after a data-join", "<div id='one'></div><div id='two'></div>", () => {
