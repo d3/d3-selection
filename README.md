@@ -198,7 +198,7 @@ The returned filtered selection preserves the parents of this selection, but lik
 
 <a name="selection_merge" href="#selection_merge">#</a> <i>selection</i>.<b>merge</b>(<i>other</i>) · [Source](https://github.com/d3/d3-selection/blob/master/src/selection/merge.js)
 
-Returns a new selection merging this selection with the specified *other* selection. The returned selection has the same number of groups and the same parents as this selection. Any missing (null) elements in this selection are filled with the corresponding element, if present (not null), from the specified *selection*. (If the *other* selection has additional groups or parents, they are ignored.)
+Returns a new selection merging this selection with the specified *other* selection or transition. The returned selection has the same number of groups and the same parents as this selection. Any missing (null) elements in this selection are filled with the corresponding element, if present (not null), from the specified *selection*. (If the *other* selection has additional groups or parents, they are ignored.)
 
 This method is used internally by [*selection*.join](#selection_join) to merge the [enter](#selection_enter) and [update](#selection_data) selections after [binding data](#joining-data). You can also merge explicitly, although note that since merging is based on element index, you should use operations that preserve index, such as [*selection*.select](#selection_select) instead of [*selection*.filter](#selection_filter). For example:
 

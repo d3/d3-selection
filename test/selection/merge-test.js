@@ -44,3 +44,20 @@ it("selection.merge(selection) reuses this selection’s parents", "<parent><chi
   assert.strictEqual(selection01._parents, selection0._parents);
   assert.strictEqual(selection10._parents, selection1._parents);
 });
+
+it("selection.merge(transition) returns a new selection, merging the two selections", "<h1 id='one'>one</h1><h1 id='two'>two</h1>", () => {
+  const one = document.querySelector("#one");
+  const two = document.querySelector("#two");
+  const selection0 = select(document.body).selectAll("h1");
+  const selection1 = selection0.select(function(d, i) { return i & 1 ? this : null; });
+  const selection2 = selection0.select(function(d, i) { return i & 1 ? null : this; });
+  assertSelection(selection1.merge(mockTransition(selection2)), {groups: [[one, two]], parents: [document.body]});
+});
+
+function mockTransition(selection) {
+  return {
+    selection() {
+      return selection;
+    }
+  };
+}
