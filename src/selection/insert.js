@@ -5,16 +5,8 @@ function constantNull() {
   return null;
 }
 
-function selectThis() {
-  return this;
-}
-
-function selectNextSibling() {
-  return this.nextSibling;
-}
-
-export default function(name, before) {
-  var create = typeof name === "function" ? name : creator(name),
+export default function insert(name, before) {
+  const create = typeof name === "function" ? name : creator(name),
       select = before == null ? constantNull : typeof before === "function" ? before : selector(before);
   return this.select(function() {
     return this.insertBefore(create.apply(this, arguments), select.apply(this, arguments) || null);
@@ -22,9 +14,15 @@ export default function(name, before) {
 }
 
 export function insertBefore(name) {
-  return this.insert(name, selectThis);
+  const create = typeof name === "function" ? name : creator(name);
+  return this.select(function() {
+    return this.parentNode.insertBefore(create.apply(this, arguments), this);
+  });
 }
 
 export function insertAfter(name) {
-  return this.insert(name, selectNextSibling);
+  const create = typeof name === "function" ? name : creator(name);
+  return this.select(function() {
+    return this.parentNode.insertBefore(create.apply(this, arguments), this.nextSibling);
+  });
 }

@@ -398,6 +398,14 @@ In both cases, this method returns a new selection containing the appended eleme
 
 The specified *name* may have a namespace prefix, such as `svg:text` to specify a `text` attribute in the SVG namespace. See [namespaces](#namespaces) for the map of supported namespaces; additional namespaces can be registered by adding to the map. If no namespace is specified, the namespace will be inherited from the parent element; or, if the name is one of the known prefixes, the corresponding namespace will be used (for example, `svg` implies `svg:svg`).
 
+<a name="selection_insertAfter" href="#selection_insertAfter">#</a> <i>selection</i>.<b>insertAfter</b>(<i>type</i>) · [Source](https://github.com/d3/d3-selection/blob/master/src/selection/insert.js)
+
+Shorthand for inserting a new element after each of the current selection’s nodes.
+
+<a name="selection_insertBefore" href="#selection_insertBefore">#</a> <i>selection</i>.<b>insertBefore</b>(<i>type</i>) · [Source](https://github.com/d3/d3-selection/blob/master/src/selection/insert.js)
+
+Shorthand for inserting a new element before each of the current selection’s nodes.
+
 <a name="selection_remove" href="#selection_remove">#</a> <i>selection</i>.<b>remove</b>() · [Source](https://github.com/d3/d3-selection/blob/master/src/selection/remove.js)
 
 Removes the selected elements from the document. Returns this selection (the removed elements) which are now detached from the DOM. There is not currently a dedicated API to add removed elements back to the document; however, you can pass a function to [*selection*.append](#selection_append) or [*selection*.insert](#selection_insert) to re-add elements.
