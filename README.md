@@ -412,6 +412,26 @@ selection.select(function() {
 });
 ```
 
+<a name="selection_wrap" href="#selection_wrap">#</a> <i>selection</i>.<b>wrap</b>(<i>type</i>) · [Source](https://github.com/d3/d3-selection/blob/master/src/selection/wrap.js)
+
+If the specified *type* is a string, creates a new element of this type (tag name) as a new parent for each selected element, and replaces that node in the document by its new parent.
+
+If the specified *type* is a function, it is evaluated for each selected element, in order, being passed the current datum (*d*), the current index (*i*), and the current group (*nodes*), with *this* as the current DOM element (*nodes*[*i*]). This function should return an element to be used as the new parent. (The function typically creates a new element, but it may instead return an existing element.) For example, to wrap a paragraph around each SPAN element:
+
+```js
+d3.selectAll("span").wrap("p");
+```
+
+This is equivalent to:
+
+```js
+d3.selectAll("span").wrap(() => document.createElement("p"));
+```
+
+In both cases, this method returns a new selection containing the new parent elements. Each new element inherits the data of the current element it wraps.
+
+The specified *name* may have a namespace prefix, such as `svg:text` to specify a `text` attribute in the SVG namespace. See [namespaces](#namespaces) for the map of supported namespaces; additional namespaces can be registered by adding to the map. If no namespace is specified, the namespace will be inherited from the selected element; or, if the name is one of the known prefixes, the corresponding namespace will be used (for example, `svg` implies `svg:svg`). To wrap svg elements in HTML A elements, pass an explicit namespace. 
+
 <a name="selection_sort" href="#selection_sort">#</a> <i>selection</i>.<b>sort</b>(<i>compare</i>) · [Source](https://github.com/d3/d3-selection/blob/master/src/selection/sort.js)
 
 Returns a new selection that contains a copy of each group in this selection sorted according to the *compare* function. After sorting, re-inserts elements to match the resulting order (per [*selection*.order](#selection_order)).

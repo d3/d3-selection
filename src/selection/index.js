@@ -32,6 +32,7 @@ import selection_datum from "./datum.js";
 import selection_on from "./on.js";
 import selection_dispatch from "./dispatch.js";
 import selection_iterator from "./iterator.js";
+import selection_wrap from "./wrap.js";
 
 export var root = [null];
 
@@ -84,6 +85,7 @@ Selection.prototype = selection.prototype = {
   datum: selection_datum,
   on: selection_on,
   dispatch: selection_dispatch,
+  wrap: selection_wrap,
   [Symbol.iterator]: selection_iterator
 };
 
