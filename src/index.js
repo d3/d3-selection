@@ -4,6 +4,7 @@ export {default as local} from "./local.js";
 export {default as matcher} from "./matcher.js";
 export {default as namespace} from "./namespace.js";
 export {default as namespaces} from "./namespaces.js";
+export {default as one} from "./one.js";
 export {default as pointer} from "./pointer.js";
 export {default as pointers} from "./pointers.js";
 export {default as select} from "./select.js";
