@@ -1,8 +1,6 @@
-export default (selection, selector) => {
-  const [name, className] = selector.split('.');
-  return selection
+export default (selection, name, className) =>
+  selection
     .selectAll(name + '.' + className)
     .data([null])
     .join(name)
     .attr('class', className);
-}
