@@ -2,6 +2,7 @@ import sourceEvent from "./sourceEvent.js";
 
 export default function(event, node) {
   event = sourceEvent(event);
+  if (event.touches) event = event.touches[0];
   if (node === undefined) node = event.currentTarget;
   if (node) {
     var svg = node.ownerSVGElement || node;
