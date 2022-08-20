@@ -276,6 +276,26 @@ Returns the owner window for the specified *node*. If *node* is a node, returns 
 
 Returns the value of the style property with the specified *name* for the specified *node*. If the *node* has an inline style with the specified *name*, its value is returned; otherwise, the [computed property value](https://developer.mozilla.org/en-US/docs/Web/CSS/computed_value) is returned. See also [*selection*.style](#selection_style).
 
+<a name="one" href="#one">#</a> d3.<b>one</b>(<i>selection</i>, <i>name</i>, <i>class</i>) · [Source](https://github.com/d3/d3-selection/blob/master/src/selection/one.js)
+
+A convenience utility for managing a single element of the given <i>name</i> and <i>class</i> within the given <i>selection</i>.
+
+For example, consider the following logic for managing an axis container:
+
+```js
+const xAxisG = selection
+  .selectAll(`g.x-axis`)
+  .data([null])
+  .join('g')
+  .attr('class', 'x-axis');
+```
+
+The above logic can be expressed more concisely as:
+
+```js
+const xAxisG = one(selection, 'g', 'x-axis');
+```
+
 ### Modifying Elements
 
 After selecting elements, use the selection’s transformation methods to affect document content. For example, to set the name attribute and color style of an anchor element:
