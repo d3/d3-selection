@@ -1,216 +1,186 @@
-var tape = require("tape"),
-    jsdom = require("../jsdom"),
-    d3 = require("../../");
+import assert from "assert";
+import {select, selectAll} from "../../src/index.js";
+import it from "../jsdom.js";
 
-tape("selection.on(type, listener) registers a listeners for the specified event type on each selected element", function(test) {
-  var clicks = 0,
-      document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
-      one = document.querySelector("#one"),
-      two = document.querySelector("#two"),
-      selection = d3.selectAll([one, two]);
-  test.equal(selection.on("click", function() { ++clicks; }), selection);
-  selection.dispatch("click");
-  test.equal(clicks, 2);
-  selection.dispatch("tick");
-  test.equal(clicks, 2);
-  test.end();
+it("selection.on(type, listener) registers a listeners for the specified event type on each selected element", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+  let clicks = 0;
+  const one = document.querySelector("#one");
+  const two = document.querySelector("#two");
+  const s = selectAll([one, two]);
+  assert.strictEqual(s.on("click", () => { ++clicks; }), s);
+  s.dispatch("click");
+  assert.strictEqual(clicks, 2);
+  s.dispatch("tick");
+  assert.strictEqual(clicks, 2);
 });
 
-tape("selection.on(type, listener) observes the specified name, if any", function(test) {
-  var foo = 0,
-      bar = 0,
-      document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
-      one = document.querySelector("#one"),
-      two = document.querySelector("#two"),
-      selection = d3.selectAll([one, two]).on("click.foo", function() { ++foo; }).on("click.bar", function() { ++bar; });
-  selection.dispatch("click");
-  test.equal(foo, 2);
-  test.equal(bar, 2);
-  test.end();
+it("selection.on(type, listener) observes the specified name, if any", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+  let foo = 0;
+  let bar = 0;
+  const one = document.querySelector("#one");
+  const two = document.querySelector("#two");
+  const s = selectAll([one, two]).on("click.foo", () => { ++foo; }).on("click.bar", () => { ++bar; });
+  s.dispatch("click");
+  assert.strictEqual(foo, 2);
+  assert.strictEqual(bar, 2);
 });
 
-tape("selection.on(type, listener, capture) observes the specified capture flag, if any", function(test) {
-  var result,
-      selection = d3.select({addEventListener: function(type, listener, capture) { result = capture; }});
-  test.equal(selection.on("click.foo", function() {}, true), selection);
-  test.deepEqual(result, true);
-  test.end();
+it("selection.on(type, listener, capture) observes the specified capture flag, if any", () => {
+  let result;
+  const s = select({addEventListener: (type, listener, capture) => { result = capture; }});
+  assert.strictEqual(s.on("click.foo", () => {}, true), s);
+  assert.deepStrictEqual(result, true);
 });
 
-tape("selection.on(type) returns the listener for the specified event type, if any", function(test) {
-  var clicked = function() {},
-      document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
-      one = document.querySelector("#one"),
-      two = document.querySelector("#two"),
-      selection = d3.selectAll([one, two]).on("click", clicked);
-  test.equal(selection.on("click"), clicked);
-  test.end();
+it("selection.on(type) returns the listener for the specified event type, if any", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+  const clicked = () => {};
+  const one = document.querySelector("#one");
+  const two = document.querySelector("#two");
+  const s = selectAll([one, two]).on("click", clicked);
+  assert.strictEqual(s.on("click"), clicked);
 });
 
-tape("selection.on(type) observes the specified name, if any", function(test) {
-  var clicked = function() {},
-      document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
-      one = document.querySelector("#one"),
-      two = document.querySelector("#two"),
-      selection = d3.selectAll([one, two]).on("click.foo", clicked);
-  test.equal(selection.on("click"), undefined);
-  test.equal(selection.on("click.foo"), clicked);
-  test.equal(selection.on("click.bar"), undefined);
-  test.equal(selection.on("tick.foo"), undefined);
-  test.equal(selection.on(".foo"), undefined);
-  test.end();
+it("selection.on(type) observes the specified name, if any", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+  const clicked = () => {};
+  const one = document.querySelector("#one");
+  const two = document.querySelector("#two");
+  const s = selectAll([one, two]).on("click.foo", clicked);
+  assert.strictEqual(s.on("click"), undefined);
+  assert.strictEqual(s.on("click.foo"), clicked);
+  assert.strictEqual(s.on("click.bar"), undefined);
+  assert.strictEqual(s.on("tick.foo"), undefined);
+  assert.strictEqual(s.on(".foo"), undefined);
 });
 
-tape("selection.on(type, null) removes the listener with the specified name, if any", function(test) {
-  var clicks = 0,
-      document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
-      one = document.querySelector("#one"),
-      two = document.querySelector("#two"),
-      selection = d3.selectAll([one, two]).on("click", function() { ++clicks; });
-  test.equal(selection.on("click", null), selection);
-  test.equal(selection.on("click"), undefined);
-  selection.dispatch("click");
-  test.equal(clicks, 0);
-  test.end();
+it("selection.on(type, null) removes the listener with the specified name, if any", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+  let clicks = 0;
+  const one = document.querySelector("#one");
+  const two = document.querySelector("#two");
+  const s = selectAll([one, two]).on("click", () => { ++clicks; });
+  assert.strictEqual(s.on("click", null), s);
+  assert.strictEqual(s.on("click"), undefined);
+  s.dispatch("click");
+  assert.strictEqual(clicks, 0);
 });
 
-tape("selection.on(type, null) observes the specified name, if any", function(test) {
-  var foo = 0,
-      bar = 0,
-      fooed = function() { ++foo; },
-      barred = function() { ++bar; },
-      document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
-      one = document.querySelector("#one"),
-      two = document.querySelector("#two"),
-      selection = d3.selectAll([one, two]).on("click.foo", fooed).on("click.bar", barred);
-  test.equal(selection.on("click.foo", null), selection);
-  test.equal(selection.on("click.foo"), undefined);
-  test.equal(selection.on("click.bar"), barred);
-  selection.dispatch("click");
-  test.equal(foo, 0);
-  test.equal(bar, 2);
-  test.end();
+it("selection.on(type, null) observes the specified name, if any", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+  let foo = 0;
+  let bar = 0;
+  const fooed = () => { ++foo; };
+  const barred = () => { ++bar; };
+  const one = document.querySelector("#one");
+  const two = document.querySelector("#two");
+  const s = selectAll([one, two]).on("click.foo", fooed).on("click.bar", barred);
+  assert.strictEqual(s.on("click.foo", null), s);
+  assert.strictEqual(s.on("click.foo"), undefined);
+  assert.strictEqual(s.on("click.bar"), barred);
+  s.dispatch("click");
+  assert.strictEqual(foo, 0);
+  assert.strictEqual(bar, 2);
 });
 
-tape("selection.on(type, null, capture) ignores the specified capture flag, if any", function(test) {
-  var clicks = 0,
-      clicked = function() { ++clicks; },
-      document = jsdom(),
-      selection = d3.select(document).on("click.foo", clicked, true);
-  selection.dispatch("click");
-  test.equal(clicks, 1);
-  selection.on(".foo", null, false).dispatch("click");
-  test.equal(clicks, 1);
-  test.equal(selection.on("click.foo"), undefined);
-  test.end();
+it("selection.on(type, null, capture) ignores the specified capture flag, if any", () => {
+  let clicks = 0;
+  const clicked = () => { ++clicks; };
+  const s = select(document).on("click.foo", clicked, true);
+  s.dispatch("click");
+  assert.strictEqual(clicks, 1);
+  s.on(".foo", null, false).dispatch("click");
+  assert.strictEqual(clicks, 1);
+  assert.strictEqual(s.on("click.foo"), undefined);
 });
 
-tape("selection.on(name, null) removes all listeners with the specified name", function(test) {
-  var clicks = 0,
-      loads = 0,
-      clicked = function() { ++clicks; },
-      loaded = function() { ++loads; },
-      document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
-      one = document.querySelector("#one"),
-      two = document.querySelector("#two"),
-      selection = d3.selectAll([one, two]).on("click.foo", clicked).on("load.foo", loaded);
-  test.equal(selection.on("click.foo"), clicked);
-  test.equal(selection.on("load.foo"), loaded);
-  selection.dispatch("click");
-  selection.dispatch("load");
-  test.equal(clicks, 2);
-  test.equal(loads, 2);
-  test.equal(selection.on(".foo", null), selection);
-  test.equal(selection.on("click.foo"), undefined);
-  test.equal(selection.on("load.foo"), undefined);
-  selection.dispatch("click");
-  selection.dispatch("load");
-  test.equal(clicks, 2);
-  test.equal(loads, 2);
-  test.end();
+it("selection.on(name, null) removes all listeners with the specified name", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+  let clicks = 0;
+  let loads = 0;
+  const clicked = () => { ++clicks; };
+  const loaded = () => { ++loads; };
+  const one = document.querySelector("#one");
+  const two = document.querySelector("#two");
+  const s = selectAll([one, two]).on("click.foo", clicked).on("load.foo", loaded);
+  assert.strictEqual(s.on("click.foo"), clicked);
+  assert.strictEqual(s.on("load.foo"), loaded);
+  s.dispatch("click");
+  s.dispatch("load");
+  assert.strictEqual(clicks, 2);
+  assert.strictEqual(loads, 2);
+  assert.strictEqual(s.on(".foo", null), s);
+  assert.strictEqual(s.on("click.foo"), undefined);
+  assert.strictEqual(s.on("load.foo"), undefined);
+  s.dispatch("click");
+  s.dispatch("load");
+  assert.strictEqual(clicks, 2);
+  assert.strictEqual(loads, 2);
 });
 
-tape("selection.on(name, null) can remove a listener with capture", function(test) {
-  var clicks = 0,
-      clicked = function() { ++clicks; },
-      document = jsdom(),
-      selection = d3.select(document).on("click.foo", clicked, true);
-  selection.dispatch("click");
-  test.equal(clicks, 1);
-  selection.on(".foo", null).dispatch("click");
-  test.equal(clicks, 1);
-  test.equal(selection.on("click.foo"), undefined);
-  test.end();
+it("selection.on(name, null) can remove a listener with capture", () => {
+  let clicks = 0;
+  const clicked = () => { ++clicks; };
+  const s = select(document).on("click.foo", clicked, true);
+  s.dispatch("click");
+  assert.strictEqual(clicks, 1);
+  s.on(".foo", null).dispatch("click");
+  assert.strictEqual(clicks, 1);
+  assert.strictEqual(s.on("click.foo"), undefined);
 });
 
-tape("selection.on(name, listener) has no effect", function(test) {
-  var clicks = 0,
-      clicked = function() { ++clicks; },
-      document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
-      one = document.querySelector("#one"),
-      two = document.querySelector("#two"),
-      selection = d3.selectAll([one, two]).on("click.foo", clicked);
-  test.equal(selection.on(".foo", function() { throw new Error; }), selection);
-  test.equal(selection.on("click.foo"), clicked);
-  selection.dispatch("click");
-  test.equal(clicks, 2);
-  test.end();
+it("selection.on(name, listener) has no effect", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+  let clicks = 0;
+  const clicked = () => { ++clicks; };
+  const one = document.querySelector("#one");
+  const two = document.querySelector("#two");
+  const s = selectAll([one, two]).on("click.foo", clicked);
+  assert.strictEqual(s.on(".foo", () => { throw new Error; }), s);
+  assert.strictEqual(s.on("click.foo"), clicked);
+  s.dispatch("click");
+  assert.strictEqual(clicks, 2);
 });
 
-tape("selection.on(type) skips missing elements", function(test) {
-  var clicked = function() {},
-      document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
-      one = document.querySelector("#one"),
-      two = document.querySelector("#two"),
-      selection = d3.selectAll([one, two]).on("click.foo", clicked);
-  test.equal(d3.selectAll([, two]).on("click.foo"), clicked);
-  test.end();
+it("selection.on(type) skips missing elements", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+  const clicked = () => {};
+  const one = document.querySelector("#one");
+  const two = document.querySelector("#two");
+  selectAll([one, two]).on("click.foo", clicked);
+  assert.strictEqual(selectAll([, two]).on("click.foo"), clicked);
 });
 
-tape("selection.on(type, listener) skips missing elements", function(test) {
-  var clicks = 0,
-      clicked = function() { ++clicks; },
-      document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>"),
-      one = document.querySelector("#one"),
-      two = document.querySelector("#two"),
-      selection = d3.selectAll([, two]).on("click.foo", clicked);
-  selection.dispatch("click");
-  test.equal(clicks, 1);
-  test.end();
+it("selection.on(type, listener) skips missing elements", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+  let clicks = 0;
+  const clicked = () => { ++clicks; };
+  const two = document.querySelector("#two");
+  const s = selectAll([, two]).on("click.foo", clicked);
+  s.dispatch("click");
+  assert.strictEqual(clicks, 1);
 });
 
-tape("selection.on(type, listener) passes the event and listener data", function(test) {
-  var document = jsdom("<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>"),
-      one = document.querySelector("#one"),
-      two = document.querySelector("#two"),
-      three = document.querySelector("#three"),
-      four = document.querySelector("#four"),
-      five = document.querySelector("#five"),
-      results = [];
+it("selection.on(type, listener) passes the event and listener data", "<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>", () => {
+  const one = document.querySelector("#one");
+  const two = document.querySelector("#two");
+  const three = document.querySelector("#three");
+  const four = document.querySelector("#four");
+  const five = document.querySelector("#five");
+  const results = [];
 
-  var selection = d3.selectAll([one, two])
+  const s = selectAll([one, two])
       .datum(function(d, i) { return "parent-" + i; })
     .selectAll("child")
       .data(function(d, i) { return [0, 1].map(function(j) { return "child-" + i + "-" + j; }); })
       .on("foo", function(e, d) { results.push([this, e.type, d]); });
 
-  test.deepEqual(results, []);
-  selection.dispatch("foo");
-  test.deepEqual(results, [
+  assert.deepStrictEqual(results, []);
+  s.dispatch("foo");
+  assert.deepStrictEqual(results, [
     [three, "foo", "child-0-0"],
     [four, "foo", "child-0-1"],
     [five, "foo", "child-1-0"]
   ]);
-  test.end();
 });
 
-tape("selection.on(type, listener) passes the current listener data", function(test) {
-  var document = jsdom("<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>"),
-      results = [],
-      selection = d3.select(document).on("foo", function(e, d) { results.push(d); });
-  selection.dispatch("foo");
+it("selection.on(type, listener) passes the current listener data", "<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>", () => {
+  const results = [];
+  const s = select(document).on("foo", function(e, d) { results.push(d); });
+  s.dispatch("foo");
   document.__data__ = 42;
-  selection.dispatch("foo");
-  test.deepEqual(results, [undefined, 42]);
-  test.end();
+  s.dispatch("foo");
+  assert.deepStrictEqual(results, [undefined, 42]);
 });

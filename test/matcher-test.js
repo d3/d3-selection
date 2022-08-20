@@ -1,13 +1,11 @@
-var tape = require("tape"),
-    jsdom = require("./jsdom"),
-    d3 = require("../");
+import assert from "assert";
+import {matcher} from "../src/index.js";
+import it from "./jsdom.js";
 
-tape("d3.matcher(selector).call(element) returns true if the element matches the selector", function(test) {
-  var document = jsdom("<body class='foo'>");
-  test.equal(d3.matcher("body").call(document.body), true);
-  test.equal(d3.matcher(".foo").call(document.body), true);
-  test.equal(d3.matcher("body.foo").call(document.body), true);
-  test.equal(d3.matcher("h1").call(document.body), false);
-  test.equal(d3.matcher("body.bar").call(document.body), false);
-  test.end();
+it("matcher(selector).call(element) returns true if the element matches the selector", "<body class='foo'>", () => {
+  assert.strictEqual(matcher("body").call(document.body), true);
+  assert.strictEqual(matcher(".foo").call(document.body), true);
+  assert.strictEqual(matcher("body.foo").call(document.body), true);
+  assert.strictEqual(matcher("h1").call(document.body), false);
+  assert.strictEqual(matcher("body.bar").call(document.body), false);
 });

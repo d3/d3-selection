@@ -1,21 +1,15 @@
-var tape = require("tape"),
-    jsdom = require("./jsdom"),
-    d3 = require("../");
+import assert from "assert";
+import {window} from "../src/index.js";
+import it from "./jsdom.js";
 
-tape("d3.window(node) returns node.ownerDocument.defaultView", function(test) {
-  var document = jsdom();
-  test.equal(d3.window(document.body), document.defaultView);
-  test.end();
+it("window(node) returns node.ownerDocument.defaultView", "", () => {
+  assert.strictEqual(window(document.body), document.defaultView);
 });
 
-tape("d3.window(document) returns document.defaultView", function(test) {
-  var document = jsdom();
-  test.equal(d3.window(document), document.defaultView);
-  test.end();
+it("window(document) returns document.defaultView", "", () => {
+  assert.strictEqual(window(document), document.defaultView);
 });
 
-tape("d3.window(window) returns window", function(test) {
-  var window = jsdom().defaultView;
-  test.equal(d3.window(window), window);
-  test.end();
+it("window(window) returns window", "", () => {
+  assert.strictEqual(window(global.window), global.window);
 });

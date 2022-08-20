@@ -1,41 +1,27 @@
-var tape = require("tape"),
-    jsdom = require("../jsdom"),
-    d3 = require("../../");
+import assert from "assert";
+import {select, selection} from "../../src/index.js";
+import it from "../jsdom.js";
 
-tape("d3.selection() returns a selection of the document element", function(test) {
-  var document = global.document = jsdom();
-  try {
-    test.equal(d3.selection().node(), document.documentElement);
-    test.end();
-  } finally {
-    delete global.document;
-  }
+it("selection() returns a selection of the document element", "", () => {
+  assert.strictEqual(selection().node(), document.documentElement);
 });
 
-tape("d3.selection.prototype can be extended", function(test) {
-  var document = jsdom("<input type='checkbox'>"),
-      s = d3.select(document.querySelector("[type=checkbox]"));
+it("selection.prototype can be extended", "<input type='checkbox'>", () => {
+  const s = select(document.querySelector("[type=checkbox]"));
   try {
-    d3.selection.prototype.checked = function(value) {
+    selection.prototype.checked = function(value) {
       return arguments.length
           ? this.property("checked", !!value)
           : this.property("checked");
     };
-    test.equal(s.checked(), false);
-    test.equal(s.checked(true), s);
-    test.equal(s.checked(), true);
-    test.end();
+    assert.strictEqual(s.checked(), false);
+    assert.strictEqual(s.checked(true), s);
+    assert.strictEqual(s.checked(), true);
   } finally {
-    delete d3.selection.prototype.checked;
+    delete selection.prototype.checked;
   }
 });
 
-tape("d3.selection() returns an instanceof d3.selection", function(test) {
-  var document = global.document = jsdom();
-  try {
-    test.ok(d3.selection() instanceof d3.selection);
-    test.end();
-  } finally {
-    delete global.document;
-  }
+it("selection() returns an instanceof selection", "", () => {
+  assert(selection() instanceof selection);
 });

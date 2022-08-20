@@ -1,49 +1,29 @@
-var tape = require("tape"),
-    jsdom = require("../jsdom"),
-    d3 = require("../../");
+import assert from "assert";
+import {select} from "../../src/index.js";
+import {assertSelection} from "../asserts.js";
+import it from "../jsdom.js";
 
-tape("selection.exit() returns an empty selection before a data-join", function(test) {
-  var body = jsdom("<h1>hello</h1>").body,
-      selection = d3.select(body);
-  test.deepEqual(selection.exit(), {_groups: [[]], _parents: [null]});
-  test.end();
+it("selection.exit() returns an empty selection before a data-join", "<h1>hello</h1>", () => {
+  const selection = select(document.body);
+  assertSelection(selection.exit(), {groups: [[,]]});
 });
 
-tape("selection.exit() shares the update selection’s parents", function(test) {
-  var body = jsdom("<h1>hello</h1>").body,
-      selection = d3.select(body);
-  test.equal(selection.exit()._parents, selection._parents);
-  test.end();
+it("selection.exit() shares the update selection’s parents", "<h1>hello</h1>", () => {
+  const selection = select(document.body);
+  assert.strictEqual(selection.exit()._parents, selection._parents);
 });
 
-tape("selection.exit() returns the same selection each time", function(test) {
-  var body = jsdom("<h1>hello</h1>").body,
-      selection = d3.select(body);
-  test.deepEqual(selection.exit(), selection.exit());
-  test.end();
+it("selection.exit() returns the same selection each time", "<h1>hello</h1>", () => {
+  const selection = select(document.body);
+  assert.deepStrictEqual(selection.exit(), selection.exit());
 });
 
-tape("selection.exit() contains unbound elements after a data-join", function(test) {
-  var body = jsdom("<div id='one'></div><div id='two'></div>").body,
-      one = body.querySelector("#one"),
-      two = body.querySelector("#two"),
-      selection = d3.select(body).selectAll("div").data(["foo"]);
-  test.deepEqual(selection.exit(), {
-    _groups: [[, two]],
-    _parents: [body]
-  });
-  test.end();
+it("selection.exit() contains unbound elements after a data-join", "<div id='one'></div><div id='two'></div>", () => {
+  const selection = select(document.body).selectAll("div").data(["foo"]);
+  assertSelection(selection.exit(), {groups: [[, document.body.querySelector("#two")]], parents: [document.body]});
 });
 
-tape("selection.exit() uses the order of the originating selection", function(test) {
-  var body = jsdom("<div id='one'></div><div id='two'></div><div id='three'></div>").body,
-      one = body.querySelector("#one"),
-      two = body.querySelector("#two"),
-      three = body.querySelector("#three"),
-      selection = d3.select(body).selectAll("div").data(["three", "one"], function(d) { return d || this.id; });
-  test.deepEqual(selection.exit(), {
-    _groups: [[, two, ]],
-    _parents: [body]
-  });
-  test.end();
+it("selection.exit() uses the order of the originating selection", "<div id='one'></div><div id='two'></div><div id='three'></div>", () => {
+  const selection = select(document.body).selectAll("div").data(["three", "one"], function(d) { return d || this.id; });
+  assertSelection(selection.exit(), {groups: [[, document.body.querySelector("#two"),, ]], parents: [document.body]});
 });

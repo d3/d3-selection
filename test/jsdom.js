@@ -1,5 +1,16 @@
-var jsdom = require("jsdom");
+import {JSDOM} from "jsdom";
 
-module.exports = function(html) {
-  return (new jsdom.JSDOM(html)).window.document;
-};
+export default function jsdomit(message, html, run) {
+  if (arguments.length < 3) run = html, html = "";
+  return it(message, async () => {
+    try {
+      const dom = new JSDOM(html);
+      global.window = dom.window;
+      global.document = dom.window.document;
+      await run();
+    } finally {
+      delete global.window;
+      delete global.document;
+    }
+  });
+}

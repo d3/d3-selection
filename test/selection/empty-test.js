@@ -1,17 +1,13 @@
-var tape = require("tape"),
-    jsdom = require("../jsdom"),
-    d3 = require("../../");
+import assert from "assert";
+import {select, selectAll} from "../../src/index.js";
+import it from "../jsdom.js";
 
-tape("selection.empty() return false if the selection is not empty", function(test) {
-  var document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>");
-  test.equal(d3.select(document).empty(), false);
-  test.end();
+it("selection.empty() return false if the selection is not empty", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+  assert.strictEqual(select(document).empty(), false);
 });
 
-tape("selection.empty() return true if the selection is empty", function(test) {
-  var document = jsdom("<h1 id='one'></h1><h1 id='two'></h1>");
-  test.equal(d3.select(null).empty(), true);
-  test.equal(d3.selectAll([]).empty(), true);
-  test.equal(d3.selectAll([,]).empty(), true);
-  test.end();
+it("selection.empty() return true if the selection is empty", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+  assert.strictEqual(select(null).empty(), true);
+  assert.strictEqual(selectAll([]).empty(), true);
+  assert.strictEqual(selectAll([,]).empty(), true);
 });

@@ -38,10 +38,22 @@ For more, see [the d3-selection collection on Observable](https://observablehq.c
 
 ## Installing
 
-If you use NPM, `npm install d3-selection`. Otherwise, download the [latest release](https://github.com/d3/d3-selection/releases/latest). You can also load d3-selection as a standalone library or as part of [D3](https://github.com/d3/d3). ES modules, AMD, CommonJS, and vanilla environments are supported. In vanilla, a `d3` global is exported:
+If you use npm, `npm install d3-selection`. You can also download the [latest release on GitHub](https://github.com/d3/d3-selection/releases/latest). For vanilla HTML in modern browsers, import d3-selection from Skypack:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/d3-selection@2"></script>
+<script type="module">
+
+import {selectAll} from "https://cdn.skypack.dev/d3-selection@3";
+
+const div = selectAll("div");
+
+</script>
+```
+
+For legacy environments, you can load d3-selection’s UMD bundle from an npm-based CDN such as jsDelivr; a `d3` global is exported:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/d3-selection@3"></script>
 <script>
 
 const div = d3.selectAll("div");
@@ -186,7 +198,7 @@ The returned filtered selection preserves the parents of this selection, but lik
 
 <a name="selection_merge" href="#selection_merge">#</a> <i>selection</i>.<b>merge</b>(<i>other</i>) · [Source](https://github.com/d3/d3-selection/blob/master/src/selection/merge.js)
 
-Returns a new selection merging this selection with the specified *other* selection. The returned selection has the same number of groups and the same parents as this selection. Any missing (null) elements in this selection are filled with the corresponding element, if present (not null), from the specified *selection*. (If the *other* selection has additional groups or parents, they are ignored.)
+Returns a new selection merging this selection with the specified *other* selection or transition. The returned selection has the same number of groups and the same parents as this selection. Any missing (null) elements in this selection are filled with the corresponding element, if present (not null), from the specified *selection*. (If the *other* selection has additional groups or parents, they are ignored.)
 
 This method is used internally by [*selection*.join](#selection_join) to merge the [enter](#selection_enter) and [update](#selection_data) selections after [binding data](#joining-data). You can also merge explicitly, although note that since merging is based on element index, you should use operations that preserve index, such as [*selection*.select](#selection_select) instead of [*selection*.filter](#selection_filter). For example:
 
