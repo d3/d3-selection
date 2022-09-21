@@ -1,6 +1,6 @@
 export default (selection, name, className) =>
   selection
-    .selectAll(`${name}.${className}`)
+    .selectAll(className ? `${name}.${className}`: name)
     .data([null])
     .join(name)
     .attr('class', className);
