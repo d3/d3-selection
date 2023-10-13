@@ -25,7 +25,7 @@ import selection_html from "./html.js";
 import selection_raise from "./raise.js";
 import selection_lower from "./lower.js";
 import selection_append from "./append.js";
-import selection_insert from "./insert.js";
+import selection_insert, {insertAfter, insertBefore} from "./insert.js";
 import selection_remove from "./remove.js";
 import selection_clone from "./clone.js";
 import selection_datum from "./datum.js";
@@ -79,6 +79,8 @@ Selection.prototype = selection.prototype = {
   lower: selection_lower,
   append: selection_append,
   insert: selection_insert,
+  insertAfter,
+  insertBefore,
   remove: selection_remove,
   clone: selection_clone,
   datum: selection_datum,
