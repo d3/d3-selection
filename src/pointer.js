@@ -8,12 +8,12 @@ export default function(event, node) {
     if (svg.createSVGPoint) {
       var point = svg.createSVGPoint();
      	if (event.touches) {
-				point.x = event.touches[0].clientX;
-				point.y = event.touches[0].clientY;
-			} else {
-				point.x = event.clientX;
-				point.y = event.clientY;
-			}
+	  point.x = event.touches[0].clientX;
+          point.y = event.touches[0].clientY;
+        else {
+          point.x = event.clientX;
+          point.y = event.clientY;
+        }
       point = point.matrixTransform(node.getScreenCTM().inverse());
       return [point.x, point.y];
     }
