@@ -5,19 +5,19 @@ import constant from "../constant.js";
 function bindIndex(parent, group, enter, update, exit, data) {
   var i = 0,
       node,
-      groupLength = group.length,
-      dataLength = data.length;
+      groupLength = group.length;
 
   // Put any non-null nodes that fit into update.
   // Put any null nodes into enter.
   // Put any remaining data into enter.
-  for (; i < dataLength; ++i) {
+  for (const datum of data) {
     if (node = group[i]) {
-      node.__data__ = data[i];
+      node.__data__ = datum;
       update[i] = node;
     } else {
-      enter[i] = new EnterNode(parent, data[i]);
+      enter[i] = new EnterNode(parent, datum);
     }
+    i += 1;
   }
 
   // Put any non-null nodes that don’t fit into exit.
@@ -33,7 +33,6 @@ function bindKey(parent, group, enter, update, exit, data, key) {
       node,
       nodeByKeyValue = new Map,
       groupLength = group.length,
-      dataLength = data.length,
       keyValues = new Array(groupLength),
       keyValue;
 
@@ -53,15 +52,17 @@ function bindKey(parent, group, enter, update, exit, data, key) {
   // Compute the key for each datum.
   // If there a node associated with this key, join and add it to update.
   // If there is not (or the key is a duplicate), add it to enter.
-  for (i = 0; i < dataLength; ++i) {
-    keyValue = key.call(parent, data[i], i, data) + "";
+  i = 0;
+  for (const datum of data) {
+    keyValue = key.call(parent, datum, i, data) + "";
     if (node = nodeByKeyValue.get(keyValue)) {
       update[i] = node;
-      node.__data__ = data[i];
+      node.__data__ = datum;
       nodeByKeyValue.delete(keyValue);
     } else {
-      enter[i] = new EnterNode(parent, data[i]);
+      enter[i] = new EnterNode(parent, datum);
     }
+    i += 1;
   }
 
   // Add any remaining nodes that were not bound to data to exit.
