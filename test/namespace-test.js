@@ -1,18 +1,18 @@
-import {test} from "vitest";
+import {it} from "vitest";
 import assert from "assert";
 import {namespace, namespaces} from "../src/index.js";
 
-test("namespace(name) returns name if there is no namespace prefix", () => {
+it("namespace(name) returns name if there is no namespace prefix", () => {
   assert.strictEqual(namespace("foo"), "foo");
   assert.strictEqual(namespace("foo:bar"), "bar");
 });
 
-test("namespace(name) coerces name to a string", () => {
+it("namespace(name) coerces name to a string", () => {
   assert.strictEqual(namespace({toString: function() { return "foo"; }}), "foo");
   assert.deepStrictEqual(namespace({toString: function() { return "svg"; }}), {space: "http://www.w3.org/2000/svg", local: "svg"});
 });
 
-test("namespace(name) returns the expected values for built-in namespaces", () => {
+it("namespace(name) returns the expected values for built-in namespaces", () => {
   assert.deepStrictEqual(namespace("svg"), {space: "http://www.w3.org/2000/svg", local: "svg"});
   assert.deepStrictEqual(namespace("xhtml"), {space: "http://www.w3.org/1999/xhtml", local: "xhtml"});
   assert.deepStrictEqual(namespace("xlink"), {space: "http://www.w3.org/1999/xlink", local: "xlink"});
@@ -23,11 +23,11 @@ test("namespace(name) returns the expected values for built-in namespaces", () =
   assert.deepStrictEqual(namespace("xml:lang"), {space: "http://www.w3.org/XML/1998/namespace", local: "lang"});
 });
 
-test("namespace(\"xmlns:…\") treats the whole name as the local name", () => {
+it("namespace(\"xmlns:…\") treats the whole name as the local name", () => {
   assert.deepStrictEqual(namespace("xmlns:xlink"), {space: "http://www.w3.org/2000/xmlns/", local: "xmlns:xlink"});
 });
 
-test("namespace(name) observes modifications to namespaces", () => {
+it("namespace(name) observes modifications to namespaces", () => {
   namespaces.d3js = "https://d3js.org/2016/namespace";
   assert.deepStrictEqual(namespace("d3js:pie"), {space: "https://d3js.org/2016/namespace", local: "pie"});
   delete namespaces.d3js;

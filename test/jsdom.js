@@ -1,9 +1,9 @@
-import {test} from "vitest";
+import {it} from "vitest";
 import {JSDOM} from "jsdom";
 
 export default function jsdomit(message, html, run) {
   if (arguments.length < 3) run = html, html = "";
-  return test(message, async () => {
+  return it(message, async () => {
     try {
       const dom = new JSDOM(html);
       global.window = dom.window;
