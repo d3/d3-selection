@@ -1,4 +1,4 @@
-import assert from "assert";
+import assert from "node:assert";
 import {pointer, pointers} from "../src/index.js";
 import it from "./jsdom.js";
 

@@ -1,4 +1,4 @@
-import assert from "assert";
+import assert from "node:assert";
 import {selectAll} from "../../src/index.js";
 import {assertSelection} from "../asserts.js";
 import it from "../jsdom.js";

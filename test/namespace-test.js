@@ -1,5 +1,5 @@
+import assert from "node:assert";
 import {it} from "vitest";
-import assert from "assert";
 import {namespace, namespaces} from "../src/index.js";
 
 it("namespace(name) returns name if there is no namespace prefix", () => {

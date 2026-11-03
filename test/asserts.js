@@ -1,4 +1,4 @@
-import assert from "assert";
+import assert from "node:assert";
 import {selection} from "../src/index.js";
 import {EnterNode} from "../src/selection/enter.js";
 

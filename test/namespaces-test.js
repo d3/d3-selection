@@ -1,5 +1,5 @@
+import assert from "node:assert";
 import {it} from "vitest";
-import assert from "assert";
 import {namespaces} from "../src/index.js";
 
 it("namespaces has the expected value", () => {
