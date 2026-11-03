@@ -1,9 +1,10 @@
 import assert from "node:assert";
 import {select} from "../../src/index.js";
 import {assertSelection, enterNode} from "../asserts.js";
-import it from "../jsdom.js";
+import {it} from "vitest";
 
-it("selection.enter() returns an empty selection before a data-join", "<h1>hello</h1>", () => {
+it("selection.enter() returns an empty selection before a data-join", () => {
+  document.documentElement.innerHTML = "<h1>hello</h1>";
   const s = select(document.body);
   assertSelection(s.enter(), {groups: [[, ]], parents: [null]});
 });
@@ -13,17 +14,20 @@ it("selection.enter() contains EnterNodes", () => {
   assert.strictEqual(s.enter().node()._parent, document.body);
 });
 
-it("selection.enter() shares the update selection’s parents", "<h1>hello</h1>", () => {
+it("selection.enter() shares the update selection’s parents", () => {
+  document.documentElement.innerHTML = "<h1>hello</h1>";
   const s = select(document.body);
   assert.strictEqual(s.enter()._parents, s._parents);
 });
 
-it("selection.enter() returns the same selection each time", "<h1>hello</h1>", () => {
+it("selection.enter() returns the same selection each time", () => {
+  document.documentElement.innerHTML = "<h1>hello</h1>";
   const s = select(document.body);
   assert.deepStrictEqual(s.enter(), s.enter());
 });
 
-it("selection.enter() contains unbound data after a data-join", "<div id='one'></div><div id='two'></div>", () => {
+it("selection.enter() contains unbound data after a data-join", () => {
+  document.documentElement.innerHTML = "<div id='one'></div><div id='two'></div>";
   const s = select(document.body).selectAll("div").data(["foo", "bar", "baz"]);
   assertSelection(s.enter(), {
     groups: [[,, enterNode(document.body, "baz")]],
@@ -31,7 +35,8 @@ it("selection.enter() contains unbound data after a data-join", "<div id='one'><
   });
 });
 
-it("selection.enter() uses the order of the data", "<div id='one'></div><div id='two'></div><div id='three'></div>", () => {
+it("selection.enter() uses the order of the data", () => {
+  document.documentElement.innerHTML = "<div id='one'></div><div id='two'></div><div id='three'></div>";
   const selection = select(document.body).selectAll("div").data(["one", "four", "three", "five"], function(d) { return d || this.id; });
   assertSelection(selection.enter(), {
     groups: [[, enterNode(document.body, "four", "#three"),, enterNode(document.body, "five")]],
@@ -68,7 +73,8 @@ it("enter.append(…) inserts entering nodes before the next node in the update 
   assert.strictEqual(document.body.innerHTML, "<p>0</p><p>1</p><p>2</p><p>3</p><p>4</p>");
 });
 
-it("enter.insert(…, before) inserts entering nodes before the sibling matching the specified selector", "<hr>", () => {
+it("enter.insert(…, before) inserts entering nodes before the sibling matching the specified selector", () => {
+  document.documentElement.innerHTML = "<hr>";
   const identity = function(d) { return d; };
   let p = select(document.body).selectAll("p");
   p = p.data([1, 3], identity);

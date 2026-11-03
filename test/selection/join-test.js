@@ -1,6 +1,6 @@
 import assert from "node:assert";
 import {select} from "../../src/index.js";
-import it from "../jsdom.js";
+import {it} from "vitest";
 
 it("selection.join(name) enter-appends elements", () => {
   let p = select(document.body).selectAll("p");
@@ -9,14 +9,16 @@ it("selection.join(name) enter-appends elements", () => {
   assert.strictEqual(document.body.innerHTML, "<p>1</p><p>3</p>");
 });
 
-it("selection.join(name) exit-removes elements", "<p>1</p><p>2</p><p>3</p>", () => {
+it("selection.join(name) exit-removes elements", () => {
+  document.documentElement.innerHTML = "<p>1</p><p>2</p><p>3</p>";
   let p = select(document.body).selectAll("p");
   p = p.data([1, 3]).join("p").text(d => d);
   p;
   assert.strictEqual(document.body.innerHTML, "<p>1</p><p>3</p>");
 });
 
-it("selection.join(enter, update, exit) calls the specified functions", "<p>1</p><p>2</p>", () => {
+it("selection.join(enter, update, exit) calls the specified functions", () => {
+  document.documentElement.innerHTML = "<p>1</p><p>2</p>";
   let p = select(document.body).selectAll("p").datum(function() { return this.textContent; });
   p = p.data([1, 3], d => d).join(
     enter => enter.append("p").attr("class", "enter").text(d => d),
@@ -36,7 +38,8 @@ it("selection.join(…) reorders nodes to match the data", () => {
   p;
 });
 
-it("selection.join(enter, update, exit) allows callbacks to return a transition", "<p>1</p><p>2</p>", () => {
+it("selection.join(enter, update, exit) allows callbacks to return a transition", () => {
+  document.documentElement.innerHTML = "<p>1</p><p>2</p>";
   let p = select(document.body).selectAll("p").datum(function() { return this.textContent; });
   p = p.data([1, 3], d => d).join(
     enter => mockTransition(enter.append("p").attr("class", "enter").text(d => d)),

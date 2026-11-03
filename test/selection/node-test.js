@@ -1,20 +1,23 @@
 import assert from "node:assert";
 import {select, selectAll} from "../../src/index.js";
-import it from "../jsdom.js";
+import {it} from "vitest";
 
-it("selection.node() returns the first element in a selection", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+it("selection.node() returns the first element in a selection", () => {
+  document.documentElement.innerHTML = "<h1 id='one'></h1><h1 id='two'></h1>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   assert.strictEqual(selectAll([one, two]).node(), one);
 });
 
-it("selection.node() skips missing elements", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+it("selection.node() skips missing elements", () => {
+  document.documentElement.innerHTML = "<h1 id='one'></h1><h1 id='two'></h1>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   assert.strictEqual(selectAll([, one,, two]).node(), one);
 });
 
-it("selection.node() skips empty groups", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+it("selection.node() skips empty groups", () => {
+  document.documentElement.innerHTML = "<h1 id='one'></h1><h1 id='two'></h1>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   assert.strictEqual(selectAll([one, two]).selectAll(function(d, i) { return i ? [this] : []; }).node(), two);

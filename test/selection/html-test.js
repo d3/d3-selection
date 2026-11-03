@@ -1,6 +1,6 @@
 import assert from "node:assert";
 import {select, selectAll} from "../../src/index.js";
-import it from "../jsdom.js";
+import {it} from "vitest";
 
 it("selection.html() returns the inner HTML on the first selected element", () => {
   const node = {innerHTML: "hello"};
@@ -35,7 +35,8 @@ it("selection.html(function) sets the value of the inner HTML on the selected el
   assert.strictEqual(two.innerHTML, "baz");
 });
 
-it("selection.html(function) passes the value function data, index and group", "<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>", () => {
+it("selection.html(function) passes the value function data, index and group", () => {
+  document.documentElement.innerHTML = "<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   const three = document.querySelector("#three");

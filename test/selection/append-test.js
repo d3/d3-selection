@@ -1,13 +1,14 @@
 import assert from "node:assert";
 import {namespaces, select, selectAll, selection} from "../../src/index.js";
 import {assertSelection} from "../asserts.js";
-import it from "../jsdom.js";
+import {it} from "vitest";
 
 it("selection.append(…) returns a selection", () => {
   assert(select(document.body).append("h1") instanceof selection);
 });
 
-it("selection.append(name) appends a new element of the specified name as the last child of each selected element", "<div id='one'><span class='before'></span></div><div id='two'><span class='before'></span></div>", () => {
+it("selection.append(name) appends a new element of the specified name as the last child of each selected element", () => {
+  document.documentElement.innerHTML = "<div id='one'><span class='before'></span></div><div id='two'><span class='before'></span></div>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   const s = selectAll([one, two]).append("span");
@@ -16,7 +17,8 @@ it("selection.append(name) appends a new element of the specified name as the la
   assertSelection(s, {groups: [[three, four]]});
 });
 
-it("selection.append(name) observes the specified namespace, if any", "<div id='one'></div><div id='two'></div>", () => {
+it("selection.append(name) observes the specified namespace, if any", () => {
+  document.documentElement.innerHTML = "<div id='one'></div><div id='two'></div>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   const s = selectAll([one, two]).append("svg:g");
@@ -27,7 +29,8 @@ it("selection.append(name) observes the specified namespace, if any", "<div id='
   assertSelection(s, {groups: [[three, four]]});
 });
 
-it("selection.append(name) uses createElement, not createElementNS, if the implied namespace is the same as the document", "<div id='one'></div><div id='two'></div>", () => {
+it("selection.append(name) uses createElement, not createElementNS, if the implied namespace is the same as the document", () => {
+  document.documentElement.innerHTML = "<div id='one'></div><div id='two'></div>";
   let pass = 0;
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
@@ -45,7 +48,8 @@ it("selection.append(name) uses createElement, not createElementNS, if the impli
   assertSelection(selection, {groups: [[three, four]]});
 });
 
-it("selection.append(name) observes the implicit namespace, if any", "<div id='one'></div><div id='two'></div>", () => {
+it("selection.append(name) observes the implicit namespace, if any", () => {
+  document.documentElement.innerHTML = "<div id='one'></div><div id='two'></div>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   const selection = selectAll([one, two]).append("svg");
@@ -56,7 +60,8 @@ it("selection.append(name) observes the implicit namespace, if any", "<div id='o
   assertSelection(selection, {groups: [[three, four]]});
 });
 
-it("selection.append(name) observes the inherited namespace, if any", "<div id='one'></div><div id='two'></div>", () => {
+it("selection.append(name) observes the inherited namespace, if any", () => {
+  document.documentElement.innerHTML = "<div id='one'></div><div id='two'></div>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   const selection = selectAll([one, two]).append("svg").append("g");
@@ -67,7 +72,8 @@ it("selection.append(name) observes the inherited namespace, if any", "<div id='
   assertSelection(selection, {groups: [[three, four]]});
 });
 
-it("selection.append(name) observes a custom namespace, if any", "<div id='one'></div><div id='two'></div>", () => {
+it("selection.append(name) observes a custom namespace, if any", () => {
+  document.documentElement.innerHTML = "<div id='one'></div><div id='two'></div>";
   try {
     namespaces.d3js = "https://d3js.org/2016/namespace";
     const one = document.querySelector("#one");
@@ -83,7 +89,8 @@ it("selection.append(name) observes a custom namespace, if any", "<div id='one'>
   }
 });
 
-it("selection.append(function) appends the returned element as the last child of each selected element", "<div id='one'><span class='before'></span></div><div id='two'><span class='before'></span></div>", () => {
+it("selection.append(function) appends the returned element as the last child of each selected element", () => {
+  document.documentElement.innerHTML = "<div id='one'><span class='before'></span></div><div id='two'><span class='before'></span></div>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   const selection = selectAll([one, two]).append(function() { return document.createElement("SPAN"); });
@@ -92,7 +99,8 @@ it("selection.append(function) appends the returned element as the last child of
   assertSelection(selection, {groups: [[three, four]]});
 });
 
-it("selection.append(function) passes the creator function data, index and group", "<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>", () => {
+it("selection.append(function) passes the creator function data, index and group", () => {
+  document.documentElement.innerHTML = "<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   const three = document.querySelector("#three");
@@ -113,13 +121,15 @@ it("selection.append(function) passes the creator function data, index and group
   ]);
 });
 
-it("selection.append(…) propagates data if defined on the originating element", "<parent><child>hello</child></parent>", () => {
+it("selection.append(…) propagates data if defined on the originating element", () => {
+  document.documentElement.innerHTML = "<parent><child>hello</child></parent>";
   const parent = document.querySelector("parent");
   parent.__data__ = 0; // still counts as data even though falsey
   assert.strictEqual(select(parent).append("child").datum(), 0);
 });
 
-it("selection.append(…) will not propagate data if not defined on the originating element", "<parent><child>hello</child></parent>", () => {
+it("selection.append(…) will not propagate data if not defined on the originating element", () => {
+  document.documentElement.innerHTML = "<parent><child>hello</child></parent>";
   const parent = document.querySelector("parent");
   const child = document.querySelector("child");
   child.__data__ = 42;
@@ -127,7 +137,8 @@ it("selection.append(…) will not propagate data if not defined on the originat
   assert.strictEqual(child.__data__, 42);
 });
 
-it("selection.append(…) propagates parents from the originating selection", "<parent></parent><parent></parent>", () => {
+it("selection.append(…) propagates parents from the originating selection", () => {
+  document.documentElement.innerHTML = "<parent></parent><parent></parent>";
   const parents = select(document).selectAll("parent");
   const childs = parents.append("child");
   assertSelection(parents, {groups: [document.querySelectorAll("parent")], parents: [document]});
@@ -135,7 +146,8 @@ it("selection.append(…) propagates parents from the originating selection", "<
   assert.strictEqual(parents.parents, childs.parents); // Not copied!
 });
 
-it("selection.append(…) can select elements when the originating selection is nested", "<parent id='one'><child></child></parent><parent id='two'><child></child></parent>", () => {
+it("selection.append(…) can select elements when the originating selection is nested", () => {
+  document.documentElement.innerHTML = "<parent id='one'><child></child></parent><parent id='two'><child></child></parent>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   const selection = selectAll([one, two]).selectAll("child").append("span");
@@ -144,7 +156,8 @@ it("selection.append(…) can select elements when the originating selection is 
   assertSelection(selection, {groups: [[three], [four]], parents: [one, two]});
 });
 
-it("selection.append(…) skips missing originating elements", "<h1></h1>", () => {
+it("selection.append(…) skips missing originating elements", () => {
+  document.documentElement.innerHTML = "<h1></h1>";
   const h1 = document.querySelector("h1");
   const selection = selectAll([, h1]).append("span");
   const span = h1.querySelector("span");

@@ -1,8 +1,9 @@
 import assert from "node:assert";
 import {selectAll} from "../../src/index.js";
-import it from "../jsdom.js";
+import {it} from "vitest";
 
-it("selection.dispatch(type) dispatches a custom event of the specified type to each selected element in order", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+it("selection.dispatch(type) dispatches a custom event of the specified type to each selected element in order", () => {
+  document.documentElement.innerHTML = "<h1 id='one'></h1><h1 id='two'></h1>";
   let event;
   const result = [];
   const one = document.querySelector("#one");
@@ -16,7 +17,8 @@ it("selection.dispatch(type) dispatches a custom event of the specified type to 
   assert.strictEqual(event.detail, null);
 });
 
-it("selection.dispatch(type, params) dispatches a custom event with the specified constant parameters", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+it("selection.dispatch(type, params) dispatches a custom event with the specified constant parameters", () => {
+  document.documentElement.innerHTML = "<h1 id='one'></h1><h1 id='two'></h1>";
   let event;
   const result = [];
   const one = document.querySelector("#one");
@@ -30,7 +32,8 @@ it("selection.dispatch(type, params) dispatches a custom event with the specifie
   assert.strictEqual(event.detail, "loud");
 });
 
-it("selection.dispatch(type, function) dispatches a custom event with the specified parameter function", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+it("selection.dispatch(type, function) dispatches a custom event with the specified parameter function", () => {
+  document.documentElement.innerHTML = "<h1 id='one'></h1><h1 id='two'></h1>";
   const result = [];
   const events = [];
   const one = document.querySelector("#one");
@@ -48,7 +51,8 @@ it("selection.dispatch(type, function) dispatches a custom event with the specif
   assert.strictEqual(events[1].detail, "loud-1");
 });
 
-it("selection.dispatch(type) skips missing elements", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+it("selection.dispatch(type) skips missing elements", () => {
+  document.documentElement.innerHTML = "<h1 id='one'></h1><h1 id='two'></h1>";
   let event;
   const result = [];
   const one = document.querySelector("#one");

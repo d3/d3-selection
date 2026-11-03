@@ -1,8 +1,9 @@
 import assert from "node:assert";
 import {select, selectAll} from "../../src/index.js";
-import it from "../jsdom.js";
+import {it} from "vitest";
 
-it("selection.classed(classes) returns true if and only if the first element has the specified classes", "<h1 class='c1 c2'>hello</h1><h1 class='c3'></h1>", () => {
+it("selection.classed(classes) returns true if and only if the first element has the specified classes", () => {
+  document.documentElement.innerHTML = "<h1 class='c1 c2'>hello</h1><h1 class='c3'></h1>";
   assert.strictEqual(select(document).select("h1").classed(""), true);
   assert.strictEqual(select(document).select("h1").classed("c1"), true);
   assert.strictEqual(select(document).select("h1").classed("c2"), true);
@@ -15,7 +16,8 @@ it("selection.classed(classes) returns true if and only if the first element has
   assert.strictEqual(selectAll([null, document]).select("h1").classed("c3"), false);
 });
 
-it("selection.classed(classes) coerces the specified classes to a string", "<h1 class='c1 c2'>hello</h1><h1 class='c3'></h1>", () => {
+it("selection.classed(classes) coerces the specified classes to a string", () => {
+  document.documentElement.innerHTML = "<h1 class='c1 c2'>hello</h1><h1 class='c3'></h1>";
   assert.strictEqual(select(document).select("h1").classed({toString: function() { return "c1 c2"; }}), true);
 });
 
@@ -61,7 +63,8 @@ it("selection.classed(classes, function) sets whether the selected elements have
   assert.strictEqual(s.attr("class"), "");
 });
 
-it("selection.classed(classes, function) passes the value function data, index and group", "<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>", () => {
+it("selection.classed(classes, function) passes the value function data, index and group", () => {
+  document.documentElement.innerHTML = "<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   const three = document.querySelector("#three");
@@ -106,7 +109,8 @@ it("selection.classed(classes, value) sets the class attribute if classList is n
   assert.strictEqual(s.attr("class"), "");
 });
 
-it("selection.classed(classes, value) coerces the specified classes to a string", "<h1>hello</h1>", () => {
+it("selection.classed(classes, value) coerces the specified classes to a string", () => {
+  document.documentElement.innerHTML = "<h1>hello</h1>";
   const s = select(document).select("h1");
   assert.strictEqual(s.classed("c1 c2"), false);
   assert.strictEqual(s.classed({toString: function() { return "c1 c2"; }}, true), s);

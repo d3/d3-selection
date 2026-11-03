@@ -1,19 +1,22 @@
 import assert from "node:assert";
 import {select, selection, selectAll} from "../../src/index.js";
 import {assertSelection} from "../asserts.js";
-import it from "../jsdom.js";
+import {it} from "vitest";
 
-it("selection.filter(…) returns a selection", "<h1>hello</h1>", () => {
+it("selection.filter(…) returns a selection", () => {
+  document.documentElement.innerHTML = "<h1>hello</h1>";
   assert(select(document.body).filter("body") instanceof selection);
 });
 
-it("selection.filter(string) retains the selected elements that matches the selector string", "<h1><span id='one'></span><span id='two'></span></h1><h1><span id='three'></span><span id='four'></span></h1>", () => {
+it("selection.filter(string) retains the selected elements that matches the selector string", () => {
+  document.documentElement.innerHTML = "<h1><span id='one'></span><span id='two'></span></h1><h1><span id='three'></span><span id='four'></span></h1>";
   const one = document.querySelector("#one");
   const three = document.querySelector("#three");
   assertSelection(select(document).selectAll("span").filter("#one,#three"), {groups: [[one, three]], parents: [document]});
 });
 
-it("selection.filter(function) retains elements for which the given function returns true", "<h1><span id='one'></span><span id='two'></span></h1><h1><span id='three'></span><span id='four'></span></h1>", () => {
+it("selection.filter(function) retains elements for which the given function returns true", () => {
+  document.documentElement.innerHTML = "<h1><span id='one'></span><span id='two'></span></h1><h1><span id='three'></span><span id='four'></span></h1>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   const three = document.querySelector("#three");
@@ -21,7 +24,8 @@ it("selection.filter(function) retains elements for which the given function ret
   assertSelection(selectAll([one, two, three, four]).filter(function(d, i) { return i & 1; }), {groups: [[two, four]], parents: [null]});
 });
 
-it("selection.filter(function) passes the selector function data, index and group", "<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>", () => {
+it("selection.filter(function) passes the selector function data, index and group", () => {
+  document.documentElement.innerHTML = "<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   const three = document.querySelector("#three");
@@ -42,7 +46,8 @@ it("selection.filter(function) passes the selector function data, index and grou
   ]);
 });
 
-it("selection.filter(…) propagates parents from the originating selection", "<parent><child>1</child></parent><parent><child>2</child></parent>", () => {
+it("selection.filter(…) propagates parents from the originating selection", () => {
+  document.documentElement.innerHTML = "<parent><child>1</child></parent><parent><child>2</child></parent>";
   const parents = select(document).selectAll("parent");
   const parents2 = parents.filter(function() { return true; });
   assertSelection(parents, {groups: [document.querySelectorAll("parent")], parents: [document]});
@@ -50,7 +55,8 @@ it("selection.filter(…) propagates parents from the originating selection", "<
   assert(parents._parents === parents2._parents); // Not copied!
 });
 
-it("selection.filter(…) can filter elements when the originating selection is nested", "<parent id='one'><child><span id='three'></span></child></parent><parent id='two'><child><span id='four'></span></child></parent>", () => {
+it("selection.filter(…) can filter elements when the originating selection is nested", () => {
+  document.documentElement.innerHTML = "<parent id='one'><child><span id='three'></span></child></parent><parent id='two'><child><span id='four'></span></child></parent>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   const three = document.querySelector("#three");
@@ -58,14 +64,16 @@ it("selection.filter(…) can filter elements when the originating selection is 
   assertSelection(selectAll([one, two]).selectAll("span").filter("*"), {groups: [[three], [four]], parents: [one, two]});
 });
 
-it("selection.filter(…) skips missing originating elements and does not retain the original indexes", "<h1>hello</h1>", () => {
+it("selection.filter(…) skips missing originating elements and does not retain the original indexes", () => {
+  document.documentElement.innerHTML = "<h1>hello</h1>";
   const h1 = document.querySelector("h1");
   assertSelection(selectAll([, h1]).filter("*"), {groups: [[h1]], parents: [null]});
   assertSelection(selectAll([null, h1]).filter("*"), {groups: [[h1]], parents: [null]});
   assertSelection(selectAll([undefined, h1]).filter("*"), {groups: [[h1]], parents: [null]});
 });
 
-it("selection.filter(…) skips missing originating elements when the originating selection is nested", "<parent id='one'><child></child><child id='three'></child></parent><parent id='two'><child></child><child id='four'></child></parent>", () => {
+it("selection.filter(…) skips missing originating elements when the originating selection is nested", () => {
+  document.documentElement.innerHTML = "<parent id='one'><child></child><child id='three'></child></parent><parent id='two'><child></child><child id='four'></child></parent>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   const three = document.querySelector("#three");

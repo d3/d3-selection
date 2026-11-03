@@ -1,6 +1,6 @@
 import assert from "node:assert";
 import {select, selectAll, style} from "../../src/index.js";
-import it from "../jsdom.js";
+import {it} from "vitest";
 
 it("style(node, name) returns the inline value of the style property with the specified name on the first selected element, if present", () => {
   const node = {style: {getPropertyValue: function(name) { return name === "color" ? "red" : ""}}};
@@ -26,7 +26,8 @@ it("selection.style(name) returns the computed value of the style property with 
   assert.strictEqual(selectAll([null, node]).style("color"), "rgb(255, 0, 0)");
 });
 
-it("selection.style(name, value) sets the value of the style property with the specified name on the selected elements", "<h1 id='one' class='c1 c2'>hello</h1><h1 id='two' class='c3'></h1>", () => {
+it("selection.style(name, value) sets the value of the style property with the specified name on the selected elements", () => {
+  document.documentElement.innerHTML = "<h1 id='one' class='c1 c2'>hello</h1><h1 id='two' class='c3'></h1>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   const s = selectAll([one, two]);
@@ -37,7 +38,8 @@ it("selection.style(name, value) sets the value of the style property with the s
   assert.strictEqual(two.style.getPropertyPriority("color"), "");
 });
 
-it("selection.style(name, value, priority) sets the value and priority of the style property with the specified name on the selected elements", "<h1 id='one' class='c1 c2'>hello</h1><h1 id='two' class='c3'></h1>", () => {
+it("selection.style(name, value, priority) sets the value and priority of the style property with the specified name on the selected elements", () => {
+  document.documentElement.innerHTML = "<h1 id='one' class='c1 c2'>hello</h1><h1 id='two' class='c3'></h1>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   const s = selectAll([one, two]);
@@ -48,7 +50,8 @@ it("selection.style(name, value, priority) sets the value and priority of the st
   assert.strictEqual(two.style.getPropertyPriority("color"), "important");
 });
 
-it("selection.style(name, null) removes the attribute with the specified name on the selected elements", "<h1 id='one' style='color:red;' class='c1 c2'>hello</h1><h1 id='two' style='color:red;' class='c3'></h1>", () => {
+it("selection.style(name, null) removes the attribute with the specified name on the selected elements", () => {
+  document.documentElement.innerHTML = "<h1 id='one' style='color:red;' class='c1 c2'>hello</h1><h1 id='two' style='color:red;' class='c3'></h1>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   const s = selectAll([one, two]);
@@ -59,7 +62,8 @@ it("selection.style(name, null) removes the attribute with the specified name on
   assert.strictEqual(two.style.getPropertyPriority("color"), "");
 });
 
-it("selection.style(name, function) sets the value of the style property with the specified name on the selected elements", "<h1 id='one' class='c1 c2'>hello</h1><h1 id='two' class='c3'></h1>", () => {
+it("selection.style(name, function) sets the value of the style property with the specified name on the selected elements", () => {
+  document.documentElement.innerHTML = "<h1 id='one' class='c1 c2'>hello</h1><h1 id='two' class='c3'></h1>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   const s = selectAll([one, two]);
@@ -70,7 +74,8 @@ it("selection.style(name, function) sets the value of the style property with th
   assert.strictEqual(two.style.getPropertyPriority("color"), "");
 });
 
-it("selection.style(name, function, priority) sets the value and priority of the style property with the specified name on the selected elements", "<h1 id='one' class='c1 c2'>hello</h1><h1 id='two' class='c3'></h1>", () => {
+it("selection.style(name, function, priority) sets the value and priority of the style property with the specified name on the selected elements", () => {
+  document.documentElement.innerHTML = "<h1 id='one' class='c1 c2'>hello</h1><h1 id='two' class='c3'></h1>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   const s = selectAll([one, two]);
@@ -81,7 +86,8 @@ it("selection.style(name, function, priority) sets the value and priority of the
   assert.strictEqual(two.style.getPropertyPriority("color"), "important");
 });
 
-it("selection.style(name, function) passes the value function data, index and group", "<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>", () => {
+it("selection.style(name, function) passes the value function data, index and group", () => {
+  document.documentElement.innerHTML = "<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   const three = document.querySelector("#three");

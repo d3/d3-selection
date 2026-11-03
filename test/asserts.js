@@ -1,5 +1,5 @@
 import assert from "node:assert";
-import {selection} from "../src/index.js";
+import {selection} from "d3-selection";
 import {EnterNode} from "../src/selection/enter.js";
 
 export function assertSelection(actual, expected) {

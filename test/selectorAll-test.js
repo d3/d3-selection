@@ -1,8 +1,9 @@
 import assert from "node:assert";
-import {selectorAll} from "../src/index.js";
-import it from "./jsdom.js";
+import {selectorAll} from "d3-selection";
+import {it} from "vitest";
 
-it("selectorAll(selector).call(element) returns all elements that match the selector", "<body class='foo'><div class='foo'>", () => {
+it("selectorAll(selector).call(element) returns all elements that match the selector", () => {
+  document.documentElement.innerHTML = "<body class='foo'><div class='foo'>";
   const body = document.body;
   const div = document.querySelector("div");
   assert.deepStrictEqual([...selectorAll("body").call(document.documentElement)], [body]);
@@ -14,7 +15,8 @@ it("selectorAll(selector).call(element) returns all elements that match the sele
   assert.deepStrictEqual([...selectorAll("body.bar").call(document.documentElement)], []);
 });
 
-it("selectorAll(null).call(element) always returns the empty array", "<body class='foo'><undefined></undefined><null></null>", () => {
+it("selectorAll(null).call(element) always returns the empty array", () => {
+  document.documentElement.innerHTML = "<body class='foo'><undefined></undefined><null></null>";
   assert.deepStrictEqual(selectorAll().call(document.documentElement), []);
   assert.deepStrictEqual(selectorAll(null).call(document.documentElement), []);
   assert.deepStrictEqual(selectorAll(undefined).call(document.documentElement), []);

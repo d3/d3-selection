@@ -1,6 +1,6 @@
 import assert from "node:assert";
 import {select} from "../../src/index.js";
-import it from "../jsdom.js";
+import {it} from "vitest";
 
 it("selection.call(function) calls the specified function, passing the selection", () => {
   let result;

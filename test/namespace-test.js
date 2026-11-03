@@ -1,6 +1,6 @@
 import assert from "node:assert";
 import {it} from "vitest";
-import {namespace, namespaces} from "../src/index.js";
+import {namespace, namespaces} from "d3-selection";
 
 it("namespace(name) returns name if there is no namespace prefix", () => {
   assert.strictEqual(namespace("foo"), "foo");
