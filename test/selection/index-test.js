@@ -1,12 +1,13 @@
-import assert from "assert";
-import {select, selection} from "../../src/index.js";
-import it from "../jsdom.js";
+import assert from "node:assert";
+import {select, selection} from "d3-selection";
+import {it} from "vitest";
 
-it("selection() returns a selection of the document element", "", () => {
+it("selection() returns a selection of the document element", () => {
   assert.strictEqual(selection().node(), document.documentElement);
 });
 
-it("selection.prototype can be extended", "<input type='checkbox'>", () => {
+it("selection.prototype can be extended", () => {
+  document.documentElement.innerHTML = "<input type='checkbox'>";
   const s = select(document.querySelector("[type=checkbox]"));
   try {
     selection.prototype.checked = function(value) {
@@ -22,6 +23,6 @@ it("selection.prototype can be extended", "<input type='checkbox'>", () => {
   }
 });
 
-it("selection() returns an instanceof selection", "", () => {
+it("selection() returns an instanceof selection", () => {
   assert(selection() instanceof selection);
 });

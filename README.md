@@ -7,6 +7,6 @@ Selections allow powerful data-driven transformation of the document object mode
 ## Resources
 
 - [Documentation](https://d3js.org/d3-selection)
-- [Examples](https://observablehq.com/collection/@d3/d3-selection)
+- [Examples](https://observablehq.com/@d3/-/collection/d3-selection)
 - [Releases](https://github.com/d3/d3-selection/releases)
 - [Getting help](https://d3js.org/community)

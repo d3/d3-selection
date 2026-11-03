@@ -1,9 +1,10 @@
-import assert from "assert";
-import {selectAll} from "../../src/index.js";
+import assert from "node:assert";
+import {selectAll} from "d3-selection";
 import {assertSelection} from "../asserts.js";
-import it from "../jsdom.js";
+import {it} from "vitest";
 
-it("selection.insert(name, before) inserts a new element of the specified name before the specified child of each selected element", "<div id='one'><span class='before'></span></div><div id='two'><span class='before'></span></div>", () => {
+it("selection.insert(name, before) inserts a new element of the specified name before the specified child of each selected element", () => {
+  document.documentElement.innerHTML = "<div id='one'><span class='before'></span></div><div id='two'><span class='before'></span></div>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   const selection = selectAll([one, two]).insert("span", ".before");
@@ -12,7 +13,8 @@ it("selection.insert(name, before) inserts a new element of the specified name b
   assertSelection(selection, {groups: [[three, four]], parents: [null]});
 });
 
-it("selection.insert(function, function) inserts the returned element before the specified child of each selected element", "<div id='one'><span class='before'></span></div><div id='two'><span class='before'></span></div>", () => {
+it("selection.insert(function, function) inserts the returned element before the specified child of each selected element", () => {
+  document.documentElement.innerHTML = "<div id='one'><span class='before'></span></div><div id='two'><span class='before'></span></div>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   const selection = selectAll([one, two]).insert(function() { return document.createElement("SPAN"); }, function() { return this.firstChild; });
@@ -21,7 +23,8 @@ it("selection.insert(function, function) inserts the returned element before the
   assertSelection(selection, {groups: [[three, four]], parents: [null]});
 });
 
-it("selection.insert(function, function) inserts the returned element as the last child if the selector function returns null", "<div id='one'><span class='before'></span></div><div id='two'><span class='before'></span></div>", () => {
+it("selection.insert(function, function) inserts the returned element as the last child if the selector function returns null", () => {
+  document.documentElement.innerHTML = "<div id='one'><span class='before'></span></div><div id='two'><span class='before'></span></div>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   const selection = selectAll([one, two]).insert(function() { return document.createElement("SPAN"); }, function() { return; });
@@ -30,7 +33,8 @@ it("selection.insert(function, function) inserts the returned element as the las
   assertSelection(selection, {groups: [[three, four]], parents: [null]});
 });
 
-it("selection.insert(name, function) passes the selector function data, index and group", "<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>", () => {
+it("selection.insert(name, function) passes the selector function data, index and group", () => {
+  document.documentElement.innerHTML = "<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   const three = document.querySelector("#three");

@@ -1,8 +1,9 @@
-import assert from "assert";
-import {select, selectAll} from "../../src/index.js";
-import it from "../jsdom.js";
+import assert from "node:assert";
+import {select, selectAll} from "d3-selection";
+import {it} from "vitest";
 
-it("selection.on(type, listener) registers a listeners for the specified event type on each selected element", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+it("selection.on(type, listener) registers a listeners for the specified event type on each selected element", () => {
+  document.documentElement.innerHTML = "<h1 id='one'></h1><h1 id='two'></h1>";
   let clicks = 0;
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
@@ -14,7 +15,8 @@ it("selection.on(type, listener) registers a listeners for the specified event t
   assert.strictEqual(clicks, 2);
 });
 
-it("selection.on(type, listener) observes the specified name, if any", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+it("selection.on(type, listener) observes the specified name, if any", () => {
+  document.documentElement.innerHTML = "<h1 id='one'></h1><h1 id='two'></h1>";
   let foo = 0;
   let bar = 0;
   const one = document.querySelector("#one");
@@ -32,7 +34,8 @@ it("selection.on(type, listener, capture) observes the specified capture flag, i
   assert.deepStrictEqual(result, true);
 });
 
-it("selection.on(type) returns the listener for the specified event type, if any", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+it("selection.on(type) returns the listener for the specified event type, if any", () => {
+  document.documentElement.innerHTML = "<h1 id='one'></h1><h1 id='two'></h1>";
   const clicked = () => {};
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
@@ -40,7 +43,8 @@ it("selection.on(type) returns the listener for the specified event type, if any
   assert.strictEqual(s.on("click"), clicked);
 });
 
-it("selection.on(type) observes the specified name, if any", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+it("selection.on(type) observes the specified name, if any", () => {
+  document.documentElement.innerHTML = "<h1 id='one'></h1><h1 id='two'></h1>";
   const clicked = () => {};
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
@@ -52,7 +56,8 @@ it("selection.on(type) observes the specified name, if any", "<h1 id='one'></h1>
   assert.strictEqual(s.on(".foo"), undefined);
 });
 
-it("selection.on(type, null) removes the listener with the specified name, if any", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+it("selection.on(type, null) removes the listener with the specified name, if any", () => {
+  document.documentElement.innerHTML = "<h1 id='one'></h1><h1 id='two'></h1>";
   let clicks = 0;
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
@@ -63,7 +68,8 @@ it("selection.on(type, null) removes the listener with the specified name, if an
   assert.strictEqual(clicks, 0);
 });
 
-it("selection.on(type, null) observes the specified name, if any", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+it("selection.on(type, null) observes the specified name, if any", () => {
+  document.documentElement.innerHTML = "<h1 id='one'></h1><h1 id='two'></h1>";
   let foo = 0;
   let bar = 0;
   const fooed = () => { ++foo; };
@@ -90,7 +96,8 @@ it("selection.on(type, null, capture) ignores the specified capture flag, if any
   assert.strictEqual(s.on("click.foo"), undefined);
 });
 
-it("selection.on(name, null) removes all listeners with the specified name", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+it("selection.on(name, null) removes all listeners with the specified name", () => {
+  document.documentElement.innerHTML = "<h1 id='one'></h1><h1 id='two'></h1>";
   let clicks = 0;
   let loads = 0;
   const clicked = () => { ++clicks; };
@@ -124,7 +131,8 @@ it("selection.on(name, null) can remove a listener with capture", () => {
   assert.strictEqual(s.on("click.foo"), undefined);
 });
 
-it("selection.on(name, listener) has no effect", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+it("selection.on(name, listener) has no effect", () => {
+  document.documentElement.innerHTML = "<h1 id='one'></h1><h1 id='two'></h1>";
   let clicks = 0;
   const clicked = () => { ++clicks; };
   const one = document.querySelector("#one");
@@ -136,7 +144,8 @@ it("selection.on(name, listener) has no effect", "<h1 id='one'></h1><h1 id='two'
   assert.strictEqual(clicks, 2);
 });
 
-it("selection.on(type) skips missing elements", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+it("selection.on(type) skips missing elements", () => {
+  document.documentElement.innerHTML = "<h1 id='one'></h1><h1 id='two'></h1>";
   const clicked = () => {};
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
@@ -144,7 +153,8 @@ it("selection.on(type) skips missing elements", "<h1 id='one'></h1><h1 id='two'>
   assert.strictEqual(selectAll([, two]).on("click.foo"), clicked);
 });
 
-it("selection.on(type, listener) skips missing elements", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+it("selection.on(type, listener) skips missing elements", () => {
+  document.documentElement.innerHTML = "<h1 id='one'></h1><h1 id='two'></h1>";
   let clicks = 0;
   const clicked = () => { ++clicks; };
   const two = document.querySelector("#two");
@@ -153,7 +163,8 @@ it("selection.on(type, listener) skips missing elements", "<h1 id='one'></h1><h1
   assert.strictEqual(clicks, 1);
 });
 
-it("selection.on(type, listener) passes the event and listener data", "<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>", () => {
+it("selection.on(type, listener) passes the event and listener data", () => {
+  document.documentElement.innerHTML = "<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   const three = document.querySelector("#three");
@@ -176,7 +187,8 @@ it("selection.on(type, listener) passes the event and listener data", "<parent i
   ]);
 });
 
-it("selection.on(type, listener) passes the current listener data", "<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>", () => {
+it("selection.on(type, listener) passes the current listener data", () => {
+  document.documentElement.innerHTML = "<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>";
   const results = [];
   const s = select(document).on("foo", function(e, d) { results.push(d); });
   s.dispatch("foo");

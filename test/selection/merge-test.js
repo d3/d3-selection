@@ -1,9 +1,10 @@
-import assert from "assert";
-import {select, selectAll} from "../../src/index.js";
+import assert from "node:assert";
+import {select, selectAll} from "d3-selection";
 import {assertSelection} from "../asserts.js";
-import it from "../jsdom.js";
+import {it} from "vitest";
 
-it("selection.merge(selection) returns a new selection, merging the two selections", "<h1 id='one'>one</h1><h1 id='two'>two</h1>", () => {
+it("selection.merge(selection) returns a new selection, merging the two selections", () => {
+  document.documentElement.innerHTML = "<h1 id='one'>one</h1><h1 id='two'>two</h1>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   const selection0 = select(document.body).selectAll("h1");
@@ -14,7 +15,8 @@ it("selection.merge(selection) returns a new selection, merging the two selectio
   assertSelection(selection2, {groups: [[one,, ]], parents: [document.body]});
 });
 
-it("selection.merge(selection) returns a selection with the same size and parents as this selection", "<div id='body0'><h1 name='one'>one</h1><h1 name='two'>two</h1></div><div id='body1'><h1 name='one'>one</h1><h1 name='two'>two</h1><h1 name='three'>three</h1></div>", () => {
+it("selection.merge(selection) returns a selection with the same size and parents as this selection", () => {
+  document.documentElement.innerHTML = "<div id='body0'><h1 name='one'>one</h1><h1 name='two'>two</h1></div><div id='body1'><h1 name='one'>one</h1><h1 name='two'>two</h1><h1 name='three'>three</h1></div>";
   const body0 = document.querySelector("#body0");
   const body1 = document.querySelector("#body1");
   const one0 = body0.querySelector("[name='one']");
@@ -26,7 +28,8 @@ it("selection.merge(selection) returns a selection with the same size and parent
   assertSelection(select(body1).selectAll("h1").merge(select(body0).selectAll("h1")), {groups: [[one1, two1, three1]], parents: [body1]});
 });
 
-it("selection.merge(selection) reuses groups from this selection if the other selection has fewer groups", "<parent><child></child><child></child></parent><parent><child></child><child></child></parent>", () => {
+it("selection.merge(selection) reuses groups from this selection if the other selection has fewer groups", () => {
+  document.documentElement.innerHTML = "<parent><child></child><child></child></parent><parent><child></child><child></child></parent>";
   const selection0 = selectAll("parent").selectAll("child");
   const selection1 = selectAll("parent:first-child").selectAll("child");
   const selection01 = selection0.merge(selection1);
@@ -36,7 +39,8 @@ it("selection.merge(selection) reuses groups from this selection if the other se
   assert.strictEqual(selection01._groups[1], selection0._groups[1]);
 });
 
-it("selection.merge(selection) reuses this selection’s parents", "<parent><child></child><child></child></parent><parent><child></child><child></child></parent>", () => {
+it("selection.merge(selection) reuses this selection’s parents", () => {
+  document.documentElement.innerHTML = "<parent><child></child><child></child></parent><parent><child></child><child></child></parent>";
   const selection0 = selectAll("parent").selectAll("child");
   const selection1 = selectAll("parent:first-child").selectAll("child");
   const selection01 = selection0.merge(selection1);
@@ -45,7 +49,8 @@ it("selection.merge(selection) reuses this selection’s parents", "<parent><chi
   assert.strictEqual(selection10._parents, selection1._parents);
 });
 
-it("selection.merge(transition) returns a new selection, merging the two selections", "<h1 id='one'>one</h1><h1 id='two'>two</h1>", () => {
+it("selection.merge(transition) returns a new selection, merging the two selections", () => {
+  document.documentElement.innerHTML = "<h1 id='one'>one</h1><h1 id='two'>two</h1>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   const selection0 = select(document.body).selectAll("h1");

@@ -1,9 +1,10 @@
-import assert from "assert";
-import {selectAll} from "../../src/index.js";
+import assert from "node:assert";
+import {selectAll} from "d3-selection";
 import {assertSelection} from "../asserts.js";
-import it from "../jsdom.js";
+import {it} from "vitest";
 
-it("selection.sort(…) returns a new selection, sorting each group’s data, and then ordering the elements to match", "<h1 id='one' data-value='1'></h1><h1 id='two' data-value='0'></h1><h1 id='three' data-value='2'></h1>", () => {
+it("selection.sort(…) returns a new selection, sorting each group’s data, and then ordering the elements to match", () => {
+  document.documentElement.innerHTML = "<h1 id='one' data-value='1'></h1><h1 id='two' data-value='0'></h1><h1 id='three' data-value='2'></h1>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   const three = document.querySelector("#three");
@@ -16,7 +17,8 @@ it("selection.sort(…) returns a new selection, sorting each group’s data, an
   assert.strictEqual(three.nextSibling, null);
 });
 
-it("selection.sort(…) sorts each group separately", "<div id='one'><h1 id='three' data-value='1'></h1><h1 id='four' data-value='0'></h1></div><div id='two'><h1 id='five' data-value='3'></h1><h1 id='six' data-value='-1'></h1></div>", () => {
+it("selection.sort(…) sorts each group separately", () => {
+  document.documentElement.innerHTML = "<div id='one'><h1 id='three' data-value='1'></h1><h1 id='four' data-value='0'></h1></div><div id='two'><h1 id='five' data-value='3'></h1><h1 id='six' data-value='-1'></h1></div>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   const three = document.querySelector("#three");
@@ -31,7 +33,8 @@ it("selection.sort(…) sorts each group separately", "<div id='one'><h1 id='thr
   assert.strictEqual(five.nextSibling, null);
 });
 
-it("selection.sort() uses natural ascending order", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+it("selection.sort() uses natural ascending order", () => {
+  document.documentElement.innerHTML = "<h1 id='one'></h1><h1 id='two'></h1>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   const selection = selectAll([two, one]).datum(function(d, i) { i; });
@@ -40,7 +43,8 @@ it("selection.sort() uses natural ascending order", "<h1 id='one'></h1><h1 id='t
   assert.strictEqual(two.nextSibling, one);
 });
 
-it("selection.sort() puts missing elements at the end of each group", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+it("selection.sort() puts missing elements at the end of each group", () => {
+  document.documentElement.innerHTML = "<h1 id='one'></h1><h1 id='two'></h1>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   selectAll([two, one]).datum(function(d, i) { return i; });
@@ -49,7 +53,8 @@ it("selection.sort() puts missing elements at the end of each group", "<h1 id='o
   assert.strictEqual(one.nextSibling, null);
 });
 
-it("selection.sort(function) puts missing elements at the end of each group", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+it("selection.sort(function) puts missing elements at the end of each group", () => {
+  document.documentElement.innerHTML = "<h1 id='one'></h1><h1 id='two'></h1>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   selectAll([two, one]).datum(function(d, i) { return i; });
@@ -58,7 +63,8 @@ it("selection.sort(function) puts missing elements at the end of each group", "<
   assert.strictEqual(two.nextSibling, null);
 });
 
-it("selection.sort(function) uses the specified data comparator function", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+it("selection.sort(function) uses the specified data comparator function", () => {
+  document.documentElement.innerHTML = "<h1 id='one'></h1><h1 id='two'></h1>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   const selection = selectAll([two, one]).datum(function(d, i) { return i; });
@@ -67,7 +73,8 @@ it("selection.sort(function) uses the specified data comparator function", "<h1 
   assert.strictEqual(two.nextSibling, null);
 });
 
-it("selection.sort(function) returns a new selection, and does not modify the groups array in-place", "<h1 id='one'></h1><h1 id='two'></h1>", () => {
+it("selection.sort(function) returns a new selection, and does not modify the groups array in-place", () => {
+  document.documentElement.innerHTML = "<h1 id='one'></h1><h1 id='two'></h1>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   const selection0 = selectAll([one, two]).datum(function(d, i) { return i; });

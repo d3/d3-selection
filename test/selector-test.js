@@ -1,8 +1,9 @@
-import assert from "assert";
-import {selector} from "../src/index.js";
-import it from "./jsdom.js";
+import assert from "node:assert";
+import {selector} from "d3-selection";
+import {it} from "vitest";
 
-it("selector(selector).call(element) returns the first element that matches the selector", "<body class='foo'>", () => {
+it("selector(selector).call(element) returns the first element that matches the selector", () => {
+  document.documentElement.innerHTML = "<body class='foo'>";
   assert.strictEqual(selector("body").call(document.documentElement), document.body);
   assert.strictEqual(selector(".foo").call(document.documentElement), document.body);
   assert.strictEqual(selector("body.foo").call(document.documentElement), document.body);
@@ -10,7 +11,8 @@ it("selector(selector).call(element) returns the first element that matches the 
   assert.strictEqual(selector("body.bar").call(document.documentElement), null);
 });
 
-it("selector(null).call(element) always returns undefined", "<body class='foo'><undefined></undefined><null></null>", () => {
+it("selector(null).call(element) always returns undefined", () => {
+  document.documentElement.innerHTML = "<body class='foo'><undefined></undefined><null></null>";
   assert.strictEqual(selector().call(document.documentElement), undefined);
   assert.strictEqual(selector(null).call(document.documentElement), undefined);
   assert.strictEqual(selector(undefined).call(document.documentElement), undefined);

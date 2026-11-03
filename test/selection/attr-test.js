@@ -1,13 +1,15 @@
-import assert from "assert";
-import {namespaces, select, selectAll} from "../../src/index.js";
-import it from "../jsdom.js";
+import assert from "node:assert";
+import {namespaces, select, selectAll} from "d3-selection";
+import {it} from "vitest";
 
-it("selection.attr(name) returns the value of the attribute with the specified name on the first selected element", "<h1 class='c1 c2'>hello</h1><h1 class='c3'></h1>", () => {
+it("selection.attr(name) returns the value of the attribute with the specified name on the first selected element", () => {
+  document.documentElement.innerHTML = "<h1 class='c1 c2'>hello</h1><h1 class='c3'></h1>";
   assert.strictEqual(select(document).select("h1").attr("class"), "c1 c2");
   assert.strictEqual(selectAll([null, document]).select("h1").attr("class"), "c1 c2");
 });
 
-it("selection.attr(name) coerces the specified name to a string", "<h1 class='c1 c2'>hello</h1><h1 class='c3'></h1>", () => {
+it("selection.attr(name) coerces the specified name to a string", () => {
+  document.documentElement.innerHTML = "<h1 class='c1 c2'>hello</h1><h1 class='c3'></h1>";
   assert.strictEqual(select(document).select("h1").attr({toString() { return "class"; }}), "c1 c2");
 });
 
@@ -70,7 +72,8 @@ it("selection.attr(name, null) observes the namespace prefix, if any", () => {
   assert.strictEqual((result = undefined, selection.attr("svg:foo", function() { return null; }), result), "svg:foo");
 });
 
-it("selection.attr(name, value) sets the value of the attribute with the specified name on the selected elements", "<h1 id='one' class='c1 c2'>hello</h1><h1 id='two' class='c3'></h1>", () => {
+it("selection.attr(name, value) sets the value of the attribute with the specified name on the selected elements", () => {
+  document.documentElement.innerHTML = "<h1 id='one' class='c1 c2'>hello</h1><h1 id='two' class='c3'></h1>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   const s = selectAll([one, two]);
@@ -79,7 +82,8 @@ it("selection.attr(name, value) sets the value of the attribute with the specifi
   assert.strictEqual(two.getAttribute("foo"), "bar");
 });
 
-it("selection.attr(name, null) removes the attribute with the specified name on the selected elements", "<h1 id='one' foo='bar' class='c1 c2'>hello</h1><h1 id='two' foo='bar' class='c3'></h1>", () => {
+it("selection.attr(name, null) removes the attribute with the specified name on the selected elements", () => {
+  document.documentElement.innerHTML = "<h1 id='one' foo='bar' class='c1 c2'>hello</h1><h1 id='two' foo='bar' class='c3'></h1>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   const s = selectAll([one, two]);
@@ -88,7 +92,8 @@ it("selection.attr(name, null) removes the attribute with the specified name on 
   assert.strictEqual(two.hasAttribute("foo"), false);
 });
 
-it("selection.attr(name, function) sets the value of the attribute with the specified name on the selected elements", "<h1 id='one' class='c1 c2'>hello</h1><h1 id='two' class='c3'></h1>", () => {
+it("selection.attr(name, function) sets the value of the attribute with the specified name on the selected elements", () => {
+  document.documentElement.innerHTML = "<h1 id='one' class='c1 c2'>hello</h1><h1 id='two' class='c3'></h1>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   const selection = selectAll([one, two]);
@@ -97,7 +102,8 @@ it("selection.attr(name, function) sets the value of the attribute with the spec
   assert.strictEqual(two.getAttribute("foo"), "bar-1");
 });
 
-it("selection.attr(name, function) passes the value function data, index and group", "<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>", () => {
+it("selection.attr(name, function) passes the value function data, index and group", () => {
+  document.documentElement.innerHTML = "<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   const three = document.querySelector("#three");

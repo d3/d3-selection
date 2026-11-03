@@ -1,6 +1,6 @@
-import assert from "assert";
-import {create} from "../src/index.js";
-import it from "./jsdom.js";
+import assert from "node:assert";
+import {create} from "d3-selection";
+import {it} from "vitest";
 
 it("create(name) returns a new HTML element with the given name", () => {
   const h1 = create("h1");

@@ -1,24 +1,28 @@
-import assert from "assert";
-import {select, selection, selectAll} from "../../src/index.js";
+import assert from "node:assert";
+import {select, selection, selectAll} from "d3-selection";
 import {assertSelection} from "../asserts.js";
-import it from "../jsdom.js";
+import {it} from "vitest";
 
-it("selection.selectAll(…) returns a selection", "<h1>hello</h1>", () => {
+it("selection.selectAll(…) returns a selection", () => {
+  document.documentElement.innerHTML = "<h1>hello</h1>";
   assert(select(document).selectAll("h1") instanceof selection);
 });
 
-it("selection.selectAll(string) selects all descendants that match the selector string for each selected element", "<h1 id='one'><span></span><span></span></h1><h1 id='two'><span></span><span></span></h1>", () => {
+it("selection.selectAll(string) selects all descendants that match the selector string for each selected element", () => {
+  document.documentElement.innerHTML = "<h1 id='one'><span></span><span></span></h1><h1 id='two'><span></span><span></span></h1>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   assertSelection(selectAll([one, two]).selectAll("span"), {groups: [one.querySelectorAll("span"), two.querySelectorAll("span")], parents: [one, two]});
 });
 
-it("selection.selectAll(function) selects the return values of the given function for each selected element", "<span id='one'></span>", () => {
+it("selection.selectAll(function) selects the return values of the given function for each selected element", () => {
+  document.documentElement.innerHTML = "<span id='one'></span>";
   const one = document.querySelector("#one");
   assertSelection(select(document).selectAll(function() { return [one]; }), {groups: [[one]], parents: [document]});
 });
 
-it("selection.selectAll(function) passes the selector function data, index and group", "<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>", () => {
+it("selection.selectAll(function) passes the selector function data, index and group", () => {
+  document.documentElement.innerHTML = "<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   const three = document.querySelector("#three");
@@ -39,7 +43,8 @@ it("selection.selectAll(function) passes the selector function data, index and g
   ]);
 });
 
-it("selection.selectAll(…) will not propagate data", "<parent><child>hello</child></parent>", () => {
+it("selection.selectAll(…) will not propagate data", () => {
+  document.documentElement.innerHTML = "<parent><child>hello</child></parent>";
   const parent = document.querySelector("parent");
   const child = document.querySelector("child");
   parent.__data__ = 42;
@@ -47,7 +52,8 @@ it("selection.selectAll(…) will not propagate data", "<parent><child>hello</ch
   assert(!("__data__" in child));
 });
 
-it("selection.selectAll(…) groups selected elements by their parent in the originating selection", "<parent id='one'><child id='three'></child></parent><parent id='two'><child id='four'></child></parent>", () => {
+it("selection.selectAll(…) groups selected elements by their parent in the originating selection", () => {
+  document.documentElement.innerHTML = "<parent id='one'><child id='three'></child></parent><parent id='two'><child id='four'></child></parent>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   const three = document.querySelector("#three");
@@ -56,7 +62,8 @@ it("selection.selectAll(…) groups selected elements by their parent in the ori
   assertSelection(select(document).selectAll("child"), {groups: [[three, four]], parents: [document]});
 });
 
-it("selection.selectAll(…) can select elements when the originating selection is nested", "<parent id='one'><child id='three'><span id='five'></span></child></parent><parent id='two'><child id='four'><span id='six'></span></child></parent>", () => {
+it("selection.selectAll(…) can select elements when the originating selection is nested", () => {
+  document.documentElement.innerHTML = "<parent id='one'><child id='three'><span id='five'></span></child></parent><parent id='two'><child id='four'><span id='six'></span></child></parent>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   const three = document.querySelector("#three");
@@ -66,7 +73,8 @@ it("selection.selectAll(…) can select elements when the originating selection 
   assertSelection(selectAll([one, two]).selectAll("child").selectAll("span"), {groups: [[five], [six]], parents: [three, four]});
 });
 
-it("selection.selectAll(…) skips missing originating elements", "<h1><span>hello</span></h1>", () => {
+it("selection.selectAll(…) skips missing originating elements", () => {
+  document.documentElement.innerHTML = "<h1><span>hello</span></h1>";
   const h1 = document.querySelector("h1");
   const span = document.querySelector("span");
   assertSelection(selectAll([, h1]).selectAll("span"), {groups: [[span]], parents: [h1]});
@@ -74,7 +82,8 @@ it("selection.selectAll(…) skips missing originating elements", "<h1><span>hel
   assertSelection(selectAll([undefined, h1]).selectAll("span"), {groups: [[span]], parents: [h1]});
 });
 
-it("selection.selectAll(…) skips missing originating elements when the originating selection is nested", "<parent id='one'><child></child><child id='three'><span id='five'></span></child></parent><parent id='two'><child></child><child id='four'><span id='six'></span></child></parent>", () => {
+it("selection.selectAll(…) skips missing originating elements when the originating selection is nested", () => {
+  document.documentElement.innerHTML = "<parent id='one'><child></child><child id='three'><span id='five'></span></child></parent><parent id='two'><child></child><child id='four'><span id='six'></span></child></parent>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   const three = document.querySelector("#three");

@@ -1,31 +1,36 @@
-import assert from "assert";
-import {pointer, pointers} from "../src/index.js";
-import it from "./jsdom.js";
+import assert from "node:assert";
+import {pointer, pointers} from "d3-selection";
+import {it} from "vitest";
 
-it("pointer(mousemove) returns an array of coordinates", "<div>", () => {
+it("pointer(mousemove) returns an array of coordinates", () => {
+  document.documentElement.innerHTML = "<div>";
   const target = document.querySelector("div");
   assert.deepStrictEqual(pointer(mousemove(10, 20)), [10, 20]);
   assert.deepStrictEqual(pointer(mousemove(10, 20, target), target), [10, 20]);
 });
 
-it("pointer(touch, target) returns an array of coordinates", "<div>", () => {
+it("pointer(touch, target) returns an array of coordinates", () => {
+  document.documentElement.innerHTML = "<div>";
   const target = document.querySelector("div");
   assert.deepStrictEqual(pointer(touch(10, 20), target), [10, 20]);
 });
 
-it("pointers(mousemove) returns an array of arrays of coordinates", "<div>", () => {
+it("pointers(mousemove) returns an array of arrays of coordinates", () => {
+  document.documentElement.innerHTML = "<div>";
   const target = document.querySelector("div");
   assert.deepStrictEqual(pointers(mousemove(10, 20)), [[10, 20]]);
   assert.deepStrictEqual(pointers(mousemove(10, 20, target)), [[10, 20]]);
 });
 
-it("pointers(touchmove) returns an array of arrays of coordinates", "<div>", () => {
+it("pointers(touchmove) returns an array of arrays of coordinates", () => {
+  document.documentElement.innerHTML = "<div>";
   const target = document.querySelector("div");
   assert.deepStrictEqual(pointers(touchmove(10, 20)), [[10, 20]]);
   assert.deepStrictEqual(pointers(touchmove(10, 20, target)), [[10, 20]]);
 });
 
-it("pointers(touches) returns an array of arrays of coordinates", "<div>", () => {
+it("pointers(touches) returns an array of arrays of coordinates", () => {
+  document.documentElement.innerHTML = "<div>";
   assert.deepStrictEqual(pointers([touch(10, 20)]), [[10, 20]]);
 });
 

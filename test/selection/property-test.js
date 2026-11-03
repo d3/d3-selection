@@ -1,6 +1,6 @@
-import assert from "assert";
-import {select, selectAll} from "../../src/index.js";
-import it from "../jsdom.js";
+import assert from "node:assert";
+import {select, selectAll} from "d3-selection";
+import {it} from "vitest";
 
 it("selection.property(name) returns the property with the specified name on the first selected element", () => {
   const node = {foo: 42};
@@ -35,7 +35,8 @@ it("selection.property(name, function) sets the value of the property with the s
   assert.strictEqual(two.foo, "baz");
 });
 
-it("selection.property(name, function) passes the value function data, index and group", "<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>", () => {
+it("selection.property(name, function) passes the value function data, index and group", () => {
+  document.documentElement.innerHTML = "<parent id='one'><child id='three'></child><child id='four'></child></parent><parent id='two'><child id='five'></child></parent>";
   const one = document.querySelector("#one");
   const two = document.querySelector("#two");
   const three = document.querySelector("#three");
