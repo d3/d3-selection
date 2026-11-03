@@ -1,5 +1,5 @@
 import assert from "node:assert";
-import {select} from "../../src/index.js";
+import {select} from "d3-selection";
 import {it} from "vitest";
 
 it("selection.call(function) calls the specified function, passing the selection", () => {

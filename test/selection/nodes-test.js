@@ -1,5 +1,5 @@
 import assert from "node:assert";
-import * as d3 from "../../src/index.js";
+import * as d3 from "d3-selection";
 import {it} from "vitest";
 
 it("selection.nodes() returns an array containing all selected nodes", () => {

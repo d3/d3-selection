@@ -1,5 +1,5 @@
 import assert from "node:assert";
-import {select, selectAll} from "../../src/index.js";
+import {select, selectAll} from "d3-selection";
 import {it} from "vitest";
 
 it("selection.order() moves selected elements so that they are before their next sibling", () => {

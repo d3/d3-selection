@@ -1,5 +1,5 @@
 import assert from "node:assert";
-import {select, selectAll, style} from "../../src/index.js";
+import {select, selectAll, style} from "d3-selection";
 import {it} from "vitest";
 
 it("style(node, name) returns the inline value of the style property with the specified name on the first selected element, if present", () => {

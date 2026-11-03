@@ -1,5 +1,5 @@
 import assert from "node:assert";
-import {namespaces, select, selectAll} from "../../src/index.js";
+import {namespaces, select, selectAll} from "d3-selection";
 import {it} from "vitest";
 
 it("selection.attr(name) returns the value of the attribute with the specified name on the first selected element", () => {

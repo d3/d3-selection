@@ -1,5 +1,5 @@
 import assert from "node:assert";
-import {select, selectAll} from "../../src/index.js";
+import {select, selectAll} from "d3-selection";
 import {it} from "vitest";
 
 it("selection.classed(classes) returns true if and only if the first element has the specified classes", () => {

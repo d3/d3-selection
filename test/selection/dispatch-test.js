@@ -1,5 +1,5 @@
 import assert from "node:assert";
-import {selectAll} from "../../src/index.js";
+import {selectAll} from "d3-selection";
 import {it} from "vitest";
 
 it("selection.dispatch(type) dispatches a custom event of the specified type to each selected element in order", () => {

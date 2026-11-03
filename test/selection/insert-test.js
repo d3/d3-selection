@@ -1,5 +1,5 @@
 import assert from "node:assert";
-import {selectAll} from "../../src/index.js";
+import {selectAll} from "d3-selection";
 import {assertSelection} from "../asserts.js";
 import {it} from "vitest";
 

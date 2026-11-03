@@ -1,5 +1,5 @@
 import assert from "node:assert";
-import {selectAll} from "../../src/index.js";
+import {selectAll} from "d3-selection";
 import {it} from "vitest";
 
 it("selection.each(function) calls the specified function for each selected element in order", () => {

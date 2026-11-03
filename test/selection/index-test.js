@@ -1,5 +1,5 @@
 import assert from "node:assert";
-import {select, selection} from "../../src/index.js";
+import {select, selection} from "d3-selection";
 import {it} from "vitest";
 
 it("selection() returns a selection of the document element", () => {
