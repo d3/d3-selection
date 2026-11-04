@@ -4,11 +4,9 @@ export default function(event, node) {
   event = sourceEvent(event);
   if (node === undefined) node = event.currentTarget;
   if (node) {
-    var svg = node.ownerSVGElement || node;
-    if (svg.createSVGPoint) {
-      var point = svg.createSVGPoint();
-      point.x = event.clientX, point.y = event.clientY;
-      point = point.matrixTransform(node.getScreenCTM().inverse());
+    if (window.DOMPointReadOnly) {
+      const point = new window.DOMPointReadOnly(event.clientX, event.clientY)
+        .matrixTransform(node.getScreenCTM().inverse());
       return [point.x, point.y];
     }
     if (node.getBoundingClientRect) {
